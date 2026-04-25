@@ -116,7 +116,7 @@ const SAISONS = {
           {num:'04', name:'10 fentes alternées', detail:'Genou à 90°. 8 par jambe.'},
         ]
       },
-      mouvements: ['Pilates doux','Marche rapide','Squats doux','Fentes légères','Danse libre','Vélo tranquille']
+      mouvements: ['Pilates doux','Marche rapide','Squats doux','Fentes légères','Vélo tranquille']
     },
     skincare: {
       whatHappens: 'Les œstrogènes montent progressivement — ta peau devient plus lumineuse, plus souple. C\'est la meilleure phase pour les soins actifs et l\'exfoliation douce.',
