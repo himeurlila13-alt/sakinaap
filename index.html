@@ -179,62 +179,52 @@
     </div>
   </div>
 
-  <!-- HERO CARD -->
-  <div class="accueil-hero-card fade-in">
-    <div class="hero-gradient" id="accueil-hero-card" style="background:var(--season-grad)">
-      <div style="position:absolute; top:-10px; right:-10px; opacity:0.12; pointer-events:none;">
-        <svg width="160" height="160" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
-          <ellipse cx="80" cy="34" rx="18" ry="36" fill="white"/>
-          <ellipse cx="80" cy="34" rx="18" ry="36" fill="white" transform="rotate(72,80,80)"/>
-          <ellipse cx="80" cy="34" rx="18" ry="36" fill="white" transform="rotate(144,80,80)"/>
-          <ellipse cx="80" cy="34" rx="18" ry="36" fill="white" transform="rotate(216,80,80)"/>
-          <ellipse cx="80" cy="34" rx="18" ry="36" fill="white" transform="rotate(288,80,80)"/>
-          <circle cx="80" cy="80" r="20" fill="white"/>
-        </svg>
+<div class="hero-compact">
+  <div class="hero-compact-top" id="accueil-hero-card" style="background:var(--season-grad)">
+    <div class="hero-compact-row fade-in">
+      <div class="hero-greeting">
+        <div class="hero-greeting-name" id="dash-name">Ma sœur</div>
+        <div class="hero-greeting-sub" id="dash-greeting-sub">Bon matin — 🌸 Printemps · J8</div>
       </div>
-      <div style="position:absolute; bottom:-8px; left:-8px; opacity:0.07; pointer-events:none;">
-        <svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-          <ellipse cx="40" cy="17" rx="10" ry="20" fill="white"/>
-          <ellipse cx="40" cy="17" rx="10" ry="20" fill="white" transform="rotate(72,40,40)"/>
-          <ellipse cx="40" cy="17" rx="10" ry="20" fill="white" transform="rotate(144,40,40)"/>
-          <ellipse cx="40" cy="17" rx="10" ry="20" fill="white" transform="rotate(216,40,40)"/>
-          <ellipse cx="40" cy="17" rx="10" ry="20" fill="white" transform="rotate(288,40,40)"/>
-          <circle cx="40" cy="40" r="12" fill="white"/>
-        </svg>
+      <div class="hero-phase-pill">
+        <span class="hero-phase-pill-emoji" id="dash-phase-emoji">🌸</span>
+        <div class="hero-phase-pill-day" id="dash-phase-day">J8</div>
+        <div class="hero-phase-pill-label" id="dash-phase-label">Folliculaire</div>
       </div>
-      <div class="hero-salutation fade-in" style="position:relative;">
-        <div class="hero-salutation-fr">As-Salamu Alaykum</div>
-        <div class="hero-salutation-ar">السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ</div>
-      </div>
-      <div class="hero-name fade-in-2" id="hero-name" style="position:relative;">Lila</div>
-      <div style="display:flex; align-items:center; gap:8px; margin:12px 0; position:relative;">
-        <div style="flex:1; height:1px; background:rgba(255,255,255,.2);"></div>
-        <div style="font-size:14px; opacity:0.5;" id="hero-big-emoji">🌸</div>
-        <div style="flex:1; height:1px; background:rgba(255,255,255,.2);"></div>
-      </div>
-      <div class="hero-badges fade-in-3" style="position:relative;">
-        <div class="hero-badge">
-          <div class="hero-badge-label" id="hero-phase-label">Phase folliculaire</div>
-          <div class="hero-badge-value" id="hero-season-name">🌸 Printemps</div>
-        </div>
-        <div class="hero-badge">
-          <div class="hero-badge-label">Jour du cycle</div>
-          <div class="hero-badge-value" id="hero-day-num">J8</div>
-        </div>
-      </div>
-    </div>
-    <div class="hero-message-section" style="position:relative;">
-      <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-        <div style="width:16px; height:1px; background:var(--season); opacity:.5;"></div>
-        <div class="hero-message-label" style="margin-bottom:0;">Message du jour</div>
-        <div style="flex:1; height:1px; background:var(--season); opacity:.15;"></div>
-      </div>
-      <div class="hero-message-text" id="daily-message">L'énergie revient — profites-en pour avancer sur ce qui attend.</div>
     </div>
   </div>
+  <div class="hero-message-bar">
+    <div class="hero-message-bar-dot"></div>
+    <div class="hero-message-bar-text" id="daily-message">L'énergie revient — profites-en.</div>
+  </div>
+</div>
+  
+  <div class="day-score-card">
+  <div class="day-score-title">✦ MA JOURNÉE</div>
+  <div class="day-score-grid" id="day-score-grid"></div>
+</div>
 
-  <div style="height:16px;"></div>
-
+  <div class="quick-seance-card">
+  <div class="qs-header" style="background:var(--season-grad)">
+    <div class="qs-tag">💪 SÉANCE DU JOUR</div>
+    <div class="qs-title-row">
+      <div>
+        <div class="qs-name" id="qs-name">Réveil en douceur</div>
+        <div class="qs-meta" id="qs-meta">Mix sol + debout</div>
+      </div>
+      <div class="qs-duration-badge" id="qs-duration">12 min</div>
+    </div>
+  </div>
+  <div class="qs-exercises" id="qs-exercises"></div>
+  <div id="qs-btn-wrap">
+    <button class="qs-btn" onclick="validerSeanceDash()">✓ Séance accomplie — Alhamdulillah</button>
+  </div>
+  <div class="qs-done" id="qs-done-wrap" style="display:none">
+    <div class="qs-done-check">✓</div>
+    <div class="qs-done-text">Alhamdulillah — séance accomplie aujourd'hui 🌸</div>
+  </div>
+</div>
+  
   <!-- INVOCATION DE LA PHASE -->
   <div id="inv-card" style="margin:14px 14px 0; border-radius:20px; overflow:hidden; box-shadow:0 4px 20px rgba(45,36,32,.1);">
     <div style="background:var(--season-grad); padding:18px 20px; position:relative; overflow:hidden;">
@@ -329,6 +319,18 @@
       </div>
     </div>
   </div>
+
+  <!-- SYMPTÔMES -->
+<div class="card" style="margin-top:0">
+  <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="toggleSymptomesSection()">
+    <div class="card-title" style="margin-bottom:0;">🌡️ Mes symptômes du jour</div>
+    <span id="symptomes-arrow" style="font-size:11px;color:var(--gris);opacity:.5;">▼</span>
+  </div>
+  <div id="symptomes-content" style="margin-top:12px;">
+    <div style="font-size:12px;color:var(--gris);margin-bottom:12px;font-family:var(--serif);font-style:italic;">Coche ce que tu ressens aujourd'hui — adapté à ta phase.</div>
+    <div class="symptomes-grid" id="symptomes-grid"></div>
+  </div>
+</div>
   <!-- RÈGLES & INTIMITÉ -->
   <div style="margin:0 14px 12px; border-radius:20px; overflow:hidden; border:1.5px solid var(--sable);">
     <div style="background:#FDF0EE; padding:16px 18px; cursor:pointer; display:flex; align-items:center; justify-content:space-between;" onclick="toggleIntimite()">
@@ -398,31 +400,29 @@
     <div class="prayer-row" onclick="togglePrayer(this,'maghrib')"><div class="prayer-chk" id="pr-maghrib">🌅</div><div class="prayer-name" id="prn-maghrib">Maghrib</div><div class="prayer-time">Coucher du soleil</div></div>
     <div class="prayer-row" onclick="togglePrayer(this,'isha')"><div class="prayer-chk" id="pr-isha">🌙</div><div class="prayer-name" id="prn-isha">Isha</div><div class="prayer-time">Nuit</div></div>
   </div>
-  <!-- DHIKR -->
-  <div class="dhikr-card">
-    <div class="dhikr-hdr"><div class="dhikr-hdr-t">📿 Adhkar du jour</div><div class="dhikr-hdr-s">SubhanAllah · Alhamdulillah · Allahu Akbar</div></div>
-    <div class="dhikr-items">
-      <div class="dhikr-item" id="dhikr-item-subhan"><div class="dhikr-ring" id="dhikr-ring-subhan"><div class="dhikr-count" id="dhikr-subhan">0</div><div class="dhikr-max">/33</div></div><div style="flex:1"><div class="dhikr-arabic">سُبْحَانَ اللَّهِ</div><div class="dhikr-fr">SubhanAllah · Gloire à Allah</div></div><button class="dhikr-btn" onclick="incrementDhikr('subhan',33)">+</button></div>
-      <div class="dhikr-item" id="dhikr-item-alhamdu"><div class="dhikr-ring" id="dhikr-ring-alhamdu"><div class="dhikr-count" id="dhikr-alhamdu">0</div><div class="dhikr-max">/33</div></div><div style="flex:1"><div class="dhikr-arabic">اَلْحَمْدُ لِلَّهِ</div><div class="dhikr-fr">Alhamdulillah · Louange à Allah</div></div><button class="dhikr-btn" onclick="incrementDhikr('alhamdu',33)">+</button></div>
-      <div class="dhikr-item" id="dhikr-item-akbar"><div class="dhikr-ring" id="dhikr-ring-akbar"><div class="dhikr-count" id="dhikr-akbar">0</div><div class="dhikr-max">/34</div></div><div style="flex:1"><div class="dhikr-arabic">اللَّهُ أَكْبَرُ</div><div class="dhikr-fr">Allahu Akbar · Allah est le Plus Grand</div></div><button class="dhikr-btn" onclick="incrementDhikr('akbar',34)">+</button></div>
-    </div>
+  <!-- DHIKR CASES À COCHER -->
+<div class="dhikr-check-card">
+  <div class="dhikr-check-hdr">
+    <div class="dhikr-check-hdr-t">📿 Adhkar du jour</div>
+    <div class="dhikr-check-hdr-s">Coche quand tu as accompli chaque dhikr</div>
   </div>
-  <!-- ISTIGHFAR -->
-  <div style="margin:12px 14px 0; background:white; border-radius:20px; border:1.5px solid var(--sable); overflow:hidden;">
-    <div style="padding:14px 16px 12px; border-bottom:1px solid rgba(0,0,0,.05);">
-      <div style="font-family:var(--serif);font-size:15px;color:var(--noir);margin-bottom:2px;">🤍 Istighfar — Demande de pardon</div>
-      <div style="font-size:12px;color:var(--gris);">Coche chaque fois que tu demandes pardon</div>
-    </div>
-    <div style="padding:8px 12px 12px;">
-      <div class="dhikr-item" id="dhikr-item-istighfar"><div class="dhikr-ring" id="dhikr-ring-istighfar"><div class="dhikr-count" id="dhikr-istighfar">0</div><div class="dhikr-max">/100</div></div><div style="flex:1"><div class="dhikr-arabic">أَسْتَغْفِرُ اللَّهَ</div><div class="dhikr-fr">Astaghfirullah · Je demande pardon à Allah</div></div><button class="dhikr-btn" onclick="incrementDhikr('istighfar',100)">+</button></div>
-    </div>
-    <div style="padding:0 16px 14px;">
-      <div style="background:var(--season-soft);border-radius:12px;padding:10px 14px;font-family:var(--serif);font-size:12px;color:var(--noir);font-style:italic;line-height:1.6;">"Celui qui dit l'istighfar régulièrement, Allah lui ouvre une issue dans ses difficultés." — Abou Dawoud</div>
-    </div>
-  </div>
-  <div style="height:16px;"></div>
+  <div class="dhikr-check-items" id="dhikr-check-items"></div>
 </div>
 
+<!-- LECTURE DU CORAN -->
+<div class="coran-check-card" style="margin:12px 14px 0;">
+  <div class="coran-check-inner" id="coran-check-inner" onclick="toggleCoranCheck()">
+    <div class="coran-check-box">📖</div>
+    <div class="coran-check-content">
+      <div class="coran-check-title">Lecture du Coran</div>
+      <div class="coran-check-sub">Même un verset — c'est une lumière pour ta journée</div>
+    </div>
+  </div>
+  <div class="coran-check-hadith">
+    "La meilleure d'entre vous est celle qui apprend le Coran et l'enseigne." — Boukhari
+  </div>
+</div>
+  
 <!-- VIE -->
 <div class="tab-page" id="tab-vie">
   <div class="tab-topbar" style="background:rgba(250,246,240,.97)">
