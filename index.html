@@ -15,258 +15,208 @@
 </head>
 <body>
 
-<!-- ═══ ONBOARDING ═══ -->
+<!-- ONBOARDING -->
 <div id="onboarding">
 <div class="ob-wrap">
-
-  <!-- STEP 0: Prénom -->
   <div class="ob-step active" id="step-0">
     <div class="ob-logo">SakinApp</div>
-    <div class="ob-eye">Bienvenue, ma sœur ✨</div>
-    <div class="ob-title">Ton corps a un rythme.<br><em>Apprends à l'écouter.</em></div>
-    <div class="ob-sub">SakinApp t'accompagne chaque jour — selon ton cycle, ta foi et ton énergie.</div>
-    <div class="ob-fl">Ton prénom</div>
-    <input class="ob-input" id="input-prenom" type="text" placeholder="Lisa, Aya, Lila…" maxlength="30"
-      autocomplete="given-name" autocorrect="off" autocapitalize="words" spellcheck="false" inputmode="text">
+    <div class="ob-eye">Bienvenue, ma soeur</div>
+    <div class="ob-title">Ton corps a un rythme.<br><em>Apprends a l'ecouter.</em></div>
+    <div class="ob-sub">SakinApp t'accompagne chaque jour selon ton cycle, ta foi et ton energie.</div>
+    <div class="ob-fl">Ton prenom</div>
+    <input class="ob-input" id="input-prenom" type="text" placeholder="Lisa, Aya, Lila..." maxlength="30" autocomplete="given-name" autocorrect="off" autocapitalize="words" spellcheck="false" inputmode="text">
     <div class="ob-privacy" style="margin-top:12px;">
-      <span style="font-size:16px">🔒</span>
-      <span class="ob-privacy-txt">Tes données restent sur ton téléphone. Jamais partagées, jamais vendues.</span>
+      <span style="font-size:16px">&#128274;</span>
+      <span class="ob-privacy-txt">Tes donnees restent sur ton telephone. Jamais partagees, jamais vendues.</span>
     </div>
-    <button class="ob-btn" onclick="nextStep(1)" style="margin-top:24px;">Commencer →</button>
+    <button class="ob-btn" onclick="nextStep(1)" style="margin-top:24px;">Commencer</button>
   </div>
-
-  <!-- STEP 1: Cycle -->
   <div class="ob-step" id="step-1">
     <div class="ob-logo">SakinApp</div>
-    <div class="ob-eye">Ton cycle 🌙</div>
-    <div class="ob-title">Où en es-tu<br><em>dans ton cycle ?</em></div>
-    <div class="ob-sub">Je calcule ta saison du moment pour personnaliser ton expérience.</div>
-    <div class="ob-fl">1er jour de tes dernières règles</div>
+    <div class="ob-eye">Ton cycle</div>
+    <div class="ob-title">Ou en es-tu<br><em>dans ton cycle ?</em></div>
+    <div class="ob-sub">Je calcule ta saison du moment pour personnaliser ton experience.</div>
+    <div class="ob-fl">1er jour de tes dernieres regles</div>
     <input class="ob-input" id="input-date" type="date" style="margin-bottom:18px">
-    <div class="ob-fl">Durée habituelle de ton cycle</div>
+    <div class="ob-fl">Duree habituelle de ton cycle</div>
     <div class="ob-options" id="duration-options">
-      <div class="ob-option" onclick="selectDuration(this,26)">
-        <span class="ob-option-emoji">🌙</span>
-        <div><div class="ob-option-text">Court — 24 à 26 jours</div></div>
-        <div class="ob-option-chk">✓</div>
-      </div>
-      <div class="ob-option selected" onclick="selectDuration(this,28)">
-        <span class="ob-option-emoji">🌸</span>
-        <div><div class="ob-option-text">Moyen — 27 à 30 jours</div></div>
-        <div class="ob-option-chk">✓</div>
-      </div>
-      <div class="ob-option" onclick="selectDuration(this,33)">
-        <span class="ob-option-emoji">☀️</span>
-        <div><div class="ob-option-text">Long — 31 à 35 jours</div></div>
-        <div class="ob-option-chk">✓</div>
-      </div>
+      <div class="ob-option" onclick="selectDuration(this,26)"><span class="ob-option-emoji">&#127769;</span><div><div class="ob-option-text">Court - 24 a 26 jours</div></div><div class="ob-option-chk">&#10003;</div></div>
+      <div class="ob-option selected" onclick="selectDuration(this,28)"><span class="ob-option-emoji">&#127800;</span><div><div class="ob-option-text">Moyen - 27 a 30 jours</div></div><div class="ob-option-chk">&#10003;</div></div>
+      <div class="ob-option" onclick="selectDuration(this,33)"><span class="ob-option-emoji">&#9728;&#65039;</span><div><div class="ob-option-text">Long - 31 a 35 jours</div></div><div class="ob-option-chk">&#10003;</div></div>
     </div>
-    <button class="ob-btn" onclick="nextStep(2)" style="margin-top:24px">Révéler ma saison ✨</button>
+    <button class="ob-btn" onclick="nextStep(2)" style="margin-top:24px">Reveler ma saison</button>
   </div>
-
 </div>
 </div>
 
-<!-- ═══ RÉVÉLATION ═══ -->
+<!-- REVELATION -->
 <div id="revelation" class="screen">
-  <div class="rev-emoji" id="rev-emoji">🌸</div>
+  <div class="rev-emoji" id="rev-emoji">&#127800;</div>
   <div class="rev-title" id="rev-title">Tu es en Printemps</div>
-  <div class="rev-subtitle" id="rev-subtitle">Phase folliculaire · Jour 8</div>
-  <div class="rev-message" id="rev-message">L'énergie revient. C'est le moment de commencer ce qui attend.</div>
-  <button class="rev-btn" onclick="enterApp()">Commencer ma journée ✦</button>
+  <div class="rev-subtitle" id="rev-subtitle">Phase folliculaire - Jour 8</div>
+  <div class="rev-message" id="rev-message">L'energie revient. C'est le moment de commencer ce qui attend.</div>
+  <button class="rev-btn" onclick="enterApp()">Commencer ma journee</button>
 </div>
 
-<!-- ═══ CHECK-IN MATIN ═══ -->
+<!-- CHECK-IN MATIN -->
 <div class="checkin-overlay" id="checkin-overlay">
   <div class="checkin-sheet">
+    <div class="checkin-handle"></div>
     <div class="checkin-title">Comment tu vas vraiment, ce matin ?</div>
     <div class="checkin-options">
-      <div class="checkin-option" onclick="doCheckin('bien')">
-        <span class="checkin-option-emoji">🌸</span>
-        <span class="checkin-option-text">Je vais bien</span>
-      </div>
-      <div class="checkin-option" onclick="doCheckin('fatiguee')">
-        <span class="checkin-option-emoji">😴</span>
-        <span class="checkin-option-text">Je suis fatiguée</span>
-      </div>
-      <div class="checkin-option" onclick="doCheckin('difficile')">
-        <span class="checkin-option-emoji">🌊</span>
-        <span class="checkin-option-text">C'est difficile en ce moment</span>
-      </div>
-      <div class="checkin-option" onclick="doCheckin('foi')">
-        <span class="checkin-option-emoji">🤲</span>
-        <span class="checkin-option-text">Ma foi est en bas</span>
-      </div>
+      <div class="checkin-option" onclick="doCheckin('bien')"><span class="checkin-option-emoji">&#127800;</span><span class="checkin-option-text">Je vais bien</span></div>
+      <div class="checkin-option" onclick="doCheckin('fatiguee')"><span class="checkin-option-emoji">&#128564;</span><span class="checkin-option-text">Je suis fatiguee</span></div>
+      <div class="checkin-option" onclick="doCheckin('difficile')"><span class="checkin-option-emoji">&#127754;</span><span class="checkin-option-text">C'est difficile en ce moment</span></div>
+      <div class="checkin-option" onclick="doCheckin('foi')"><span class="checkin-option-emoji">&#129330;</span><span class="checkin-option-text">Ma foi est en bas</span></div>
     </div>
   </div>
 </div>
 
-<!-- ═══ CHECK-IN SOIR ═══ -->
+<!-- CHECK-IN SOIR -->
 <div class="checkin-overlay" id="evening-checkin-overlay" style="display:none;">
   <div class="checkin-sheet" style="max-height:90vh;overflow-y:auto;">
     <div class="checkin-handle"></div>
     <div id="evening-questions">
-      <div style="font-family:var(--serif);font-size:20px;color:var(--noir);margin-bottom:6px;text-align:center;">Comment s'est passée ta journée ?</div>
-      <div style="font-size:13px;color:var(--gris);text-align:center;margin-bottom:20px;font-family:var(--serif);font-style:italic;" id="evening-sub">Sakina t'écoute 🌸</div>
+      <div style="font-family:var(--serif);font-size:20px;color:var(--noir);margin-bottom:6px;text-align:center;">Comment s'est passee ta journee ?</div>
+      <div style="font-size:13px;color:var(--gris);text-align:center;margin-bottom:20px;font-family:var(--serif);font-style:italic;">Sakina t'ecoute</div>
       <div style="display:flex;flex-direction:column;gap:8px;">
-        <div class="checkin-option" onclick="doEveningCheckin('bien')"><span class="checkin-option-emoji">🌟</span><span class="checkin-option-text">Belle journée, alhamdulillah</span></div>
-        <div class="checkin-option" onclick="doEveningCheckin('fatiguee')"><span class="checkin-option-emoji">😴</span><span class="checkin-option-text">Je suis épuisée</span></div>
-        <div class="checkin-option" onclick="doEveningCheckin('difficile')"><span class="checkin-option-emoji">🌊</span><span class="checkin-option-text">C'était dur aujourd'hui</span></div>
-        <div class="checkin-option" onclick="doEveningCheckin('calme')"><span class="checkin-option-emoji">🍂</span><span class="checkin-option-text">Journée calme, sans plus</span></div>
+        <div class="checkin-option" onclick="doEveningCheckin('bien')"><span class="checkin-option-emoji">&#127775;</span><span class="checkin-option-text">Belle journee, alhamdulillah</span></div>
+        <div class="checkin-option" onclick="doEveningCheckin('fatiguee')"><span class="checkin-option-emoji">&#128564;</span><span class="checkin-option-text">Je suis epuisee</span></div>
+        <div class="checkin-option" onclick="doEveningCheckin('difficile')"><span class="checkin-option-emoji">&#127754;</span><span class="checkin-option-text">C'etait dur aujourd'hui</span></div>
+        <div class="checkin-option" onclick="doEveningCheckin('calme')"><span class="checkin-option-emoji">&#127810;</span><span class="checkin-option-text">Journee calme, sans plus</span></div>
       </div>
     </div>
     <div id="evening-response" style="display:none;">
       <div style="text-align:center;margin-bottom:16px;">
-        <div style="font-size:36px;margin-bottom:10px;" id="evening-resp-emoji">🌸</div>
+        <div style="font-size:36px;margin-bottom:10px;" id="evening-resp-emoji">&#127800;</div>
         <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--season);font-weight:600;margin-bottom:10px;">Sakina te dit</div>
       </div>
       <div style="background:var(--season-soft);border-radius:16px;padding:18px;margin-bottom:16px;border-left:3px solid var(--season);">
         <div id="evening-resp-msg" style="font-family:var(--serif);font-size:15px;color:var(--noir);line-height:1.75;font-style:italic;"></div>
       </div>
       <div style="background:white;border:1.5px solid var(--sable);border-radius:16px;padding:16px;margin-bottom:20px;text-align:center;">
-        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gris);font-weight:600;margin-bottom:10px;">🤲 Invocation du soir</div>
-        <div style="font-size:18px;direction:rtl;color:var(--noir);line-height:1.8;margin-bottom:6px;">بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا</div>
-        <div style="font-size:12px;color:var(--gris);font-style:italic;">"En Ton Nom, ô Allah, je meurs et je vis." — Boukhari</div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gris);font-weight:600;margin-bottom:10px;">Invocation du soir</div>
+        <div style="font-size:18px;direction:rtl;color:var(--noir);line-height:1.8;margin-bottom:6px;">&#1576;&#1616;&#1575;&#1587;&#1618;&#1605;&#1616;&#1603;&#1ى اللَّهُمَّ أَمُوتُ وَأَحْيَا</div>
+        <div style="font-size:12px;color:var(--gris);font-style:italic;">"En Ton Nom, o Allah, je meurs et je vis." - Boukhari</div>
       </div>
-      <button onclick="closeEveningCheckin()" style="width:100%;padding:14px;background:var(--season-grad);color:white;border:none;border-radius:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">Bonne nuit 🌙</button>
+      <button onclick="closeEveningCheckin()" style="width:100%;padding:14px;background:var(--season-grad);color:white;border:none;border-radius:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">Bonne nuit</button>
     </div>
   </div>
 </div>
 
-<!-- ═══ APP ═══ -->
+<!-- APP -->
 <div id="app">
-  <div class="app-content" id="app-content">
+<div class="app-content" id="app-content">
 
 <!-- ACCUEIL -->
 <div class="tab-page active" id="tab-accueil">
   <div class="topbar" id="homeTopbar" style="background:rgba(250,246,240,.97)">
-    <div class="logo-w">
-      <div class="logo-m">SakinApp</div>
-      <div class="logo-t">Chaque saison a sa sagesse.</div>
+    <div class="logo-w"><div class="logo-m">SakinApp</div><div class="logo-t">Chaque saison a sa sagesse.</div></div>
+    <div class="tbr"><button class="av-btn" id="avBtn" style="background:var(--season-grad);">&#127800;</button></div>
+  </div>
+
+  <!-- Banniere PWA -->
+  <div id="install-banner" style="display:none;margin:10px 14px 0;background:linear-gradient(135deg,var(--season-soft),white);border:1.5px solid var(--season-light);border-radius:16px;padding:16px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+      <div style="width:36px;height:36px;border-radius:10px;background:var(--season-grad);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;">&#128242;</div>
+      <div style="flex:1;"><div style="font-size:13px;font-weight:600;color:var(--noir);">Installe SakinApp sur ton telephone</div><div style="font-size:11px;color:var(--gris);margin-top:2px;">Pour les rappels et un acces rapide</div></div>
     </div>
-    <div class="tbr">
-      <button class="av-btn" id="avBtn" style="background:var(--season-grad);">🌸</button>
+    <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px;">
+      <div style="background:white;border-radius:10px;padding:10px 12px;display:flex;align-items:flex-start;gap:8px;"><span style="font-size:15px;flex-shrink:0;">&#127822;</span><div><div style="font-size:12px;font-weight:600;color:var(--noir);margin-bottom:2px;">iPhone (Safari)</div><div style="font-size:11px;color:var(--gris);line-height:1.5;">Appuie sur Partager puis Sur l'ecran d'accueil puis Ajouter</div></div></div>
+      <div style="background:white;border-radius:10px;padding:10px 12px;display:flex;align-items:flex-start;gap:8px;"><span style="font-size:15px;flex-shrink:0;">&#129302;</span><div><div style="font-size:12px;font-weight:600;color:var(--noir);margin-bottom:2px;">Android (Chrome)</div><div style="font-size:11px;color:var(--gris);line-height:1.5;">Appuie sur le menu puis Ajouter a l'ecran d'accueil</div></div></div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;"><button onclick="dismissInstallBanner()" style="background:none;border:none;color:var(--gris);font-size:12px;cursor:pointer;text-decoration:underline;font-family:var(--sans);">Ne plus afficher</button></div>
+  </div>
+
+  <!-- HERO CARD -->
+  <div class="accueil-hero-card fade-in">
+    <div class="hero-gradient" id="accueil-hero-card" style="background:var(--season-grad)">
+      <div style="position:absolute;top:-10px;right:-10px;opacity:0.12;pointer-events:none;">
+        <svg width="160" height="160" viewBox="0 0 160 160"><ellipse cx="80" cy="34" rx="18" ry="36" fill="white"/><ellipse cx="80" cy="34" rx="18" ry="36" fill="white" transform="rotate(72,80,80)"/><ellipse cx="80" cy="34" rx="18" ry="36" fill="white" transform="rotate(144,80,80)"/><ellipse cx="80" cy="34" rx="18" ry="36" fill="white" transform="rotate(216,80,80)"/><ellipse cx="80" cy="34" rx="18" ry="36" fill="white" transform="rotate(288,80,80)"/><circle cx="80" cy="80" r="20" fill="white"/></svg>
+      </div>
+      <div class="hero-salutation fade-in" style="position:relative;">
+        <div class="hero-salutation-fr">As-Salamu Alaykum</div>
+        <div class="hero-salutation-ar">&#1575;&#1604;&#1587;&#1617;&#1614;&#1604;&#1614;&#1575;&#1605;&#1615; &#1593;&#1614;&#1604;&#1614;&#1610;&#1618;&#1603;&#1615;&#1605;&#1618; &#1608;&#1614;&#1585;&#1614;&#1581;&#1618;&#1605;&#1614;&#1577;&#1615; &#1575;&#1604;&#1604;&#1617;&#1607;&#1616;</div>
+      </div>
+      <div class="hero-name fade-in-2" id="hero-name" style="position:relative;">Lila</div>
+      <div style="display:flex;align-items:center;gap:8px;margin:10px 0;position:relative;">
+        <div style="flex:1;height:1px;background:rgba(255,255,255,.2);"></div>
+        <div style="font-size:14px;opacity:0.5;" id="hero-big-emoji">&#127800;</div>
+        <div style="flex:1;height:1px;background:rgba(255,255,255,.2);"></div>
+      </div>
+      <div class="hero-badges fade-in-3" style="position:relative;">
+        <div class="hero-badge"><div class="hero-badge-label" id="hero-phase-label">Phase folliculaire</div><div class="hero-badge-value" id="hero-season-name">&#127800; Printemps</div></div>
+        <div class="hero-badge"><div class="hero-badge-label">Jour du cycle</div><div class="hero-badge-value" id="hero-day-num">J8</div></div>
+      </div>
+    </div>
+    <div class="hero-message-section" style="position:relative;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <div style="width:16px;height:1px;background:var(--season);opacity:.5;"></div>
+        <div class="hero-message-label" style="margin-bottom:0;">Message du jour</div>
+        <div style="flex:1;height:1px;background:var(--season);opacity:.15;"></div>
+      </div>
+      <div class="hero-message-text" id="daily-message">L'energie revient - profites-en pour avancer sur ce qui attend.</div>
     </div>
   </div>
 
-  <!-- BANNER INSTALLATION PWA -->
-  <div id="install-banner" style="display:none; margin:10px 14px 0; background:linear-gradient(135deg,var(--season-soft),white); border:1.5px solid var(--season-light); border-radius:16px; padding:16px;">
-    <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
-      <div style="width:36px; height:36px; border-radius:10px; background:var(--season-grad); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:18px;">📲</div>
-      <div style="flex:1;">
-        <div style="font-size:13px; font-weight:600; color:var(--noir);">Installe SakinApp sur ton téléphone</div>
-        <div style="font-size:11px; color:var(--gris); margin-top:2px;">Pour les rappels & un accès rapide</div>
-      </div>
-    </div>
-    <div style="display:flex; flex-direction:column; gap:7px; margin-bottom:12px;">
-      <div style="background:white; border-radius:10px; padding:10px 12px; display:flex; align-items:flex-start; gap:8px;">
-        <span style="font-size:15px; flex-shrink:0;">🍎</span>
-        <div>
-          <div style="font-size:12px; font-weight:600; color:var(--noir); margin-bottom:2px;">iPhone (Safari)</div>
-          <div style="font-size:11px; color:var(--gris); line-height:1.5;">Appuie sur <strong>Partager</strong> (icône en bas) → <strong>"Sur l'écran d'accueil"</strong> → Ajouter</div>
-        </div>
-      </div>
-      <div style="background:white; border-radius:10px; padding:10px 12px; display:flex; align-items:flex-start; gap:8px;">
-        <span style="font-size:15px; flex-shrink:0;">🤖</span>
-        <div>
-          <div style="font-size:12px; font-weight:600; color:var(--noir); margin-bottom:2px;">Android (Chrome)</div>
-          <div style="font-size:11px; color:var(--gris); line-height:1.5;">Appuie sur <strong>⋮</strong> (menu) → <strong>"Ajouter à l'écran d'accueil"</strong> → Installer</div>
-        </div>
-      </div>
-    </div>
-    <div style="display:flex; justify-content:flex-end;">
-      <button onclick="dismissInstallBanner()" style="background:none; border:none; color:var(--gris); font-size:12px; cursor:pointer; padding:2px 0; text-decoration:underline; font-family:var(--sans);">Ne plus afficher</button>
-    </div>
-  </div>
-
-<div class="hero-compact">
-  <div class="hero-compact-top" id="accueil-hero-card" style="background:var(--season-grad)">
-    <div class="hero-compact-row fade-in">
-      <div class="hero-greeting">
-        <div class="hero-greeting-name" id="dash-name">Ma sœur</div>
-        <div class="hero-greeting-sub" id="dash-greeting-sub">Bon matin — 🌸 Printemps · J8</div>
-      </div>
-      <div class="hero-phase-pill">
-        <span class="hero-phase-pill-emoji" id="dash-phase-emoji">🌸</span>
-        <div class="hero-phase-pill-day" id="dash-phase-day">J8</div>
-        <div class="hero-phase-pill-label" id="dash-phase-label">Folliculaire</div>
-      </div>
-    </div>
-  </div>
-  <div class="hero-message-bar">
-    <div class="hero-message-bar-dot"></div>
-    <div class="hero-message-bar-text" id="daily-message">L'énergie revient — profites-en.</div>
-  </div>
-</div>
-  
+  <!-- SCORE DU JOUR -->
   <div class="day-score-card">
-  <div class="day-score-title">✦ MA JOURNÉE</div>
-  <div class="day-score-grid" id="day-score-grid"></div>
-</div>
+    <div class="day-score-title">&#10022; MA JOURNEE</div>
+    <div class="day-score-grid" id="day-score-grid"></div>
+  </div>
 
+  <!-- SEANCE RAPIDE -->
   <div class="quick-seance-card">
-  <div class="qs-header" style="background:var(--season-grad)">
-    <div class="qs-tag">💪 SÉANCE DU JOUR</div>
-    <div class="qs-title-row">
-      <div>
-        <div class="qs-name" id="qs-name">Réveil en douceur</div>
-        <div class="qs-meta" id="qs-meta">Mix sol + debout</div>
+    <div class="qs-header" style="background:var(--season-grad)">
+      <div class="qs-tag">&#128170; SEANCE DU JOUR</div>
+      <div class="qs-title-row">
+        <div><div class="qs-name" id="qs-name">Reveil en douceur</div><div class="qs-meta" id="qs-meta">Mix sol + debout</div></div>
+        <div class="qs-duration-badge" id="qs-duration">12 min</div>
       </div>
-      <div class="qs-duration-badge" id="qs-duration">12 min</div>
+    </div>
+    <div class="qs-exercises" id="qs-exercises"></div>
+    <div id="qs-btn-wrap"><button class="qs-btn" onclick="validerSeanceDash()">&#10003; Seance accomplie - Alhamdulillah</button></div>
+    <div class="qs-done" id="qs-done-wrap" style="display:none;">
+      <div class="qs-done-check">&#10003;</div>
+      <div class="qs-done-text">Alhamdulillah - seance accomplie aujourd'hui &#127800;</div>
     </div>
   </div>
-  <div class="qs-exercises" id="qs-exercises"></div>
-  <div id="qs-btn-wrap">
-    <button class="qs-btn" onclick="validerSeanceDash()">✓ Séance accomplie — Alhamdulillah</button>
+
+  <!-- SUGGESTIONS ENGAGEANTES -->
+  <div class="sugg-engage-card">
+    <div class="sugg-engage-header">
+      <div class="sugg-engage-title">&#10022; SUGGESTIONS DU JOUR</div>
+      <div class="sugg-engage-count" id="sugg-engage-count">0/5 faits</div>
+    </div>
+    <div class="sugg-engage-list" id="sugg-engage-list"></div>
   </div>
-  <div class="qs-done" id="qs-done-wrap" style="display:none">
-    <div class="qs-done-check">✓</div>
-    <div class="qs-done-text">Alhamdulillah — séance accomplie aujourd'hui 🌸</div>
-  </div>
-</div>
-  
+
   <!-- INVOCATION DE LA PHASE -->
-  <div id="inv-card" style="margin:14px 14px 0; border-radius:20px; overflow:hidden; box-shadow:0 4px 20px rgba(45,36,32,.1);">
-    <div style="background:var(--season-grad); padding:18px 20px; position:relative; overflow:hidden;">
-      <div style="position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.07);pointer-events:none;"></div>
-      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.55);font-weight:600;margin-bottom:10px;">🤲 Invocation de ta phase</div>
-      <div id="inv-arabic" style="font-size:20px;direction:rtl;text-align:right;color:white;line-height:1.9;margin-bottom:8px;">رَبِّ أَوْزِعْنِي أَنْ أَشْكُرَ نِعْمَتَكَ</div>
+  <div id="inv-card" style="margin:12px 14px 0;border-radius:20px;overflow:hidden;box-shadow:0 4px 20px rgba(45,36,32,.1);">
+    <div style="background:var(--season-grad);padding:18px 20px;position:relative;overflow:hidden;">
+      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.55);font-weight:600;margin-bottom:10px;">&#129330; Invocation de ta phase</div>
+      <div id="inv-arabic" style="font-size:20px;direction:rtl;text-align:right;color:white;line-height:1.9;margin-bottom:8px;">&#1585;&#1614;&#1576;&#1617;&#1616; &#1575;&#1600;&#1608;&#1618;&#1586;&#1616;&#1593;&#1618;&#1606;&#1616;&#1610; &#1575;&#1614;&#1606;&#1618; &#1575;&#1614;&#1588;&#1618;&#1603;&#1615;&#1585;&#1614; &#1606;&#1616;&#1593;&#1618;&#1605;&#1614;&#1578;&#1614;&#1603;&#1614;</div>
       <div id="inv-translation" style="font-family:var(--serif);font-size:13px;font-style:italic;color:rgba(255,255,255,.75);line-height:1.6;margin-bottom:6px;">"Seigneur, inspire-moi de remercier pour Tes bienfaits."</div>
       <div id="inv-source" style="font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.5px;">Coran 27:19</div>
     </div>
   </div>
 
-  <!-- SUGGESTIONS CLIQUABLES -->
-  <div class="card" style="margin-top:14px;">
-    <div class="card-title" id="suggestions-title">🌸 Suggestions du Printemps</div>
-    <div style="font-size:12px;color:var(--gris);margin-bottom:12px;font-family:var(--serif);font-style:italic" id="suggestions-desc">Des petits gestes adaptés à ton énergie du moment.</div>
-    <div id="suggestions-row"></div>
-  </div>
-
-  <!-- SOIN DU JOUR -->
+  <!-- TILES SOIN -->
   <div class="soin-grid">
-    <div class="soin-tile" onclick="switchTabById('vie', 'alim')">
-      <div class="soin-emoji">🍵</div>
-      <div class="soin-cat">Alimentation</div>
-      <div class="soin-desc" id="food-today">Quinoa, avocat, fruits rouges</div>
-      <div class="soin-link">Voir plus →</div>
-    </div>
-    <div class="soin-tile" onclick="switchTabById('vie', 'skin')">
-      <div class="soin-emoji">✨</div>
-      <div class="soin-cat">Skincare</div>
-      <div class="soin-desc" id="skin-today">Vitamine C + Argile blanche</div>
-      <div class="soin-link">Voir plus →</div>
-    </div>
+    <div class="soin-tile" onclick="switchTabById('vie','alim')"><div class="soin-emoji">&#127861;</div><div class="soin-cat">Alimentation</div><div class="soin-desc" id="food-today">Quinoa, avocat, fruits rouges</div><div class="soin-link">Voir plus</div></div>
+    <div class="soin-tile" onclick="switchTabById('vie','skin')"><div class="soin-emoji">&#10024;</div><div class="soin-cat">Skincare</div><div class="soin-desc" id="skin-today">Vitamine C + Argile blanche</div><div class="soin-link">Voir plus</div></div>
   </div>
+  <div style="height:8px;"></div>
 </div>
 
 <!-- CYCLE -->
 <div class="tab-page" id="tab-cycle">
   <div class="tab-topbar">
     <div class="tab-topbar-title">Mon Cycle</div>
-    <div class="tab-topbar-sub" id="cycle-header-sub">Printemps · Jour 8 sur 28</div>
+    <div class="tab-topbar-sub" id="cycle-header-sub">Printemps - Jour 8 sur 28</div>
   </div>
   <div style="height:14px;"></div>
+
   <div class="cycle-ring-container">
     <div class="cycle-ring-wrap">
       <svg viewBox="0 0 200 200" id="cycle-svg">
@@ -279,214 +229,234 @@
       <div class="cycle-center-info">
         <div class="cycle-center-day" id="cycle-day-num">8</div>
         <div class="cycle-center-label">Jour du cycle</div>
-        <div class="cycle-center-season" id="cycle-season-label">🌸 Printemps</div>
+        <div class="cycle-center-season" id="cycle-season-label">&#127800; Printemps</div>
       </div>
     </div>
     <div class="cycle-legend">
       <div class="legend-item"><div class="legend-dot" style="background:#7B5EA7"></div>Hiver</div>
       <div class="legend-item"><div class="legend-dot" style="background:#3DAE8A"></div>Printemps</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#E8834A"></div>Été</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#E8834A"></div>Ete</div>
       <div class="legend-item"><div class="legend-dot" style="background:#C4694A"></div>Automne</div>
     </div>
   </div>
-  <div style="margin:0 14px 12px; display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-    <div style="background:var(--season-grad); border-radius:18px; padding:16px; text-align:center;">
-      <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:6px;font-weight:600;">Prochaines règles</div>
+
+  <div style="margin:0 14px 12px;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+    <div style="background:var(--season-grad);border-radius:18px;padding:16px;text-align:center;">
+      <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:6px;font-weight:600;">Prochaines regles</div>
       <div style="font-family:var(--script);font-size:30px;color:white;line-height:1;" id="countdown-num">6</div>
       <div style="font-size:11px;color:rgba(255,255,255,.65);margin-top:4px;" id="countdown-label">jours</div>
     </div>
-    <div style="background:white; border:1.5px solid var(--sable); border-radius:18px; padding:16px; text-align:center;">
+    <div style="background:white;border:1.5px solid var(--sable);border-radius:18px;padding:16px;text-align:center;">
       <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gris);margin-bottom:6px;font-weight:600;">Phase actuelle</div>
       <div style="font-family:var(--serif);font-size:16px;color:var(--season);font-weight:600;line-height:1.3;" id="cycle-phase-name">Folliculaire</div>
-      <div style="font-size:11px;color:var(--gris);margin-top:4px;" id="cycle-phase-days">J6 → J13</div>
+      <div style="font-size:11px;color:var(--gris);margin-top:4px;" id="cycle-phase-days">J6 - J13</div>
     </div>
   </div>
+
+  <!-- SYMPTOMES DU JOUR -->
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="toggleSymptomesSection()">
+      <div class="card-title" style="margin-bottom:0;">&#127777;&#65039; Mes symptomes du jour</div>
+      <span id="symptomes-arrow" style="font-size:11px;color:var(--gris);opacity:.5;transition:transform .25s;">&#9660;</span>
+    </div>
+    <div id="symptomes-content" style="margin-top:12px;">
+      <div style="font-size:12px;color:var(--gris);margin-bottom:12px;font-family:var(--serif);font-style:italic;">Coche ce que tu ressens - adapte a ta phase du cycle.</div>
+      <div class="symptomes-grid" id="symptomes-grid"></div>
+    </div>
+  </div>
+
   <!-- GLAIRE CERVICALE -->
   <div class="card">
     <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="toggleGlaire()">
-      <div class="card-title" style="margin-bottom:0;">💧 Observation du jour — Glaire cervicale</div>
-      <span id="glaire-arrow" style="font-size:11px;color:var(--gris);opacity:.5;transition:transform .25s;">▼</span>
+      <div class="card-title" style="margin-bottom:0;">&#128167; Observation du jour - Glaire cervicale</div>
+      <span id="glaire-arrow" style="font-size:11px;color:var(--gris);opacity:.5;transition:transform .25s;">&#9660;</span>
     </div>
-    <div id="glaire-collapsed" style="margin-top:8px;font-size:12px;color:var(--gris);font-family:var(--serif);font-style:italic;">Touche pour observer ta glaire aujourd'hui →</div>
+    <div id="glaire-collapsed" style="margin-top:8px;font-size:12px;color:var(--gris);font-family:var(--serif);font-style:italic;">Touche pour observer ta glaire aujourd'hui</div>
     <div id="glaire-content" style="display:none;margin-top:12px;">
-      <div style="font-size:12px;color:var(--gris);margin-bottom:12px;font-family:var(--serif);font-style:italic;">Ce que tu observes t'indique ta fertilité du moment.</div>
+      <div style="font-size:12px;color:var(--gris);margin-bottom:12px;font-family:var(--serif);font-style:italic;">Ce que tu observes t'indique ta fertilite du moment.</div>
       <div class="glaire-options" id="glaire-options">
-        <div class="glaire-option" onclick="selectGlaire(this,'regles')"><div class="glaire-dot" style="background:#F0EBF8;">🌙</div><div><div class="glaire-name">Rien / Règles</div><div class="glaire-desc">Période de repos · Pas de fertilité</div></div></div>
-        <div class="glaire-option" onclick="selectGlaire(this,'seche')"><div class="glaire-dot" style="background:#F5F5F5;">🤍</div><div><div class="glaire-name">Sèche ou collante</div><div class="glaire-desc">Début de cycle · Faible fertilité</div></div></div>
-        <div class="glaire-option" onclick="selectGlaire(this,'cremeuse')"><div class="glaire-dot" style="background:#E8F8F3;">🌿</div><div><div class="glaire-name">Crémeuse / Laiteuse</div><div class="glaire-desc">Fertilité possible · Corps en préparation</div></div></div>
-        <div class="glaire-option" onclick="selectGlaire(this,'filante')"><div class="glaire-dot" style="background:#FFF8EE;">⚡</div><div><div class="glaire-name">Filante / Transparente</div><div class="glaire-desc">Ovulation proche · Pic de fertilité</div></div></div>
-        <div class="glaire-option" onclick="selectGlaire(this,'epaisse')"><div class="glaire-dot" style="background:#FDF0EE;">🍂</div><div><div class="glaire-name">Épaisse / Absente</div><div class="glaire-desc">Après ovulation · Phase lutéale</div></div></div>
+        <div class="glaire-option" onclick="selectGlaire(this,'regles')"><div class="glaire-dot" style="background:#F0EBF8;">&#127769;</div><div><div class="glaire-name">Rien / Regles</div><div class="glaire-desc">Periode de repos - Pas de fertilite</div></div></div>
+        <div class="glaire-option" onclick="selectGlaire(this,'seche')"><div class="glaire-dot" style="background:#F5F5F5;">&#129293;</div><div><div class="glaire-name">Seche ou collante</div><div class="glaire-desc">Debut de cycle - Faible fertilite</div></div></div>
+        <div class="glaire-option" onclick="selectGlaire(this,'cremeuse')"><div class="glaire-dot" style="background:#E8F8F3;">&#127807;</div><div><div class="glaire-name">Cremeuse / Laiteuse</div><div class="glaire-desc">Fertilite possible</div></div></div>
+        <div class="glaire-option" onclick="selectGlaire(this,'filante')"><div class="glaire-dot" style="background:#FFF8EE;">&#9889;</div><div><div class="glaire-name">Filante / Transparente</div><div class="glaire-desc">Ovulation proche - Pic de fertilite</div></div></div>
+        <div class="glaire-option" onclick="selectGlaire(this,'epaisse')"><div class="glaire-dot" style="background:#FDF0EE;">&#127810;</div><div><div class="glaire-name">Epaisse / Absente</div><div class="glaire-desc">Apres ovulation - Phase luteale</div></div></div>
       </div>
     </div>
   </div>
 
-  <!-- SYMPTÔMES -->
-<div class="card" style="margin-top:0">
-  <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="toggleSymptomesSection()">
-    <div class="card-title" style="margin-bottom:0;">🌡️ Mes symptômes du jour</div>
-    <span id="symptomes-arrow" style="font-size:11px;color:var(--gris);opacity:.5;">▼</span>
-  </div>
-  <div id="symptomes-content" style="margin-top:12px;">
-    <div style="font-size:12px;color:var(--gris);margin-bottom:12px;font-family:var(--serif);font-style:italic;">Coche ce que tu ressens aujourd'hui — adapté à ta phase.</div>
-    <div class="symptomes-grid" id="symptomes-grid"></div>
-  </div>
-</div>
-  <!-- RÈGLES & INTIMITÉ -->
-  <div style="margin:0 14px 12px; border-radius:20px; overflow:hidden; border:1.5px solid var(--sable);">
-    <div style="background:#FDF0EE; padding:16px 18px; cursor:pointer; display:flex; align-items:center; justify-content:space-between;" onclick="toggleIntimite()">
-      <div style="font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#C4694A;">🌙 Règles & Intimité en Islam</div>
-      <span id="intimite-arrow" style="font-size:11px;color:#C4694A;opacity:.6;">▼</span>
+  <!-- REGLES ET INTIMITE -->
+  <div style="margin:0 14px 12px;border-radius:20px;overflow:hidden;border:1.5px solid var(--sable);">
+    <div style="background:#FDF0EE;padding:16px 18px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;" onclick="toggleIntimite()">
+      <div style="font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#C4694A;">&#127769; Regles et Intimite en Islam</div>
+      <span id="intimite-arrow" style="font-size:11px;color:#C4694A;opacity:.6;">&#9660;</span>
     </div>
     <div id="intimite-content" style="display:none;">
-      <div style="background:#FDF0EE; padding:0 18px 16px;">
-        <div style="font-size:13px;color:var(--noir);line-height:1.7;margin-bottom:10px;">Pendant les règles (haidh), le coït est interdit. Les câlins et la tendresse restent permis.</div>
+      <div style="background:#FDF0EE;padding:0 18px 16px;">
+        <div style="font-size:13px;color:var(--noir);line-height:1.7;margin-bottom:10px;">Pendant les regles (haidh), le coit est interdit. Les calins et la tendresse restent permis.</div>
         <div style="background:rgba(255,255,255,.7);border-radius:10px;padding:10px 12px;">
-          <div style="font-size:14px;direction:rtl;text-align:right;color:#5A2018;line-height:1.8;margin-bottom:4px;">قُلْ هُوَ أَذًى فَاعْتَزِلُوا النِّسَاءَ فِي الْمَحِيضِ</div>
+          <div style="font-size:14px;direction:rtl;text-align:right;color:#5A2018;line-height:1.8;margin-bottom:4px;">&#1602;&#1615;&#1604;&#1618; &#1607;&#1615;&#1608;&#1614; &#1575;&#1614;&#1584;&#1611;&#1609; &#1601;&#1614;&#1575;&#1618;&#1593;&#1618;&#1578;&#1614;&#1586;&#1616;&#1604;&#1615;&#1608;&#1575; &#1575;&#1604;&#1606;&#1617;&#1616;&#1587;&#1614;&#1575;&#1569;&#1614; &#1601;&#1616;&#1610; &#1575;&#1604;&#1618;&#1605;&#1614;&#1581;&#1616;&#1610;&#1590;&#1616;</div>
           <div style="font-size:11px;color:var(--gris);font-style:italic;">Coran 2:222</div>
         </div>
-        <div style="margin-top:10px;font-size:12px;color:var(--gris);line-height:1.6;">✦ Après les règles : ghusl obligatoire avant de reprendre les rapports.<br>✦ Le coït interrompu (ʿazl) est permis avec l'accord de l'épouse.</div>
+        <div style="margin-top:10px;font-size:12px;color:var(--gris);line-height:1.6;">Apres les regles : ghusl obligatoire avant de reprendre les rapports.<br>Le coit interrompu est permis avec l'accord de l'epouse.</div>
       </div>
-      <div style="background:#F0F8F5; padding:16px 18px; border-top:1px solid rgba(61,174,138,.1);">
-        <div style="font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#1A6B52;margin-bottom:8px;">🤱 Lochies — Post-accouchement</div>
-        <div style="font-size:13px;color:var(--noir);line-height:1.6;">Saignements après l'accouchement (nifas) · Mêmes règles que le haidh · Jusqu'à 40 jours selon la majorité des savants.</div>
+      <div style="background:#F0F8F5;padding:16px 18px;border-top:1px solid rgba(61,174,138,.1);">
+        <div style="font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#1A6B52;margin-bottom:8px;">&#129329; Lochies - Post-accouchement</div>
+        <div style="font-size:13px;color:var(--noir);line-height:1.6;">Saignements apres l'accouchement (nifas). Memes regles que le haidh. Jusqu'a 40 jours selon la majorite des savants.</div>
       </div>
-      <div style="background:white; padding:16px 18px; border-top:1px solid rgba(0,0,0,.04);">
-        <div style="font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--season);margin-bottom:12px;">🤲 Invocation pendant les douleurs</div>
+      <div style="background:white;padding:16px 18px;border-top:1px solid rgba(0,0,0,.04);">
+        <div style="font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--season);margin-bottom:12px;">&#129330; Invocation pendant les douleurs</div>
         <div style="background:var(--season-soft);border-radius:12px;padding:12px 14px;">
-          <div style="font-size:18px;direction:rtl;text-align:right;color:var(--noir);line-height:1.8;margin-bottom:6px;">رَبِّ إِنِّي مَسَّنِيَ الضُّرُّ وَأَنتَ أَرْحَمُ الرَّاحِمِينَ</div>
-          <div style="font-size:12px;color:var(--gris);font-style:italic;margin-bottom:2px;">"Seigneur, l'adversité m'a touchée, et Tu es le plus Miséricordieux."</div>
+          <div style="font-size:18px;direction:rtl;text-align:right;color:var(--noir);line-height:1.8;margin-bottom:6px;">&#1585;&#1614;&#1576;&#1617;&#1616; &#1573;&#1616;&#1606;&#1617;&#1616;&#1610; &#1605;&#1614;&#1587;&#1617;&#1614;&#1606;&#1616;&#1610;&#1614; &#1575;&#1604;&#1590;&#1617;&#1615;&#1585;&#1617;&#1615; &#1608;&#1614;&#1575;&#1614;&#1606;&#1618;&#1578;&#1614; &#1575;&#1614;&#1585;&#1618;&#1581;&#1614;&#1605;&#1615; &#1575;&#1604;&#1585;&#1617;&#1614;&#1575;&#1581;&#1616;&#1605;&#1616;&#1610;&#1606;&#1614;</div>
+          <div style="font-size:12px;color:var(--gris);font-style:italic;margin-bottom:2px;">"Seigneur, l'adversite m'a touchee, et Tu es le plus Misericordieux."</div>
           <div style="font-size:10px;color:var(--gris);opacity:.7;">Coran 21:83</div>
         </div>
-        <div style="margin-top:8px;font-size:12px;color:var(--gris);font-style:italic;font-family:var(--serif);line-height:1.6;">Pendant les règles, le dhikr reste toujours ouvert. Ton cœur reste connecté à Allah.</div>
+        <div style="margin-top:8px;font-size:12px;color:var(--gris);font-style:italic;font-family:var(--serif);line-height:1.6;">Pendant les regles, le dhikr reste toujours ouvert. Ton coeur reste connecte a Allah.</div>
       </div>
     </div>
   </div>
   <div style="height:14px;"></div>
 </div>
 
-<!-- ÂME -->
+<!-- AME -->
 <div class="tab-page" id="tab-ame">
   <div class="tab-topbar">
-    <div class="tab-topbar-title">L'Âme</div>
-    <div class="tab-topbar-sub">Nourrir son intérieur</div>
+    <div class="tab-topbar-title">L'Ame</div>
+    <div class="tab-topbar-sub">Nourrir son interieur</div>
   </div>
+
   <!-- NOM D'ALLAH DU JOUR -->
-  <div id="asma-day-card" style="margin:14px 14px 0; border-radius:20px; overflow:hidden; box-shadow:0 4px 20px rgba(45,36,32,.1);">
-    <div style="background:var(--season-grad); padding:20px; cursor:pointer;" onclick="openAsmaModal()">
-      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:12px;font-weight:600;">✦ Nom d'Allah du jour</div>
-      <div id="asma-day-arabic" style="font-size:34px;direction:rtl;text-align:center;color:white;line-height:1.6;margin-bottom:6px;">اللَّطِيف</div>
+  <div id="asma-day-card" style="margin:14px 14px 0;border-radius:20px;overflow:hidden;box-shadow:0 4px 20px rgba(45,36,32,.1);">
+    <div style="background:var(--season-grad);padding:20px;cursor:pointer;" onclick="openAsmaModal()">
+      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:12px;font-weight:600;">&#10022; Nom d'Allah du jour</div>
+      <div id="asma-day-arabic" style="font-size:34px;direction:rtl;text-align:center;color:white;line-height:1.6;margin-bottom:6px;">&#1575;&#1604;&#1604;&#1617;&#1614;&#1591;&#1616;&#1610;&#1601;</div>
       <div id="asma-day-fr" style="font-family:var(--script);font-size:24px;color:white;text-align:center;margin-bottom:16px;">Al-Latif</div>
       <div style="display:flex;align-items:center;gap:10px;">
-        <div style="flex:1;height:3px;background:rgba(255,255,255,.2);border-radius:2px;overflow:hidden;">
-          <div id="asma-progress" style="height:100%;background:white;border-radius:2px;transition:width .4s;width:0%"></div>
-        </div>
+        <div style="flex:1;height:3px;background:rgba(255,255,255,.2);border-radius:2px;overflow:hidden;"><div id="asma-progress" style="height:100%;background:white;border-radius:2px;transition:width .4s;width:0%"></div></div>
         <div style="font-size:11px;color:rgba(255,255,255,.55);white-space:nowrap;"><span id="asma-count">0</span>/99</div>
       </div>
-      <div style="font-size:10px;color:rgba(255,255,255,.4);text-align:center;margin-top:8px;letter-spacing:.5px;">Touche pour voir les 99 noms →</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.4);text-align:center;margin-top:8px;letter-spacing:.5px;">Touche pour voir les 99 noms</div>
     </div>
-    <div style="background:white; padding:16px 18px;">
-      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--season);font-weight:600;margin-bottom:10px;">✦ À méditer</div>
+    <div style="background:white;padding:16px 18px;">
+      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--season);font-weight:600;margin-bottom:10px;">&#10022; A mediter</div>
       <div id="asma-day-meaning" style="font-family:var(--serif);font-size:14px;font-style:italic;color:var(--noir);line-height:1.7;margin-bottom:10px;"></div>
       <div id="asma-day-reflection" style="font-size:12px;color:var(--gris);line-height:1.6;padding:10px 12px;background:var(--season-soft);border-radius:10px;border-left:2px solid var(--season);"></div>
     </div>
   </div>
-  <!-- 5 PRIÈRES -->
-  <div class="prayers-card">
-    <div class="prayers-hdr"><div class="prayers-hdr-t">🕌 Mes 5 prières</div><div class="prayers-hdr-s" id="prayers-hdr-sub">Coche au fur et à mesure de ta journée</div></div>
-    <div class="prayers-prog"><div class="prayers-prog-t"><div class="prayers-prog-f" id="prayer-progress" style="width:0%"></div></div><div class="prayers-prog-lbl" id="prayer-prog-lbl">0 / 5</div></div>
-    <div class="prayer-row" onclick="togglePrayer(this,'fajr')"><div class="prayer-chk" id="pr-fajr">☀️</div><div class="prayer-name" id="prn-fajr">Fajr</div><div class="prayer-time">Aube</div></div>
-    <div class="prayer-row" onclick="togglePrayer(this,'dohr')"><div class="prayer-chk" id="pr-dohr">🌤️</div><div class="prayer-name" id="prn-dohr">Dhuhr</div><div class="prayer-time">Midi</div></div>
-    <div class="prayer-row" onclick="togglePrayer(this,'asr')"><div class="prayer-chk" id="pr-asr">🌥️</div><div class="prayer-name" id="prn-asr">Asr</div><div class="prayer-time">Après-midi</div></div>
-    <div class="prayer-row" onclick="togglePrayer(this,'maghrib')"><div class="prayer-chk" id="pr-maghrib">🌅</div><div class="prayer-name" id="prn-maghrib">Maghrib</div><div class="prayer-time">Coucher du soleil</div></div>
-    <div class="prayer-row" onclick="togglePrayer(this,'isha')"><div class="prayer-chk" id="pr-isha">🌙</div><div class="prayer-name" id="prn-isha">Isha</div><div class="prayer-time">Nuit</div></div>
-  </div>
-  <!-- DHIKR CASES À COCHER -->
-<div class="dhikr-check-card">
-  <div class="dhikr-check-hdr">
-    <div class="dhikr-check-hdr-t">📿 Adhkar du jour</div>
-    <div class="dhikr-check-hdr-s">Coche quand tu as accompli chaque dhikr</div>
-  </div>
-  <div class="dhikr-check-items" id="dhikr-check-items"></div>
-</div>
 
-<!-- LECTURE DU CORAN -->
-<div class="coran-check-card" style="margin:12px 14px 0;">
-  <div class="coran-check-inner" id="coran-check-inner" onclick="toggleCoranCheck()">
-    <div class="coran-check-box">📖</div>
-    <div class="coran-check-content">
-      <div class="coran-check-title">Lecture du Coran</div>
-      <div class="coran-check-sub">Même un verset — c'est une lumière pour ta journée</div>
+  <!-- 5 PRIERES -->
+  <div class="prayers-card">
+    <div class="prayers-hdr"><div class="prayers-hdr-t">&#128332; Mes 5 prieres</div><div class="prayers-hdr-s" id="prayers-hdr-sub">Coche au fur et a mesure de ta journee</div></div>
+    <div class="prayers-prog"><div class="prayers-prog-t"><div class="prayers-prog-f" id="prayer-progress" style="width:0%"></div></div><div class="prayers-prog-lbl" id="prayer-prog-lbl">0 / 5</div></div>
+    <div class="prayer-row" onclick="togglePrayer(this,'fajr')"><div class="prayer-chk" id="pr-fajr">&#9728;&#65039;</div><div class="prayer-name" id="prn-fajr">Fajr</div><div class="prayer-time">Aube</div></div>
+    <div class="prayer-row" onclick="togglePrayer(this,'dohr')"><div class="prayer-chk" id="pr-dohr">&#127780;&#65039;</div><div class="prayer-name" id="prn-dohr">Dhuhr</div><div class="prayer-time">Midi</div></div>
+    <div class="prayer-row" onclick="togglePrayer(this,'asr')"><div class="prayer-chk" id="pr-asr">&#127781;&#65039;</div><div class="prayer-name" id="prn-asr">Asr</div><div class="prayer-time">Apres-midi</div></div>
+    <div class="prayer-row" onclick="togglePrayer(this,'maghrib')"><div class="prayer-chk" id="pr-maghrib">&#127749;</div><div class="prayer-name" id="prn-maghrib">Maghrib</div><div class="prayer-time">Coucher du soleil</div></div>
+    <div class="prayer-row" onclick="togglePrayer(this,'isha')"><div class="prayer-chk" id="pr-isha">&#127769;</div><div class="prayer-name" id="prn-isha">Isha</div><div class="prayer-time">Nuit</div></div>
+  </div>
+
+  <!-- DHIKR CASES A COCHER -->
+  <div class="dhikr-check-card">
+    <div class="dhikr-check-hdr">
+      <div class="dhikr-check-hdr-t">&#128255; Adhkar du jour</div>
+      <div class="dhikr-check-hdr-s">Coche quand tu as accompli chaque dhikr</div>
+    </div>
+    <div class="dhikr-check-items" id="dhikr-check-items"></div>
+  </div>
+
+  <!-- LECTURE DU CORAN -->
+  <div class="coran-check-card" style="margin:12px 14px 0;">
+    <div class="coran-check-inner" id="coran-check-inner" onclick="toggleCoranCheck()">
+      <div class="coran-check-box">&#128214;</div>
+      <div class="coran-check-content">
+        <div class="coran-check-title">Lecture du Coran</div>
+        <div class="coran-check-sub">Meme un verset - c'est une lumiere pour ta journee</div>
+      </div>
+    </div>
+    <div class="coran-check-hadith">"La meilleure d'entre vous est celle qui apprend le Coran et l'enseigne." - Boukhari</div>
+  </div>
+
+  <!-- ISTIGHFAR -->
+  <div style="margin:12px 14px 0;background:white;border-radius:20px;border:1.5px solid var(--sable);overflow:hidden;">
+    <div style="padding:14px 16px 12px;border-bottom:1px solid rgba(0,0,0,.05);">
+      <div style="font-family:var(--serif);font-size:15px;color:var(--noir);margin-bottom:2px;">&#129293; Istighfar - Demande de pardon</div>
+      <div style="font-size:12px;color:var(--gris);">Coche chaque fois que tu demandes pardon</div>
+    </div>
+    <div style="padding:8px 12px 12px;">
+      <div class="dhikr-item" id="dhikr-item-istighfar">
+        <div class="dhikr-ring" id="dhikr-ring-istighfar"><div class="dhikr-count" id="dhikr-istighfar">0</div><div class="dhikr-max">/100</div></div>
+        <div style="flex:1"><div class="dhikr-arabic">&#1575;&#1614;&#1587;&#1618;&#1578;&#1614;&#1594;&#1618;&#1601;&#1616;&#1585;&#1615; &#1575;&#1604;&#1604;&#1617;&#1614;&#1607;&#1614;</div><div class="dhikr-fr">Astaghfirullah - Je demande pardon a Allah</div></div>
+        <button class="dhikr-btn" onclick="incrementDhikr('istighfar',100)">+</button>
+      </div>
+    </div>
+    <div style="padding:0 16px 14px;">
+      <div style="background:var(--season-soft);border-radius:12px;padding:10px 14px;font-family:var(--serif);font-size:12px;color:var(--noir);font-style:italic;line-height:1.6;">"Celui qui dit l'istighfar regulierement, Allah lui ouvre une issue dans ses difficultes." - Abou Dawoud</div>
     </div>
   </div>
-  <div class="coran-check-hadith">
-    "La meilleure d'entre vous est celle qui apprend le Coran et l'enseigne." — Boukhari
-  </div>
+  <div style="height:16px;"></div>
 </div>
-  
+
 <!-- VIE -->
 <div class="tab-page" id="tab-vie">
   <div class="tab-topbar" style="background:rgba(250,246,240,.97)">
     <div class="tab-topbar-title" style="color:var(--season)">Ma Vie</div>
-    <div class="tab-topbar-sub">Alimentation · Mouvement · Soin</div>
+    <div class="tab-topbar-sub">Alimentation - Mouvement - Soin</div>
   </div>
   <div style="height:28px;"></div>
   <div class="vie-tabs">
-    <div class="vie-tab active" onclick="switchVieTab(this,'alim')">🍵 Alimentation</div>
-    <div class="vie-tab" onclick="switchVieTab(this,'sport')">💪 Sport</div>
-    <div class="vie-tab" onclick="switchVieTab(this,'skin')">✨ Skincare</div>
+    <div class="vie-tab active" onclick="switchVieTab(this,'alim')">&#127861; Alimentation</div>
+    <div class="vie-tab" onclick="switchVieTab(this,'sport')">&#128170; Sport</div>
+    <div class="vie-tab" onclick="switchVieTab(this,'skin')">&#10024; Skincare</div>
   </div>
-  <!-- Alimentation -->
+
+  <!-- ALIMENTATION -->
   <div class="vie-section active" id="vie-alim">
     <div class="card">
       <div class="card-title">Ce que ton corps a besoin en ce moment</div>
       <div class="nutriment-grid" id="nutriment-grid"></div>
     </div>
     <div class="card">
-      <div class="card-title">⭐ Aliments à privilégier</div>
+      <div class="card-title">&#11088; Aliments a privilegier</div>
       <div class="aliment-tags" id="aliment-tags"></div>
       <div style="margin-top:10px;font-size:11px;color:var(--gris);font-family:var(--serif);font-style:italic;display:flex;align-items:center;gap:6px;">
         <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--season);flex-shrink:0;"></span>
-        Les aliments colorés sont les stars de ta phase — priorité à eux.
+        Les aliments colores sont les stars de ta phase - priorite a eux.
       </div>
     </div>
     <div class="card">
-      <div class="card-title">🌿 Ton corps préfère moins de</div>
+      <div class="card-title">&#127807; Ton corps prefere moins de</div>
       <div class="aliment-tags" id="aliment-eviter"></div>
     </div>
-    <!-- PREMIUM recettes -->
     <div class="prem-blur-wrap">
       <div class="prem-blur-inner">
-        <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:12px;">🍽️ Recette de ta saison</div>
+        <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:12px;">&#127869;&#65039; Recette de ta saison</div>
         <div style="height:80px;background:linear-gradient(135deg,#E8DDD0,#F5EDE0);border-radius:14px;margin-bottom:10px;"></div>
         <div style="height:12px;background:var(--sable);border-radius:6px;width:65%;margin-bottom:8px;"></div>
         <div style="height:10px;background:var(--sable);border-radius:5px;width:80%;margin-bottom:8px;"></div>
-        <div style="height:10px;background:var(--sable);border-radius:5px;width:50%;"></div>
       </div>
       <div class="prem-blur-ov">
-        <div style="font-size:26px;margin-bottom:8px;">🍽️</div>
+        <div style="font-size:26px;margin-bottom:8px;">&#127869;&#65039;</div>
         <div class="prem-blur-title">Recettes de ta saison</div>
-        <div class="prem-blur-sub">28+ recettes cycliques adaptées à ta phase, bientôt disponibles.</div>
-        <button class="prem-blur-btn" onclick="goToPremium()">Rejoindre la liste d'attente ✦</button>
+        <div class="prem-blur-sub">28+ recettes cycliques adaptees a ta phase, bientot disponibles.</div>
+        <button class="prem-blur-btn" onclick="goToPremium()">Rejoindre la liste d'attente</button>
       </div>
     </div>
   </div>
-  <!-- Sport -->
+
+  <!-- SPORT -->
   <div class="vie-section" id="vie-sport">
     <div style="height:14px"></div>
     <div class="sport-card" style="margin:0 14px">
       <div class="sport-header" id="sport-header" style="background:var(--season-grad)">
-        <div class="sport-tag">💪 Séance du jour</div>
-        <div class="sport-name" id="sport-name">Réveil en douceur</div>
-        <div class="sport-meta" id="sport-meta">12 min · Mix sol + debout</div>
+        <div class="sport-tag">&#128170; Seance du jour</div>
+        <div class="sport-name" id="sport-name">Reveil en douceur</div>
+        <div class="sport-meta" id="sport-meta">12 min - Mix sol + debout</div>
         <div id="sport-exercises" style="margin-top:8px"></div>
         <div style="margin-top:16px" id="sport-validate-wrap">
-          <button id="sport-validate-btn" onclick="validerSeance()" style="width:100%;padding:13px;background:rgba(255,255,255,0.18);border:1.5px solid rgba(255,255,255,0.35);border-radius:14px;color:white;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">✓ Séance accomplie</button>
+          <button id="sport-validate-btn" onclick="validerSeance()" style="width:100%;padding:13px;background:rgba(255,255,255,0.18);border:1.5px solid rgba(255,255,255,0.35);border-radius:14px;color:white;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">&#10003; Seance accomplie</button>
         </div>
         <div id="sport-done-state" style="display:none;margin-top:16px;background:rgba(255,255,255,0.15);border-radius:14px;padding:14px 16px;text-align:center;border:1px solid rgba(255,255,255,0.25);">
-          <div style="font-size:22px;margin-bottom:6px">✦</div>
-          <div style="font-family:var(--serif);font-size:15px;color:white;font-style:italic;margin-bottom:8px" id="sport-done-msg">Alhamdulillah — tu as pris soin de ton corps.</div>
-          <div style="font-size:16px;direction:rtl;color:rgba(255,255,255,0.85);margin-bottom:4px">اَلْحَمْدُ لِلَّهِ</div>
-          <div style="font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:1px">Alhamdulillah · Louange à Allah</div>
+          <div style="font-size:22px;margin-bottom:6px">&#10022;</div>
+          <div style="font-family:var(--serif);font-size:15px;color:white;font-style:italic;margin-bottom:8px" id="sport-done-msg">Alhamdulillah - tu as pris soin de ton corps.</div>
         </div>
       </div>
       <div style="background:white;padding:16px 18px 20px;">
@@ -495,7 +465,7 @@
         <div id="sport-mouvements"></div>
         <div style="margin-top:12px;">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-            <div style="font-size:11px;color:var(--gris);" id="mouv-progress-label">0 / 0 pratiqués</div>
+            <div style="font-size:11px;color:var(--gris);" id="mouv-progress-label">0 / 0 pratiques</div>
             <div style="font-size:11px;color:var(--season);font-weight:600;" id="mouv-progress-pct">0%</div>
           </div>
           <div style="height:4px;background:var(--sable);border-radius:2px;overflow:hidden;">
@@ -506,37 +476,38 @@
     </div>
     <div style="height:14px"></div>
   </div>
-  <!-- Skincare -->
+
+  <!-- SKINCARE -->
   <div class="vie-section" id="vie-skin">
     <div class="card">
       <div class="card-title">Ce qui se passe sur ta peau en ce moment</div>
-      <div style="font-size:13px; color:var(--gris); line-height:1.6;" id="skin-what-happens"></div>
+      <div style="font-size:13px;color:var(--gris);line-height:1.6;" id="skin-what-happens"></div>
     </div>
     <div class="card">
-      <div class="card-title">Actifs à privilégier</div>
+      <div class="card-title">Actifs a privilegier</div>
       <div id="skin-actifs"></div>
     </div>
     <div class="card">
-      <div class="card-title">✓ Gestes clés</div>
+      <div class="card-title">&#10003; Gestes cles</div>
       <div class="aliment-tags" id="skin-gestes"></div>
     </div>
     <div class="card">
-      <div class="card-title">🌿 Ton corps préfère moins de</div>
+      <div class="card-title">&#127807; Ton corps prefere moins de</div>
       <div class="aliment-tags" id="skin-eviter" style="gap:6px;"></div>
     </div>
     <div class="prem-blur-wrap">
       <div class="prem-blur-inner">
-        <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:12px;">✨ Routine matin & soir</div>
+        <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:12px;">&#10024; Routine matin et soir</div>
         <div style="display:flex;flex-direction:column;gap:8px;">
           <div style="height:52px;background:linear-gradient(135deg,#F5EDE0,#EDD8C0);border-radius:12px;"></div>
           <div style="height:52px;background:linear-gradient(135deg,#EAE0F0,#DDD0E8);border-radius:12px;"></div>
         </div>
       </div>
       <div class="prem-blur-ov">
-        <div style="font-size:26px;margin-bottom:8px;">✨</div>
-        <div class="prem-blur-title">Routine complète matin & soir</div>
-        <div class="prem-blur-sub">Protocole skincare détaillé selon ta saison, bientôt disponible.</div>
-        <button class="prem-blur-btn" onclick="goToPremium()">Rejoindre la liste d'attente ✦</button>
+        <div style="font-size:26px;margin-bottom:8px;">&#10024;</div>
+        <div class="prem-blur-title">Routine complete matin et soir</div>
+        <div class="prem-blur-sub">Protocole skincare detaille selon ta saison, bientot disponible.</div>
+        <button class="prem-blur-btn" onclick="goToPremium()">Rejoindre la liste d'attente</button>
       </div>
     </div>
   </div>
@@ -545,206 +516,208 @@
 <!-- MOI -->
 <div class="tab-page" id="tab-moi">
   <div class="profil-hero">
-    <div class="profil-av" id="profilAv" style="background:var(--season-grad);">🌸</div>
+    <div class="profil-av" id="profilAv" style="background:var(--season-grad);">&#127800;</div>
     <div class="profil-nm" id="profil-name">Lila</div>
-    <div class="profil-badge" id="profil-sub">Printemps · Jour 8</div>
+    <div class="profil-badge" id="profil-sub">Printemps - Jour 8</div>
   </div>
   <div style="height:16px;"></div>
-  <!-- BANDE ÉNERGIE 28 JOURS -->
-  <div style="margin:0 14px 14px; background:white; border-radius:20px; border:1.5px solid var(--sable); padding:16px 18px;">
-    <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:4px;">Mon énergie sur 28 jours</div>
-    <div style="font-family:var(--serif);font-size:11px;font-style:italic;color:var(--gris);margin-bottom:14px;">Colorée par saison · Le point brillant = aujourd'hui</div>
+
+  <!-- ENERGIE 28 JOURS -->
+  <div style="margin:0 14px 14px;background:white;border-radius:20px;border:1.5px solid var(--sable);padding:16px 18px;">
+    <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:4px;">Mon energie sur 28 jours</div>
+    <div style="font-family:var(--serif);font-size:11px;font-style:italic;color:var(--gris);margin-bottom:14px;">Coloree par saison - Le point brillant = aujourd'hui</div>
     <div style="display:flex;align-items:flex-end;gap:3px;height:56px;" id="energy-bars-moi"></div>
     <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:9px;color:var(--gris);">
-      <span>🌙 Hiver</span><span>🌸 Printemps</span><span>☀️ Été</span><span>🍂 Automne</span>
+      <span>&#127769; Hiver</span><span>&#127800; Printemps</span><span>&#9728;&#65039; Ete</span><span>&#127810; Automne</span>
     </div>
   </div>
-  <div style="height:12px;"></div>
-  <!-- SECTION AVIS BETA -->
-  <div id="feedback-section" style="display:none; margin:0 14px 14px; border-radius:20px; overflow:hidden; border:1.5px solid var(--sable); background:white; box-shadow:0 2px 12px rgba(45,36,32,.05);">
-    <div style="background:linear-gradient(135deg,var(--season-soft),white); padding:18px 20px 14px; border-bottom:1px solid var(--sable);">
-      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--season);font-weight:600;margin-bottom:6px;">✦ Phase de test</div>
+
+  <!-- FEEDBACK BETA -->
+  <div id="feedback-section" style="display:none;margin:0 14px 14px;border-radius:20px;overflow:hidden;border:1.5px solid var(--sable);background:white;">
+    <div style="background:linear-gradient(135deg,var(--season-soft),white);padding:18px 20px 14px;border-bottom:1px solid var(--sable);">
+      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--season);font-weight:600;margin-bottom:6px;">&#10022; Phase de test</div>
       <div style="font-family:var(--serif);font-size:17px;color:var(--noir);margin-bottom:6px;">Ton avis compte vraiment</div>
-      <div style="font-size:12px;color:var(--gris);line-height:1.6;">Tu es parmi les premières à utiliser SakinApp.<br>Après quelques jours d'utilisation, prends 2 minutes pour partager ton ressenti.</div>
+      <div style="font-size:12px;color:var(--gris);line-height:1.6;">Tu es parmi les premieres a utiliser SakinApp. Apres quelques jours, prends 2 minutes pour partager ton ressenti.</div>
     </div>
     <div style="padding:18px 20px 20px;" id="feedback-form-wrap">
       <div style="margin-bottom:16px;">
         <div style="font-size:12px;font-weight:600;color:var(--noir);margin-bottom:10px;">Comment tu trouves l'app globalement ?</div>
         <div style="display:flex;gap:8px;" id="rating-stars">
-          <div onclick="setRating(1)" data-star="1" style="flex:1;text-align:center;padding:10px 6px;border-radius:12px;border:1.5px solid var(--sable);cursor:pointer;font-size:20px;transition:all .2s;">😕</div>
-          <div onclick="setRating(2)" data-star="2" style="flex:1;text-align:center;padding:10px 6px;border-radius:12px;border:1.5px solid var(--sable);cursor:pointer;font-size:20px;transition:all .2s;">😐</div>
-          <div onclick="setRating(3)" data-star="3" style="flex:1;text-align:center;padding:10px 6px;border-radius:12px;border:1.5px solid var(--sable);cursor:pointer;font-size:20px;transition:all .2s;">🙂</div>
-          <div onclick="setRating(4)" data-star="4" style="flex:1;text-align:center;padding:10px 6px;border-radius:12px;border:1.5px solid var(--sable);cursor:pointer;font-size:20px;transition:all .2s;">😊</div>
-          <div onclick="setRating(5)" data-star="5" style="flex:1;text-align:center;padding:10px 6px;border-radius:12px;border:1.5px solid var(--sable);cursor:pointer;font-size:20px;transition:all .2s;">🤩</div>
+          <div onclick="setRating(1)" style="flex:1;text-align:center;padding:10px 6px;border-radius:12px;border:1.5px solid var(--sable);cursor:pointer;font-size:20px;">&#128533;</div>
+          <div onclick="setRating(2)" style="flex:1;text-align:center;padding:10px 6px;border-radius:12px;border:1.5px solid var(--sable);cursor:pointer;font-size:20px;">&#128528;</div>
+          <div onclick="setRating(3)" style="flex:1;text-align:center;padding:10px 6px;border-radius:12px;border:1.5px solid var(--sable);cursor:pointer;font-size:20px;">&#128578;</div>
+          <div onclick="setRating(4)" style="flex:1;text-align:center;padding:10px 6px;border-radius:12px;border:1.5px solid var(--sable);cursor:pointer;font-size:20px;">&#128522;</div>
+          <div onclick="setRating(5)" style="flex:1;text-align:center;padding:10px 6px;border-radius:12px;border:1.5px solid var(--sable);cursor:pointer;font-size:20px;">&#129321;</div>
         </div>
         <div id="rating-label" style="text-align:center;font-size:11px;color:var(--gris);margin-top:6px;font-family:var(--serif);font-style:italic;min-height:16px;"></div>
       </div>
       <div style="margin-bottom:14px;">
-        <div style="font-size:12px;font-weight:600;color:var(--noir);margin-bottom:8px;">Ce que tu aimes le plus ✦</div>
+        <div style="font-size:12px;font-weight:600;color:var(--noir);margin-bottom:8px;">Ce que tu aimes le plus</div>
         <div style="display:flex;flex-wrap:wrap;gap:6px;" id="likes-chips">
-          <div onclick="toggleChip(this)" style="padding:7px 13px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;transition:all .2s;background:white;">Le design</div>
-          <div onclick="toggleChip(this)" style="padding:7px 13px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;transition:all .2s;background:white;">Le contenu islamique</div>
-          <div onclick="toggleChip(this)" style="padding:7px 13px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;transition:all .2s;background:white;">Le cycle & saisons</div>
-          <div onclick="toggleChip(this)" style="padding:7px 13px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;transition:all .2s;background:white;">Les prières</div>
-          <div onclick="toggleChip(this)" style="padding:7px 13px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;transition:all .2s;background:white;">La glaire cervicale</div>
-          <div onclick="toggleChip(this)" style="padding:7px 13px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;transition:all .2s;background:white;">Le sport</div>
-          <div onclick="toggleChip(this)" style="padding:7px 13px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;transition:all .2s;background:white;">L'alimentation</div>
-          <div onclick="toggleChip(this)" style="padding:7px 13px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;transition:all .2s;background:white;">Les 99 noms</div>
+          <div onclick="toggleChip(this)" style="padding:7px 13px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;">Le design</div>
+          <div onclick="toggleChip(this)" style="padding:7px 13px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;">Le contenu islamique</div>
+          <div onclick="toggleChip(this)" style="padding:7px 13px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;">Le cycle et saisons</div>
+          <div onclick="toggleChip(this)" style="padding:7px 13px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;">Les prieres</div>
+          <div onclick="toggleChip(this)" style="padding:7px 13px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;">La glaire cervicale</div>
+          <div onclick="toggleChip(this)" style="padding:7px 13px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;">Le sport</div>
+          <div onclick="toggleChip(this)" style="padding:7px 13px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;">L'alimentation</div>
+          <div onclick="toggleChip(this)" style="padding:7px 13px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;">Les 99 noms</div>
         </div>
       </div>
       <div style="margin-bottom:14px;">
-        <div style="font-size:12px;font-weight:600;color:var(--noir);margin-bottom:8px;">Ce qui manque ou à améliorer</div>
-        <textarea id="feedback-text" placeholder="Dis-moi librement ce que tu penses — bug, idée, ressenti…" style="width:100%;padding:12px 14px;border:1.5px solid var(--sable);border-radius:14px;font-size:13px;font-family:var(--sans);color:var(--noir);background:var(--creme);outline:none;resize:none;min-height:80px;line-height:1.6;-webkit-appearance:none;box-sizing:border-box;"></textarea>
+        <div style="font-size:12px;font-weight:600;color:var(--noir);margin-bottom:8px;">Ce qui manque ou a ameliorer</div>
+        <textarea id="feedback-text" placeholder="Dis-moi librement ce que tu penses - bug, idee, ressenti..." style="width:100%;padding:12px 14px;border:1.5px solid var(--sable);border-radius:14px;font-size:13px;font-family:var(--sans);color:var(--noir);background:var(--creme);outline:none;resize:none;min-height:80px;line-height:1.6;-webkit-appearance:none;box-sizing:border-box;"></textarea>
       </div>
       <div style="margin-bottom:16px;">
-        <div style="font-size:12px;font-weight:600;color:var(--noir);margin-bottom:6px;">Ton email <span style="font-weight:400;color:var(--gris);">(optionnel)</span></div>
+        <div style="font-size:12px;font-weight:600;color:var(--noir);margin-bottom:6px;">Ton email (optionnel)</div>
         <input id="feedback-email" type="email" placeholder="ton@email.com" style="width:100%;padding:12px 14px;border:1.5px solid var(--sable);border-radius:12px;font-size:13px;font-family:var(--sans);color:var(--noir);background:white;outline:none;-webkit-appearance:none;box-sizing:border-box;">
       </div>
-      <button onclick="sendFeedback()" style="width:100%;padding:14px;background:var(--season-grad);color:white;border:none;border-radius:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">Envoyer mon avis ✦</button>
+      <button onclick="sendFeedback()" style="width:100%;padding:14px;background:var(--season-grad);color:white;border:none;border-radius:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">Envoyer mon avis</button>
       <div id="feedback-msg" style="text-align:center;font-size:12px;margin-top:10px;font-family:var(--serif);font-style:italic;min-height:18px;"></div>
     </div>
     <div id="feedback-sent-wrap" style="display:none;padding:28px 20px;text-align:center;">
-      <div style="font-size:32px;margin-bottom:12px;">🤲</div>
+      <div style="font-size:32px;margin-bottom:12px;">&#129330;</div>
       <div style="font-family:var(--script);font-size:22px;color:var(--season);margin-bottom:8px;">Jazak Allahou Khayran</div>
-      <div style="font-family:var(--serif);font-size:14px;font-style:italic;color:var(--noir);line-height:1.7;margin-bottom:6px;">Ton avis m'aide à construire quelque chose de vraiment utile.</div>
-      <div style="font-size:12px;color:var(--gris);">Barak Allahou fik pour ta confiance 🌸</div>
+      <div style="font-family:var(--serif);font-size:14px;font-style:italic;color:var(--noir);line-height:1.7;">Ton avis m'aide a construire quelque chose de vraiment utile.</div>
     </div>
   </div>
+
   <!-- PREMIUM CARD -->
-  <div style="margin:0 14px 14px; border-radius:22px; overflow:hidden; box-shadow:0 12px 48px rgba(90,60,20,.22);">
-    <div style="background:linear-gradient(145deg,#1C1008,#3A2010,#6A4018); padding:26px 22px 22px; position:relative; overflow:hidden;">
-      <div style="position:absolute;top:-40px;right:-30px;width:160px;height:160px;border-radius:50%;background:rgba(201,169,110,.08);"></div>
+  <div style="margin:0 14px 14px;border-radius:22px;overflow:hidden;box-shadow:0 12px 48px rgba(90,60,20,.22);">
+    <div style="background:linear-gradient(145deg,#1C1008,#3A2010,#6A4018);padding:26px 22px 22px;position:relative;overflow:hidden;">
       <div style="width:32px;height:2px;background:linear-gradient(90deg,#C9A96E,#E8C88A);border-radius:1px;margin-bottom:14px;"></div>
       <div style="font-size:9px;letter-spacing:3.5px;text-transform:uppercase;color:#C9A96E;margin-bottom:10px;font-weight:600;">SakinApp Premium</div>
-      <div style="font-family:var(--script);font-size:32px;color:#FAF6F0;margin-bottom:6px;">En préparation</div>
-      <div style="font-family:var(--serif);font-size:13px;font-style:italic;color:rgba(250,246,240,.55);line-height:1.6;">"Un accompagnement à la hauteur de ton chemin."</div>
+      <div style="font-family:var(--script);font-size:32px;color:#FAF6F0;margin-bottom:6px;">En preparation</div>
+      <div style="font-family:var(--serif);font-size:13px;font-style:italic;color:rgba(250,246,240,.55);line-height:1.6;">"Un accompagnement a la hauteur de ton chemin."</div>
     </div>
-    <div style="background:linear-gradient(180deg,#FAF6F0,#F5EDE0); padding:22px 22px 20px;">
-      <div style="font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:#8A6A30;font-weight:600;margin-bottom:16px;">Ce qui arrive bientôt</div>
-      <div style="display:flex;flex-direction:column;gap:0;">
-        <div style="display:flex;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid #EAD9C0;"><div style="width:6px;height:6px;border-radius:50%;background:#C9A96E;flex-shrink:0;margin-left:4px;"></div><div><div style="font-size:13px;font-weight:600;color:#1C1008;">Recettes cycliques</div><div style="font-size:11px;color:#8A7060;margin-top:1px;">28+ recettes adaptées à chaque phase</div></div></div>
-        <div style="display:flex;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid #EAD9C0;"><div style="width:6px;height:6px;border-radius:50%;background:#C9A96E;flex-shrink:0;margin-left:4px;"></div><div><div style="font-size:13px;font-weight:600;color:#1C1008;">Séances sport guidées</div><div style="font-size:11px;color:#8A7060;margin-top:1px;">Adaptées à ta phase & ton niveau</div></div></div>
-        <div style="display:flex;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid #EAD9C0;"><div style="width:6px;height:6px;border-radius:50%;background:#C9A96E;flex-shrink:0;margin-left:4px;"></div><div><div style="font-size:13px;font-weight:600;color:#1C1008;">Routines skincare complètes</div><div style="font-size:11px;color:#8A7060;margin-top:1px;">Matin & soir selon ta saison</div></div></div>
+    <div style="background:linear-gradient(180deg,#FAF6F0,#F5EDE0);padding:22px 22px 20px;">
+      <div style="font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:#8A6A30;font-weight:600;margin-bottom:16px;">Ce qui arrive bientot</div>
+      <div style="display:flex;flex-direction:column;">
+        <div style="display:flex;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid #EAD9C0;"><div style="width:6px;height:6px;border-radius:50%;background:#C9A96E;flex-shrink:0;margin-left:4px;"></div><div><div style="font-size:13px;font-weight:600;color:#1C1008;">Recettes cycliques</div><div style="font-size:11px;color:#8A7060;margin-top:1px;">28+ recettes adaptees a chaque phase</div></div></div>
+        <div style="display:flex;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid #EAD9C0;"><div style="width:6px;height:6px;border-radius:50%;background:#C9A96E;flex-shrink:0;margin-left:4px;"></div><div><div style="font-size:13px;font-weight:600;color:#1C1008;">Seances sport guidees</div><div style="font-size:11px;color:#8A7060;margin-top:1px;">Adaptees a ta phase et ton niveau</div></div></div>
+        <div style="display:flex;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid #EAD9C0;"><div style="width:6px;height:6px;border-radius:50%;background:#C9A96E;flex-shrink:0;margin-left:4px;"></div><div><div style="font-size:13px;font-weight:600;color:#1C1008;">Routines skincare completes</div><div style="font-size:11px;color:#8A7060;margin-top:1px;">Matin et soir selon ta saison</div></div></div>
         <div style="display:flex;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid #EAD9C0;"><div style="width:6px;height:6px;border-radius:50%;background:#C9A96E;flex-shrink:0;margin-left:4px;"></div><div><div style="font-size:13px;font-weight:600;color:#1C1008;">Bilan multi-cycles</div><div style="font-size:11px;color:#8A7060;margin-top:1px;">Tes patterns sur plusieurs mois</div></div></div>
-        <div style="display:flex;align-items:center;gap:14px;padding:11px 0;"><div style="width:6px;height:6px;border-radius:50%;background:#C9A96E;flex-shrink:0;margin-left:4px;"></div><div><div style="font-size:13px;font-weight:600;color:#1C1008;">Sakina Body PDF offert</div><div style="font-size:11px;color:#8A7060;margin-top:1px;">Le guide complet en téléchargement</div></div></div>
+        <div style="display:flex;align-items:center;gap:14px;padding:11px 0;"><div style="width:6px;height:6px;border-radius:50%;background:#C9A96E;flex-shrink:0;margin-left:4px;"></div><div><div style="font-size:13px;font-weight:600;color:#1C1008;">Sakina Body PDF offert</div><div style="font-size:11px;color:#8A7060;margin-top:1px;">Le guide complet en telechargement</div></div></div>
       </div>
       <div style="height:1px;background:linear-gradient(90deg,transparent,#C9A96E,transparent);margin:18px 0;"></div>
       <div style="display:flex;gap:10px;margin-bottom:18px;">
         <div style="flex:1;background:white;border:1.5px solid #D4B87A;border-radius:14px;padding:14px;text-align:center;">
           <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#8A7060;margin-bottom:6px;">Mensuel</div>
-          <div style="font-family:var(--script);font-size:28px;color:#3A2010;">2,99€</div>
+          <div style="font-family:var(--script);font-size:28px;color:#3A2010;">2,99&#8364;</div>
           <div style="font-size:10px;color:#8A7060;margin-top:2px;">/ mois</div>
         </div>
-        <div style="flex:1;background:linear-gradient(145deg,#3A2010,#6A4018);border-radius:14px;padding:14px;text-align:center;position:relative;box-shadow:0 4px 16px rgba(58,32,16,.3);">
+        <div style="flex:1;background:linear-gradient(145deg,#3A2010,#6A4018);border-radius:14px;padding:14px;text-align:center;position:relative;">
           <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#C9A96E,#A87A30);color:#1C1008;font-size:9px;font-weight:700;padding:3px 10px;border-radius:10px;white-space:nowrap;">MEILLEURE OFFRE</div>
           <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:rgba(250,246,240,.5);margin-bottom:6px;">Annuel</div>
-          <div style="font-family:var(--script);font-size:28px;color:#FAF6F0;">24,99€</div>
-          <div style="font-size:10px;color:rgba(201,169,110,.7);margin-top:2px;">/ an · économise 30%</div>
+          <div style="font-family:var(--script);font-size:28px;color:#FAF6F0;">24,99&#8364;</div>
+          <div style="font-size:10px;color:rgba(201,169,110,.7);margin-top:2px;">/ an - economise 30%</div>
         </div>
       </div>
       <div style="text-align:center;margin-bottom:14px;">
-        <div style="font-family:var(--serif);font-size:15px;color:#1C1008;margin-bottom:4px;">Sois la première informée</div>
-        <div style="font-size:12px;color:#8A7060;line-height:1.5;">Accès anticipé & tarif fondatrice réservé.</div>
+        <div style="font-family:var(--serif);font-size:15px;color:#1C1008;margin-bottom:4px;">Sois la premiere informee</div>
+        <div style="font-size:12px;color:#8A7060;line-height:1.5;">Acces anticipe et tarif fondatrice reserve.</div>
       </div>
       <div style="display:flex;gap:8px;">
         <input id="waitlist-email" type="email" placeholder="ton@email.com" style="flex:1;padding:12px 14px;border:1.5px solid #D4B87A;border-radius:12px;font-size:13px;font-family:var(--sans);color:#1C1008;background:white;outline:none;-webkit-appearance:none;">
-        <button onclick="joinWaitlist()" style="background:linear-gradient(135deg,#C9A96E,#A87A30);color:#1C1008;border:none;border-radius:12px;padding:12px 16px;font-size:13px;font-weight:700;font-family:var(--sans);cursor:pointer;white-space:nowrap;flex-shrink:0;">Rejoindre ✦</button>
+        <button onclick="joinWaitlist()" style="background:linear-gradient(135deg,#C9A96E,#A87A30);color:#1C1008;border:none;border-radius:12px;padding:12px 16px;font-size:13px;font-weight:700;font-family:var(--sans);cursor:pointer;white-space:nowrap;flex-shrink:0;">Rejoindre</button>
       </div>
       <div id="waitlist-msg" style="text-align:center;font-size:12px;color:#3DAE8A;margin-top:8px;font-family:var(--serif);font-style:italic;min-height:18px;"></div>
     </div>
   </div>
-  <!-- Paramètres -->
+
+  <!-- PARAMETRES -->
   <div class="prof-sec">
     <div class="ps-hdr">Mon profil</div>
-    <div class="ps-row" onclick="openEditCycle()"><div class="ps-ico">📅</div><div><div class="ps-lbl">Modifier mon cycle</div><div class="ps-sub" id="psCycle">Configurer</div></div><div class="ps-arr">›</div></div>
-    <div class="ps-row" onclick="openNotifSettings()"><div class="ps-ico">🔔</div><div><div class="ps-lbl">Rappels Sakina</div><div class="ps-sub">Configurer mes notifications</div></div><div class="ps-arr">›</div></div>
-    <div class="ps-row" onclick="resetApp()"><div class="ps-ico">🔄</div><div><div class="ps-lbl" style="color:#C4694A;">Réinitialiser</div></div><div class="ps-arr">›</div></div>
+    <div class="ps-row" onclick="openEditCycle()"><div class="ps-ico">&#128197;</div><div><div class="ps-lbl">Modifier mon cycle</div><div class="ps-sub" id="psCycle">Configurer</div></div><div class="ps-arr">&#8250;</div></div>
+    <div class="ps-row" onclick="openNotifSettings()"><div class="ps-ico">&#128276;</div><div><div class="ps-lbl">Rappels Sakina</div><div class="ps-sub">Configurer mes notifications</div></div><div class="ps-arr">&#8250;</div></div>
+    <div class="ps-row" onclick="resetApp()"><div class="ps-ico">&#128260;</div><div><div class="ps-lbl" style="color:#C4694A;">Reinitialiser</div></div><div class="ps-arr">&#8250;</div></div>
   </div>
-  <div style="text-align:center; padding:20px; color:var(--gris); font-size:12px;">
-    SakinApp · v1.0 MVP<br>
-    <span style="font-family:'Dancing Script',cursive; font-size:16px; color:var(--season);">بِسْمِ اللَّهِ</span>
+
+  <div style="text-align:center;padding:20px;color:var(--gris);font-size:12px;">
+    SakinApp - v1.0 MVP<br>
+    <span style="font-family:'Dancing Script',cursive;font-size:16px;color:var(--season);">&#1576;&#1616;&#1587;&#1618;&#1605;&#1616; &#1575;&#1604;&#1604;&#1617;&#1614;&#1607;&#1616;</span>
   </div>
 </div>
 
-  </div><!-- app-content -->
+</div><!-- app-content -->
 
-  <!-- MODAL MODIFIER CYCLE -->
-  <div class="modal-overlay" id="edit-cycle-modal" onclick="if(event.target.id==='edit-cycle-modal')closeEditCycle()">
-    <div class="modal-sheet">
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
-        <div style="font-family:'Playfair Display',serif; font-size:18px; color:var(--noir);">Modifier mon cycle</div>
-        <button onclick="closeEditCycle()" style="background:var(--sable); border:none; border-radius:50%; width:32px; height:32px; font-size:18px; cursor:pointer;">×</button>
-      </div>
-      <div style="font-size:12px; color:var(--gris); margin-bottom:8px; font-weight:600; letter-spacing:1px; text-transform:uppercase;">Premier jour de mes dernières règles</div>
-      <input id="edit-cycle-date" type="date" class="ob-input" style="margin-bottom:16px;">
-      <div style="font-size:12px; color:var(--gris); margin-bottom:8px; font-weight:600; letter-spacing:1px; text-transform:uppercase;">Durée habituelle du cycle</div>
-      <div style="display:flex; gap:8px; margin-bottom:24px;" id="edit-duration-options">
-        <div class="ob-option" onclick="selectEditDuration(this,26)" style="flex:1; padding:12px; flex-direction:column; align-items:center; text-align:center;"><span class="ob-option-emoji">🌙</span><div class="ob-option-text" style="font-size:12px; margin-top:4px;">24–26 j</div></div>
-        <div class="ob-option selected" id="edit-dur-28" onclick="selectEditDuration(this,28)" style="flex:1; padding:12px; flex-direction:column; align-items:center; text-align:center;"><span class="ob-option-emoji">🌸</span><div class="ob-option-text" style="font-size:12px; margin-top:4px;">27–30 j</div></div>
-        <div class="ob-option" onclick="selectEditDuration(this,33)" style="flex:1; padding:12px; flex-direction:column; align-items:center; text-align:center;"><span class="ob-option-emoji">☀️</span><div class="ob-option-text" style="font-size:12px; margin-top:4px;">31–35 j</div></div>
-      </div>
-      <button onclick="saveEditCycle()" class="ob-btn" style="margin-top:0;">Enregistrer ✓</button>
+<!-- MODAL CYCLE -->
+<div class="modal-overlay" id="edit-cycle-modal" onclick="if(event.target.id==='edit-cycle-modal')closeEditCycle()">
+  <div class="modal-sheet">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--noir);">Modifier mon cycle</div>
+      <button onclick="closeEditCycle()" style="background:var(--sable);border:none;border-radius:50%;width:32px;height:32px;font-size:18px;cursor:pointer;">&#215;</button>
     </div>
+    <div style="font-size:12px;color:var(--gris);margin-bottom:8px;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Premier jour de mes dernieres regles</div>
+    <input id="edit-cycle-date" type="date" class="ob-input" style="margin-bottom:16px;">
+    <div style="font-size:12px;color:var(--gris);margin-bottom:8px;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Duree habituelle du cycle</div>
+    <div style="display:flex;gap:8px;margin-bottom:24px;" id="edit-duration-options">
+      <div class="ob-option" onclick="selectEditDuration(this,26)" style="flex:1;padding:12px;flex-direction:column;align-items:center;text-align:center;"><span class="ob-option-emoji">&#127769;</span><div class="ob-option-text" style="font-size:12px;margin-top:4px;">24-26 j</div></div>
+      <div class="ob-option selected" id="edit-dur-28" onclick="selectEditDuration(this,28)" style="flex:1;padding:12px;flex-direction:column;align-items:center;text-align:center;"><span class="ob-option-emoji">&#127800;</span><div class="ob-option-text" style="font-size:12px;margin-top:4px;">27-30 j</div></div>
+      <div class="ob-option" onclick="selectEditDuration(this,33)" style="flex:1;padding:12px;flex-direction:column;align-items:center;text-align:center;"><span class="ob-option-emoji">&#9728;&#65039;</span><div class="ob-option-text" style="font-size:12px;margin-top:4px;">31-35 j</div></div>
+    </div>
+    <button onclick="saveEditCycle()" class="ob-btn" style="margin-top:0;">Enregistrer</button>
   </div>
+</div>
 
-  <!-- MODAL NOTIFICATIONS -->
-  <div class="modal-overlay" id="notif-modal" onclick="if(event.target.id==='notif-modal')closeNotifModal()">
-    <div class="modal-sheet">
-      <div class="modal-handle"></div>
-      <div class="modal-title">🔔 Rappels Sakina</div>
-      <div class="modal-sub">Sakina t'enverra des messages doux selon ta saison.</div>
-      <div id="notif-permission-status" style="background:var(--creme);border-radius:14px;padding:12px 15px;margin-bottom:20px;font-size:13px;color:var(--gris);line-height:1.5;"></div>
-      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:22px;" id="notif-freq-options">
-        <div class="ob-option" onclick="selectFreq(this,1)" data-freq="1"><span class="ob-option-emoji">🌿</span><div><div class="ob-option-text">Une fois par jour</div><div style="font-size:11px;color:var(--gris);margin-top:2px;">Le soir — bilan de journée</div></div><div class="ob-option-chk">✓</div></div>
-        <div class="ob-option selected" onclick="selectFreq(this,2)" data-freq="2"><span class="ob-option-emoji">🌸</span><div><div class="ob-option-text">Deux fois par jour</div><div style="font-size:11px;color:var(--gris);margin-top:2px;">Matin 8h + Soir 20h30</div></div><div class="ob-option-chk">✓</div></div>
-        <div class="ob-option" onclick="selectFreq(this,3)" data-freq="3"><span class="ob-option-emoji">☀️</span><div><div class="ob-option-text">Trois fois par jour</div><div style="font-size:11px;color:var(--gris);margin-top:2px;">8h + 13h30 + 20h30</div></div><div class="ob-option-chk">✓</div></div>
-        <div class="ob-option" onclick="selectFreq(this,0)" data-freq="0"><span class="ob-option-emoji">🔕</span><div><div class="ob-option-text">Désactiver</div></div><div class="ob-option-chk">✓</div></div>
-      </div>
-      <button onclick="saveNotifSettings()" class="modal-cta">Activer mes rappels ✦</button>
+<!-- MODAL NOTIFS -->
+<div class="modal-overlay" id="notif-modal" onclick="if(event.target.id==='notif-modal')closeNotifModal()">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">&#128276; Rappels Sakina</div>
+    <div class="modal-sub">Sakina t'enverra des messages doux selon ta saison.</div>
+    <div id="notif-permission-status" style="background:var(--creme);border-radius:14px;padding:12px 15px;margin-bottom:20px;font-size:13px;color:var(--gris);line-height:1.5;"></div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:22px;" id="notif-freq-options">
+      <div class="ob-option" onclick="selectFreq(this,1)" data-freq="1"><span class="ob-option-emoji">&#127807;</span><div><div class="ob-option-text">Une fois par jour</div><div style="font-size:11px;color:var(--gris);margin-top:2px;">Le soir - bilan de journee</div></div><div class="ob-option-chk">&#10003;</div></div>
+      <div class="ob-option selected" onclick="selectFreq(this,2)" data-freq="2"><span class="ob-option-emoji">&#127800;</span><div><div class="ob-option-text">Deux fois par jour</div><div style="font-size:11px;color:var(--gris);margin-top:2px;">Matin 8h + Soir 20h30</div></div><div class="ob-option-chk">&#10003;</div></div>
+      <div class="ob-option" onclick="selectFreq(this,3)" data-freq="3"><span class="ob-option-emoji">&#9728;&#65039;</span><div><div class="ob-option-text">Trois fois par jour</div><div style="font-size:11px;color:var(--gris);margin-top:2px;">8h + 13h30 + 20h30</div></div><div class="ob-option-chk">&#10003;</div></div>
+      <div class="ob-option" onclick="selectFreq(this,0)" data-freq="0"><span class="ob-option-emoji">&#128277;</span><div><div class="ob-option-text">Desactiver</div></div><div class="ob-option-chk">&#10003;</div></div>
     </div>
+    <button onclick="saveNotifSettings()" class="modal-cta">Activer mes rappels</button>
   </div>
+</div>
 
-  <!-- Bottom Nav -->
-  <div class="bottom-nav" id="bottomNav">
-    <div class="nav-item active" id="nav-accueil" onclick="switchTab('accueil',this)">
-      <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-      <div class="nav-label">Accueil</div><div class="nav-pip"></div>
-    </div>
-    <div class="nav-item" id="nav-cycle" onclick="switchTab('cycle',this)">
-      <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-      <div class="nav-label">Cycle</div><div class="nav-pip"></div>
-    </div>
-    <div class="nav-item" id="nav-ame" onclick="switchTab('ame',this)">
-      <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
-      <div class="nav-label">Âme</div><div class="nav-pip"></div>
-    </div>
-    <div class="nav-item" id="nav-vie" onclick="switchTab('vie',this)">
-      <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
-      <div class="nav-label">Vie</div><div class="nav-pip"></div>
-    </div>
-    <div class="nav-item" id="nav-moi" onclick="switchTab('moi',this)">
-      <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-      <div class="nav-label">Moi</div><div class="nav-pip"></div>
-    </div>
+<!-- BOTTOM NAV -->
+<div class="bottom-nav" id="bottomNav">
+  <div class="nav-item active" id="nav-accueil" onclick="switchTab('accueil',this)">
+    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+    <div class="nav-label">Accueil</div><div class="nav-pip"></div>
   </div>
+  <div class="nav-item" id="nav-cycle" onclick="switchTab('cycle',this)">
+    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+    <div class="nav-label">Cycle</div><div class="nav-pip"></div>
+  </div>
+  <div class="nav-item" id="nav-ame" onclick="switchTab('ame',this)">
+    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+    <div class="nav-label">Ame</div><div class="nav-pip"></div>
+  </div>
+  <div class="nav-item" id="nav-vie" onclick="switchTab('vie',this)">
+    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
+    <div class="nav-label">Vie</div><div class="nav-pip"></div>
+  </div>
+  <div class="nav-item" id="nav-moi" onclick="switchTab('moi',this)">
+    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+    <div class="nav-label">Moi</div><div class="nav-pip"></div>
+  </div>
+</div>
 
-  <!-- MODAL 99 NOMS D'ALLAH -->
-  <div class="asma-modal-ov" id="asma-modal" onclick="if(event.target.id==='asma-modal')closeAsmaModal()">
-    <div class="asma-sheet">
-      <div class="asma-hdr">
-        <div style="display:flex;align-items:center;justify-content:space-between;">
-          <div><div style="font-family:var(--serif);font-size:18px;color:var(--noir);">الأسماء الحسنى</div><div style="font-size:12px;color:var(--gris);margin-top:2px;">Les 99 plus beaux noms d'Allah</div></div>
-          <button onclick="closeAsmaModal()" style="background:var(--sable);border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">×</button>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;margin-top:12px;">
-          <div style="flex:1;height:5px;background:var(--sable);border-radius:3px;overflow:hidden;"><div id="asma-modal-progress" style="height:100%;border-radius:3px;background:var(--season);transition:width .4s;width:0%"></div></div>
-          <div style="font-size:12px;color:var(--gris);white-space:nowrap;"><span id="asma-modal-count">0</span> / 99 appris</div>
-        </div>
-        <div style="font-size:11px;color:var(--gris);margin-top:8px;font-style:italic;font-family:var(--serif);">Coche les noms que tu connais</div>
+<!-- MODAL 99 NOMS -->
+<div class="asma-modal-ov" id="asma-modal" onclick="if(event.target.id==='asma-modal')closeAsmaModal()">
+  <div class="asma-sheet">
+    <div class="asma-hdr">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div><div style="font-family:var(--serif);font-size:18px;color:var(--noir);">&#1575;&#1604;&#1571;&#1587;&#1605;&#1575;&#1569; &#1575;&#1604;&#1581;&#1587;&#1606;&#1609;</div><div style="font-size:12px;color:var(--gris);margin-top:2px;">Les 99 plus beaux noms d'Allah</div></div>
+        <button onclick="closeAsmaModal()" style="background:var(--sable);border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#215;</button>
       </div>
-      <div class="asma-list" id="asma-list"></div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:12px;">
+        <div style="flex:1;height:5px;background:var(--sable);border-radius:3px;overflow:hidden;"><div id="asma-modal-progress" style="height:100%;border-radius:3px;background:var(--season);transition:width .4s;width:0%"></div></div>
+        <div style="font-size:12px;color:var(--gris);white-space:nowrap;"><span id="asma-modal-count">0</span> / 99 appris</div>
+      </div>
+      <div style="font-size:11px;color:var(--gris);margin-top:8px;font-style:italic;font-family:var(--serif);">Coche les noms que tu connais</div>
     </div>
+    <div class="asma-list" id="asma-list"></div>
   </div>
+</div>
 
 </div><!-- app -->
 
