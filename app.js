@@ -31,12 +31,21 @@ let ST = {
 };
 
 function saveState() {
-  try { localStorage.setItem('sakinapp_v1', JSON.stringify(ST)); } catch(e) {}
+  // Ne jamais sauvegarder currentSaison/currentDay — recalculés a chaque lancement
+  const toSave = {...ST};
+  delete toSave.currentSaison;
+  delete toSave.currentDay;
+  try { localStorage.setItem('sakinapp_v1', JSON.stringify(toSave)); } catch(e) {}
 }
 function loadState() {
   try {
     const saved = localStorage.getItem('sakinapp_v1');
-    if (saved) ST = {...ST, ...JSON.parse(saved)};
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      delete parsed.currentSaison;
+      delete parsed.currentDay;
+      ST = {...ST, ...parsed};
+    }
   } catch(e) {}
 }
 
@@ -810,9 +819,14 @@ function checkWeeklyReset() {
 }
 
 function initApp() {
-  try { computeCycle(); } catch(e) {}
-  try { applySaisonTheme(); } catch(e) {}
+  // Toujours recalculer le cycle en premier — jamais faire confiance au localStorage
+  try { computeCycle(); } catch(e) { console.error('computeCycle:', e); }
+  // Appliquer le theme APRES le calcul
+  try { applySaisonTheme(); } catch(e) { console.error('applySaisonTheme:', e); }
+  // Puis remplir tous les onglets
   try { populateAll(); } catch(e) { console.error('populateAll:', e); }
+  // Sauvegarder les valeurs recalculees
+  try { saveState(); } catch(e) {}
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -846,7 +860,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('visibilitychange', () => {
     try {
       if (document.visibilityState === 'hidden') saveState();
-      else if (document.visibilityState === 'visible' && ST.prenom && ST.cycleStart) setTimeout(checkNotificationReturn, 500);
     } catch(e) {}
   });
 });
