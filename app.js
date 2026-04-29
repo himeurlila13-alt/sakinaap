@@ -30,6 +30,7 @@ let ST = {
   lastWeeklyReset: null,
   eveningCheckinDate: null,
   eveningCheckinMood: null,
+  cycleHistory: [],
 };
 
 function saveState() {
@@ -411,6 +412,7 @@ function populateAll() {
   setTimeout(showInstallBanner, 1500);
   restoreFeedback();
   renderEnergyBars();
+  renderCycleHistory();
   if (ST.waitlistEmail) {
     const ei = document.getElementById('waitlist-email');
     const wm = document.getElementById('waitlist-msg');
@@ -1282,6 +1284,11 @@ function selectEditDuration(el, val) {
 function saveEditCycle() {
   const dateVal=document.getElementById('edit-cycle-date').value;
   if (!dateVal) { alert('Indique la date 🌙'); return; }
+  if (ST.cycleStart && ST.cycleStart !== dateVal) {
+    if (!ST.cycleHistory) ST.cycleHistory = [];
+    ST.cycleHistory.unshift({ start: ST.cycleStart, duration: ST.cycleDuration || 28 });
+    if (ST.cycleHistory.length > 6) ST.cycleHistory = ST.cycleHistory.slice(0, 6);
+  }
   ST.cycleStart=dateVal; ST.cycleDuration=editDuration; saveState(); closeEditCycle();
   computeCycle(); applySaisonTheme(); populateAll();
   showToast('✓ Cycle mis à jour — ' + SAISONS[ST.currentSaison].emoji + ' ' + SAISONS[ST.currentSaison].nom + ' · Jour ' + ST.currentDay);
@@ -1382,6 +1389,44 @@ function showToast(msg) {
   let el=document.getElementById('toastEl');
   if (!el) { el=document.createElement('div'); el.id='toastEl'; el.className='toast'; document.body.appendChild(el); }
   el.textContent=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),2900);
+}
+function formatDateFr(dateStr) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const months = ['jan.','fév.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+  return d + ' ' + months[m - 1] + ' ' + y;
+}
+function renderCycleHistory() {
+  const card = document.getElementById('cycle-history-card');
+  const list = document.getElementById('cycle-history-list');
+  if (!card || !list) return;
+  const history = ST.cycleHistory || [];
+  if (!ST.cycleStart && history.length === 0) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+  const s = SAISONS[ST.currentSaison];
+  let html = '';
+  if (ST.cycleStart) {
+    const hasPast = history.length > 0;
+    html += `<div style="display:flex;align-items:center;gap:12px;padding:10px 0;${hasPast ? 'border-bottom:1px solid var(--sable);' : ''}">
+      <div style="width:36px;height:36px;border-radius:50%;background:${s.grad};display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">${s.emoji}</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:600;color:var(--noir);">Du ${formatDateFr(ST.cycleStart)}</div>
+        <div style="font-size:11px;color:var(--gris);margin-top:2px;">Jour ${ST.currentDay} · ${s.nom} · ${ST.cycleDuration || 28} jours</div>
+      </div>
+      <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:white;background:${s.color};padding:3px 8px;border-radius:8px;">En cours</div>
+    </div>`;
+  }
+  const shown = history.slice(0, 6);
+  shown.forEach((c, i) => {
+    const sep = i < shown.length - 1 ? 'border-bottom:1px solid var(--sable);' : '';
+    html += `<div style="display:flex;align-items:center;gap:12px;padding:10px 0;${sep}">
+      <div style="width:36px;height:36px;border-radius:50%;background:#F5EDE0;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">&#127769;</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:600;color:var(--noir);">Du ${formatDateFr(c.start)}</div>
+        <div style="font-size:11px;color:var(--gris);margin-top:2px;">${c.duration} jours</div>
+      </div>
+    </div>`;
+  });
+  list.innerHTML = html;
 }
 function exportData() {
   const data = localStorage.getItem('sakinapp_v1');
