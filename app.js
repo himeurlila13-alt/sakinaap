@@ -104,7 +104,6 @@ const DHIKR_CHECKS = [
   { id: 'subhan',     arabic: 'سُبْحَانَ اللَّهِ',  fr: 'SubhanAllah · Gloire à Allah',          count: '33×' },
   { id: 'alhamdu',    arabic: 'اَلْحَمْدُ لِلَّهِ', fr: 'Alhamdulillah · Louange à Allah',        count: '33×' },
   { id: 'akbar',      arabic: 'اللَّهُ أَكْبَرُ',    fr: 'Allahu Akbar · Allah est le Plus Grand', count: '34×' },
-  { id: 'istighfar',  arabic: 'أَسْتَغْفِرُ اللَّهَ', fr: 'Astaghfirullah · Demande de pardon',   count: '✦' },
 ];
 
 const SAISONS = {
@@ -370,7 +369,7 @@ function applySaisonTheme() {
   r.setProperty('--season-grad', s.grad);
   const av = document.querySelector('.av-btn');
   if (av) { av.style.background = s.grad; av.textContent = s.emoji; }
-  document.querySelectorAll('.dhikr-btn').forEach(b => b.style.background = s.color);
+
   const _sh = document.getElementById('sport-header');
   if (_sh) _sh.style.background = s.grad;
   const pav = document.getElementById('profilAv');
@@ -1383,6 +1382,42 @@ function showToast(msg) {
   let el=document.getElementById('toastEl');
   if (!el) { el=document.createElement('div'); el.id='toastEl'; el.className='toast'; document.body.appendChild(el); }
   el.textContent=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),2900);
+}
+function exportData() {
+  const data = localStorage.getItem('sakinapp_v1');
+  if (!data) { showToast('Aucune donnée à sauvegarder.'); return; }
+  const filename = 'sakinapp_backup_' + new Date().toISOString().slice(0,10) + '.json';
+  if (navigator.share && /iphone|ipad|ipod/i.test(navigator.userAgent)) {
+    const file = new File([data], filename, { type: 'application/json' });
+    navigator.share({ files: [file], title: 'SakinApp – Sauvegarde' }).catch(() => {});
+  } else {
+    const a = document.createElement('a');
+    a.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(data);
+    a.download = filename;
+    a.click();
+  }
+}
+function importData() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json,application/json';
+  input.onchange = () => {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const parsed = JSON.parse(e.target.result);
+        if (typeof parsed !== 'object' || parsed === null) throw new Error();
+        if (confirm('Restaurer ces données ? Tes données actuelles seront remplacées.')) {
+          localStorage.setItem('sakinapp_v1', JSON.stringify(parsed));
+          location.reload();
+        }
+      } catch { showToast('Fichier invalide. Vérifie que c\'est bien une sauvegarde SakinApp.'); }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
 }
 function resetApp() {
   if (confirm('Réinitialiser SakinApp ? Toutes tes données seront effacées.')) { localStorage.removeItem('sakinapp_v1'); location.reload(); }
