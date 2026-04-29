@@ -422,21 +422,18 @@ function renderDashboard(s) {
   const heroTop = document.getElementById('accueil-hero-card');
   if (heroTop) heroTop.style.background = s.grad;
 
-  // Salutation
-  const hour = new Date().getHours();
-  const salut = hour < 12 ? 'Bon matin' : hour < 18 ? 'Bon après-midi' : 'Bonsoir';
-  const el_salut = document.getElementById('dash-greeting-sub');
-  if (el_salut) el_salut.textContent = salut + ' — ' + s.emoji + ' ' + s.nom + ' · J' + ST.currentDay;
-  const el_name = document.getElementById('dash-name');
+  const el_name = document.getElementById('hero-name');
   if (el_name) el_name.textContent = ST.prenom || 'Ma sœur';
 
   // Phase pill
-  const el_emoji = document.getElementById('dash-phase-emoji');
-  const el_day = document.getElementById('dash-phase-day');
-  const el_phase = document.getElementById('dash-phase-label');
+  const el_emoji = document.getElementById('hero-big-emoji');
+  const el_day = document.getElementById('hero-day-num');
+  const el_phase = document.getElementById('hero-phase-label');
+  const el_season = document.getElementById('hero-season-name');
   if (el_emoji) el_emoji.textContent = s.emoji;
   if (el_day) el_day.textContent = 'J' + ST.currentDay;
   if (el_phase) el_phase.textContent = s.phase;
+  if (el_season) el_season.textContent = s.emoji + ' ' + s.nom;
 
   // Message
   updateMessage();
