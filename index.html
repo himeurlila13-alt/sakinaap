@@ -138,7 +138,7 @@
         <div class="hero-salutation-fr">As-Salamu Alaykum</div>
         <div class="hero-salutation-ar">&#1575;&#1604;&#1587;&#1617;&#1614;&#1604;&#1614;&#1575;&#1605;&#1615; &#1593;&#1614;&#1604;&#1614;&#1610;&#1618;&#1603;&#1615;&#1605;&#1618; &#1608;&#1614;&#1585;&#1614;&#1581;&#1618;&#1605;&#1614;&#1577;&#1615; &#1575;&#1604;&#1604;&#1617;&#1607;&#1616;</div>
       </div>
-      <div class="hero-name fade-in-2" id="hero-name" style="position:relative;">Lila</div>
+      <div class="hero-name fade-in-2" id="hero-name" style="position:relative;"></div>
       <div style="display:flex;align-items:center;gap:8px;margin:10px 0;position:relative;">
         <div style="flex:1;height:1px;background:rgba(255,255,255,.2);"></div>
         <div style="font-size:14px;opacity:0.5;" id="hero-big-emoji">&#127800;</div>
@@ -275,11 +275,11 @@
     <div id="glaire-content" style="display:none;margin-top:12px;">
       <div style="font-size:12px;color:var(--gris);margin-bottom:12px;font-family:var(--serif);font-style:italic;">Ce que tu observes t'indique ta fertilite du moment.</div>
       <div class="glaire-options" id="glaire-options">
-        <div class="glaire-option" onclick="selectGlaire(this,'regles')"><div class="glaire-dot" style="background:#F0EBF8;">&#127769;</div><div><div class="glaire-name">Rien / Regles</div><div class="glaire-desc">Periode de repos - Pas de fertilite</div></div></div>
-        <div class="glaire-option" onclick="selectGlaire(this,'seche')"><div class="glaire-dot" style="background:#F5F5F5;">&#129293;</div><div><div class="glaire-name">Seche ou collante</div><div class="glaire-desc">Debut de cycle - Faible fertilite</div></div></div>
-        <div class="glaire-option" onclick="selectGlaire(this,'cremeuse')"><div class="glaire-dot" style="background:#E8F8F3;">&#127807;</div><div><div class="glaire-name">Cremeuse / Laiteuse</div><div class="glaire-desc">Fertilite possible</div></div></div>
-        <div class="glaire-option" onclick="selectGlaire(this,'filante')"><div class="glaire-dot" style="background:#FFF8EE;">&#9889;</div><div><div class="glaire-name">Filante / Transparente</div><div class="glaire-desc">Ovulation proche - Pic de fertilite</div></div></div>
-        <div class="glaire-option" onclick="selectGlaire(this,'epaisse')"><div class="glaire-dot" style="background:#FDF0EE;">&#127810;</div><div><div class="glaire-name">Epaisse / Absente</div><div class="glaire-desc">Apres ovulation - Phase luteale</div></div></div>
+        <div class="glaire-option" data-type="regles" onclick="selectGlaire(this,'regles')"><div class="glaire-dot" style="background:#F0EBF8;">&#127769;</div><div><div class="glaire-name">Rien / Regles</div><div class="glaire-desc">Periode de repos - Pas de fertilite</div></div></div>
+        <div class="glaire-option" data-type="seche" onclick="selectGlaire(this,'seche')"><div class="glaire-dot" style="background:#F5F5F5;">&#129293;</div><div><div class="glaire-name">Seche ou collante</div><div class="glaire-desc">Debut de cycle - Faible fertilite</div></div></div>
+        <div class="glaire-option" data-type="cremeuse" onclick="selectGlaire(this,'cremeuse')"><div class="glaire-dot" style="background:#E8F8F3;">&#127807;</div><div><div class="glaire-name">Cremeuse / Laiteuse</div><div class="glaire-desc">Fertilite possible</div></div></div>
+        <div class="glaire-option" data-type="filante" onclick="selectGlaire(this,'filante')"><div class="glaire-dot" style="background:#FFF8EE;">&#9889;</div><div><div class="glaire-name">Filante / Transparente</div><div class="glaire-desc">Ovulation proche - Pic de fertilite</div></div></div>
+        <div class="glaire-option" data-type="epaisse" onclick="selectGlaire(this,'epaisse')"><div class="glaire-dot" style="background:#FDF0EE;">&#127810;</div><div><div class="glaire-name">Epaisse / Absente</div><div class="glaire-desc">Apres ovulation - Phase luteale</div></div></div>
       </div>
     </div>
   </div>
@@ -497,8 +497,8 @@
 <div class="tab-page" id="tab-moi">
   <div class="profil-hero">
     <div class="profil-av" id="profilAv" style="background:var(--season-grad);">&#127800;</div>
-    <div class="profil-nm" id="profil-name">Lila</div>
-    <div class="profil-badge" id="profil-sub">Printemps - Jour 8</div>
+    <div class="profil-nm" id="profil-name"></div>
+    <div class="profil-badge" id="profil-sub"></div>
   </div>
   <div style="height:16px;"></div>
 

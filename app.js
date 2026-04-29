@@ -28,6 +28,8 @@ let ST = {
   installBannerDismissed: false,
   lastDailyReset: null,
   lastWeeklyReset: null,
+  eveningCheckinDate: null,
+  eveningCheckinMood: null,
 };
 
 function saveState() {
@@ -344,6 +346,7 @@ function computeCycle() {
   const today = new Date();
   const start = new Date(ST.cycleStart);
   const diff = Math.floor((today - start) / (1000*60*60*24));
+  if (diff < 0) { ST.currentDay = 1; ST.currentSaison = 'hiver'; return; }
   const dur = ST.cycleDuration || 28;
   const day = (diff % dur) + 1;
   ST.currentDay = Math.max(1, Math.min(day, dur));
@@ -472,14 +475,14 @@ function renderDayScore() {
   if (!container) return;
 
   const items = [
-    { id: 'score-priere', emoji: '🕌', label: 'Prières', done: prayersDone >= 3, sub: prayersDone + '/5', action: () => switchTabById('ame') },
-    { id: 'score-dhikr',  emoji: '📿', label: 'Dhikr',   done: dhikrDone, action: () => switchTabById('ame') },
-    { id: 'score-sport',  emoji: '💪', label: 'Séance',  done: !!seanceDone, action: () => {} },
-    { id: 'score-coran',  emoji: '📖', label: 'Coran',   done: !!coranDone, action: () => switchTabById('ame') },
+    { emoji: '🕌', label: 'Prières', done: prayersDone >= 3, sub: prayersDone + '/5', onclick: "switchTabById('ame')" },
+    { emoji: '📿', label: 'Dhikr',   done: dhikrDone, onclick: "switchTabById('ame')" },
+    { emoji: '💪', label: 'Séance',  done: !!seanceDone, onclick: '' },
+    { emoji: '📖', label: 'Coran',   done: !!coranDone, onclick: "switchTabById('ame')" },
   ];
 
   container.innerHTML = items.map(it => `
-    <div class="day-score-item ${it.done ? 'done' : ''}" onclick="${it.action.toString().replace('() => ', '')}">
+    <div class="day-score-item ${it.done ? 'done' : ''}" onclick="${it.onclick}">
       <div class="day-score-ring-wrap">
         <div class="day-score-ring">${it.emoji}</div>
       </div>
@@ -1110,6 +1113,7 @@ function selectGlaire(el, type) {
 function toggleGlaire() {
   const content = document.getElementById('glaire-content');
   const arrow = document.getElementById('glaire-arrow');
+  if (!content) return;
   const isOpen = content.style.display !== 'none';
   content.style.display = isOpen ? 'none' : 'block';
   if (arrow) arrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
@@ -1117,6 +1121,7 @@ function toggleGlaire() {
 function toggleIntimite() {
   const content = document.getElementById('intimite-content');
   const arrow = document.getElementById('intimite-arrow');
+  if (!content) return;
   const isOpen = content.style.display !== 'none';
   content.style.display = isOpen ? 'none' : 'block';
   if (arrow) arrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
@@ -1125,7 +1130,7 @@ function restoreGlaire() {
   const today = new Date().toDateString();
   if (ST.glaireDate === today && ST.glaire) {
     document.querySelectorAll('.glaire-option').forEach(o => {
-      if ((o.getAttribute('onclick')||'').includes("'" + ST.glaire + "'")) o.classList.add('selected');
+      if (o.dataset.type === ST.glaire) o.classList.add('selected');
     });
   }
 }
