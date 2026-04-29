@@ -343,18 +343,21 @@ const ASMA_MEDITATIONS = {
 // ═══════════════════════════════════════════════
 function computeCycle() {
   if (!ST.cycleStart) return;
-  const today = new Date();
-  const start = new Date(ST.cycleStart);
-  const diff = Math.floor((today - start) / (1000*60*60*24));
+  // Comparer en heure locale pour éviter le décalage UTC (new Date("YYYY-MM-DD") = minuit UTC)
+  const now = new Date();
+  const todayLocal = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const [sy, sm, sd] = ST.cycleStart.split('-').map(Number);
+  const startLocal = new Date(sy, sm - 1, sd);
+  const diff = Math.floor((todayLocal - startLocal) / (1000 * 60 * 60 * 24));
   if (diff < 0) { ST.currentDay = 1; ST.currentSaison = 'hiver'; return; }
   const dur = ST.cycleDuration || 28;
   const day = (diff % dur) + 1;
   ST.currentDay = Math.max(1, Math.min(day, dur));
-  const ovulation = Math.round(dur / 2);
+  // Bornes alignées sur SAISONS et phaseMap (J1-5 / J6-13 / J14-17 / J18+)
   const d = ST.currentDay;
   if (d <= 5) ST.currentSaison = 'hiver';
-  else if (d <= ovulation - 2) ST.currentSaison = 'printemps';
-  else if (d <= ovulation + 1) ST.currentSaison = 'ete';
+  else if (d <= 13) ST.currentSaison = 'printemps';
+  else if (d <= 17) ST.currentSaison = 'ete';
   else ST.currentSaison = 'automne';
 }
 
