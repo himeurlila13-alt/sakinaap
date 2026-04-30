@@ -351,7 +351,7 @@
   </div>
 
   <!-- 5 PRIERES -->
-  <div class="prayers-card">
+  <div class="prayers-card" id="prayers-card">
     <div class="prayers-hdr"><div class="prayers-hdr-t">&#128332; Mes 5 prieres</div><div class="prayers-hdr-s" id="prayers-hdr-sub">Coche au fur et a mesure de ta journee</div></div>
     <div class="prayers-prog"><div class="prayers-prog-t"><div class="prayers-prog-f" id="prayer-progress" style="width:0%"></div></div><div class="prayers-prog-lbl" id="prayer-prog-lbl">0 / 5</div></div>
     <div class="prayer-row" onclick="togglePrayer(this,'fajr')"><div class="prayer-chk" id="pr-fajr">&#9728;&#65039;</div><div class="prayer-name" id="prn-fajr">Fajr</div><div class="prayer-time">Aube</div></div>
@@ -359,6 +359,15 @@
     <div class="prayer-row" onclick="togglePrayer(this,'asr')"><div class="prayer-chk" id="pr-asr">&#127781;&#65039;</div><div class="prayer-name" id="prn-asr">Asr</div><div class="prayer-time">Apres-midi</div></div>
     <div class="prayer-row" onclick="togglePrayer(this,'maghrib')"><div class="prayer-chk" id="pr-maghrib">&#127749;</div><div class="prayer-name" id="prn-maghrib">Maghrib</div><div class="prayer-time">Coucher du soleil</div></div>
     <div class="prayer-row" onclick="togglePrayer(this,'isha')"><div class="prayer-chk" id="pr-isha">&#127769;</div><div class="prayer-name" id="prn-isha">Isha</div><div class="prayer-time">Nuit</div></div>
+  </div>
+
+  <!-- MESSAGE HIVER (remplace les prieres pendant les regles) -->
+  <div id="prayers-hiver-card" style="display:none;margin:14px 14px 0;background:white;border-radius:20px;border:1.5px solid #D4C4EE;padding:20px 18px;text-align:center;">
+    <div style="font-size:28px;margin-bottom:10px;">&#129353;</div>
+    <div style="font-family:'Playfair Display',serif;font-size:16px;color:#7B5EA7;margin-bottom:8px;">Tu es dispensée des prières</div>
+    <div style="font-size:13px;color:var(--gris);line-height:1.7;margin-bottom:14px;">Pendant tes règles, Allah t'a accordé une permission. Continue le dhikr, la lecture du Coran et le souvenir d'Allah — tu restes connectée à Lui.</div>
+    <div style="font-size:15px;direction:rtl;color:#7B5EA7;font-weight:500;line-height:2;">فَاذْكُرُونِي أَذْكُرْكُمْ</div>
+    <div style="font-size:11px;color:var(--gris);margin-top:4px;font-style:italic;">« Souvenez-vous de Moi, Je Me souviendrai de vous. » — Sourate Al-Baqara, 2:152</div>
   </div>
 
   <!-- DHIKR CASES A COCHER -->

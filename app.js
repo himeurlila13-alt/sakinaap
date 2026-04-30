@@ -481,7 +481,7 @@ function renderDayScore() {
   if (!container) return;
 
   const items = [
-    { emoji: '🕌', label: 'Prières', done: prayersDone >= 3, sub: prayersDone + '/5', onclick: "switchTabById('ame')" },
+    ...(ST.currentSaison !== 'hiver' ? [{ emoji: '🕌', label: 'Prières', done: prayersDone >= 3, sub: prayersDone + '/5', onclick: "switchTabById('ame')" }] : []),
     { emoji: '📿', label: 'Dhikr',   done: dhikrDone, onclick: "switchTabById('ame')" },
     { emoji: '💪', label: 'Séance',  done: !!seanceDone, onclick: '' },
     { emoji: '📖', label: 'Coran',   done: !!coranDone, onclick: "switchTabById('ame')" },
@@ -661,18 +661,15 @@ function renderAme(s) {
   showNomDuJour();
   updateAsmaCount();
 
-  // Note prières en hiver
-  const prayerSub = document.getElementById('prayers-hdr-sub');
-  if (prayerSub) {
-    if (ST.currentSaison === 'hiver') {
-      prayerSub.textContent = '🤍 Pendant les règles, le dhikr te suffit — tu restes connectée à Allah.';
-      prayerSub.style.color = '#7B5EA7';
-      prayerSub.style.fontStyle = 'italic';
-    } else {
-      prayerSub.textContent = 'Coche au fur et à mesure de ta journée';
-      prayerSub.style.color = '';
-      prayerSub.style.fontStyle = '';
-    }
+  // Cacher les prières pendant hiver (règles)
+  const prayersCard = document.getElementById('prayers-card');
+  const hiverCard = document.getElementById('prayers-hiver-card');
+  if (ST.currentSaison === 'hiver') {
+    if (prayersCard) prayersCard.style.display = 'none';
+    if (hiverCard) hiverCard.style.display = 'block';
+  } else {
+    if (prayersCard) prayersCard.style.display = '';
+    if (hiverCard) hiverCard.style.display = 'none';
   }
 
   // Dhikr cases à cocher
