@@ -344,7 +344,6 @@ const ASMA_MEDITATIONS = {
 // ═══════════════════════════════════════════════
 function computeCycle() {
   if (!ST.cycleStart) return;
-  // Comparer en heure locale pour éviter le décalage UTC (new Date("YYYY-MM-DD") = minuit UTC)
   const now = new Date();
   const todayLocal = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const [sy, sm, sd] = ST.cycleStart.split('-').map(Number);
@@ -354,11 +353,18 @@ function computeCycle() {
   const dur = ST.cycleDuration || 28;
   const day = (diff % dur) + 1;
   ST.currentDay = Math.max(1, Math.min(day, dur));
-  // Bornes alignées sur SAISONS et phaseMap (J1-5 / J6-13 / J14-17 / J18+)
+
+  // La phase lutéale est ~14j avant la fin — c'est elle qui est constante.
+  // C'est la phase folliculaire (Printemps) qui s'allonge ou raccourcit selon le cycle.
   const d = ST.currentDay;
+  const ovulationDay = Math.max(10, dur - 14); // ovulation ≈ 14j avant les prochaines règles
+  const eteStart = Math.max(8, ovulationDay - 2); // fenêtre fertile : 2j avant ovulation
+  const eteEnd = Math.min(dur - 2, ovulationDay + 2); // 2j après ovulation
+  const automneStart = eteEnd + 1;
+
   if (d <= 5) ST.currentSaison = 'hiver';
-  else if (d <= 13) ST.currentSaison = 'printemps';
-  else if (d <= 17) ST.currentSaison = 'ete';
+  else if (d < eteStart) ST.currentSaison = 'printemps';
+  else if (d <= eteEnd) ST.currentSaison = 'ete';
   else ST.currentSaison = 'automne';
 }
 
