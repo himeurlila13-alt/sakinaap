@@ -638,6 +638,15 @@ function saveAutreSymptome(val) {
   ST.autreSymptomesText[today] = val;
   saveState();
 }
+function validateAutreSymptome() {
+  const inp = document.getElementById('autre-symptome-input');
+  const confirm = document.getElementById('autre-symptome-confirm');
+  if (inp) inp.blur();
+  if (confirm) {
+    confirm.style.display = 'block';
+    setTimeout(() => { confirm.style.display = 'none'; }, 2000);
+  }
+}
 
 function restoreSymptomes() {
   renderSymptomes();
@@ -819,7 +828,6 @@ function checkDailyReset() {
   ST.selectedSugg = [];
   ST.glaire = null;
   ST.glaireDate = null;
-  ST.symptomes = {};
   ST.checkin = null;
   ST.checkinDate = null;
   ST.lastDailyReset = today;

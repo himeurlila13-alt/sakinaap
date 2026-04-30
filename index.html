@@ -263,7 +263,11 @@
       <div style="font-size:12px;color:var(--gris);margin-bottom:12px;font-family:var(--serif);font-style:italic;">Coche ce que tu ressens - adapte a ta phase du cycle.</div>
       <div class="symptomes-grid" id="symptomes-grid"></div>
       <div id="autre-symptome-wrap" style="display:none;margin-top:10px;">
-        <input type="text" id="autre-symptome-input" placeholder="Décris ton symptôme..." oninput="saveAutreSymptome(this.value)" style="width:100%;border:1.5px solid var(--sable);border-radius:12px;padding:10px 14px;font-size:14px;font-family:var(--serif);color:var(--noir);background:var(--creme);box-sizing:border-box;outline:none;">
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="text" id="autre-symptome-input" placeholder="Décris ton symptôme..." oninput="saveAutreSymptome(this.value)" onkeydown="if(event.key==='Enter'){this.blur();validateAutreSymptome();}" style="flex:1;border:1.5px solid var(--sable);border-radius:12px;padding:10px 14px;font-size:14px;font-family:var(--serif);color:var(--noir);background:var(--creme);box-sizing:border-box;outline:none;">
+          <button onclick="validateAutreSymptome()" style="background:var(--season);color:#fff;border:none;border-radius:12px;padding:10px 16px;font-size:14px;cursor:pointer;white-space:nowrap;flex-shrink:0;">&#10003; OK</button>
+        </div>
+        <div id="autre-symptome-confirm" style="display:none;font-size:12px;color:var(--season);margin-top:6px;font-family:var(--serif);font-style:italic;">Noté &#10003;</div>
       </div>
     </div>
   </div>
