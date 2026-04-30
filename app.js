@@ -396,10 +396,10 @@ function populateAll() {
   renderAme(s);
 
   // ── VIE ──
-  renderVie(s);
+  try { renderVie(s); } catch(e) { console.error('renderVie:', e); _debugShow('VIE ERR: ' + e.message); }
 
   // ── MOI ──
-  renderMoi(s);
+  try { renderMoi(s); } catch(e) { console.error('renderMoi:', e); _debugShow('MOI ERR: ' + e.message); }
 
   // RESTORE
   restorePrayers();
@@ -1389,6 +1389,16 @@ function showToast(msg) {
   let el=document.getElementById('toastEl');
   if (!el) { el=document.createElement('div'); el.id='toastEl'; el.className='toast'; document.body.appendChild(el); }
   el.textContent=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),2900);
+}
+function _debugShow(msg) {
+  let el = document.getElementById('_debugBanner');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = '_debugBanner';
+    el.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;background:#C4694A;color:white;font-size:12px;padding:8px 14px;font-family:monospace;word-break:break-all;';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
 }
 function formatDateFr(dateStr) {
   const [y, m, d] = dateStr.split('-').map(Number);
