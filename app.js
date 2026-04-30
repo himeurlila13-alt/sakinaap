@@ -1466,8 +1466,11 @@ function importData() {
   };
   input.click();
 }
-function resetApp() {
-  if (confirm('Réinitialiser SakinApp ? Toutes tes données seront effacées.')) { localStorage.removeItem('sakinapp_v1'); location.reload(); }
+function deleteMyData() {
+  if (confirm('Supprimer toutes mes données ?\n\nTon prénom, ton cycle, tes prières, ton historique — tout sera effacé de cet appareil définitivement.\n\nAucune donnée n\'a jamais été envoyée à un serveur.')) {
+    localStorage.removeItem('sakinapp_v1');
+    location.reload();
+  }
 }
 
 if ('serviceWorker' in navigator) {
