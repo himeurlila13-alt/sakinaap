@@ -396,10 +396,10 @@ function populateAll() {
   renderAme(s);
 
   // ── VIE ──
-  try { renderVie(s); } catch(e) { console.error('renderVie:', e); _debugShow('VIE ERR: ' + e.message); }
+  renderVie(s);
 
   // ── MOI ──
-  try { renderMoi(s); } catch(e) { console.error('renderMoi:', e); _debugShow('MOI ERR: ' + e.message); }
+  renderMoi(s);
 
   // RESTORE
   restorePrayers();
@@ -945,6 +945,8 @@ function switchTab(name, navEl) {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('tab-' + name).classList.add('active');
   navEl.classList.add('active');
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
   const appContent = document.getElementById('app-content');
   if (appContent) { appContent.scrollTop = 0; setTimeout(() => { appContent.scrollTop = 0; }, 50); }
 }
@@ -1389,20 +1391,6 @@ function showToast(msg) {
   let el=document.getElementById('toastEl');
   if (!el) { el=document.createElement('div'); el.id='toastEl'; el.className='toast'; document.body.appendChild(el); }
   el.textContent=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),2900);
-}
-window.onerror = function(msg, src, line, col, err) {
-  _debugShow('JS ERR ligne ' + line + ': ' + msg);
-  return true;
-};
-function _debugShow(msg) {
-  let el = document.getElementById('_debugBanner');
-  if (!el) {
-    el = document.createElement('div');
-    el.id = '_debugBanner';
-    el.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;background:#C4694A;color:white;font-size:12px;padding:8px 14px;font-family:monospace;word-break:break-all;';
-    document.body.appendChild(el);
-  }
-  el.textContent = msg;
 }
 function formatDateFr(dateStr) {
   const [y, m, d] = dateStr.split('-').map(Number);
