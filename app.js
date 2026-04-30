@@ -414,6 +414,7 @@ function populateAll() {
   restoreFeedback();
   renderEnergyBars();
   renderCycleHistory();
+  renderPatterns();
   if (ST.waitlistEmail) {
     const ei = document.getElementById('waitlist-email');
     const wm = document.getElementById('waitlist-msg');
@@ -1454,6 +1455,85 @@ function renderCycleHistory() {
   });
   list.innerHTML = html;
 }
+function renderPatterns() {
+  const card = document.getElementById('patterns-card');
+  if (!card) return;
+  if (!ST.cycleStart) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+
+  const history = ST.cycleHistory || [];
+  const allCycles = [{ start: ST.cycleStart, duration: ST.cycleDuration || 28 }, ...history];
+  const durations = allCycles.map(c => c.duration || 28);
+  const avg = Math.round(durations.reduce((a, b) => a + b, 0) / durations.length);
+  const minD = Math.min(...durations);
+  const maxD = Math.max(...durations);
+  const isRegular = (maxD - minD) <= 3;
+
+  // Compter les symptômes sur toutes les dates
+  const sympCount = {};
+  const sympMeta = {};
+  Object.values(SYMPTOMES_PAR_PHASE).flat().forEach(s => { sympMeta[s.id] = s; });
+  Object.values(ST.symptomes || {}).forEach(arr => {
+    arr.forEach(id => {
+      if (id === 'autre') return;
+      sympCount[id] = (sympCount[id] || 0) + 1;
+    });
+  });
+  const topSymp = Object.entries(sympCount)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 4)
+    .map(([id, cnt]) => ({ ...sympMeta[id], cnt }))
+    .filter(s => s && s.emoji);
+
+  const totalJoursSuivis = Object.keys(ST.symptomes || {}).length;
+
+  // Section gratuite
+  document.getElementById('patterns-free').innerHTML = `
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <div style="flex:1;background:var(--creme);border-radius:14px;padding:12px;text-align:center;">
+        <div style="font-size:24px;font-weight:700;color:var(--noir);font-family:var(--serif);">${avg}</div>
+        <div style="font-size:10px;color:var(--gris);margin-top:2px;">jours en moy.</div>
+      </div>
+      <div style="flex:1;background:var(--creme);border-radius:14px;padding:12px;text-align:center;">
+        <div style="font-size:24px;font-weight:700;color:var(--noir);font-family:var(--serif);">${allCycles.length}</div>
+        <div style="font-size:10px;color:var(--gris);margin-top:2px;">cycles suivis</div>
+      </div>
+      <div style="flex:1;background:var(--creme);border-radius:14px;padding:12px;text-align:center;">
+        <div style="font-size:20px;">${isRegular ? '🌿' : '〰️'}</div>
+        <div style="font-size:10px;color:var(--gris);margin-top:2px;">${isRegular ? 'Régulier' : 'Variable'}</div>
+      </div>
+    </div>
+    ${minD !== maxD ? `<div style="font-size:11px;color:var(--gris);margin-bottom:14px;line-height:1.5;">Tes cycles varient entre <b style="color:var(--noir);">${minD}</b> et <b style="color:var(--noir);">${maxD}</b> jours — ${isRegular ? 'une belle régularité.' : 'des variations normales.'}</div>` : `<div style="font-size:11px;color:var(--gris);margin-bottom:14px;">Tes cycles sont très stables ✨</div>`}
+  `;
+
+  // Section premium verrouillée
+  const previewSymptoms = topSymp.length >= 2 ? topSymp : [
+    { emoji: '😴', label: 'Fatigue', cnt: 8 },
+    { emoji: '🌀', label: 'Crampes', cnt: 5 },
+    { emoji: '🌸', label: 'Bonne humeur', cnt: 4 },
+  ];
+
+  document.getElementById('patterns-premium').innerHTML = `
+    <div style="position:relative;border-radius:14px;overflow:hidden;margin-top:4px;">
+      <div style="filter:blur(3px);pointer-events:none;user-select:none;padding:14px;background:var(--creme);">
+        <div style="font-size:10px;font-weight:600;color:var(--gris);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">Tes symptômes les plus fréquents</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">
+          ${previewSymptoms.map(s => `<div style="background:white;border-radius:10px;padding:6px 12px;font-size:12px;display:flex;align-items:center;gap:6px;">${s.emoji} <span>${s.label}</span> <span style="color:var(--gris);">·</span> <b>${s.cnt}×</b></div>`).join('')}
+        </div>
+        <div style="font-size:10px;font-weight:600;color:var(--gris);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Analyse par phase</div>
+        <div style="font-size:12px;color:var(--gris);line-height:1.6;">🌙 Hiver · Fatigue et crampes reviennent souvent<br>☀️ Été · Énergie max, quelques maux de tête</div>
+        <div style="margin-top:10px;font-size:12px;color:var(--gris);">🔮 Prochaines règles prévues dans ≈ 8 jours</div>
+      </div>
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,0.72);backdrop-filter:blur(1px);">
+        <div style="font-size:28px;margin-bottom:8px;">✨</div>
+        <div style="font-size:14px;font-weight:700;color:var(--noir);margin-bottom:4px;font-family:var(--serif);">Fonctionnalité Premium</div>
+        <div style="font-size:12px;color:var(--gris);margin-bottom:14px;text-align:center;max-width:200px;line-height:1.5;">Patterns, prédictions et analyse<br>de tes cycles complets</div>
+        <div style="background:linear-gradient(135deg,#C4A95A,#E8C97A);color:white;border-radius:12px;padding:10px 22px;font-size:12px;font-weight:700;letter-spacing:0.5px;">Bientôt disponible</div>
+      </div>
+    </div>
+  `;
+}
+
 function exportData() {
   const data = localStorage.getItem('sakinapp_v1');
   if (!data) { showToast('Aucune donnée à sauvegarder.'); return; }
