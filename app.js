@@ -16,6 +16,7 @@ let ST = {
   glaire: null,
   glaireDate: null,
   symptomes: {},      // { 'date': ['fatigue','crampes',...] }
+  autreSymptomesText: {}, // { 'date': 'texte libre' }
   currentSaison: 'printemps',
   currentDay: 1,
   selectedSugg: [],
@@ -600,15 +601,18 @@ function renderSymptomes() {
   const today = new Date().toDateString();
   const selSymp = (ST.symptomes && ST.symptomes[today]) || [];
 
+  const autreSelected = selSymp.includes('autre');
+  const autreText = (ST.autreSymptomesText && ST.autreSymptomesText[today]) || '';
+
   container.innerHTML = liste.map(sy => {
     const isSel = selSymp.includes(sy.id);
-    return `
-      <div class="symptome-chip ${isSel ? 'selected' : ''}" onclick="toggleSymptome('${sy.id}', this)">
-        <span class="symptome-chip-emoji">${sy.emoji}</span>
-        <span class="symptome-chip-text">${sy.label}</span>
-      </div>
-    `;
-  }).join('');
+    return `<div class="symptome-chip ${isSel ? 'selected' : ''}" onclick="toggleSymptome('${sy.id}', this)"><span class="symptome-chip-emoji">${sy.emoji}</span><span class="symptome-chip-text">${sy.label}</span></div>`;
+  }).join('') + `<div class="symptome-chip ${autreSelected ? 'selected' : ''}" onclick="toggleSymptome('autre', this)"><span class="symptome-chip-emoji">✏️</span><span class="symptome-chip-text">Autre</span></div>`;
+
+  const wrap = document.getElementById('autre-symptome-wrap');
+  const inp = document.getElementById('autre-symptome-input');
+  if (wrap) wrap.style.display = autreSelected ? 'block' : 'none';
+  if (inp) inp.value = autreText;
 }
 
 function toggleSymptome(id, el) {
@@ -620,6 +624,18 @@ function toggleSymptome(id, el) {
   if (idx > -1) arr.splice(idx, 1);
   else arr.push(id);
   el.classList.toggle('selected', arr.includes(id));
+  if (id === 'autre') {
+    const wrap = document.getElementById('autre-symptome-wrap');
+    const inp = document.getElementById('autre-symptome-input');
+    if (wrap) wrap.style.display = arr.includes('autre') ? 'block' : 'none';
+    if (inp && arr.includes('autre')) setTimeout(() => inp.focus(), 50);
+  }
+  saveState();
+}
+function saveAutreSymptome(val) {
+  const today = new Date().toDateString();
+  if (!ST.autreSymptomesText) ST.autreSymptomesText = {};
+  ST.autreSymptomesText[today] = val;
   saveState();
 }
 
@@ -1477,7 +1493,7 @@ function confirmDeleteMyData() {
   ST = {
     prenom: '', cycleStart: null, cycleDuration: 28, checkin: null, checkinDate: null,
     prayers: {}, dhikrChecks: {}, dhikrDate: null, coranDone: {}, asmaKnown: [],
-    glaire: null, glaireDate: null, symptomes: {}, currentSaison: 'printemps', currentDay: 1,
+    glaire: null, glaireDate: null, symptomes: {}, autreSymptomesText: {}, currentSaison: 'printemps', currentDay: 1,
     selectedSugg: [], seanceDashDone: {}, mouvDone: {}, seanceDone: {}, notifFreq: 2,
     waitlistEmail: null, feedbackSent: false, installBannerDismissed: false,
     lastDailyReset: null, lastWeeklyReset: null, eveningCheckinDate: null,
