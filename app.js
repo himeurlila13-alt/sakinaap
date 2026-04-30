@@ -1467,10 +1467,14 @@ function importData() {
   input.click();
 }
 function deleteMyData() {
-  if (confirm('Supprimer toutes mes données ?\n\nTon prénom, ton cycle, tes prières, ton historique — tout sera effacé de cet appareil définitivement.\n\nAucune donnée n\'a jamais été envoyée à un serveur.')) {
-    localStorage.removeItem('sakinapp_v1');
-    location.reload();
-  }
+  document.getElementById('delete-modal').style.display = 'flex';
+}
+function closeDeleteModal() {
+  document.getElementById('delete-modal').style.display = 'none';
+}
+function confirmDeleteMyData() {
+  localStorage.removeItem('sakinapp_v1');
+  location.reload();
 }
 
 if ('serviceWorker' in navigator) {
