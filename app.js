@@ -1172,6 +1172,16 @@ function restoreGlaire() {
 // ═══════════════════════════════════════════════
 // ENERGY BARS & CYCLE RING
 // ═══════════════════════════════════════════════
+function phaseForDay(i, dur) {
+  const ovulationDay = Math.max(10, dur - 14);
+  const eteStart = Math.max(8, ovulationDay - 2);
+  const eteEnd = Math.min(dur - 2, ovulationDay + 2);
+  if (i <= 5) return 'hiver';
+  if (i < eteStart) return 'printemps';
+  if (i <= eteEnd) return 'ete';
+  return 'automne';
+}
+
 function renderEnergyBars() {
   const el = document.getElementById('energy-bars-moi');
   if (!el) return;
@@ -1179,17 +1189,15 @@ function renderEnergyBars() {
   const dur = ST.cycleDuration || 28;
   const colors = {hiver:'#7B5EA7',printemps:'#3DAE8A',ete:'#E8834A',automne:'#C4694A'};
   const energyBase = {hiver:25,printemps:70,ete:95,automne:50};
+  const title = document.getElementById('energy-title');
+  if (title) title.textContent = `Mon énergie sur ${dur} jours`;
   let html = '';
-  for (let i = 1; i <= 28; i++) {
-    const ratio = i / dur;
-    let phase = 'automne';
-    if (ratio <= 0.18) phase = 'hiver';
-    else if (ratio <= 0.5) phase = 'printemps';
-    else if (ratio <= 0.64) phase = 'ete';
-    const h = Math.max(8, Math.min(100, energyBase[phase] + Math.sin(i*1.3)*10));
+  for (let i = 1; i <= dur; i++) {
+    const phase = phaseForDay(i, dur);
+    const h = Math.max(8, Math.min(100, energyBase[phase] + Math.sin(i * 1.3) * 10));
     const isToday = i === day;
     const opacity = i > day ? '0.2' : '0.55';
-    const ring = isToday ? `box-shadow:0 0 0 2px var(--season);` : '';
+    const ring = isToday ? 'box-shadow:0 0 0 2px var(--season);' : '';
     html += `<div style="flex:1;border-radius:3px 3px 0 0;background:${colors[phase]};height:${h}%;opacity:${isToday?'1':opacity};${ring}min-height:4px;"></div>`;
   }
   el.innerHTML = html;
@@ -1199,7 +1207,10 @@ function drawCycleRing() {
   const cx=100, cy=100, r=82;
   const dur = ST.cycleDuration || 28;
   const day = ST.currentDay || 1;
-  const phases = [{id:'seg-hiver',start:1,end:5,color:'#7B5EA7'},{id:'seg-printemps',start:6,end:13,color:'#3DAE8A'},{id:'seg-ete',start:14,end:17,color:'#E8834A'},{id:'seg-automne',start:18,end:dur,color:'#C4694A'}];
+  const ovDay = Math.max(10, dur - 14);
+  const eteS = Math.max(8, ovDay - 2);
+  const eteE = Math.min(dur - 2, ovDay + 2);
+  const phases = [{id:'seg-hiver',start:1,end:5,color:'#7B5EA7'},{id:'seg-printemps',start:6,end:eteS-1,color:'#3DAE8A'},{id:'seg-ete',start:eteS,end:eteE,color:'#E8834A'},{id:'seg-automne',start:eteE+1,end:dur,color:'#C4694A'}];
   function polarToCart(angle) { const rad=(angle-90)*Math.PI/180; return {x:cx+r*Math.cos(rad),y:cy+r*Math.sin(rad)}; }
   function dayToAngle(d) { return ((d-1)/dur)*360; }
   function arcPath(s2,e2) { const a1=dayToAngle(s2),a2=dayToAngle(e2+1); const p1=polarToCart(a1),p2=polarToCart(a2); const large=(a2-a1)>180?1:0; return 'M '+p1.x+' '+p1.y+' A '+r+' '+r+' 0 '+large+' 1 '+p2.x+' '+p2.y; }
