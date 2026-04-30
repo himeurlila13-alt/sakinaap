@@ -390,6 +390,88 @@
     </div>
     <div class="coran-check-hadith">"La meilleure d'entre vous est celle qui apprend le Coran et l'enseigne." - Boukhari</div>
   </div>
+
+  <!-- HYGIENE ISLAMIQUE -->
+  <div style="margin:12px 14px 0;background:white;border-radius:20px;border:1.5px solid var(--sable);overflow:hidden;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;" onclick="toggleHygiene()">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:15px;color:var(--noir);">&#128167; Pureté &amp; Hygiène islamique</div>
+        <div style="font-size:11px;color:var(--gris);margin-top:2px;">Règles, Ghusl, ce qui redevient permis</div>
+      </div>
+      <span id="hygiene-arrow" style="font-size:11px;color:var(--gris);opacity:.5;transition:transform .25s;">&#9660;</span>
+    </div>
+
+    <div id="hygiene-content" style="display:none;padding:0 16px 16px;">
+
+      <!-- PENDANT LES RÈGLES -->
+      <div style="background:var(--creme);border-radius:14px;padding:14px;margin-bottom:10px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7B5EA7;margin-bottom:10px;">&#127769; Pendant les règles</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--noir);line-height:1.5;">
+          <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#7B5EA7;font-size:16px;flex-shrink:0;">·</span><span>La <b>prière</b> et le <b>jeûne</b> sont suspendus — ils ne se rattrapent pas pour la prière, mais le jeûne est à compenser.</span></div>
+          <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#7B5EA7;font-size:16px;flex-shrink:0;">·</span><span>Les <b>rapports intimes</b> sont interdits jusqu'à la purification.</span></div>
+          <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#7B5EA7;font-size:16px;flex-shrink:0;">·</span><span>Le <b>dhikr, la du'â et l'écoute du Coran</b> restent pleinement ouverts et recommandés.</span></div>
+          <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#7B5EA7;font-size:16px;flex-shrink:0;">·</span><span>Tu peux <b>toucher et lire le Coran</b> selon la majorité des savants contemporains (Ibn 'Uthaymin, Ibn Bâz).</span></div>
+          <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#7B5EA7;font-size:16px;flex-shrink:0;">·</span><span>L'entrée à la mosquée est déconseillée sauf nécessité selon les écoles.</span></div>
+        </div>
+      </div>
+
+      <!-- LE GHUSL -->
+      <div style="background:#E8F8F3;border-radius:14px;padding:14px;margin-bottom:10px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#3DAE8A;margin-bottom:10px;">&#10024; Le Ghusl — Purification après les règles</div>
+        <div style="font-size:12px;color:var(--gris);font-style:italic;margin-bottom:12px;line-height:1.5;">Le ghusl est obligatoire (fard) dès la fin des règles, avant de reprendre la prière.</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:22px;height:22px;border-radius:50%;background:#3DAE8A;color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+            <div style="font-size:13px;color:var(--noir);line-height:1.5;"><b>Niyyah</b> — Formuler l'intention dans son cœur de se purifier de l'état d'impureté majeure.</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:22px;height:22px;border-radius:50%;background:#3DAE8A;color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+            <div style="font-size:13px;color:var(--noir);line-height:1.5;"><b>Bismillah</b> — Commencer au nom d'Allah.</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:22px;height:22px;border-radius:50%;background:#3DAE8A;color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+            <div style="font-size:13px;color:var(--noir);line-height:1.5;"><b>Laver les mains</b> 3 fois.</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:22px;height:22px;border-radius:50%;background:#3DAE8A;color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
+            <div style="font-size:13px;color:var(--noir);line-height:1.5;"><b>Nettoyer les parties intimes</b> soigneusement.</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:22px;height:22px;border-radius:50%;background:#3DAE8A;color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">5</div>
+            <div style="font-size:13px;color:var(--noir);line-height:1.5;"><b>Faire le wudu complet</b> (comme pour la prière).</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:22px;height:22px;border-radius:50%;background:#3DAE8A;color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">6</div>
+            <div style="font-size:13px;color:var(--noir);line-height:1.5;"><b>Verser l'eau sur la tête</b> 3 fois en massant la racine des cheveux pour que l'eau atteigne le cuir chevelu.</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:22px;height:22px;border-radius:50%;background:#3DAE8A;color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">7</div>
+            <div style="font-size:13px;color:var(--noir);line-height:1.5;"><b>Verser l'eau sur tout le corps</b> — côté droit puis gauche, en veillant à ce qu'aucune partie ne reste sèche.</div>
+          </div>
+        </div>
+        <div style="margin-top:12px;padding:10px 12px;background:white;border-radius:10px;font-size:12px;color:var(--gris);line-height:1.5;font-style:italic;">
+          💡 Il n'est pas obligatoire de défaire les tresses selon l'avis de la majorité — à condition que l'eau atteigne les racines.
+        </div>
+      </div>
+
+      <!-- CE QUI REDEVIENT PERMIS -->
+      <div style="background:#FFF8EE;border-radius:14px;padding:14px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#E8834A;margin-bottom:10px;">&#127800; Après le Ghusl — Ce qui redevient permis</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <div style="background:white;border-radius:10px;padding:7px 12px;font-size:12px;color:var(--noir);display:flex;align-items:center;gap:6px;"><span>&#128332;</span> La prière</div>
+          <div style="background:white;border-radius:10px;padding:7px 12px;font-size:12px;color:var(--noir);display:flex;align-items:center;gap:6px;"><span>&#127758;</span> Le jeûne</div>
+          <div style="background:white;border-radius:10px;padding:7px 12px;font-size:12px;color:var(--noir);display:flex;align-items:center;gap:6px;"><span>&#128214;</span> Toucher le Mushaf</div>
+          <div style="background:white;border-radius:10px;padding:7px 12px;font-size:12px;color:var(--noir);display:flex;align-items:center;gap:6px;"><span>&#128255;</span> Réciter le Coran</div>
+          <div style="background:white;border-radius:10px;padding:7px 12px;font-size:12px;color:var(--noir);display:flex;align-items:center;gap:6px;"><span>&#128101;</span> Les rapports intimes</div>
+          <div style="background:white;border-radius:10px;padding:7px 12px;font-size:12px;color:var(--noir);display:flex;align-items:center;gap:6px;"><span>&#128591;</span> Le tawaf</div>
+          <div style="background:white;border-radius:10px;padding:7px 12px;font-size:12px;color:var(--noir);display:flex;align-items:center;gap:6px;"><span>&#127891;</span> Entrer à la mosquée</div>
+        </div>
+        <div style="margin-top:10px;font-size:12px;color:var(--gris);font-family:'Playfair Display',serif;font-style:italic;line-height:1.6;">« Et ils t'interrogent sur les menstrues. Dis : C'est une indisposition. Éloignez-vous des femmes pendant les menstrues... Puis quand elles se sont purifiées, abordez-les de la manière qu'Allah vous a prescrite. » — Coran 2:222</div>
+      </div>
+
+    </div>
+  </div>
+
 </div>
 
 <!-- VIE -->

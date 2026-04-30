@@ -1628,3 +1628,11 @@ function toggleSymptomesSection() {
   content.style.display = isOpen ? 'none' : 'block';
   if (arrow) arrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
 }
+function toggleHygiene() {
+  const content = document.getElementById('hygiene-content');
+  const arrow = document.getElementById('hygiene-arrow');
+  if (!content) return;
+  const isOpen = content.style.display !== 'none';
+  content.style.display = isOpen ? 'none' : 'block';
+  if (arrow) arrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+}
