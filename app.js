@@ -1472,6 +1472,9 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js').catch(()=>{});
     navigator.serviceWorker.addEventListener('controllerchange', () => { window.location.reload(); });
+    navigator.serviceWorker.addEventListener('message', e => {
+      if (e.data && e.data.type === 'RELOAD') window.location.reload();
+    });
   });
 }
 
