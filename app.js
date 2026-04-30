@@ -1469,7 +1469,10 @@ function resetApp() {
 }
 
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(()=>{}); });
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(()=>{});
+    navigator.serviceWorker.addEventListener('controllerchange', () => { window.location.reload(); });
+  });
 }
 
 // Toggle section symptômes
