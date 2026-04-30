@@ -1474,7 +1474,18 @@ function closeDeleteModal() {
 }
 function confirmDeleteMyData() {
   try { localStorage.clear(); } catch(e) {}
-  window.location.replace(window.location.origin + '/?reset=' + Date.now());
+  ST = {
+    prenom: '', cycleStart: null, cycleDuration: 28, checkin: null, checkinDate: null,
+    prayers: {}, dhikrChecks: {}, dhikrDate: null, coranDone: {}, asmaKnown: [],
+    glaire: null, glaireDate: null, symptomes: {}, currentSaison: 'printemps', currentDay: 1,
+    selectedSugg: [], seanceDashDone: {}, mouvDone: {}, seanceDone: {}, notifFreq: 2,
+    waitlistEmail: null, feedbackSent: false, installBannerDismissed: false,
+    lastDailyReset: null, lastWeeklyReset: null, eveningCheckinDate: null,
+    eveningCheckinMood: null, cycleHistory: []
+  };
+  closeDeleteModal();
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('onboarding').style.display = 'block';
 }
 
 if ('serviceWorker' in navigator) {
