@@ -1390,6 +1390,10 @@ function showToast(msg) {
   if (!el) { el=document.createElement('div'); el.id='toastEl'; el.className='toast'; document.body.appendChild(el); }
   el.textContent=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),2900);
 }
+window.onerror = function(msg, src, line, col, err) {
+  _debugShow('JS ERR ligne ' + line + ': ' + msg);
+  return true;
+};
 function _debugShow(msg) {
   let el = document.getElementById('_debugBanner');
   if (!el) {
