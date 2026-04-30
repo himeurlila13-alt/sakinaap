@@ -106,6 +106,7 @@ const DHIKR_CHECKS = [
   { id: 'subhan',     arabic: 'سُبْحَانَ اللَّهِ',  fr: 'SubhanAllah · Gloire à Allah',          count: '33×' },
   { id: 'alhamdu',    arabic: 'اَلْحَمْدُ لِلَّهِ', fr: 'Alhamdulillah · Louange à Allah',        count: '33×' },
   { id: 'akbar',      arabic: 'اللَّهُ أَكْبَرُ',    fr: 'Allahu Akbar · Allah est le Plus Grand', count: '34×' },
+  { id: 'istighfar',  arabic: 'أَسْتَغْفِرُ اللَّهَ', fr: 'Astaghfirullah · Je demande pardon à Allah', count: '100×', verse: '« afin qu\'Allah te pardonne tes péchés, passés et futurs, qu\'Il parachève sur toi Son bienfait et te guide sur une voie droite. » — Coran 48:2' },
 ];
 
 const SAISONS = {
@@ -694,14 +695,16 @@ function renderDhikrChecks() {
 
   container.innerHTML = DHIKR_CHECKS.map(d => {
     const isDone = !!checks[d.id];
+    const verseHtml = d.verse ? `<div style="font-size:10px;color:var(--gris);font-style:italic;line-height:1.5;margin-top:5px;padding-top:5px;border-top:1px solid var(--sable);">${d.verse}</div>` : '';
     return `
-      <div class="dhikr-check-item ${isDone ? 'done' : ''}" onclick="toggleDhikrCheck('${d.id}', this)">
-        <div class="dhikr-check-box">${isDone ? '✓' : ''}</div>
-        <div class="dhikr-check-content">
+      <div class="dhikr-check-item ${isDone ? 'done' : ''}" onclick="toggleDhikrCheck('${d.id}', this)" style="${d.verse ? 'align-items:flex-start;' : ''}">
+        <div class="dhikr-check-box" style="${d.verse ? 'margin-top:4px;' : ''}">${isDone ? '✓' : ''}</div>
+        <div class="dhikr-check-content" style="flex:1;">
           <div class="dhikr-check-arabic">${d.arabic}</div>
           <div class="dhikr-check-fr">${d.fr}</div>
+          ${verseHtml}
         </div>
-        <div class="dhikr-check-count">${d.count}</div>
+        <div class="dhikr-check-count" style="${d.verse ? 'margin-top:4px;' : ''}">${d.count}</div>
       </div>
     `;
   }).join('');
