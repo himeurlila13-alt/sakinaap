@@ -1467,10 +1467,10 @@ function importData() {
   input.click();
 }
 function deleteMyData() {
-  document.getElementById('delete-modal').style.display = 'flex';
+  document.getElementById('delete-modal').classList.add('open');
 }
 function closeDeleteModal() {
-  document.getElementById('delete-modal').style.display = 'none';
+  document.getElementById('delete-modal').classList.remove('open');
 }
 function confirmDeleteMyData() {
   localStorage.removeItem('sakinapp_v1');
