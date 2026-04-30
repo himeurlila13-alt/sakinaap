@@ -15,6 +15,18 @@
 </head>
 <body>
 
+<!-- BANNIERE MISE A JOUR -->
+<div id="update-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(135deg,var(--season,#3DAE8A),var(--season-light,#80D4B8));padding:12px 16px;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 2px 12px rgba(0,0,0,0.15);">
+  <div style="display:flex;align-items:center;gap:10px;flex:1;">
+    <span style="font-size:18px;">✨</span>
+    <div>
+      <div style="font-size:13px;font-weight:600;color:white;line-height:1.3;">Mise à jour disponible</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.85);">Nouvelle version de SakinApp prête</div>
+    </div>
+  </div>
+  <button onclick="applyUpdate()" style="background:white;color:var(--season,#3DAE8A);border:none;border-radius:10px;padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;">Actualiser</button>
+</div>
+
 <!-- ONBOARDING -->
 <div id="onboarding">
 <div class="ob-wrap">

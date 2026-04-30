@@ -1,18 +1,24 @@
-const CACHE = 'sakinapp-v14';
+const CACHE = 'sakinapp-v15';
 const ASSETS = ['/', '/index.html', '/style.css', '/app.js', '/manifest.json'];
+
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
-  self.skipWaiting();
+  // Ne pas appeler skipWaiting() ici — on laisse l'utilisatrice choisir quand mettre à jour
 });
+
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
       Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    ).then(() => self.clients.matchAll({ includeUncontrolled: true, type: 'window' }))
-     .then(clients => clients.forEach(c => c.postMessage({ type: 'RELOAD' })))
+    ).then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
+
+// Message depuis l'app pour forcer l'activation immédiate quand l'utilisatrice clique "Actualiser"
+self.addEventListener('message', e => {
+  if (e.data && e.data.type === 'SKIP_WAITING') self.skipWaiting();
+});
+
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   e.respondWith(

@@ -1609,13 +1609,35 @@ function confirmDeleteMyData() {
   document.getElementById('onboarding').style.display = 'block';
 }
 
+let _waitingSW = null;
+function showUpdateBanner() {
+  const banner = document.getElementById('update-banner');
+  if (banner) banner.style.display = 'flex';
+}
+function applyUpdate() {
+  if (_waitingSW) {
+    _waitingSW.postMessage({ type: 'SKIP_WAITING' });
+    navigator.serviceWorker.addEventListener('controllerchange', () => window.location.reload(), { once: true });
+  } else {
+    window.location.reload();
+  }
+}
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(()=>{});
-    navigator.serviceWorker.addEventListener('controllerchange', () => { window.location.reload(); });
-    navigator.serviceWorker.addEventListener('message', e => {
-      if (e.data && e.data.type === 'RELOAD') window.location.reload();
-    });
+    navigator.serviceWorker.register('/sw.js').then(reg => {
+      if (reg.waiting) { _waitingSW = reg.waiting; showUpdateBanner(); }
+      reg.addEventListener('updatefound', () => {
+        const newSW = reg.installing;
+        if (!newSW) return;
+        newSW.addEventListener('statechange', () => {
+          if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+            _waitingSW = newSW;
+            showUpdateBanner();
+          }
+        });
+      });
+    }).catch(() => {});
   });
 }
 
