@@ -1473,8 +1473,8 @@ function closeDeleteModal() {
   document.getElementById('delete-modal').classList.remove('open');
 }
 function confirmDeleteMyData() {
-  localStorage.removeItem('sakinapp_v1');
-  location.reload();
+  try { localStorage.clear(); } catch(e) {}
+  window.location.replace(window.location.origin + '/?reset=' + Date.now());
 }
 
 if ('serviceWorker' in navigator) {
