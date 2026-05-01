@@ -967,7 +967,10 @@ function enterApp() {
   document.getElementById('app').style.display = 'flex';
   initApp();
   const today = new Date().toDateString();
-  if (ST.checkinDate !== today) {
+  const isFirstTime = !localStorage.getItem('tourDone');
+  if (isFirstTime) {
+    setTimeout(() => startTour(), 400);
+  } else if (ST.checkinDate !== today) {
     setTimeout(() => {
       const ov = document.getElementById('checkin-overlay');
       if (ov) { ov.style.display = 'flex'; ov.style.alignItems = 'flex-end'; }
@@ -1629,6 +1632,67 @@ function confirmDeleteMyData() {
   closeDeleteModal();
   document.getElementById('app').style.display = 'none';
   document.getElementById('onboarding').style.display = 'block';
+}
+
+// ═══════════════════════════════════════════════
+// TOUR GUIDÉ
+// ═══════════════════════════════════════════════
+const TOUR_STEPS = [
+  {
+    emoji: '🏠',
+    title: 'Ton tableau de bord',
+    text: 'Chaque matin, retrouve ton check-in, tes rappels spirituels et tes suggestions du jour — tout adapté à ta saison de cycle.',
+  },
+  {
+    emoji: '🌙',
+    title: 'Ton cycle en un coup d\'œil',
+    text: 'L\'anneau coloré suit ta phase en temps réel. Note tes symptômes du jour et démarre un nouveau cycle d\'un simple toucher.',
+  },
+  {
+    emoji: '🤲',
+    title: 'Ta connexion spirituelle',
+    text: 'Coche tes prières, tes adhkar du jour et ta lecture du Coran. Pendant l\'Hiver, un espace doux remplace les prières.',
+  },
+  {
+    emoji: '🌿',
+    title: 'Ta vie au rythme du cycle',
+    text: 'Alimentation, sport et skincare changent selon ta phase. Ton corps a des besoins différents chaque semaine — SakinApp te guide.',
+  },
+  {
+    emoji: '✨',
+    title: 'Ton espace personnel',
+    text: 'Retrouve ton historique de cycles, ton portrait de cycle et tes réglages. Tes données restent sur ton téléphone, uniquement.',
+  },
+];
+let _tourStep = 0;
+
+function startTour() {
+  if (localStorage.getItem('tourDone')) return;
+  _tourStep = 0;
+  document.getElementById('tour-overlay').style.display = 'flex';
+  renderTourStep();
+}
+
+function renderTourStep() {
+  const step = TOUR_STEPS[_tourStep];
+  const total = TOUR_STEPS.length;
+  document.getElementById('tour-emoji').textContent = step.emoji;
+  document.getElementById('tour-title').textContent = step.title;
+  document.getElementById('tour-text').textContent = step.text;
+  const dots = document.getElementById('tour-dots');
+  dots.innerHTML = TOUR_STEPS.map((_, i) =>
+    `<div style="width:${i===_tourStep?'20px':'8px'};height:8px;border-radius:4px;background:${i===_tourStep?'var(--season,#3DAE8A)':'#E8DDD0'};transition:all .3s;"></div>`
+  ).join('');
+}
+
+function tourNext() {
+  _tourStep++;
+  if (_tourStep >= TOUR_STEPS.length) {
+    document.getElementById('tour-overlay').style.display = 'none';
+    localStorage.setItem('tourDone', '1');
+    return;
+  }
+  renderTourStep();
 }
 
 let _waitingSW = null;

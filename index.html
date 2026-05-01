@@ -15,6 +15,17 @@
 </head>
 <body>
 
+<!-- TOUR GUIDE -->
+<div id="tour-overlay" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(30,20,10,0.72);align-items:center;justify-content:center;padding:24px;">
+  <div style="background:white;border-radius:28px;padding:32px 24px 24px;max-width:340px;width:100%;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,0.25);">
+    <div id="tour-emoji" style="font-size:52px;margin-bottom:16px;line-height:1;">🏠</div>
+    <div id="tour-title" style="font-family:'Playfair Display',serif;font-size:20px;color:#1C1008;margin-bottom:10px;font-weight:600;"></div>
+    <div id="tour-text" style="font-size:13px;color:#8A7060;line-height:1.7;margin-bottom:28px;"></div>
+    <button onclick="tourNext()" style="width:100%;padding:15px;background:var(--season,#3DAE8A);color:white;border:none;border-radius:16px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:0.3px;">Compris 🌸</button>
+    <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:18px;" id="tour-dots"></div>
+  </div>
+</div>
+
 <!-- BANNIERE MISE A JOUR -->
 <div id="update-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(135deg,var(--season,#3DAE8A),var(--season-light,#80D4B8));padding:12px 16px;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 2px 12px rgba(0,0,0,0.15);">
   <div style="display:flex;align-items:center;gap:10px;flex:1;">
