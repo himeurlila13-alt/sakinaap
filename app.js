@@ -590,12 +590,34 @@ function renderCycle(s) {
   const _cnu = document.getElementById('countdown-num'); if (_cnu) _cnu.textContent = remaining <= 0 ? '0' : remaining;
   const _clb = document.getElementById('countdown-label'); if (_clb) _clb.textContent = remaining <= 1 ? 'demain' : 'jours';
   const _cpn = document.getElementById('cycle-phase-name'); if (_cpn) _cpn.textContent = (s.phase||'').replace('Phase ','');
-  const phaseMap = {hiver:'J1 → J5', printemps:'J6 → J13', ete:'J14 → J17', automne:'J18 → J'+ST.cycleDuration};
+  const dur = ST.cycleDuration || 28;
+  const _ovD = Math.max(10, dur - 14);
+  const _etS = Math.max(8, _ovD - 2);
+  const _etE = Math.min(dur - 2, _ovD + 2);
+  const phaseMap = {hiver:'J1 → J5', printemps:'J6 → J'+(_etS-1), ete:'J'+_etS+' → J'+_etE, automne:'J'+(_etE+1)+' → J'+dur};
   const _cpd = document.getElementById('cycle-phase-days'); if (_cpd) _cpd.textContent = phaseMap[ST.currentSaison] || '';
   drawCycleRing();
 
   // Symptômes
   renderSymptomes();
+}
+
+function startNewCycleToday() {
+  const today = new Date();
+  const todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
+  if (ST.cycleStart === todayStr) return;
+  if (!ST.cycleHistory) ST.cycleHistory = [];
+  if (ST.cycleStart) {
+    ST.cycleHistory.unshift({ start: ST.cycleStart, duration: ST.cycleDuration || 28 });
+    if (ST.cycleHistory.length > 6) ST.cycleHistory = ST.cycleHistory.slice(0, 6);
+  }
+  ST.cycleStart = todayStr;
+  saveState();
+  computeCycle();
+  applySaisonTheme();
+  populateAll();
+  const msg = document.getElementById('new-cycle-msg');
+  if (msg) { msg.style.display = 'block'; setTimeout(() => { msg.style.display = 'none'; }, 5000); }
 }
 
 // ═══════════════════════════════════════════════
