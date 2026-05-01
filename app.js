@@ -967,15 +967,14 @@ function enterApp() {
   document.getElementById('app').style.display = 'flex';
   initApp();
   const today = new Date().toDateString();
-  const isFirstTime = !localStorage.getItem('tourDone');
-  if (isFirstTime) {
-    setTimeout(() => startTour(), 400);
-  } else if (ST.checkinDate !== today) {
-    setTimeout(() => {
+  setTimeout(() => {
+    if (!localStorage.getItem('tabSeen_accueil')) {
+      showTabTour('accueil');
+    } else if (ST.checkinDate !== today) {
       const ov = document.getElementById('checkin-overlay');
       if (ov) { ov.style.display = 'flex'; ov.style.alignItems = 'flex-end'; }
-    }, 600);
-  }
+    }
+  }, 500);
 }
 
 // ═══════════════════════════════════════════════
@@ -1005,6 +1004,7 @@ function switchTab(name, navEl) {
   document.documentElement.scrollTop = 0;
   const appContent = document.getElementById('app-content');
   if (appContent) { appContent.scrollTop = 0; setTimeout(() => { appContent.scrollTop = 0; }, 50); }
+  setTimeout(() => showTabTour(name), 300);
 }
 
 function switchTabById(name, section) {
@@ -1014,6 +1014,7 @@ function switchTabById(name, section) {
   const tabMap = {accueil:0, cycle:1, ame:2, vie:3, moi:4};
   const navItems = document.querySelectorAll('.nav-item');
   if (navItems[tabMap[name]]) navItems[tabMap[name]].classList.add('active');
+  setTimeout(() => showTabTour(name), 300);
   const _ac2 = document.getElementById('app-content');
   if (_ac2) _ac2.scrollTop = 0;
   if (section) {
@@ -1635,64 +1636,55 @@ function confirmDeleteMyData() {
 }
 
 // ═══════════════════════════════════════════════
-// TOUR GUIDÉ
+// TOUR GUIDÉ — un tooltip par onglet à la 1ère ouverture
 // ═══════════════════════════════════════════════
-const TOUR_STEPS = [
-  {
+const TAB_TOURS = {
+  accueil: {
     emoji: '🏠',
     title: 'Ton tableau de bord',
-    text: 'Chaque matin, retrouve ton check-in, tes rappels spirituels et tes suggestions du jour — tout adapté à ta saison de cycle.',
+    text: 'Chaque matin, fais ton check-in, consulte tes rappels spirituels et découvre tes suggestions personnalisées selon ta saison de cycle.',
   },
-  {
+  cycle: {
     emoji: '🌙',
     title: 'Ton cycle en un coup d\'œil',
-    text: 'L\'anneau coloré suit ta phase en temps réel. Note tes symptômes du jour et démarre un nouveau cycle d\'un simple toucher.',
+    text: 'L\'anneau coloré affiche ta phase en temps réel. Note tes symptômes du jour et démarre un nouveau cycle d\'un simple toucher.',
   },
-  {
+  ame: {
     emoji: '🤲',
     title: 'Ta connexion spirituelle',
-    text: 'Coche tes prières, tes adhkar du jour et ta lecture du Coran. Pendant l\'Hiver, un espace doux remplace les prières.',
+    text: 'Coche tes prières, tes adhkar et ta lecture du Coran. Pendant tes règles, un espace doux et adapté remplace la carte des prières.',
   },
-  {
+  vie: {
     emoji: '🌿',
     title: 'Ta vie au rythme du cycle',
-    text: 'Alimentation, sport et skincare changent selon ta phase. Ton corps a des besoins différents chaque semaine — SakinApp te guide.',
+    text: 'Alimentation, sport et skincare changent à chaque phase. Retrouve ici les conseils adaptés à ce que ton corps traverse en ce moment.',
   },
-  {
+  moi: {
     emoji: '✨',
     title: 'Ton espace personnel',
-    text: 'Retrouve ton historique de cycles, ton portrait de cycle et tes réglages. Tes données restent sur ton téléphone, uniquement.',
+    text: 'Consulte ton historique de cycles, ton portrait de cycle et gère tes paramètres. Tes données ne quittent jamais ton téléphone.',
   },
-];
-let _tourStep = 0;
+};
+let _currentTourTab = null;
 
-function startTour() {
-  if (localStorage.getItem('tourDone')) return;
-  _tourStep = 0;
-  document.getElementById('tour-overlay').style.display = 'flex';
-  renderTourStep();
-}
-
-function renderTourStep() {
-  const step = TOUR_STEPS[_tourStep];
-  const total = TOUR_STEPS.length;
+function showTabTour(name) {
+  if (!TAB_TOURS[name]) return;
+  if (localStorage.getItem('tabSeen_' + name)) return;
+  _currentTourTab = name;
+  const step = TAB_TOURS[name];
   document.getElementById('tour-emoji').textContent = step.emoji;
   document.getElementById('tour-title').textContent = step.title;
   document.getElementById('tour-text').textContent = step.text;
-  const dots = document.getElementById('tour-dots');
-  dots.innerHTML = TOUR_STEPS.map((_, i) =>
-    `<div style="width:${i===_tourStep?'20px':'8px'};height:8px;border-radius:4px;background:${i===_tourStep?'var(--season,#3DAE8A)':'#E8DDD0'};transition:all .3s;"></div>`
-  ).join('');
+  document.getElementById('tour-dots').innerHTML = '';
+  document.getElementById('tour-overlay').style.display = 'flex';
 }
 
 function tourNext() {
-  _tourStep++;
-  if (_tourStep >= TOUR_STEPS.length) {
-    document.getElementById('tour-overlay').style.display = 'none';
-    localStorage.setItem('tourDone', '1');
-    return;
+  document.getElementById('tour-overlay').style.display = 'none';
+  if (_currentTourTab) {
+    localStorage.setItem('tabSeen_' + _currentTourTab, '1');
+    _currentTourTab = null;
   }
-  renderTourStep();
 }
 
 let _waitingSW = null;
