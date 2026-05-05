@@ -371,3 +371,96 @@ body{font-family:var(--sans);background:var(--creme);max-width:430px;margin:0 au
 .prem-blur-title{font-family:var(--serif);font-size:16px;color:#1C1008;margin-bottom:5px}
 .prem-blur-sub{font-size:12px;color:#8A7060;line-height:1.5;margin-bottom:14px}
 .prem-blur-btn{background:linear-gradient(135deg,#C9A96E,#A87A30);color:#1C1008;border:none;border-radius:12px;padding:10px 22px;font-size:13px;font-weight:700;font-family:var(--sans);cursor:pointer;box-shadow:0 4px 14px rgba(168,122,48,.25)}
+
+/* ═══════════════════════════════════════════
+   UX IMPROVEMENTS
+   ═══════════════════════════════════════════ */
+
+/* 1. Tour guidé — animation d'entrée de la carte */
+@keyframes tourCardIn{from{opacity:0;transform:scale(.88) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes tourOverlayIn{from{opacity:0}to{opacity:1}}
+#tour-overlay{animation:tourOverlayIn .22s ease both}
+#tour-overlay > div{animation:tourCardIn .32s cubic-bezier(.34,1.4,.64,1) .08s both}
+
+/* 2. Transitions entre onglets — fade doux à l'activation */
+@keyframes tabFadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.tab-page.active{animation:tabFadeIn .28s cubic-bezier(.22,1,.36,1) both}
+
+/* 3. Zones cliquables collapsibles — cible de tap agrandie + feedback */
+.card > div[onclick],
+div[onclick="toggleGlaire()"],
+div[onclick="toggleIntimite()"],
+div[onclick="toggleHygiene()"],
+div[onclick="toggleSymptomesSection()"] {
+  min-height: 48px;
+  border-radius: 12px;
+  margin: -4px -4px;
+  padding-left: 4px;
+  padding-right: 4px;
+  transition: background .15s;
+}
+div[onclick="toggleGlaire()"]:active,
+div[onclick="toggleIntimite()"]:active,
+div[onclick="toggleHygiene()"]:active,
+div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
+
+/* Flèches collapsibles — plus visibles */
+#symptomes-arrow, #glaire-arrow, #intimite-arrow, #hygiene-arrow {
+  font-size: 14px !important;
+  opacity: .45 !important;
+  transition: transform .25s, opacity .2s !important;
+  padding: 6px;
+}
+
+/* 4. Prayer rows — feedback tap plus franc */
+.prayer-row { transition: background .12s; }
+.prayer-row:active { background: var(--season-soft) !important; }
+
+/* 5. Settings rows — feedback plus visible */
+.ps-row { transition: background .12s; }
+.ps-row:active { background: var(--season-soft) !important; }
+
+/* 6. Nav items — zone de tap agrandie */
+.nav-item { padding: 8px 12px; min-width: 52px; }
+
+/* 7. Symptom chips — micro scale sur sélection */
+.symptome-chip { transition: all .18s cubic-bezier(.34,1.4,.64,1); }
+.symptome-chip:active { transform: scale(.94); }
+.symptome-chip.selected { transform: scale(1.03); }
+
+/* 8. Glaire options — même traitement */
+.glaire-option { transition: all .18s cubic-bezier(.34,1.4,.64,1); }
+.glaire-option:active { transform: scale(.97); }
+.glaire-option.selected { transform: scale(1.02); }
+
+/* 9. Bouton nouveau cycle — active state */
+#btn-new-cycle { transition: all .15s cubic-bezier(.34,1.4,.64,1); }
+#btn-new-cycle:active { transform: scale(.97); background: #F0EBF8 !important; }
+
+/* 10. Dhikr items — tap feedback */
+.dhikr-check-item { transition: all .18s cubic-bezier(.34,1.4,.64,1); }
+.dhikr-check-item:active { transform: scale(.98); }
+
+/* 11. Coran inner — tap feedback */
+.coran-check-inner { transition: background .15s; }
+.coran-check-inner:active { background: var(--season-soft) !important; }
+
+/* 12. Suggestions — tap feedback */
+.sugg-engage-item { transition: all .18s; }
+.sugg-engage-item:active { transform: scale(.98); }
+
+/* 13. Ob-btn et boutons primaires — scale down au lieu de simple opacité */
+.ob-btn { transition: transform .12s, opacity .12s !important; }
+.ob-btn:active { transform: scale(.97) !important; opacity: 1 !important; }
+
+/* 14. Day score items — tap feedback */
+.day-score-item { transition: transform .15s; }
+.day-score-item:active { transform: scale(.92); }
+
+/* 15. Asma modal items — already has active, améliore scale */
+.asma-item { transition: background .12s, transform .12s; }
+.asma-item:active { transform: scale(.98); }
+
+/* 16. Checkin options — plus d'espace et meilleur feedback */
+.checkin-option { transition: all .15s cubic-bezier(.34,1.4,.64,1); }
+.checkin-option:active { transform: scale(.97); background: var(--season-soft) !important; border-color: var(--season) !important; }
