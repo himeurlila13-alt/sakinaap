@@ -505,124 +505,6 @@
 
 </div>
 
-<!-- VIE -->
-<div class="tab-page" id="tab-vie">
-  <div class="tab-topbar" style="background:rgba(250,246,240,.97)">
-    <div class="tab-topbar-title" style="color:var(--season)">Ma Vie</div>
-    <div class="tab-topbar-sub">Alimentation - Mouvement - Soin</div>
-  </div>
-  <div style="height:28px;"></div>
-  <div class="vie-tabs">
-    <div class="vie-tab active" onclick="switchVieTab(this,'alim')">&#127861; Alimentation</div>
-    <div class="vie-tab" onclick="switchVieTab(this,'sport')">&#128170; Sport</div>
-    <div class="vie-tab" onclick="switchVieTab(this,'skin')">&#10024; Skincare</div>
-  </div>
-
-  <!-- ALIMENTATION -->
-  <div class="vie-section active" id="vie-alim">
-    <div class="card">
-      <div class="card-title">Ce que ton corps a besoin en ce moment</div>
-      <div class="nutriment-grid" id="nutriment-grid"></div>
-    </div>
-    <div class="card">
-      <div class="card-title">&#11088; Aliments a privilegier</div>
-      <div class="aliment-tags" id="aliment-tags"></div>
-      <div style="margin-top:10px;font-size:11px;color:var(--gris);font-family:var(--serif);font-style:italic;display:flex;align-items:center;gap:6px;">
-        <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--season);flex-shrink:0;"></span>
-        Les aliments colores sont les stars de ta phase - priorite a eux.
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">&#127807; Ton corps prefere moins de</div>
-      <div class="aliment-tags" id="aliment-eviter"></div>
-    </div>
-    <div class="prem-blur-wrap">
-      <div class="prem-blur-inner">
-        <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:12px;">&#127869;&#65039; Recette de ta saison</div>
-        <div style="height:80px;background:linear-gradient(135deg,#E8DDD0,#F5EDE0);border-radius:14px;margin-bottom:10px;"></div>
-        <div style="height:12px;background:var(--sable);border-radius:6px;width:65%;margin-bottom:8px;"></div>
-        <div style="height:10px;background:var(--sable);border-radius:5px;width:80%;margin-bottom:8px;"></div>
-      </div>
-      <div class="prem-blur-ov">
-        <div style="font-size:26px;margin-bottom:8px;">&#127869;&#65039;</div>
-        <div class="prem-blur-title">Recettes de ta saison</div>
-        <div class="prem-blur-sub">28+ recettes cycliques adaptees a ta phase, bientot disponibles.</div>
-        <button class="prem-blur-btn" onclick="goToPremium()">Rejoindre la liste d'attente</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- SPORT -->
-  <div class="vie-section" id="vie-sport">
-    <div style="height:14px"></div>
-    <div class="sport-card" style="margin:0 14px">
-      <div class="sport-header" id="sport-header" style="background:var(--season-grad)">
-        <div class="sport-tag">&#128170; Seance du jour</div>
-        <div class="sport-name" id="sport-name">Reveil en douceur</div>
-        <div class="sport-meta" id="sport-meta">12 min - Mix sol + debout</div>
-        <div id="sport-exercises" style="margin-top:8px"></div>
-        <div style="margin-top:16px" id="sport-validate-wrap">
-          <button id="sport-validate-btn" onclick="validerSeance()" style="width:100%;padding:13px;background:rgba(255,255,255,0.18);border:1.5px solid rgba(255,255,255,0.35);border-radius:14px;color:white;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">&#10003; Seance accomplie</button>
-        </div>
-        <div id="sport-done-state" style="display:none;margin-top:16px;background:rgba(255,255,255,0.15);border-radius:14px;padding:14px 16px;text-align:center;border:1px solid rgba(255,255,255,0.25);">
-          <div style="font-size:22px;margin-bottom:6px">&#10022;</div>
-          <div style="font-family:var(--serif);font-size:15px;color:white;font-style:italic;margin-bottom:8px" id="sport-done-msg">Alhamdulillah - tu as pris soin de ton corps.</div>
-        </div>
-      </div>
-      <div style="background:white;padding:16px 18px 20px;">
-        <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:4px;">Mouvements de la semaine</div>
-        <div style="font-family:var(--serif);font-size:12px;font-style:italic;color:var(--gris);margin-bottom:14px;">Coche ceux que tu pratiques</div>
-        <div id="sport-mouvements"></div>
-        <div style="margin-top:12px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-            <div style="font-size:11px;color:var(--gris);" id="mouv-progress-label">0 / 0 pratiques</div>
-            <div style="font-size:11px;color:var(--season);font-weight:600;" id="mouv-progress-pct">0%</div>
-          </div>
-          <div style="height:4px;background:var(--sable);border-radius:2px;overflow:hidden;">
-            <div id="mouv-progress-fill" style="height:100%;background:var(--season);border-radius:2px;transition:width .4s ease;width:0%"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div style="height:14px"></div>
-  </div>
-
-  <!-- SKINCARE -->
-  <div class="vie-section" id="vie-skin">
-    <div class="card">
-      <div class="card-title">Ce qui se passe sur ta peau en ce moment</div>
-      <div style="font-size:13px;color:var(--gris);line-height:1.6;" id="skin-what-happens"></div>
-    </div>
-    <div class="card">
-      <div class="card-title">Actifs a privilegier</div>
-      <div id="skin-actifs"></div>
-    </div>
-    <div class="card">
-      <div class="card-title">&#10003; Gestes cles</div>
-      <div class="aliment-tags" id="skin-gestes"></div>
-    </div>
-    <div class="card">
-      <div class="card-title">&#127807; Ton corps prefere moins de</div>
-      <div class="aliment-tags" id="skin-eviter" style="gap:6px;"></div>
-    </div>
-    <div class="prem-blur-wrap">
-      <div class="prem-blur-inner">
-        <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:12px;">&#10024; Routine matin et soir</div>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <div style="height:52px;background:linear-gradient(135deg,#F5EDE0,#EDD8C0);border-radius:12px;"></div>
-          <div style="height:52px;background:linear-gradient(135deg,#EAE0F0,#DDD0E8);border-radius:12px;"></div>
-        </div>
-      </div>
-      <div class="prem-blur-ov">
-        <div style="font-size:26px;margin-bottom:8px;">&#10024;</div>
-        <div class="prem-blur-title">Routine complete matin et soir</div>
-        <div class="prem-blur-sub">Protocole skincare detaille selon ta saison, bientot disponible.</div>
-        <button class="prem-blur-btn" onclick="goToPremium()">Rejoindre la liste d'attente</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- OBJECTIFS -->
 <div class="tab-page" id="tab-objectifs">
   <div class="tab-topbar">
@@ -820,10 +702,6 @@
   <div class="nav-item" id="nav-ame" onclick="switchTab('ame',this)">
     <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
     <div class="nav-label">Ame</div><div class="nav-pip"></div>
-  </div>
-  <div class="nav-item" id="nav-vie" onclick="switchTab('vie',this)">
-    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
-    <div class="nav-label">Vie</div><div class="nav-pip"></div>
   </div>
   <div class="nav-item" id="nav-objectifs" onclick="switchTab('objectifs',this)">
     <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>

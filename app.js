@@ -576,9 +576,6 @@ function populateAll() {
   // ── ÂME ──
   renderAme(s);
 
-  // ── VIE ──
-  renderVie(s);
-
   // ── OBJECTIFS ──
   renderObjectifs();
 
@@ -1724,7 +1721,7 @@ function switchTabById(name, section) {
   document.querySelectorAll('.tab-page').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('tab-' + name)?.classList.add('active');
-  const tabMap = {accueil:0, cycle:1, ame:2, vie:3, objectifs:4, moi:5};
+  const tabMap = {accueil:0, cycle:1, ame:2, objectifs:3, moi:4};
   const navItems = document.querySelectorAll('.nav-item');
   if (navItems[tabMap[name]]) navItems[tabMap[name]].classList.add('active');
   setTimeout(() => showTabTour(name), 300);
