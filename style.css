@@ -464,3 +464,297 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
 /* 16. Checkin options — plus d'espace et meilleur feedback */
 .checkin-option { transition: all .15s cubic-bezier(.34,1.4,.64,1); }
 .checkin-option:active { transform: scale(.97); background: var(--season-soft) !important; border-color: var(--season) !important; }
+
+/* ═══════════════════════════════════════════════
+   ACCUEIL — 3 CARTES D'ACTION DU JOUR
+═══════════════════════════════════════════════ */
+.actions-section-label {
+  margin: 18px 14px 10px;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--season);
+  font-weight: 700;
+  font-family: var(--sans);
+}
+
+.action-card {
+  margin: 0 14px 12px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 3px 16px rgba(45,36,32,.08);
+  overflow: hidden;
+}
+
+.action-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid var(--sable);
+}
+.action-card-emoji { font-size: 22px; flex-shrink: 0; }
+.action-card-title { font-family: var(--serif); font-size: 16px; color: var(--noir); font-weight: 600; }
+.action-card-sub { font-size: 11px; color: var(--gris); margin-top: 1px; }
+
+.action-card-free { padding: 14px 18px; }
+.action-free-label {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--season);
+  font-weight: 700;
+  margin-bottom: 10px;
+  font-family: var(--sans);
+}
+.action-free-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.action-star-chip {
+  background: var(--season-soft);
+  color: var(--season-dark);
+  border: 1px solid var(--season-light);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--sans);
+}
+.action-free-tip-wrap { }
+.action-free-tip {
+  display: block;
+  font-size: 13px;
+  color: var(--noir);
+  line-height: 1.6;
+  font-family: var(--serif);
+  font-style: italic;
+}
+
+.action-card-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--sable), transparent);
+  margin: 0 18px;
+}
+
+.action-card-premium-wrap { padding: 14px 18px; }
+.action-prem-title {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--season);
+  font-weight: 700;
+  margin-bottom: 10px;
+  font-family: var(--sans);
+}
+
+/* Contenu débloqué Premium */
+.action-premium-unlocked {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--season-soft);
+  border: 1.5px solid var(--season-light);
+  border-radius: 14px;
+  padding: 14px;
+  cursor: pointer;
+  transition: transform .15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.action-premium-unlocked:active { transform: scale(.98); }
+.action-prem-unlocked-emoji { font-size: 26px; flex-shrink: 0; }
+.action-prem-unlocked-name { font-size: 13px; font-weight: 600; color: var(--noir); }
+.action-prem-unlocked-sub { font-size: 11px; color: var(--season); margin-top: 2px; }
+.action-prem-unlocked-arrow { font-size: 22px; color: var(--season); margin-left: auto; font-weight: 300; }
+
+/* Contenu Premium verrouillé avec flou */
+.action-premium-locked {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--sable);
+}
+.action-prem-blur {
+  padding: 12px 14px;
+  filter: blur(4px);
+  user-select: none;
+  pointer-events: none;
+}
+.action-prem-recipe-preview {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--noir);
+  margin-bottom: 4px;
+}
+.action-prem-steps-preview { font-size: 11px; color: var(--gris); }
+.action-prem-cta {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(250,246,240,.88);
+}
+.action-prem-label {
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--season);
+}
+.action-prem-btn {
+  background: var(--season-grad);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 9px 18px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--sans);
+  cursor: pointer;
+  transition: transform .12s;
+}
+.action-prem-btn:active { transform: scale(.96); }
+
+/* Section niveaux sport Premium */
+.qs-niveaux-section { padding: 14px 16px 4px; border-top: 1px solid var(--sable); }
+.qs-niveaux-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+.qs-niveau-card {
+  border-radius: 12px;
+  padding: 12px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform .15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.qs-niveau-card.unlocked {
+  background: var(--season-soft);
+  border: 1.5px solid var(--season-light);
+}
+.qs-niveau-card.unlocked:active { transform: scale(.95); }
+.qs-niveau-card.locked {
+  background: var(--sable);
+  opacity: .6;
+  cursor: default;
+}
+.qs-niveau-badge {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--season);
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.qs-niveau-name { font-size: 11px; font-weight: 600; color: var(--noir); margin-bottom: 2px; }
+.qs-niveau-dur { font-size: 10px; color: var(--gris); }
+.qs-niveau-lock { font-size: 14px; margin-top: 4px; }
+
+/* ═══════════════════════════════════════════════
+   MODAUX PREMIUM (recette, routine, niveau)
+═══════════════════════════════════════════════ */
+.pmod-sheet {
+  max-height: 85vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.pmod-handle {
+  width: 36px; height: 4px;
+  background: var(--sable);
+  border-radius: 2px;
+  margin: 0 auto 20px;
+}
+.pmod-modal-title {
+  font-family: var(--serif);
+  font-size: 18px;
+  color: var(--noir);
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+.pmod-title {
+  font-family: var(--serif);
+  font-size: 17px;
+  color: var(--noir);
+  font-weight: 600;
+  margin-bottom: 8px;
+  text-align: center;
+}
+.pmod-pourquoi {
+  font-size: 12px;
+  color: var(--gris);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-family: var(--serif);
+  font-style: italic;
+  text-align: center;
+  padding: 0 8px;
+}
+.pmod-section {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--season);
+  font-weight: 700;
+  margin: 16px 0 10px;
+  font-family: var(--sans);
+}
+.pmod-list {
+  padding-left: 18px;
+  margin: 0;
+}
+.pmod-list li {
+  font-size: 13px;
+  color: var(--noir);
+  line-height: 1.7;
+  margin-bottom: 4px;
+}
+
+/* Routine skin dans modal */
+.pmod-routine-block { margin-bottom: 8px; }
+.pmod-routine-time {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--season);
+  letter-spacing: .5px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--sable);
+}
+.pmod-skin-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--sable);
+}
+.pmod-skin-step:last-child { border-bottom: none; }
+.pmod-skin-icon { font-size: 20px; flex-shrink: 0; width: 28px; text-align: center; }
+.pmod-skin-name { font-size: 13px; font-weight: 600; color: var(--noir); }
+.pmod-skin-dur {
+  font-size: 10px;
+  background: var(--season-soft);
+  color: var(--season);
+  border-radius: 8px;
+  padding: 2px 6px;
+  margin-left: 6px;
+  font-weight: 600;
+}
+.pmod-skin-detail { font-size: 11px; color: var(--gris); line-height: 1.5; margin-top: 3px; }
+
+.pmod-close-btn {
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  padding: 14px;
+  background: var(--sable);
+  border: none;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gris);
+  font-family: var(--sans);
+  cursor: pointer;
+}
+.pmod-close-btn:active { transform: scale(.98); }

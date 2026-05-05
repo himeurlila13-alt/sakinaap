@@ -188,7 +188,50 @@
     <div class="day-score-grid" id="day-score-grid"></div>
   </div>
 
-  <!-- SEANCE RAPIDE -->
+  <!-- 3 CARTES D'ACTION DU JOUR -->
+  <div class="actions-section-label">&#10022; TES 3 ACTIONS DU JOUR</div>
+
+  <!-- CARTE MANGER -->
+  <div class="action-card">
+    <div class="action-card-header">
+      <span class="action-card-emoji">&#127869;&#65039;</span>
+      <div class="action-card-titles">
+        <div class="action-card-title">Manger</div>
+        <div class="action-card-sub">A privilégier aujourd'hui</div>
+      </div>
+    </div>
+    <div class="action-card-free">
+      <div class="action-free-label">&#10022; Aliments star de ta phase</div>
+      <div id="action-manger-free" class="action-free-chips"></div>
+    </div>
+    <div class="action-card-divider"></div>
+    <div class="action-card-premium-wrap">
+      <div class="action-prem-title">&#10022; Recette du jour</div>
+      <div id="action-manger-premium"></div>
+    </div>
+  </div>
+
+  <!-- CARTE PRENDRE SOIN -->
+  <div class="action-card">
+    <div class="action-card-header">
+      <span class="action-card-emoji">&#10024;</span>
+      <div class="action-card-titles">
+        <div class="action-card-title">Prendre soin</div>
+        <div class="action-card-sub">Skincare adaptée à ta phase</div>
+      </div>
+    </div>
+    <div class="action-card-free">
+      <div class="action-free-label">&#10022; Actifs du moment</div>
+      <div id="action-soin-free" class="action-free-tip-wrap"></div>
+    </div>
+    <div class="action-card-divider"></div>
+    <div class="action-card-premium-wrap">
+      <div class="action-prem-title">&#10022; Routine complète</div>
+      <div id="action-soin-premium"></div>
+    </div>
+  </div>
+
+  <!-- CARTE BOUGER (Séance du jour) -->
   <div class="quick-seance-card">
     <div class="qs-header" style="background:var(--season-grad)">
       <div class="qs-tag">&#128170; SEANCE DU JOUR</div>
@@ -198,11 +241,12 @@
       </div>
     </div>
     <div class="qs-exercises" id="qs-exercises"></div>
-    <div id="qs-btn-wrap"><button class="qs-btn" onclick="validerSeanceDash()">&#10003; Seance accomplie - Alhamdulillah</button></div>
+    <div id="qs-btn-wrap"><button class="qs-btn" onclick="validerSeanceDash()">&#10003; Séance accomplie - Alhamdulillah</button></div>
     <div class="qs-done" id="qs-done-wrap" style="display:none;">
       <div class="qs-done-check">&#10003;</div>
-      <div class="qs-done-text">Alhamdulillah - seance accomplie aujourd'hui &#127800;</div>
+      <div class="qs-done-text">Alhamdulillah - séance accomplie aujourd'hui &#127800;</div>
     </div>
+    <div id="qs-niveaux-premium" class="qs-niveaux-section"></div>
   </div>
 
   <!-- SUGGESTIONS ENGAGEANTES -->
@@ -224,12 +268,7 @@
     </div>
   </div>
 
-  <!-- TILES SOIN -->
-  <div class="soin-grid">
-    <div class="soin-tile" onclick="switchTabById('vie','alim')"><div class="soin-emoji">&#127861;</div><div class="soin-cat">Alimentation</div><div class="soin-desc" id="food-today">Quinoa, avocat, fruits rouges</div><div class="soin-link">Voir plus</div></div>
-    <div class="soin-tile" onclick="switchTabById('vie','skin')"><div class="soin-emoji">&#10024;</div><div class="soin-cat">Skincare</div><div class="soin-desc" id="skin-today">Vitamine C + Argile blanche</div><div class="soin-link">Voir plus</div></div>
-  </div>
-  <div style="height:8px;"></div>
+  <div style="height:16px;"></div>
 </div>
 
 <!-- CYCLE -->
@@ -757,6 +796,11 @@
   <!-- PARAMETRES -->
   <div class="prof-sec">
     <div class="ps-hdr">Mon profil</div>
+    <div class="ps-row" style="cursor:default;">
+      <div class="ps-ico">&#10022;</div>
+      <div style="flex:1;"><div class="ps-lbl">Mode Premium <span style="font-size:10px;background:#EAD9C0;color:#8A6A30;padding:2px 7px;border-radius:8px;margin-left:6px;font-weight:600;">TEST</span></div><div class="ps-sub">Active pour prévisualiser les fonctions</div></div>
+      <button id="premium-toggle-btn" onclick="togglePremium()" style="background:var(--sable);color:var(--gris);border:none;border-radius:10px;padding:7px 14px;font-size:12px;font-weight:700;font-family:var(--sans);cursor:pointer;flex-shrink:0;">Inactif</button>
+    </div>
     <div class="ps-row" onclick="openEditCycle()"><div class="ps-ico">&#128197;</div><div><div class="ps-lbl">Modifier mon cycle</div><div class="ps-sub" id="psCycle">Configurer</div></div><div class="ps-arr">&#8250;</div></div>
     <div class="ps-row" onclick="openNotifSettings()"><div class="ps-ico">&#128276;</div><div><div class="ps-lbl">Rappels Sakina</div><div class="ps-sub">Configurer mes notifications</div></div><div class="ps-arr">&#8250;</div></div>
     <div class="ps-row" onclick="exportData()"><div class="ps-ico">&#128190;</div><div><div class="ps-lbl">Sauvegarder mes donn&#233;es</div><div class="ps-sub">T&#233;l&#233;charger une copie de secours</div></div><div class="ps-arr">&#8250;</div></div>
@@ -863,6 +907,48 @@
 </div>
 
 </div><!-- app -->
+
+<!-- MODAL RECETTE PREMIUM -->
+<div class="modal-overlay" id="recipe-modal" onclick="if(event.target===this)closeRecipeModal()">
+  <div class="modal-sheet pmod-sheet">
+    <div class="pmod-handle"></div>
+    <div id="recipe-modal-content"></div>
+    <button onclick="closeRecipeModal()" class="pmod-close-btn">Fermer</button>
+  </div>
+</div>
+
+<!-- MODAL ROUTINE SKINCARE PREMIUM -->
+<div class="modal-overlay" id="skin-modal" onclick="if(event.target===this)closeSkinModal()">
+  <div class="modal-sheet pmod-sheet">
+    <div class="pmod-handle"></div>
+    <div class="pmod-modal-title">&#10024; Routine skincare</div>
+    <div id="skin-modal-content"></div>
+    <button onclick="closeSkinModal()" class="pmod-close-btn">Fermer</button>
+  </div>
+</div>
+
+<!-- MODAL NIVEAU SPORT PREMIUM -->
+<div class="modal-overlay" id="niveau-modal" onclick="if(event.target===this)closeNiveauModal()">
+  <div class="modal-sheet pmod-sheet">
+    <div class="pmod-handle"></div>
+    <div id="niveau-modal-content"></div>
+    <button onclick="closeNiveauModal()" class="pmod-close-btn">Fermer</button>
+  </div>
+</div>
+
+<!-- MODAL PROGRESSION SPORT -->
+<div class="modal-overlay" id="progression-modal">
+  <div class="modal-sheet" style="text-align:center;padding:32px 24px 28px;">
+    <div style="font-size:44px;margin-bottom:14px;">&#128170;</div>
+    <div style="font-family:var(--serif);font-size:20px;color:var(--noir);margin-bottom:8px;">5 séances validées !</div>
+    <div style="font-size:13px;color:var(--gris);line-height:1.7;margin-bottom:28px;">Comment tu te sens par rapport à tes séances du moment ?</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <button onclick="handleProgressionAnswer('plus')" style="background:var(--season-grad);color:white;border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">&#128293; Je progresse — je veux aller plus loin</button>
+      <button onclick="handleProgressionAnswer('bien')" style="background:var(--season-soft);color:var(--noir);border:1.5px solid var(--season-light);border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">&#128522; Je suis bien à ce niveau</button>
+      <button onclick="handleProgressionAnswer('dur')" style="background:var(--sable);color:var(--gris);border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">&#128549; C'est encore intense pour moi</button>
+    </div>
+  </div>
+</div>
 
 <script src="/app.js" defer></script>
 </body>

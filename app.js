@@ -32,6 +32,9 @@ let ST = {
   eveningCheckinDate: null,
   eveningCheckinMood: null,
   cycleHistory: [],
+  isPremium: false,
+  seanceValidatedCount: 0,
+  seanceLevel: 1,
 };
 
 function saveState() {
@@ -308,6 +311,173 @@ const SAISONS = {
   }
 };
 
+// ═══════════════════════════════════════════════
+// PREMIUM DATA
+// ═══════════════════════════════════════════════
+const RECETTES = {
+  hiver: [
+    { nom:'Soupe lentilles-curcuma-gingembre', emoji:'🍲', pourquoi:'Le fer des lentilles compense tes pertes. Curcuma + gingembre réduisent l\'inflammation naturellement.', ingredients:['200g lentilles corail','Bouillon de légumes','1 cc curcuma, 1 cc gingembre râpé','1 oignon, 2 gousses d\'ail','Jus d\'un citron'], etapes:['Faire revenir oignon et ail 3 min','Ajouter lentilles + bouillon (600ml)','Cuire 15 min à feu moyen','Mixer la moitié pour crémer','Assaisonner, presser le citron'] },
+    { nom:'Bowl épinards-sardines au sésame', emoji:'🥣', pourquoi:'Oméga-3 des sardines + fer des épinards — le duo anti-crampes de l\'Hiver par excellence.', ingredients:['1 boîte sardines à l\'huile d\'olive','Grosse poignée d\'épinards frais','80g riz complet cuit','1 cs sésame toasté','Huile d\'olive, jus de citron'], etapes:['Disposer le riz dans le bol','Ajouter épinards et sardines égouttées','Arroser d\'huile d\'olive et citron','Parsemer de sésame'] },
+    { nom:'Dattes farcies amandes-chocolat noir', emoji:'🍫', pourquoi:'Magnésium du chocolat + fer des dattes + bons gras des amandes — collation anti-fatigue complète.', ingredients:['6 dattes Medjool','Poignée d\'amandes entières','2 carrés chocolat noir 70%+','Fleur de sel'], etapes:['Ouvrir les dattes et retirer les noyaux','Glisser une amande dans chaque datte','Fondre le chocolat au bain-marie','Tremper les dattes ou napper','Fleur de sel + réfrigérer 10 min'] },
+  ],
+  printemps: [
+    { nom:'Bowl avocat-œuf poché-quinoa', emoji:'🥑', pourquoi:'Les bons gras de l\'avocat soutiennent la montée des œstrogènes. Le quinoa apporte les 9 acides aminés essentiels.', ingredients:['80g quinoa cuit','1 œuf poché','½ avocat tranché','1 cs graines de lin moulues','Citron, fleur de sel'], etapes:['Cuire le quinoa 12 min, égoutter','Porter l\'eau à frémissement pour l\'œuf','Pocher l\'œuf 3 min','Assembler quinoa + avocat + œuf','Lin moulu, citron, sel'] },
+    { nom:'Salade fruits rouges & graines de lin', emoji:'🍓', pourquoi:'Les phyto-œstrogènes du lin amplifient ton élan naturel. Les antioxydants des fruits rouges protègent tes cellules.', ingredients:['Mélange fruits rouges (fraises, myrtilles, framboises)','150g yaourt grec','1 cs graines de lin moulues','1 cc miel','Quelques feuilles de menthe'], etapes:['Disposer les fruits dans un bol','Verser le yaourt à côté','Parsemer de graines de lin','Filet de miel, feuilles de menthe'] },
+    { nom:'Wrap brocoli-poulet-houmous', emoji:'🌯', pourquoi:'Les fibres du brocoli éliminent l\'excès d\'œstrogènes. Les protéines du poulet soutiennent l\'énergie montante.', ingredients:['1 grande galette de blé complet','100g poulet cuit émincé','Fleurets brocoli cuits vapeur','2 cs houmous','Paprika, citron'], etapes:['Chauffer la galette 30 sec','Tartiner d\'houmous','Ajouter le poulet et le brocoli','Saupoudrer de paprika, citron','Rouler serré et couper en deux'] },
+  ],
+  ete: [
+    { nom:'Salade pastèque-grenade-menthe-feta', emoji:'🍉', pourquoi:'Ultra-hydratante à l\'ovulation quand le corps chauffe. La grenade est un antioxydant puissant pour les cellules ovariennes.', ingredients:['Tranches de pastèque sans graines','Grains de ½ grenade','60g feta émiettée','Feuilles de menthe fraîche','Jus de citron vert'], etapes:['Couper la pastèque en cubes','Égrener la grenade au-dessus','Émietter la feta par-dessus','Ajouter la menthe ciselée','Presser le citron vert, servir frais'] },
+    { nom:'Filet de poisson vapeur & taboulé léger', emoji:'🐟', pourquoi:'Les protéines légères soutiennent l\'ovulation. Le zinc des herbes et céréales renforce l\'immunité à son pic.', ingredients:['150g filet de poisson blanc','120g taboulé (boulgour, persil, tomates)','1 cs graines de courge','Huile d\'olive extra-vierge','Citron, sel, poivre'], etapes:['Cuire le poisson vapeur 8 min','Préparer le taboulé classique','Dresser le poisson sur le taboulé','Parsemer de graines de courge','Huile d\'olive et quartier de citron'] },
+    { nom:'Smoothie myrtilles-épinards-gingembre', emoji:'🫐', pourquoi:'Les antioxydants des myrtilles protègent les ovocytes. Le gingembre est anti-inflammatoire et booste la digestion.', ingredients:['100g myrtilles surgelées','Grosse poignée d\'épinards','2cm gingembre frais','150ml lait de coco léger','1 cc miel'], etapes:['Tout mettre dans le blender','Mixer 45 secondes à haute vitesse','Goûter, ajuster le miel','Servir immédiatement dans un grand verre'] },
+  ],
+  automne: [
+    { nom:'Curry patate douce-lentilles-coco', emoji:'🍛', pourquoi:'Les glucides complexes stabilisent ta glycémie et ton humeur. Le magnésium des lentilles réduit directement l\'irritabilité du SPM.', ingredients:['2 petites patates douces','150g lentilles corail','200ml lait de coco','Curry, cumin, curcuma','1 oignon, 2 gousses d\'ail'], etapes:['Faire revenir oignon, ail et épices 3 min','Ajouter dés de patate douce','Verser lentilles + lait de coco + 200ml eau','Couvrir, cuire 20 min à feu doux','Rectifier l\'assaisonnement'] },
+    { nom:'Porridge avoine-banane-chocolat noir', emoji:'🍌', pourquoi:'Le tryptophane de la banane se transforme en sérotonine. L\'avoine libère l\'énergie lentement pour éviter les fringales du SPM.', ingredients:['80g flocons d\'avoine','300ml lait d\'amande','1 banane mûre','1 carré chocolat noir 70%+','Cannelle, 1 cc miel'], etapes:['Porter le lait à frémissement','Ajouter les flocons, remuer 5 min','Trancher la banane','Disposer sur le porridge chaud','Râper le chocolat, saupoudrer cannelle + miel'] },
+    { nom:'Bowl épinards-amandes-datte & fromage', emoji:'🥗', pourquoi:'Magnésium des amandes + sucre lent des dattes + fer des épinards — le trio parfait contre le SPM.', ingredients:['Grosse poignée épinards sautés à l\'ail','Poignée d\'amandes effilées toastées','4 dattes Medjool coupées','60g halloumi grillé (ou feta)','1 cs vinaigre balsamique'], etapes:['Sauter les épinards à l\'ail 2 min','Griller le halloumi 2 min par face','Assembler épinards + amandes + dattes','Poser le fromage chaud dessus','Filet de balsamique, servir chaud'] },
+  ],
+};
+
+const ROUTINES_PREMIUM = {
+  hiver: {
+    matin: [
+      { icon:'🧴', geste:'Nettoyage ultra-doux', duree:'1 min', detail:'Eau tiède + nettoyant crémeux sans sulfates. Pas de frottement — tamponner délicatement.' },
+      { icon:'🌿', geste:'Aloé vera pur', duree:'30 sec', detail:'Gel d\'aloé sur peau légèrement humide. Laisser absorber 1 min avant la suite.' },
+      { icon:'🌹', geste:'Huile de rose musquée', duree:'1 min', detail:'3-4 gouttes. Presser entre les paumes, appliquer par petits tamponnements.' },
+      { icon:'☀️', geste:'SPF 30 minimum', duree:'30 sec', detail:'Même par temps gris. Protège la barrière cutanée fragilisée par les hormones basses.' },
+    ],
+    soir: [
+      { icon:'🛢️', geste:'Nettoyage à l\'huile', duree:'2 min', detail:'Huile de jojoba sur visage sec, masser 60 sec en cercles, rincer à l\'eau tiède.' },
+      { icon:'🍯', geste:'Masque miel brut (2×/sem)', duree:'10 min', detail:'Couche fine sur visage propre. Anti-inflammatoire et réparateur. Rincer à l\'eau tiède.' },
+      { icon:'🌹', geste:'Sérum rose musquée', duree:'1 min', detail:'5-6 gouttes sur peau légèrement humide pour maximiser la pénétration.' },
+      { icon:'💧', geste:'Crème barrière riche', duree:'30 sec', detail:'Scelle tout en dernier. Rechercher : céramides, beurre de karité, squalane.' },
+    ],
+  },
+  printemps: {
+    matin: [
+      { icon:'🧴', geste:'Nettoyage en douceur', duree:'1 min', detail:'Mousse légère ou eau micellaire. Rincer à l\'eau légèrement fraîche pour tonifier.' },
+      { icon:'✨', geste:'Sérum vitamine C', duree:'1 min', detail:'3-4 gouttes sur peau sèche. Presser doucement. Laisser absorber 2 minutes.' },
+      { icon:'🌺', geste:'Crème légère niacinamide', duree:'30 sec', detail:'Unifie le teint, resserre les pores. Parfaite pour amplifier l\'éclat du Printemps.' },
+      { icon:'☀️', geste:'SPF 30+', duree:'30 sec', detail:'Dernier geste impératif. La vitamine C + SPF = combo anti-taches optimal.' },
+    ],
+    soir: [
+      { icon:'🛢️', geste:'Double nettoyage', duree:'2 min', detail:'Huile pour démaquiller en premier, puis nettoyant doux pour purifier en profondeur.' },
+      { icon:'🪨', geste:'Gua sha 3 min', duree:'3 min', detail:'Mouvements ascendants sur sérum hydratant. Drainer, tonifier, stimuler la microcirculation.' },
+      { icon:'🌾', geste:'Masque argile blanche (1×/sem)', duree:'8 min', detail:'Appliquer sur zone T. Rincer avant séchage complet — jamais plus de 8 min.' },
+      { icon:'💧', geste:'Hydratant léger', duree:'30 sec', detail:'Texture gel ou fluide. Laisser absorber sans frotter.' },
+    ],
+  },
+  ete: {
+    matin: [
+      { icon:'💧', geste:'Nettoyage express à l\'eau fraîche', duree:'30 sec', detail:'Eau fraîche uniquement le matin. La peau est équilibrée — ne pas sur-nettoyer.' },
+      { icon:'🌸', geste:'Brume eau de rose', duree:'20 sec', detail:'Spritzer à 20 cm du visage. Laisser sécher naturellement, ne pas tamponner.' },
+      { icon:'🌿', geste:'Gel aloé ultra-léger', duree:'30 sec', detail:'Texture quasi invisible. Hydrate sans occlure les pores dilatés par la chaleur.' },
+      { icon:'☀️', geste:'SPF 50 — impératif', duree:'30 sec', detail:'Pic hormonal + peau au meilleur d\'elle-même. Protège-la absolument.' },
+    ],
+    soir: [
+      { icon:'🛢️', geste:'Double nettoyage', duree:'2 min', detail:'Huile pour enlever le SPF et le sébum, puis gel nettoyant léger purifiant.' },
+      { icon:'🌿', geste:'Brume hamamélis', duree:'20 sec', detail:'Resserre les pores après nettoyage. Tonique naturel astringent doux.' },
+      { icon:'💦', geste:'Sérum hydratant ultra-léger', duree:'1 min', detail:'Gel d\'aloé ou hyaluronate. Pas d\'huile le soir — la peau est déjà équilibrée.' },
+    ],
+  },
+  automne: {
+    matin: [
+      { icon:'🧼', geste:'Nettoyage rigoureux', duree:'1 min 30', detail:'Nettoyant sans huile, sans sulfates agressifs. Bien insister sur la zone T.' },
+      { icon:'🍵', geste:'Tonique thé vert', duree:'30 sec', detail:'Appliquer sur coton. Anti-inflammatoire — calme les rougeurs hormonales en 30 sec.' },
+      { icon:'🌾', geste:'Sérum zinc', duree:'1 min', detail:'Cible le sébum et les imperfections hormonales. Appliquer sur les zones à acné.' },
+      { icon:'☀️', geste:'Crème SPF légère non-comédogène', duree:'30 sec', detail:'Vérifier "non-comédogène" sur l\'emballage. Essentiel en phase lutéale.' },
+    ],
+    soir: [
+      { icon:'🧼', geste:'Nettoyage soigneux', duree:'2 min', detail:'Le nettoyage du soir est le plus important. Prends le temps de bien enlever tout.' },
+      { icon:'🌿', geste:'Tea tree en soin local', duree:'30 sec', detail:'1 goutte pure sur les imperfections uniquement. Jamais sur la peau saine.' },
+      { icon:'🍵', geste:'Crème thé vert apaisante', duree:'30 sec', detail:'Calme l\'inflammation nocturne. Récupération pendant le sommeil.' },
+      { icon:'🛏️', geste:'Changer ta taie d\'oreiller', duree:'1 min', detail:'Les bactéries s\'accumulent vite. En Automne, changer 2× par semaine minimum.' },
+    ],
+  },
+};
+
+const SPORT_NIVEAUX = {
+  hiver: [
+    { niveau:2, name:'Douceur +', duration:'10 min', meta:'Sol · Tapis · Respiratoire', exercices:[
+      {num:'01', name:'Respiration abdominale profonde', detail:'15 respirations. Mains sur le ventre, sentir l\'expansion.'},
+      {num:'02', name:'Posture enfant étendue', detail:'3 minutes, bras tendus devant. Respirer dans le bas du dos.'},
+      {num:'03', name:'Rotation lombaire', detail:'Genoux pliés, 8× de chaque côté, très lentement.'},
+      {num:'04', name:'Étirement hanches bilatéral', detail:'1 minute chaque côté. Souffle long, ne pas forcer.'},
+    ]},
+    { niveau:3, name:'Mobilité douce', duration:'15 min', meta:'Sol · Aucun impact', exercices:[
+      {num:'01', name:'Scan corporel allongé', detail:'5 minutes. Chaque expiration relâche un groupe musculaire.'},
+      {num:'02', name:'Chat-vache lent', detail:'10 cycles. Vertèbre par vertèbre, aucune précipitation.'},
+      {num:'03', name:'Pont fessier doux', detail:'10 fois, 3 secondes en haut, relâche sans bruit.'},
+      {num:'04', name:'Posture pigeon modifiée', detail:'2 minutes chaque côté. Respire dans la résistance.'},
+    ]},
+    { niveau:4, name:'Yin complet', duration:'20 min', meta:'Yoga · Sol · Méditatif', exercices:[
+      {num:'01', name:'Papillon allongé', detail:'5 minutes. Pieds ensemble, genoux ouverts vers le sol.'},
+      {num:'02', name:'Torsion douce au sol', detail:'3 minutes de chaque côté. Yeux fermés, épaules au sol.'},
+      {num:'03', name:'Jambes au mur', detail:'5 minutes. Respiration abdominale ample.'},
+      {num:'04', name:'Savasana guidé', detail:'5 minutes. Laisse chaque muscle se fondre dans le sol.'},
+    ]},
+  ],
+  printemps: [
+    { niveau:2, name:'Activation +', duration:'15 min', meta:'Debout + sol', exercices:[
+      {num:'01', name:'Échauffement articulaire', detail:'3 minutes. Chevilles, hanches, épaules — cercles fluides.'},
+      {num:'02', name:'15 squats lents', detail:'3 séries. Descente 3 sec, remontée contrôlée.'},
+      {num:'03', name:'Gainage planche genoux', detail:'3× 25 secondes. Bassin ni trop haut ni trop bas.'},
+      {num:'04', name:'12 fentes alternées / jambe', detail:'Genou arrière proche du sol. Pousser sur le talon avant.'},
+    ]},
+    { niveau:3, name:'Renforcement', duration:'18 min', meta:'Debout + sol · Progressif', exercices:[
+      {num:'01', name:'Squat sauté doux', detail:'3× 10. Atterrissage silencieux, genoux mous à l\'impact.'},
+      {num:'02', name:'Pompes sur les genoux', detail:'3× 10. Gainage abdominal actif, coudes à 45°.'},
+      {num:'03', name:'Pont fessier pulsé', detail:'3× 15 avec pause 2 sec en haut, squeeze.'},
+      {num:'04', name:'Mountain climbers lents', detail:'20 alternés. Contrôle la respiration, pas de tête qui plonge.'},
+    ]},
+    { niveau:4, name:'Circuit progressif', duration:'22 min', meta:'HIIT léger · Cardio', exercices:[
+      {num:'01', name:'Squats sautés', detail:'4× 12. Bras en avant pour l\'élan, profondeur maximale.'},
+      {num:'02', name:'Pompes + rotation du tronc', detail:'3× 8. Après chaque pompe, rotation du bras vers le ciel.'},
+      {num:'03', name:'Burpees sans saut', detail:'3× 8. Descente contrôlée, montée explosive.'},
+      {num:'04', name:'Sprint sur place 30 sec', detail:'4 fois avec 20 sec de récup active (marche).'},
+    ]},
+  ],
+  ete: [
+    { niveau:2, name:'Circuit +', duration:'22 min', meta:'Debout · Force explosive', exercices:[
+      {num:'01', name:'Squat sauté 3× 12', detail:'Atterrissage contrôlé, fesses en arrière, bras en avant.'},
+      {num:'02', name:'Gainage latéral', detail:'3× 30 sec par côté. Corps parfaitement droit.'},
+      {num:'03', name:'Fentes sautées alternées', detail:'3× 10 alternées. Élan des bras opposés pour équilibre.'},
+      {num:'04', name:'Pompes standard', detail:'3× 8. Poitrine effleure le sol, coudes proches du corps.'},
+    ]},
+    { niveau:3, name:'Force & cardio', duration:'25 min', meta:'Mix force + intensité', exercices:[
+      {num:'01', name:'Burpees complets', detail:'4× 10. Gainage, saut groupé, retour en souplesse.'},
+      {num:'02', name:'Pompes pieds surélevés', detail:'3× 8. Pieds sur le canapé — charge sur les épaules.'},
+      {num:'03', name:'Box squat explosif', detail:'3× 15 sur une chaise. Toucher et repartir immédiatement.'},
+      {num:'04', name:'Sprint genoux hauts 1 min', detail:'4 séries. Récupération 30 sec marche.'},
+    ]},
+    { niveau:4, name:'HIIT complet', duration:'30 min', meta:'Haute intensité · Cardio fort', exercices:[
+      {num:'01', name:'Jumping jacks 45 sec', detail:'4 séries. Récup 15 sec. Plein d\'amplitude.'},
+      {num:'02', name:'Squats chargés 20 reps', detail:'Sac à dos lesté ou bouteilles dans les bras.'},
+      {num:'03', name:'Burpees + pompes', detail:'4× 10. Pompe à chaque descente, saut groupé à chaque montée.'},
+      {num:'04', name:'Tabata sprint-récup', detail:'20 sec sprint max, 10 sec repos. 8 rounds.'},
+    ]},
+  ],
+  automne: [
+    { niveau:2, name:'Détente active +', duration:'15 min', meta:'Yoga · Sol', exercices:[
+      {num:'01', name:'Respiration libératrice', detail:'5 cycles, expiration 2× plus longue que l\'inspiration.'},
+      {num:'02', name:'Guerrier I & II', detail:'1 minute chaque posture, chaque côté. Ancrage dans le sol.'},
+      {num:'03', name:'Torsion assise', detail:'1 min par côté. Respire dans la torsion, pas de force.'},
+      {num:'04', name:'Pont lent 12×', detail:'3 sec en haut, squeeze. Lombaires collées au sol.'},
+    ]},
+    { niveau:3, name:'Équilibre & ancrage', duration:'18 min', meta:'Yoga + renfo doux', exercices:[
+      {num:'01', name:'Salutation au soleil × 3', detail:'Enchaînement fluide. 1 min par cycle complet.'},
+      {num:'02', name:'Guerrier III — équilibre', detail:'30 sec par jambe. Regard fixe sur un point.'},
+      {num:'03', name:'Étirement psoas en fente basse', detail:'2 min par côté. Laisser le poids du corps étirer.'},
+      {num:'04', name:'Savasana conscient', detail:'3 min. Scan corporel, relâche totale.'},
+    ]},
+    { niveau:4, name:'Yin libérateur', duration:'22 min', meta:'Yin yoga · Profond', exercices:[
+      {num:'01', name:'Dragon — fente yin', detail:'4 min par côté. Gravité fait le travail, pas les muscles.'},
+      {num:'02', name:'Papillon (baddha konasana)', detail:'5 min. Dos droit ou arrondi selon confort.'},
+      {num:'03', name:'Demi-tortue', detail:'4 min. Front au sol si possible. Bras tendus.'},
+      {num:'04', name:'Savasana + respiration 4-7-8', detail:'5 min. Inspirer 4, retenir 7, souffler 8. 8 cycles.'},
+    ]},
+  ],
+};
+
 const ASMA = [
   {num:1,ar:'اللَّهُ',fr:'Allah'},{num:2,ar:'الرَّحْمَنُ',fr:'Ar-Rahman · Le Tout Miséricordieux'},{num:3,ar:'الرَّحِيمُ',fr:'Ar-Rahim · Le Très Miséricordieux'},{num:4,ar:'الْمَلِكُ',fr:'Al-Malik · Le Roi'},{num:5,ar:'الْقُدُّوسُ',fr:'Al-Quddous · Le Très Saint'},
   {num:6,ar:'السَّلَامُ',fr:'As-Salam · La Paix'},{num:7,ar:'الْمُؤْمِنُ',fr:"Al-Mu'min · Celui qui donne la sécurité"},{num:8,ar:'الْمُهَيْمِنُ',fr:'Al-Muhaimin · Le Gardien Suprême'},{num:9,ar:'الْعَزِيزُ',fr:"Al-Aziz · Le Puissant"},{num:10,ar:'الْجَبَّارُ',fr:'Al-Jabbar · Le Contraignant'},
@@ -457,8 +627,10 @@ function renderDashboard(s) {
   // ─ Score du jour (cases rapides) ─
   renderDayScore();
 
-  // ─ Séance rapide ─
-  renderQuickSeance(s);
+  // ─ 3 cartes d'action ─
+  renderCarteManger(s);
+  renderCarteSoin(s);
+  renderCarteBouger(s);
 
   // ─ Suggestions engageantes ─
   renderSuggestionsEngage(s);
@@ -470,9 +642,13 @@ function renderDashboard(s) {
     const isc = document.getElementById('inv-source'); if (isc) isc.textContent = s.invocation.source;
   }
 
-  // Tiles soin
-  const _ft = document.getElementById('food-today'); if (_ft) _ft.textContent = s.foodTeaser || '';
-  const _st2 = document.getElementById('skin-today'); if (_st2) _st2.textContent = s.skincare?.today || s.skinTeaser || '';
+  // Toggle Premium btn state
+  const pBtn = document.getElementById('premium-toggle-btn');
+  if (pBtn) {
+    pBtn.textContent = ST.isPremium ? '✦ Actif' : 'Inactif';
+    pBtn.style.background = ST.isPremium ? 'var(--season-grad)' : 'var(--sable)';
+    pBtn.style.color = ST.isPremium ? 'white' : 'var(--gris)';
+  }
 }
 
 function renderDayScore() {
@@ -504,7 +680,7 @@ function renderDayScore() {
   `).join('');
 }
 
-function renderQuickSeance(s) {
+function renderCarteBouger(s) {
   const seance = s.sport?.seance;
   if (!seance) return;
   const today = new Date().toDateString();
@@ -539,6 +715,222 @@ function renderQuickSeance(s) {
   if (_se) _se.innerHTML = (seance.exercices||[]).map(ex =>
     `<div class="sport-exercise"><div class="sport-ex-num">${ex.num}</div><div><div class="sport-ex-name">${ex.name}</div><div class="sport-ex-detail">${ex.detail}</div></div></div>`
   ).join('');
+
+  // Section niveaux Premium
+  const niveauxEl = document.getElementById('qs-niveaux-premium');
+  if (!niveauxEl) return;
+  const niveaux = SPORT_NIVEAUX[ST.currentSaison] || [];
+  const level = ST.seanceLevel || 1;
+  if (ST.isPremium) {
+    niveauxEl.innerHTML = `
+      <div class="action-prem-title">✦ Niveaux Premium · Ton niveau : ${level}/4</div>
+      <div class="qs-niveaux-grid">
+        ${niveaux.map(n => `
+          <div class="qs-niveau-card ${n.niveau <= level ? 'unlocked' : 'locked'}"
+               ${n.niveau <= level ? `onclick="openNiveauModal(${n.niveau - 2})"` : ''}>
+            <div class="qs-niveau-badge">N${n.niveau}</div>
+            <div class="qs-niveau-name">${n.name}</div>
+            <div class="qs-niveau-dur">${n.duration}</div>
+            ${n.niveau > level ? '<div class="qs-niveau-lock">🔒</div>' : '<div class="qs-niveau-lock">▶</div>'}
+          </div>
+        `).join('')}
+      </div>
+    `;
+  } else {
+    niveauxEl.innerHTML = `
+      <div class="action-premium-locked">
+        <div class="action-prem-blur">
+          <div class="action-prem-recipe-preview">Niveaux 2, 3 &amp; 4 débloqués</div>
+          <div class="action-prem-steps-preview">Adaptatif · Progressif · Auto-ajusté</div>
+        </div>
+        <div class="action-prem-cta">
+          <div class="action-prem-label">✦ Progression guidée</div>
+          <button class="action-prem-btn" onclick="switchTabById('moi')">Débloquer Premium</button>
+        </div>
+      </div>
+    `;
+  }
+}
+
+// ═══════════════════════════════════════════════
+// CARTES MANGER & PRENDRE SOIN
+// ═══════════════════════════════════════════════
+function renderCarteManger(s) {
+  const freeEl = document.getElementById('action-manger-free');
+  const premEl = document.getElementById('action-manger-premium');
+  if (!freeEl || !premEl) return;
+
+  const stars = (s.alimentation?.star || []);
+  freeEl.innerHTML = stars.map(f => `<span class="action-star-chip">${f}</span>`).join('');
+
+  if (ST.isPremium) {
+    const recettes = RECETTES[ST.currentSaison] || [];
+    const idx = (ST.currentDay - 1) % Math.max(recettes.length, 1);
+    const r = recettes[idx];
+    if (!r) return;
+    premEl.innerHTML = `
+      <div class="action-premium-unlocked" onclick="openRecipeModal('${ST.currentSaison}',${idx})">
+        <span class="action-prem-unlocked-emoji">${r.emoji}</span>
+        <div class="action-prem-unlocked-text">
+          <div class="action-prem-unlocked-name">${r.nom}</div>
+          <div class="action-prem-unlocked-sub">Voir la recette →</div>
+        </div>
+        <span class="action-prem-unlocked-arrow">›</span>
+      </div>`;
+  } else {
+    premEl.innerHTML = `
+      <div class="action-premium-locked">
+        <div class="action-prem-blur">
+          <div class="action-prem-recipe-preview">Curry patate douce · lait de coco · épices</div>
+          <div class="action-prem-steps-preview">Étape 1 · Étape 2 · Étape 3 · Étape 4</div>
+        </div>
+        <div class="action-prem-cta">
+          <div class="action-prem-label">✦ Recette du jour</div>
+          <button class="action-prem-btn" onclick="switchTabById('moi')">Débloquer Premium</button>
+        </div>
+      </div>`;
+  }
+}
+
+function renderCarteSoin(s) {
+  const freeEl = document.getElementById('action-soin-free');
+  const premEl = document.getElementById('action-soin-premium');
+  if (!freeEl || !premEl) return;
+
+  freeEl.innerHTML = `<span class="action-free-tip">${s.skincare?.today || s.skinTeaser || ''}</span>`;
+
+  if (ST.isPremium) {
+    const routine = ROUTINES_PREMIUM[ST.currentSaison];
+    const steps = routine ? routine.matin.length + routine.soir.length : 0;
+    premEl.innerHTML = `
+      <div class="action-premium-unlocked" onclick="openSkinModal('${ST.currentSaison}')">
+        <span class="action-prem-unlocked-emoji">🌿</span>
+        <div class="action-prem-unlocked-text">
+          <div class="action-prem-unlocked-name">Routine matin &amp; soir</div>
+          <div class="action-prem-unlocked-sub">${steps} gestes adaptés à ta phase →</div>
+        </div>
+        <span class="action-prem-unlocked-arrow">›</span>
+      </div>`;
+  } else {
+    premEl.innerHTML = `
+      <div class="action-premium-locked">
+        <div class="action-prem-blur">
+          <div class="action-prem-recipe-preview">Matin · Soir · 7 gestes adaptés</div>
+          <div class="action-prem-steps-preview">Nettoyage · Actif · Soin · SPF · Masque</div>
+        </div>
+        <div class="action-prem-cta">
+          <div class="action-prem-label">✦ Routine complète</div>
+          <button class="action-prem-btn" onclick="switchTabById('moi')">Débloquer Premium</button>
+        </div>
+      </div>`;
+  }
+}
+
+// ═══════════════════════════════════════════════
+// MODAUX PREMIUM
+// ═══════════════════════════════════════════════
+function openRecipeModal(phase, idx) {
+  const r = (RECETTES[phase] || [])[idx];
+  if (!r) return;
+  const el = document.getElementById('recipe-modal-content');
+  if (el) el.innerHTML = `
+    <div style="font-size:48px;text-align:center;margin-bottom:14px;">${r.emoji}</div>
+    <div class="pmod-title">${r.nom}</div>
+    <div class="pmod-pourquoi">${r.pourquoi}</div>
+    <div class="pmod-section">🛒 Ingrédients</div>
+    <ul class="pmod-list">${(r.ingredients||[]).map(i=>`<li>${i}</li>`).join('')}</ul>
+    <div class="pmod-section">👩‍🍳 Préparation</div>
+    <ol class="pmod-list">${(r.etapes||[]).map(e=>`<li>${e}</li>`).join('')}</ol>
+  `;
+  document.getElementById('recipe-modal').classList.add('open');
+}
+function closeRecipeModal() { document.getElementById('recipe-modal').classList.remove('open'); }
+
+function openSkinModal(phase) {
+  const r = ROUTINES_PREMIUM[phase];
+  if (!r) return;
+  const renderSteps = steps => steps.map(g => `
+    <div class="pmod-skin-step">
+      <div class="pmod-skin-icon">${g.icon}</div>
+      <div class="pmod-skin-body">
+        <div class="pmod-skin-name">${g.geste} <span class="pmod-skin-dur">${g.duree}</span></div>
+        <div class="pmod-skin-detail">${g.detail}</div>
+      </div>
+    </div>`).join('');
+  const el = document.getElementById('skin-modal-content');
+  if (el) el.innerHTML = `
+    <div class="pmod-routine-block">
+      <div class="pmod-routine-time">☀️ Routine Matin</div>
+      ${renderSteps(r.matin)}
+    </div>
+    <div class="pmod-routine-block">
+      <div class="pmod-routine-time">🌙 Routine Soir</div>
+      ${renderSteps(r.soir)}
+    </div>`;
+  document.getElementById('skin-modal').classList.add('open');
+}
+function closeSkinModal() { document.getElementById('skin-modal').classList.remove('open'); }
+
+function openNiveauModal(idx) {
+  const niveaux = SPORT_NIVEAUX[ST.currentSaison] || [];
+  const n = niveaux[idx];
+  if (!n) return;
+  const el = document.getElementById('niveau-modal-content');
+  if (el) el.innerHTML = `
+    <div class="pmod-title">Niveau ${n.niveau} · ${n.name}</div>
+    <div class="pmod-pourquoi">${n.meta} · ${n.duration}</div>
+    ${n.exercices.map(ex=>`
+      <div class="sport-exercise" style="margin-bottom:12px;">
+        <div class="sport-ex-num">${ex.num}</div>
+        <div><div class="sport-ex-name">${ex.name}</div><div class="sport-ex-detail">${ex.detail}</div></div>
+      </div>`).join('')}
+  `;
+  document.getElementById('niveau-modal').classList.add('open');
+}
+function closeNiveauModal() { document.getElementById('niveau-modal').classList.remove('open'); }
+
+function checkSeanceProgression() {
+  if (!ST.isPremium) return;
+  ST.seanceValidatedCount = (ST.seanceValidatedCount || 0) + 1;
+  if (ST.seanceValidatedCount >= 5) {
+    ST.seanceValidatedCount = 0;
+    saveState();
+    setTimeout(() => document.getElementById('progression-modal').classList.add('open'), 800);
+  } else {
+    saveState();
+  }
+}
+
+function handleProgressionAnswer(ans) {
+  document.getElementById('progression-modal').classList.remove('open');
+  const level = ST.seanceLevel || 1;
+  if (ans === 'plus' && level < 4) {
+    ST.seanceLevel = level + 1;
+    showToast(`🔥 Niveau ${ST.seanceLevel} débloqué ! Alhamdulillah 💪`);
+  } else if (ans === 'dur' && level > 1) {
+    ST.seanceLevel = level - 1;
+    showToast(`💛 Niveau ${ST.seanceLevel} — on avance à ton rythme.`);
+  } else {
+    showToast('✨ Parfait — on continue au même rythme.');
+  }
+  saveState();
+  renderCarteBouger(SAISONS[ST.currentSaison]);
+}
+
+function togglePremium() {
+  ST.isPremium = !ST.isPremium;
+  saveState();
+  const btn = document.getElementById('premium-toggle-btn');
+  if (btn) {
+    btn.textContent = ST.isPremium ? '✦ Actif' : 'Inactif';
+    btn.style.background = ST.isPremium ? 'var(--season-grad)' : 'var(--sable)';
+    btn.style.color = ST.isPremium ? 'white' : 'var(--gris)';
+  }
+  const s = SAISONS[ST.currentSaison];
+  renderCarteManger(s);
+  renderCarteSoin(s);
+  renderCarteBouger(s);
+  showToast(ST.isPremium ? '✦ Mode Premium activé' : 'Mode Premium désactivé');
 }
 
 function validerSeanceDash() {
@@ -549,9 +941,10 @@ function validerSeanceDash() {
   ST.seanceDone[today] = true;
   saveState();
   const s = SAISONS[ST.currentSaison];
-  renderQuickSeance(s);
+  renderCarteBouger(s);
   restoreSeanceDone();
   renderDayScore();
+  checkSeanceProgression();
   showToast('💪 Alhamdulillah — séance accomplie ! 🌸');
 }
 
@@ -1628,7 +2021,8 @@ function confirmDeleteMyData() {
     selectedSugg: [], seanceDashDone: {}, mouvDone: {}, seanceDone: {}, notifFreq: 2,
     waitlistEmail: null, feedbackSent: false, installBannerDismissed: false,
     lastDailyReset: null, lastWeeklyReset: null, eveningCheckinDate: null,
-    eveningCheckinMood: null, cycleHistory: []
+    eveningCheckinMood: null, cycleHistory: [],
+    isPremium: false, seanceValidatedCount: 0, seanceLevel: 1
   };
   closeDeleteModal();
   document.getElementById('app').style.display = 'none';
