@@ -667,7 +667,7 @@ function renderDayScore() {
     ...(ST.currentSaison !== 'hiver' ? [{ emoji: '🕌', label: 'Prières', done: prayersDone >= 3, sub: prayersDone + '/5', onclick: "switchTabById('ame')" }] : []),
     { emoji: '📿', label: 'Dhikr',   done: dhikrDone, onclick: "switchTabById('ame')" },
     { emoji: '💪', label: 'Séance',  done: !!seanceDone, onclick: '' },
-    { emoji: '📖', label: 'Coran',   done: !!coranDone, onclick: "switchTabById('ame')" },
+    ...(ST.currentSaison !== 'hiver' ? [{ emoji: '📖', label: 'Coran', done: !!coranDone, onclick: "switchTabById('ame')" }] : []),
   ];
 
   container.innerHTML = items.map(it => `
@@ -1097,7 +1097,9 @@ function renderAme(s) {
   // Dhikr cases à cocher
   renderDhikrChecks();
 
-  // Coran case à cocher
+  // Coran case à cocher — masqué pendant hiver (règles)
+  const coranCard = document.querySelector('.coran-check-card');
+  if (coranCard) coranCard.style.display = ST.currentSaison === 'hiver' ? 'none' : '';
   renderCoranCheck();
 }
 
