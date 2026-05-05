@@ -595,7 +595,6 @@ function populateAll() {
   updateMouvProgress((s.sport?.mouvements||[]).length);
   setTimeout(showInstallBanner, 1500);
   restoreFeedback();
-  renderEnergyBars();
   renderCycleHistory();
   renderPatterns();
   if (ST.waitlistEmail) {
@@ -1019,10 +1018,36 @@ function togglePremium() {
     btn.style.color = ST.isPremium ? 'white' : 'var(--gris)';
   }
   const s = SAISONS[ST.currentSaison];
-  renderCarteManger(s);
-  renderCarteSoin(s);
   renderCarteBouger(s);
+  renderCarteRepas(s);
+  renderCarteSkincare(s);
   showToast(ST.isPremium ? '✦ Mode Premium activé' : 'Mode Premium désactivé');
+}
+
+function applyPremiumCode() {
+  const inp = document.getElementById('premium-code-input');
+  const msg = document.getElementById('premium-code-msg');
+  if (!inp || !msg) return;
+  const code = inp.value.trim().toUpperCase();
+  const VALID_CODES = ['SAKINA2026', 'BETA2026', 'FONDATRICE'];
+  if (VALID_CODES.includes(code)) {
+    ST.isPremium = true;
+    saveState();
+    const s = SAISONS[ST.currentSaison];
+    renderDashboard(s);
+    const btn = document.getElementById('premium-toggle-btn');
+    if (btn) {
+      btn.textContent = '✦ Actif';
+      btn.style.background = 'var(--season-grad)';
+      btn.style.color = 'white';
+    }
+    msg.style.color = '#3DAE8A';
+    msg.textContent = '✓ Premium activé — bienvenue !';
+    inp.value = '';
+  } else if (code) {
+    msg.style.color = '#C4694A';
+    msg.textContent = 'Code incorrect.';
+  }
 }
 
 function validerSeanceDash() {

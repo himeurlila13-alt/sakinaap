@@ -151,7 +151,6 @@
   <div class="home-header" id="home-header-bg">
     <div class="home-header-name" id="home-name">Lila</div>
     <div class="home-header-phase" id="home-phase-line">&#127800; Printemps &middot; Jour 8</div>
-    <button class="av-btn" id="avBtn" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,.25);border:none;width:34px;height:34px;border-radius:50%;font-size:16px;cursor:pointer;">&#127800;</button>
   </div>
 
   <!-- MESSAGE DU JOUR -->
@@ -671,101 +670,40 @@
   </div>
   <div style="height:16px;"></div>
 
-  <!-- ENERGIE 28 JOURS -->
-  <div style="margin:0 14px 14px;background:white;border-radius:20px;border:1.5px solid var(--sable);padding:16px 18px;">
-    <div id="energy-title" style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:4px;">Mon energie sur 28 jours</div>
-    <div style="font-family:var(--serif);font-size:11px;font-style:italic;color:var(--gris);margin-bottom:14px;">Coloree par saison — le point brillant = aujourd'hui</div>
-    <div style="display:flex;align-items:flex-end;gap:3px;height:56px;" id="energy-bars-moi"></div>
-    <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:9px;color:var(--gris);">
-      <span>&#127769; Hiver</span><span>&#127800; Printemps</span><span>&#9728;&#65039; Ete</span><span>&#127810; Automne</span>
-    </div>
-  </div>
-
-  <!-- HISTORIQUE CYCLES -->
-  <div id="cycle-history-card" style="display:none;margin:0 14px 14px;background:white;border-radius:20px;border:1.5px solid var(--sable);padding:16px 18px;">
-    <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:14px;">Mes cycles</div>
-    <div id="cycle-history-list"></div>
-  </div>
-
-  <!-- PATTERNS PREMIUM -->
-  <div id="patterns-card" style="display:none;margin:0 14px 14px;background:white;border-radius:20px;border:1.5px solid var(--sable);padding:16px 18px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-      <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);">Mon portrait de cycle</div>
-      <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:white;background:linear-gradient(135deg,#C4A95A,#E8C97A);padding:3px 10px;border-radius:8px;">✨ Premium</div>
-    </div>
-    <div id="patterns-free"></div>
-    <div id="patterns-premium"></div>
-  </div>
-
-  <!-- FEEDBACK BETA -->
-  <div id="feedback-section" style="display:none;margin:0 14px 14px;border-radius:20px;overflow:hidden;border:1.5px solid var(--sable);background:white;">
-    <div style="background:linear-gradient(135deg,var(--season-soft),white);padding:18px 20px 14px;border-bottom:1px solid var(--sable);">
-      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--season);font-weight:600;margin-bottom:6px;">&#10022; Phase de test</div>
-      <div style="font-family:var(--serif);font-size:17px;color:var(--noir);margin-bottom:6px;">Ton avis compte vraiment</div>
-      <div style="font-size:12px;color:var(--gris);line-height:1.6;">Tu es parmi les premieres a utiliser SakinApp. Apres quelques jours, prends 2 minutes pour partager ton ressenti.</div>
-    </div>
-    <div style="padding:18px 20px 20px;" id="feedback-form-wrap">
-      <div style="margin-bottom:16px;">
-        <div style="font-size:12px;font-weight:600;color:var(--noir);margin-bottom:10px;">Comment tu trouves l'app globalement ?</div>
-        <div style="display:flex;gap:8px;" id="rating-stars">
-          <div onclick="setRating(1)" style="flex:1;text-align:center;padding:10px 6px;border-radius:12px;border:1.5px solid var(--sable);cursor:pointer;font-size:20px;">&#128533;</div>
-          <div onclick="setRating(2)" style="flex:1;text-align:center;padding:10px 6px;border-radius:12px;border:1.5px solid var(--sable);cursor:pointer;font-size:20px;">&#128528;</div>
-          <div onclick="setRating(3)" style="flex:1;text-align:center;padding:10px 6px;border-radius:12px;border:1.5px solid var(--sable);cursor:pointer;font-size:20px;">&#128578;</div>
-          <div onclick="setRating(4)" style="flex:1;text-align:center;padding:10px 6px;border-radius:12px;border:1.5px solid var(--sable);cursor:pointer;font-size:20px;">&#128522;</div>
-          <div onclick="setRating(5)" style="flex:1;text-align:center;padding:10px 6px;border-radius:12px;border:1.5px solid var(--sable);cursor:pointer;font-size:20px;">&#129321;</div>
-        </div>
-        <div id="rating-label" style="text-align:center;font-size:11px;color:var(--gris);margin-top:6px;font-family:var(--serif);font-style:italic;min-height:16px;"></div>
-      </div>
-      <div style="margin-bottom:14px;">
-        <div style="font-size:12px;font-weight:600;color:var(--noir);margin-bottom:8px;">Ce que tu aimes le plus</div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;" id="likes-chips">
-          <div onclick="toggleChip(this)" style="padding:7px 13px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;">Le design</div>
-          <div onclick="toggleChip(this)" style="padding:7px 13px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;">Le contenu islamique</div>
-          <div onclick="toggleChip(this)" style="padding:7px 13px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;">Le cycle et saisons</div>
-          <div onclick="toggleChip(this)" style="padding:7px 13px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;">Les prieres</div>
-          <div onclick="toggleChip(this)" style="padding:7px 13px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;">La glaire cervicale</div>
-          <div onclick="toggleChip(this)" style="padding:7px 13px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;">Le sport</div>
-          <div onclick="toggleChip(this)" style="padding:7px 13px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;">L'alimentation</div>
-          <div onclick="toggleChip(this)" style="padding:7px 13px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;">Les 99 noms</div>
-        </div>
-      </div>
-      <div style="margin-bottom:14px;">
-        <div style="font-size:12px;font-weight:600;color:var(--noir);margin-bottom:8px;">Ce qui manque ou a ameliorer</div>
-        <textarea id="feedback-text" placeholder="Dis-moi librement ce que tu penses - bug, idee, ressenti..." style="width:100%;padding:12px 14px;border:1.5px solid var(--sable);border-radius:14px;font-size:13px;font-family:var(--sans);color:var(--noir);background:var(--creme);outline:none;resize:none;min-height:80px;line-height:1.6;-webkit-appearance:none;box-sizing:border-box;"></textarea>
-      </div>
-      <div style="margin-bottom:16px;">
-        <div style="font-size:12px;font-weight:600;color:var(--noir);margin-bottom:6px;">Ton email (optionnel)</div>
-        <input id="feedback-email" type="email" placeholder="ton@email.com" style="width:100%;padding:12px 14px;border:1.5px solid var(--sable);border-radius:12px;font-size:13px;font-family:var(--sans);color:var(--noir);background:white;outline:none;-webkit-appearance:none;box-sizing:border-box;">
-      </div>
-      <button onclick="sendFeedback()" style="width:100%;padding:14px;background:var(--season-grad);color:white;border:none;border-radius:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">Envoyer mon avis</button>
-      <div id="feedback-msg" style="text-align:center;font-size:12px;margin-top:10px;font-family:var(--serif);font-style:italic;min-height:18px;"></div>
-    </div>
-    <div id="feedback-sent-wrap" style="display:none;padding:28px 20px;text-align:center;">
-      <div style="font-size:32px;margin-bottom:12px;">&#129330;</div>
-      <div style="font-family:var(--script);font-size:22px;color:var(--season);margin-bottom:8px;">Jazak Allahou Khayran</div>
-      <div style="font-family:var(--serif);font-size:14px;font-style:italic;color:var(--noir);line-height:1.7;">Ton avis m'aide a construire quelque chose de vraiment utile.</div>
-    </div>
-  </div>
-
   <!-- PREMIUM CARD -->
   <div style="margin:0 14px 14px;border-radius:22px;overflow:hidden;box-shadow:0 12px 48px rgba(90,60,20,.22);">
-    <div style="background:linear-gradient(145deg,#1C1008,#3A2010,#6A4018);padding:26px 22px 22px;position:relative;overflow:hidden;">
+    <!-- En-tête doré -->
+    <div style="background:linear-gradient(145deg,#1C1008,#3A2010,#6A4018);padding:26px 22px 22px;">
       <div style="width:32px;height:2px;background:linear-gradient(90deg,#C9A96E,#E8C88A);border-radius:1px;margin-bottom:14px;"></div>
       <div style="font-size:9px;letter-spacing:3.5px;text-transform:uppercase;color:#C9A96E;margin-bottom:10px;font-weight:600;">SakinApp Premium</div>
-      <div style="font-family:var(--script);font-size:32px;color:#FAF6F0;margin-bottom:6px;">En preparation</div>
-      <div style="font-family:var(--serif);font-size:13px;font-style:italic;color:rgba(250,246,240,.55);line-height:1.6;">"Un accompagnement a la hauteur de ton chemin."</div>
+      <div style="font-family:var(--script);font-size:30px;color:#FAF6F0;margin-bottom:8px;">Passe au niveau supérieur</div>
+      <div style="font-family:var(--serif);font-size:13px;font-style:italic;color:rgba(250,246,240,.65);line-height:1.6;">Ton corps change chaque semaine.<br>Ton programme aussi.</div>
     </div>
+    <!-- Corps clair -->
     <div style="background:linear-gradient(180deg,#FAF6F0,#F5EDE0);padding:22px 22px 20px;">
-      <div style="font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:#8A6A30;font-weight:600;margin-bottom:16px;">Ce qui arrive bientot</div>
+      <!-- 3 bénéfices -->
       <div style="display:flex;flex-direction:column;">
-        <div style="display:flex;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid #EAD9C0;"><div style="width:6px;height:6px;border-radius:50%;background:#C9A96E;flex-shrink:0;margin-left:4px;"></div><div><div style="font-size:13px;font-weight:600;color:#1C1008;">Recettes cycliques</div><div style="font-size:11px;color:#8A7060;margin-top:1px;">28+ recettes adaptees a chaque phase</div></div></div>
-        <div style="display:flex;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid #EAD9C0;"><div style="width:6px;height:6px;border-radius:50%;background:#C9A96E;flex-shrink:0;margin-left:4px;"></div><div><div style="font-size:13px;font-weight:600;color:#1C1008;">Seances sport guidees</div><div style="font-size:11px;color:#8A7060;margin-top:1px;">Adaptees a ta phase et ton niveau</div></div></div>
-        <div style="display:flex;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid #EAD9C0;"><div style="width:6px;height:6px;border-radius:50%;background:#C9A96E;flex-shrink:0;margin-left:4px;"></div><div><div style="font-size:13px;font-weight:600;color:#1C1008;">Routines skincare completes</div><div style="font-size:11px;color:#8A7060;margin-top:1px;">Matin et soir selon ta saison</div></div></div>
-        <div style="display:flex;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid #EAD9C0;"><div style="width:6px;height:6px;border-radius:50%;background:#C9A96E;flex-shrink:0;margin-left:4px;"></div><div><div style="font-size:13px;font-weight:600;color:#1C1008;">Bilan multi-cycles</div><div style="font-size:11px;color:#8A7060;margin-top:1px;">Tes patterns sur plusieurs mois</div></div></div>
-        <div style="display:flex;align-items:center;gap:14px;padding:11px 0;"><div style="width:6px;height:6px;border-radius:50%;background:#C9A96E;flex-shrink:0;margin-left:4px;"></div><div><div style="font-size:13px;font-weight:600;color:#1C1008;">Sakina Body PDF offert</div><div style="font-size:11px;color:#8A7060;margin-top:1px;">Le guide complet en telechargement</div></div></div>
+        <div style="display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid #EAD9C0;">
+          <span style="font-size:24px;width:30px;text-align:center;flex-shrink:0;">&#127869;&#65039;</span>
+          <div><div style="font-size:14px;font-weight:600;color:#1C1008;">Une recette cyclique chaque jour</div><div style="font-size:11px;color:#8A7060;margin-top:2px;">Adaptée à ta phase, sans grammage</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid #EAD9C0;">
+          <span style="font-size:24px;width:30px;text-align:center;flex-shrink:0;">&#128170;</span>
+          <div><div style="font-size:14px;font-weight:600;color:#1C1008;">Une séance qui grandit avec toi</div><div style="font-size:11px;color:#8A7060;margin-top:2px;">4 niveaux, auto-ajustés selon ton ressenti</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;padding:13px 0;">
+          <span style="font-size:24px;width:30px;text-align:center;flex-shrink:0;">&#10024;</span>
+          <div><div style="font-size:14px;font-weight:600;color:#1C1008;">Une routine beauté selon ta saison</div><div style="font-size:11px;color:#8A7060;margin-top:2px;">Matin + soir, actifs naturels de ta phase</div></div>
+        </div>
       </div>
-      <div style="height:1px;background:linear-gradient(90deg,transparent,#C9A96E,transparent);margin:18px 0;"></div>
-      <div style="display:flex;gap:10px;margin-bottom:18px;">
+      <!-- Citation de clôture -->
+      <div style="background:linear-gradient(135deg,rgba(201,169,110,.13),rgba(168,122,48,.07));border-radius:14px;padding:14px 16px;margin:16px 0 20px;">
+        <div style="font-family:var(--serif);font-size:13px;font-style:italic;color:#5A3A10;line-height:1.75;">"Tout change selon comment tu te sens ce matin. C'est ça, un vrai accompagnement."</div>
+      </div>
+      <!-- Séparateur -->
+      <div style="height:1px;background:linear-gradient(90deg,transparent,#C9A96E,transparent);margin-bottom:18px;"></div>
+      <!-- Prix -->
+      <div style="display:flex;gap:10px;margin-bottom:12px;">
         <div style="flex:1;background:white;border:1.5px solid #D4B87A;border-radius:14px;padding:14px;text-align:center;">
           <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#8A7060;margin-bottom:6px;">Mensuel</div>
           <div style="font-family:var(--script);font-size:28px;color:#3A2010;">2,99&#8364;</div>
@@ -775,24 +713,40 @@
           <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#C9A96E,#A87A30);color:#1C1008;font-size:9px;font-weight:700;padding:3px 10px;border-radius:10px;white-space:nowrap;">MEILLEURE OFFRE</div>
           <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:rgba(250,246,240,.5);margin-bottom:6px;">Annuel</div>
           <div style="font-family:var(--script);font-size:28px;color:#FAF6F0;">24,99&#8364;</div>
-          <div style="font-size:10px;color:rgba(201,169,110,.7);margin-top:2px;">/ an - economise 30%</div>
+          <div style="font-size:10px;color:rgba(201,169,110,.7);margin-top:2px;">/ an · économise 30%</div>
         </div>
       </div>
-      <div style="text-align:center;margin-bottom:14px;">
-        <div style="font-family:var(--serif);font-size:15px;color:#1C1008;margin-bottom:4px;">Sois la premiere informee</div>
-        <div style="font-size:12px;color:#8A7060;line-height:1.5;">Acces anticipe et tarif fondatrice reserve.</div>
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="font-size:11px;color:#8A7060;font-style:italic;">Résilie quand tu veux. Aucun engagement.</div>
+      </div>
+      <!-- Waitlist -->
+      <div style="text-align:center;margin-bottom:10px;">
+        <div style="font-family:var(--serif);font-size:14px;color:#1C1008;margin-bottom:4px;">Sois la première informée</div>
+        <div style="font-size:11px;color:#8A7060;line-height:1.5;">Accès anticipé et tarif fondatrice réservé.</div>
       </div>
       <div style="display:flex;gap:8px;">
-        <input id="waitlist-email" type="email" placeholder="ton@email.com" style="flex:1;padding:12px 14px;border:1.5px solid #D4B87A;border-radius:12px;font-size:13px;font-family:var(--sans);color:#1C1008;background:white;outline:none;-webkit-appearance:none;">
-        <button onclick="joinWaitlist()" style="background:linear-gradient(135deg,#C9A96E,#A87A30);color:#1C1008;border:none;border-radius:12px;padding:12px 16px;font-size:13px;font-weight:700;font-family:var(--sans);cursor:pointer;white-space:nowrap;flex-shrink:0;">Rejoindre</button>
+        <input id="waitlist-email" type="email" placeholder="ton@email.com" style="flex:1;padding:12px 14px;border:1.5px solid #D4B87A;border-radius:12px;font-size:13px;font-family:var(--sans);color:#1C1008;background:white;outline:none;-webkit-appearance:none;appearance:none;">
+        <button onclick="joinWaitlist()" style="background:linear-gradient(135deg,#C9A96E,#A87A30);color:#1C1008;border:none;border-radius:12px;padding:12px 16px;font-size:13px;font-weight:700;font-family:var(--sans);cursor:pointer;white-space:nowrap;flex-shrink:0;">Rejoindre ✦</button>
       </div>
       <div id="waitlist-msg" style="text-align:center;font-size:12px;color:#3DAE8A;margin-top:8px;font-family:var(--serif);font-style:italic;min-height:18px;"></div>
     </div>
   </div>
 
-  <!-- PARAMETRES -->
+  <!-- CODE D'ACCÈS PREMIUM -->
+  <div style="margin:0 14px 14px;background:white;border-radius:20px;border:1.5px solid var(--sable);padding:18px 20px;">
+    <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:12px;">&#10022; Code d'accès Premium</div>
+    <div style="display:flex;gap:8px;">
+      <input id="premium-code-input" type="text" placeholder="Ton code..." maxlength="20"
+             onkeydown="if(event.key==='Enter'){applyPremiumCode();this.blur()}"
+             style="flex:1;padding:11px 14px;border:1.5px solid var(--sable);border-radius:12px;font-size:13px;font-family:var(--sans);color:var(--noir);background:var(--creme);outline:none;-webkit-appearance:none;appearance:none;text-transform:uppercase;letter-spacing:1px;">
+      <button onclick="applyPremiumCode()" style="background:var(--season-grad);color:white;border:none;border-radius:12px;padding:11px 18px;font-size:13px;font-weight:700;font-family:var(--sans);cursor:pointer;flex-shrink:0;">Valider</button>
+    </div>
+    <div id="premium-code-msg" style="font-size:12px;color:var(--gris);margin-top:8px;font-family:var(--serif);font-style:italic;min-height:16px;"></div>
+  </div>
+
+  <!-- PARAMÈTRES -->
   <div class="prof-sec">
-    <div class="ps-hdr">Mon profil</div>
+    <div class="ps-hdr">Paramètres</div>
     <div class="ps-row" style="cursor:default;">
       <div class="ps-ico">&#10022;</div>
       <div style="flex:1;"><div class="ps-lbl">Mode Premium <span style="font-size:10px;background:#EAD9C0;color:#8A6A30;padding:2px 7px;border-radius:8px;margin-left:6px;font-weight:600;">TEST</span></div><div class="ps-sub">Active pour prévisualiser les fonctions</div></div>
@@ -800,15 +754,12 @@
     </div>
     <div class="ps-row" onclick="openEditCycle()"><div class="ps-ico">&#128197;</div><div><div class="ps-lbl">Modifier mon cycle</div><div class="ps-sub" id="psCycle">Configurer</div></div><div class="ps-arr">&#8250;</div></div>
     <div class="ps-row" onclick="openNotifSettings()"><div class="ps-ico">&#128276;</div><div><div class="ps-lbl">Rappels Sakina</div><div class="ps-sub">Configurer mes notifications</div></div><div class="ps-arr">&#8250;</div></div>
-    <div class="ps-row" onclick="exportData()"><div class="ps-ico">&#128190;</div><div><div class="ps-lbl">Sauvegarder mes donn&#233;es</div><div class="ps-sub">T&#233;l&#233;charger une copie de secours</div></div><div class="ps-arr">&#8250;</div></div>
-    <div class="ps-row" onclick="importData()"><div class="ps-ico">&#128193;</div><div><div class="ps-lbl">Restaurer mes donn&#233;es</div><div class="ps-sub">Depuis une sauvegarde</div></div><div class="ps-arr">&#8250;</div></div>
-    <div class="ps-row" onclick="window.location.reload()"><div class="ps-ico">&#128257;</div><div><div class="ps-lbl">Rafra&#238;chir l&#8217;application</div><div class="ps-sub">Si l&#8217;app ne se met pas &#224; jour</div></div><div class="ps-arr">&#8250;</div></div>
-    <div class="ps-row" onclick="deleteMyData()"><div class="ps-ico">&#128465;</div><div><div class="ps-lbl" style="color:#C4694A;">Supprimer mes donn&#233;es</div><div class="ps-sub">Efface tout de cet appareil &#8212; RGPD</div></div><div class="ps-arr">&#8250;</div></div>
+    <div class="ps-row" onclick="deleteMyData()"><div class="ps-ico">&#128465;</div><div><div class="ps-lbl" style="color:#C4694A;">Réinitialiser mes données</div><div class="ps-sub">Efface tout de cet appareil — RGPD</div></div><div class="ps-arr">&#8250;</div></div>
   </div>
 
-  <div style="text-align:center;padding:20px;color:var(--gris);font-size:12px;">
-    SakinApp - v1.0 MVP<br>
-    <span style="font-family:'Dancing Script',cursive;font-size:16px;color:var(--season);">&#1576;&#1616;&#1587;&#1618;&#1605;&#1616; &#1575;&#1604;&#1604;&#1617;&#1614;&#1607;&#1616;</span>
+  <div style="text-align:center;padding:24px 20px 32px;color:var(--gris);font-size:12px;">
+    <div style="font-family:'Dancing Script',cursive;font-size:22px;color:var(--season);margin-bottom:6px;">SakinApp</div>
+    <span style="font-family:'Dancing Script',cursive;font-size:18px;color:var(--season);opacity:.6;">&#1576;&#1616;&#1587;&#1618;&#1605;&#1616; &#1575;&#1604;&#1604;&#1617;&#1614;&#1607;&#1616;</span>
   </div>
 </div>
 
