@@ -133,12 +133,8 @@
 
 <!-- ACCUEIL -->
 <div class="tab-page active" id="tab-accueil">
-  <div class="topbar" id="homeTopbar" style="background:rgba(250,246,240,.97)">
-    <div class="logo-w"><div class="logo-m">SakinApp</div><div class="logo-t">Chaque saison a sa sagesse.</div></div>
-    <div class="tbr" style="display:flex;align-items:center;gap:8px;"><button onclick="window.location.reload()" style="background:none;border:none;padding:4px 6px;cursor:pointer;font-size:18px;color:var(--gris);" title="Rafra&#238;chir">&#8635;</button><button class="av-btn" id="avBtn" style="background:var(--season-grad);">&#127800;</button></div>
-  </div>
 
-  <!-- Banniere PWA -->
+  <!-- BANNIERE PWA -->
   <div id="install-banner" style="display:none;margin:10px 14px 0;background:linear-gradient(135deg,var(--season-soft),white);border:1.5px solid var(--season-light);border-radius:16px;padding:16px;">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
       <div style="width:36px;height:36px;border-radius:10px;background:var(--season-grad);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;">&#128242;</div>
@@ -151,121 +147,70 @@
     <div style="display:flex;justify-content:flex-end;"><button onclick="dismissInstallBanner()" style="background:none;border:none;color:var(--gris);font-size:12px;cursor:pointer;text-decoration:underline;font-family:var(--sans);">Ne plus afficher</button></div>
   </div>
 
-  <!-- HERO CARD -->
-  <div class="accueil-hero-card fade-in">
-    <div class="hero-gradient" id="accueil-hero-card" style="background:var(--season-grad)">
-      <div style="position:absolute;top:-10px;right:-10px;opacity:0.12;pointer-events:none;">
-        <svg width="160" height="160" viewBox="0 0 160 160"><ellipse cx="80" cy="34" rx="18" ry="36" fill="white"/><ellipse cx="80" cy="34" rx="18" ry="36" fill="white" transform="rotate(72,80,80)"/><ellipse cx="80" cy="34" rx="18" ry="36" fill="white" transform="rotate(144,80,80)"/><ellipse cx="80" cy="34" rx="18" ry="36" fill="white" transform="rotate(216,80,80)"/><ellipse cx="80" cy="34" rx="18" ry="36" fill="white" transform="rotate(288,80,80)"/><circle cx="80" cy="80" r="20" fill="white"/></svg>
-      </div>
-      <div class="hero-salutation fade-in" style="position:relative;">
-        <div class="hero-salutation-fr">As-Salamu Alaykum</div>
-        <div class="hero-salutation-ar">&#1575;&#1604;&#1587;&#1617;&#1614;&#1604;&#1614;&#1575;&#1605;&#1615; &#1593;&#1614;&#1604;&#1614;&#1610;&#1618;&#1603;&#1615;&#1605;&#1618; &#1608;&#1614;&#1585;&#1614;&#1581;&#1618;&#1605;&#1614;&#1577;&#1615; &#1575;&#1604;&#1604;&#1617;&#1607;&#1616;</div>
-      </div>
-      <div class="hero-name fade-in-2" id="hero-name" style="position:relative;"></div>
-      <div style="display:flex;align-items:center;gap:8px;margin:10px 0;position:relative;">
-        <div style="flex:1;height:1px;background:rgba(255,255,255,.2);"></div>
-        <div style="font-size:14px;opacity:0.5;" id="hero-big-emoji">&#127800;</div>
-        <div style="flex:1;height:1px;background:rgba(255,255,255,.2);"></div>
-      </div>
-      <div class="hero-badges fade-in-3" style="position:relative;">
-        <div class="hero-badge"><div class="hero-badge-label" id="hero-phase-label">Phase folliculaire</div><div class="hero-badge-value" id="hero-season-name">&#127800; Printemps</div></div>
-        <div class="hero-badge"><div class="hero-badge-label">Jour du cycle</div><div class="hero-badge-value" id="hero-day-num">J8</div></div>
-      </div>
-    </div>
-    <div class="hero-message-section" style="position:relative;">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-        <div style="width:16px;height:1px;background:var(--season);opacity:.5;"></div>
-        <div class="hero-message-label" style="margin-bottom:0;">Message du jour</div>
-        <div style="flex:1;height:1px;background:var(--season);opacity:.15;"></div>
-      </div>
-      <div class="hero-message-text" id="daily-message">L'energie revient - profites-en pour avancer sur ce qui attend.</div>
-    </div>
+  <!-- HEADER COMPACT -->
+  <div class="home-header" id="home-header-bg">
+    <div class="home-header-name" id="home-name">Lila</div>
+    <div class="home-header-phase" id="home-phase-line">&#127800; Printemps &middot; Jour 8</div>
+    <button class="av-btn" id="avBtn" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,.25);border:none;width:34px;height:34px;border-radius:50%;font-size:16px;cursor:pointer;">&#127800;</button>
   </div>
 
-  <!-- SCORE DU JOUR -->
-  <div class="day-score-card">
-    <div class="day-score-title">&#10022; MA JOURNEE</div>
-    <div class="day-score-grid" id="day-score-grid"></div>
+  <!-- MESSAGE DU JOUR -->
+  <div class="home-message-band" id="home-message-band">
+    <div class="home-message-text" id="daily-message">L'energie revient — profites-en pour avancer sur ce qui attend.</div>
   </div>
 
-  <!-- 3 CARTES D'ACTION DU JOUR -->
-  <div class="actions-section-label">&#10022; TES 3 ACTIONS DU JOUR</div>
+  <!-- 3 CARTES DÉTAILLÉES -->
 
-  <!-- CARTE MANGER -->
-  <div class="action-card">
-    <div class="action-card-header">
-      <span class="action-card-emoji">&#127869;&#65039;</span>
-      <div class="action-card-titles">
-        <div class="action-card-title">Manger</div>
-        <div class="action-card-sub">A privilégier aujourd'hui</div>
-      </div>
+  <!-- CARTE SÉANCE -->
+  <div class="day-card" id="day-card-seance">
+    <div class="day-card-header">
+      <span class="day-card-icon">&#128170;</span>
+      <span class="day-card-title">Séance du jour</span>
+      <span class="day-card-dur" id="qs-duration">12 min</span>
     </div>
-    <div class="action-card-free">
-      <div class="action-free-label">&#10022; Aliments star de ta phase</div>
-      <div id="action-manger-free" class="action-free-chips"></div>
+    <div class="day-card-name" id="qs-name">Réveil en douceur</div>
+    <div class="day-card-meta" id="qs-meta">Mix sol + debout</div>
+    <div class="qs-exercises" id="qs-exercises" style="margin-top:10px;"></div>
+    <div id="qs-btn-wrap" style="margin-top:12px;">
+      <button class="day-card-btn" onclick="validerSeanceDash()">&#10003; Séance accomplie — Alhamdulillah</button>
     </div>
-    <div class="action-card-divider"></div>
-    <div class="action-card-premium-wrap">
-      <div class="action-prem-title">&#10022; Recette du jour</div>
-      <div id="action-manger-premium"></div>
-    </div>
-  </div>
-
-  <!-- CARTE PRENDRE SOIN -->
-  <div class="action-card">
-    <div class="action-card-header">
-      <span class="action-card-emoji">&#10024;</span>
-      <div class="action-card-titles">
-        <div class="action-card-title">Prendre soin</div>
-        <div class="action-card-sub">Skincare adaptée à ta phase</div>
-      </div>
-    </div>
-    <div class="action-card-free">
-      <div class="action-free-label">&#10022; Actifs du moment</div>
-      <div id="action-soin-free" class="action-free-tip-wrap"></div>
-    </div>
-    <div class="action-card-divider"></div>
-    <div class="action-card-premium-wrap">
-      <div class="action-prem-title">&#10022; Routine complète</div>
-      <div id="action-soin-premium"></div>
-    </div>
-  </div>
-
-  <!-- CARTE BOUGER (Séance du jour) -->
-  <div class="quick-seance-card">
-    <div class="qs-header" style="background:var(--season-grad)">
-      <div class="qs-tag">&#128170; SEANCE DU JOUR</div>
-      <div class="qs-title-row">
-        <div><div class="qs-name" id="qs-name">Reveil en douceur</div><div class="qs-meta" id="qs-meta">Mix sol + debout</div></div>
-        <div class="qs-duration-badge" id="qs-duration">12 min</div>
-      </div>
-    </div>
-    <div class="qs-exercises" id="qs-exercises"></div>
-    <div id="qs-btn-wrap"><button class="qs-btn" onclick="validerSeanceDash()">&#10003; Séance accomplie - Alhamdulillah</button></div>
     <div class="qs-done" id="qs-done-wrap" style="display:none;">
       <div class="qs-done-check">&#10003;</div>
-      <div class="qs-done-text">Alhamdulillah - séance accomplie aujourd'hui &#127800;</div>
+      <div class="qs-done-text">Alhamdulillah — séance accomplie &#127800;</div>
     </div>
     <div id="qs-niveaux-premium" class="qs-niveaux-section"></div>
   </div>
 
-  <!-- SUGGESTIONS ENGAGEANTES -->
+  <!-- CARTE REPAS -->
+  <div class="day-card" id="day-card-repas">
+    <div class="day-card-header">
+      <span class="day-card-icon">&#127869;&#65039;</span>
+      <span class="day-card-title">Ton repas du jour</span>
+    </div>
+    <div id="dc-repas-stars" class="day-card-chips"></div>
+    <div id="dc-repas-nutriments" class="day-card-nutriments"></div>
+    <div id="dc-repas-eviter" class="day-card-eviter"></div>
+    <div id="action-manger-premium" style="margin-top:10px;"></div>
+  </div>
+
+  <!-- CARTE SKINCARE -->
+  <div class="day-card" id="day-card-skin">
+    <div class="day-card-header">
+      <span class="day-card-icon">&#10024;</span>
+      <span class="day-card-title">Ta routine du jour</span>
+    </div>
+    <div id="dc-skin-actifs" class="day-card-actifs"></div>
+    <div id="dc-skin-gestes" class="day-card-chips" style="margin-top:10px;"></div>
+    <div id="action-soin-premium" style="margin-top:10px;"></div>
+  </div>
+
+  <!-- SUGGESTIONS DU JOUR -->
   <div class="sugg-engage-card">
     <div class="sugg-engage-header">
       <div class="sugg-engage-title">&#10022; SUGGESTIONS DU JOUR</div>
       <div class="sugg-engage-count" id="sugg-engage-count">0/5 faits</div>
     </div>
     <div class="sugg-engage-list" id="sugg-engage-list"></div>
-  </div>
-
-  <!-- INVOCATION DE LA PHASE -->
-  <div id="inv-card" style="margin:12px 14px 0;border-radius:20px;overflow:hidden;box-shadow:0 4px 20px rgba(45,36,32,.1);">
-    <div style="background:var(--season-grad);padding:18px 20px;position:relative;overflow:hidden;">
-      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.55);font-weight:600;margin-bottom:10px;">&#129330; Invocation de ta phase</div>
-      <div id="inv-arabic" style="font-size:20px;direction:rtl;text-align:right;color:white;line-height:1.9;margin-bottom:8px;">&#1585;&#1614;&#1576;&#1617;&#1616; &#1575;&#1600;&#1608;&#1618;&#1586;&#1616;&#1593;&#1618;&#1606;&#1616;&#1610; &#1575;&#1614;&#1606;&#1618; &#1575;&#1614;&#1588;&#1618;&#1603;&#1615;&#1585;&#1614; &#1606;&#1616;&#1593;&#1618;&#1605;&#1614;&#1578;&#1614;&#1603;&#1614;</div>
-      <div id="inv-translation" style="font-family:var(--serif);font-size:13px;font-style:italic;color:rgba(255,255,255,.75);line-height:1.6;margin-bottom:6px;">"Seigneur, inspire-moi de remercier pour Tes bienfaits."</div>
-      <div id="inv-source" style="font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.5px;">Coran 27:19</div>
-    </div>
   </div>
 
   <div style="height:16px;"></div>
@@ -442,6 +387,14 @@
     <div style="font-size:13px;color:var(--gris);line-height:1.7;margin-bottom:14px;">Pendant tes règles, Allah t'a accordé une permission. Continue le dhikr et le souvenir d'Allah — tu restes connectée à Lui.</div>
     <div style="font-size:15px;direction:rtl;color:#7B5EA7;font-weight:500;line-height:2;">فَاذْكُرُونِي أَذْكُرْكُمْ</div>
     <div style="font-size:11px;color:var(--gris);margin-top:4px;font-style:italic;">« Souvenez-vous de Moi, Je Me souviendrai de vous. » — Sourate Al-Baqara, 2:152</div>
+  </div>
+
+  <!-- INVOCATION DU JOUR -->
+  <div id="inv-card" style="margin:12px 14px 0;background:white;border-radius:20px;border:1.5px solid var(--sable);padding:18px 16px;">
+    <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--season);margin-bottom:12px;">&#10022; Invocation du jour</div>
+    <div id="inv-arabic" style="font-size:20px;direction:rtl;text-align:center;color:var(--noir);line-height:1.9;margin-bottom:8px;font-weight:500;"></div>
+    <div id="inv-translation" style="font-size:13px;color:var(--gris);text-align:center;font-style:italic;line-height:1.6;margin-bottom:4px;"></div>
+    <div id="inv-source" style="font-size:10px;color:var(--gris);text-align:center;opacity:.6;"></div>
   </div>
 
   <!-- DHIKR CASES A COCHER -->
@@ -665,6 +618,50 @@
   </div>
 </div>
 
+<!-- OBJECTIFS -->
+<div class="tab-page" id="tab-objectifs">
+  <div class="tab-topbar">
+    <div class="tab-topbar-title">Mes Objectifs</div>
+    <div class="tab-topbar-sub">Semaine &amp; cycle</div>
+  </div>
+  <div style="height:14px;"></div>
+
+  <!-- SECTION A : OBJECTIFS HEBDOMADAIRES -->
+  <div style="margin:0 14px 16px;">
+    <div class="obj-section-title">&#10022; CETTE SEMAINE</div>
+    <div id="obj-weekly-list"></div>
+
+    <div class="obj-custom-wrap">
+      <input type="text" id="obj-custom-input" placeholder="Ajouter un objectif personnel..." maxlength="60"
+             onkeydown="if(event.key==='Enter'){addCustomObj();this.blur()}"
+             style="flex:1;border:1.5px solid var(--sable);border-radius:12px;padding:10px 14px;font-size:13px;font-family:var(--sans);color:var(--noir);background:white;outline:none;-webkit-appearance:none;">
+      <button onclick="addCustomObj()" class="obj-add-btn">+</button>
+    </div>
+    <div id="obj-custom-list"></div>
+  </div>
+
+  <!-- SECTION B : CALENDRIER DU CYCLE -->
+  <div style="margin:0 14px 20px;">
+    <div class="obj-section-title">&#128197; MON CYCLE DU MOIS</div>
+    <div class="cal-month-header" id="cal-header"></div>
+    <div class="cal-weekdays">
+      <div>L</div><div>M</div><div>M</div><div>J</div><div>V</div><div>S</div><div>D</div>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+  </div>
+
+  <div style="height:16px;"></div>
+</div>
+
+<!-- MODAL JOUR CALENDRIER -->
+<div class="modal-overlay" id="day-modal" onclick="if(event.target.id==='day-modal')closeDayModal()">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div id="day-modal-content"></div>
+    <button onclick="closeDayModal()" class="modal-cta" style="margin-top:16px;">Fermer</button>
+  </div>
+</div>
+
 <!-- MOI -->
 <div class="tab-page" id="tab-moi">
   <div class="profil-hero">
@@ -870,6 +867,10 @@
   <div class="nav-item" id="nav-vie" onclick="switchTab('vie',this)">
     <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
     <div class="nav-label">Vie</div><div class="nav-pip"></div>
+  </div>
+  <div class="nav-item" id="nav-objectifs" onclick="switchTab('objectifs',this)">
+    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+    <div class="nav-label">Objectifs</div><div class="nav-pip"></div>
   </div>
   <div class="nav-item" id="nav-moi" onclick="switchTab('moi',this)">
     <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>

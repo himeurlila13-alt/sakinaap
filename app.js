@@ -35,6 +35,9 @@ let ST = {
   isPremium: false,
   seanceValidatedCount: 0,
   seanceLevel: 1,
+  weeklyObjChecks: {},
+  customObjectifs: [],
+  customObjChecks: {},
 };
 
 function saveState() {
@@ -576,6 +579,9 @@ function populateAll() {
   // ── VIE ──
   renderVie(s);
 
+  // ── OBJECTIFS ──
+  renderObjectifs();
+
   // ── MOI ──
   renderMoi(s);
 
@@ -604,22 +610,11 @@ function populateAll() {
 // DASHBOARD ENGAGEANT
 // ═══════════════════════════════════════════════
 function renderDashboard(s) {
-  // ─ Hero compact ─
-  const heroTop = document.getElementById('accueil-hero-card');
-  if (heroTop) heroTop.style.background = s.grad;
-
-  const el_name = document.getElementById('hero-name');
-  if (el_name) el_name.textContent = ST.prenom || 'Ma sœur';
-
-  // Phase pill
-  const el_emoji = document.getElementById('hero-big-emoji');
-  const el_day = document.getElementById('hero-day-num');
-  const el_phase = document.getElementById('hero-phase-label');
-  const el_season = document.getElementById('hero-season-name');
-  if (el_emoji) el_emoji.textContent = s.emoji;
-  if (el_day) el_day.textContent = 'J' + ST.currentDay;
-  if (el_phase) el_phase.textContent = s.phase;
-  if (el_season) el_season.textContent = s.emoji + ' ' + s.nom;
+  // ─ Header compact ─
+  const nameEl = document.getElementById('home-name');
+  if (nameEl) nameEl.textContent = ST.prenom || 'Ma sœur';
+  const phaseEl = document.getElementById('home-phase-line');
+  if (phaseEl) phaseEl.textContent = s.emoji + ' ' + s.nom + ' · Jour ' + ST.currentDay;
 
   // Message
   updateMessage();
@@ -628,19 +623,12 @@ function renderDashboard(s) {
   renderDayScore();
 
   // ─ 3 cartes d'action ─
-  renderCarteManger(s);
-  renderCarteSoin(s);
   renderCarteBouger(s);
+  renderCarteRepas(s);
+  renderCarteSkincare(s);
 
   // ─ Suggestions engageantes ─
   renderSuggestionsEngage(s);
-
-  // Invocation
-  if (s.invocation) {
-    const ia = document.getElementById('inv-arabic'); if (ia) ia.textContent = s.invocation.arabic;
-    const it = document.getElementById('inv-translation'); if (it) it.textContent = s.invocation.fr;
-    const isc = document.getElementById('inv-source'); if (isc) isc.textContent = s.invocation.source;
-  }
 
   // Toggle Premium btn state
   const pBtn = document.getElementById('premium-toggle-btn');
@@ -817,6 +805,110 @@ function renderCarteSoin(s) {
         <div class="action-prem-blur">
           <div class="action-prem-recipe-preview">Matin · Soir · 7 gestes adaptés</div>
           <div class="action-prem-steps-preview">Nettoyage · Actif · Soin · SPF · Masque</div>
+        </div>
+        <div class="action-prem-cta">
+          <div class="action-prem-label">✦ Routine complète</div>
+          <button class="action-prem-btn" onclick="switchTabById('moi')">Débloquer Premium</button>
+        </div>
+      </div>`;
+  }
+}
+
+function renderCarteRepas(s) {
+  const alim = s.alimentation;
+  if (!alim) return;
+
+  const starsEl = document.getElementById('dc-repas-stars');
+  if (starsEl) {
+    starsEl.innerHTML = (alim.star || []).map(f => `<span class="day-card-chip">⭐ ${f}</span>`).join('');
+  }
+
+  const nutrimEl = document.getElementById('dc-repas-nutriments');
+  if (nutrimEl) {
+    nutrimEl.innerHTML = (alim.nutriments || []).slice(0, 3).map(n => `
+      <div class="day-card-nutriment-row">
+        <span class="day-card-nutriment-nom">${n.nom}</span>
+        <span class="day-card-nutriment-why">${n.why}</span>
+      </div>
+    `).join('');
+  }
+
+  const eviterEl = document.getElementById('dc-repas-eviter');
+  if (eviterEl && (alim.eviter || []).length) {
+    eviterEl.innerHTML = `<span class="day-card-eviter-label">À éviter :</span> ` +
+      alim.eviter.map(e => `<span class="day-card-chip-eviter">${e}</span>`).join('');
+  }
+
+  const premEl = document.getElementById('action-manger-premium');
+  if (!premEl) return;
+  if (ST.isPremium) {
+    const recettes = RECETTES[ST.currentSaison] || [];
+    const idx = (ST.currentDay - 1) % Math.max(recettes.length, 1);
+    const r = recettes[idx];
+    if (!r) return;
+    premEl.innerHTML = `
+      <div class="action-premium-unlocked" onclick="openRecipeModal('${ST.currentSaison}',${idx})">
+        <span class="action-prem-unlocked-emoji">${r.emoji}</span>
+        <div class="action-prem-unlocked-text">
+          <div class="action-prem-unlocked-name">${r.nom}</div>
+          <div class="action-prem-unlocked-sub">Voir la recette →</div>
+        </div>
+        <span class="action-prem-unlocked-arrow">›</span>
+      </div>`;
+  } else {
+    premEl.innerHTML = `
+      <div class="action-premium-locked">
+        <div class="action-prem-blur">
+          <div class="action-prem-recipe-preview">Recette de saison · adaptée à ta phase</div>
+          <div class="action-prem-steps-preview">Étape 1 · Étape 2 · Étape 3</div>
+        </div>
+        <div class="action-prem-cta">
+          <div class="action-prem-label">✦ Recette du jour</div>
+          <button class="action-prem-btn" onclick="switchTabById('moi')">Débloquer Premium</button>
+        </div>
+      </div>`;
+  }
+}
+
+function renderCarteSkincare(s) {
+  const skin = s.skincare;
+  if (!skin) return;
+
+  const actifEl = document.getElementById('dc-skin-actifs');
+  if (actifEl) {
+    actifEl.innerHTML = (skin.actifs || []).slice(0, 2).map(a => `
+      <div class="day-card-actif-row">
+        <span class="day-card-actif-nom">${a.nom}</span>
+        <span class="day-card-actif-usage">${a.usage}</span>
+      </div>
+    `).join('');
+  }
+
+  const gestesEl = document.getElementById('dc-skin-gestes');
+  if (gestesEl) {
+    gestesEl.innerHTML = (skin.gestes || []).map(g => `<span class="day-card-chip">${g}</span>`).join('');
+  }
+
+  const premEl = document.getElementById('action-soin-premium');
+  if (!premEl) return;
+  if (ST.isPremium) {
+    const routine = ROUTINES_PREMIUM[ST.currentSaison];
+    const steps = routine ? routine.matin.length + routine.soir.length : 0;
+    premEl.innerHTML = `
+      <div class="action-premium-unlocked" onclick="openSkinModal('${ST.currentSaison}')">
+        <span class="action-prem-unlocked-emoji">🌿</span>
+        <div class="action-prem-unlocked-text">
+          <div class="action-prem-unlocked-name">Routine matin &amp; soir</div>
+          <div class="action-prem-unlocked-sub">${steps} gestes adaptés à ta phase →</div>
+        </div>
+        <span class="action-prem-unlocked-arrow">›</span>
+      </div>`;
+  } else {
+    premEl.innerHTML = `
+      <div class="action-premium-locked">
+        <div class="action-prem-blur">
+          <div class="action-prem-recipe-preview">Matin · Soir · Gestes adaptés</div>
+          <div class="action-prem-steps-preview">Nettoyage · Actif · Soin · SPF</div>
         </div>
         <div class="action-prem-cta">
           <div class="action-prem-label">✦ Routine complète</div>
@@ -1094,6 +1186,13 @@ function renderAme(s) {
     if (hiverCard) hiverCard.style.display = 'none';
   }
 
+  // Invocation du jour
+  if (s.invocation) {
+    const ia = document.getElementById('inv-arabic'); if (ia) ia.textContent = s.invocation.arabic;
+    const it = document.getElementById('inv-translation'); if (it) it.textContent = s.invocation.fr;
+    const isc = document.getElementById('inv-source'); if (isc) isc.textContent = s.invocation.source;
+  }
+
   // Dhikr cases à cocher
   renderDhikrChecks();
 
@@ -1258,6 +1357,198 @@ function checkDailyReset() {
   saveState();
 }
 
+// ═══════════════════════════════════════════════
+// OBJECTIFS
+// ═══════════════════════════════════════════════
+const WEEKLY_OBJECTIVES = [
+  { id: 'bouger',  label: 'Bouger 3×/sem',      emoji: '💪', target: 3 },
+  { id: 'eau',     label: 'Eau 1,5 L/jour',      emoji: '💧', target: 7 },
+  { id: 'coran',   label: 'Lire le Coran',        emoji: '📖', target: 7 },
+  { id: 'dormir',  label: 'Dormir avant 23h',     emoji: '🌙', target: 7 },
+  { id: 'prieres', label: '5 prières accomplies', emoji: '🕌', target: 7 },
+];
+
+function _getWeekKey() {
+  const now = new Date();
+  const day = now.getDay() || 7;
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - (day - 1));
+  return monday.toISOString().split('T')[0];
+}
+
+function renderObjectifs() {
+  renderWeeklyObjs();
+  renderCalendar();
+}
+
+function renderWeeklyObjs() {
+  const weekKey = _getWeekKey();
+  const todayStr = new Date().toDateString();
+  const checks = (ST.weeklyObjChecks && ST.weeklyObjChecks[weekKey]) || {};
+
+  const container = document.getElementById('obj-weekly-list');
+  if (!container) return;
+
+  container.innerHTML = WEEKLY_OBJECTIVES.map(obj => {
+    const daysArr = checks[obj.id] || [];
+    const todayDone = daysArr.includes(todayStr);
+    const count = daysArr.length;
+    const pct = Math.min(100, Math.round((count / obj.target) * 100));
+    return `
+      <div class="obj-item ${todayDone ? 'done' : ''}" onclick="toggleWeeklyObj('${obj.id}')">
+        <div class="obj-check">${todayDone ? '✓' : ''}</div>
+        <div class="obj-content">
+          <div class="obj-label">${obj.emoji} ${obj.label}</div>
+          <div class="obj-progress-bar-wrap"><div class="obj-progress-bar" style="width:${pct}%"></div></div>
+          <div class="obj-progress-txt">${count}/${obj.target} cette semaine</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  const customContainer = document.getElementById('obj-custom-list');
+  if (!customContainer) return;
+  const customs = ST.customObjectifs || [];
+  const customChecks = (ST.customObjChecks && ST.customObjChecks[weekKey]) || {};
+  customContainer.innerHTML = customs.map((label, i) => {
+    const daysArr = customChecks[i] || [];
+    const todayDone = daysArr.includes(todayStr);
+    return `
+      <div class="obj-item ${todayDone ? 'done' : ''}" onclick="toggleCustomObj(${i})">
+        <div class="obj-check">${todayDone ? '✓' : ''}</div>
+        <div class="obj-content"><div class="obj-label">📌 ${label}</div></div>
+        <button onclick="event.stopPropagation();removeCustomObj(${i})" class="obj-remove-btn">×</button>
+      </div>`;
+  }).join('');
+}
+
+function toggleWeeklyObj(id) {
+  const weekKey = _getWeekKey();
+  const todayStr = new Date().toDateString();
+  if (!ST.weeklyObjChecks) ST.weeklyObjChecks = {};
+  if (!ST.weeklyObjChecks[weekKey]) ST.weeklyObjChecks[weekKey] = {};
+  if (!ST.weeklyObjChecks[weekKey][id]) ST.weeklyObjChecks[weekKey][id] = [];
+  const arr = ST.weeklyObjChecks[weekKey][id];
+  const idx = arr.indexOf(todayStr);
+  if (idx > -1) arr.splice(idx, 1); else arr.push(todayStr);
+  saveState();
+  renderWeeklyObjs();
+}
+
+function addCustomObj() {
+  const inp = document.getElementById('obj-custom-input');
+  if (!inp || !inp.value.trim()) return;
+  if (!ST.customObjectifs) ST.customObjectifs = [];
+  ST.customObjectifs.push(inp.value.trim());
+  inp.value = '';
+  saveState();
+  renderWeeklyObjs();
+}
+
+function removeCustomObj(i) {
+  if (!ST.customObjectifs) return;
+  ST.customObjectifs.splice(i, 1);
+  if (ST.customObjChecks) {
+    Object.keys(ST.customObjChecks).forEach(wk => {
+      if (ST.customObjChecks[wk]) delete ST.customObjChecks[wk][i];
+    });
+  }
+  saveState();
+  renderWeeklyObjs();
+}
+
+function toggleCustomObj(i) {
+  const weekKey = _getWeekKey();
+  const todayStr = new Date().toDateString();
+  if (!ST.customObjChecks) ST.customObjChecks = {};
+  if (!ST.customObjChecks[weekKey]) ST.customObjChecks[weekKey] = {};
+  if (!ST.customObjChecks[weekKey][i]) ST.customObjChecks[weekKey][i] = [];
+  const arr = ST.customObjChecks[weekKey][i];
+  const idx = arr.indexOf(todayStr);
+  if (idx > -1) arr.splice(idx, 1); else arr.push(todayStr);
+  saveState();
+  renderWeeklyObjs();
+}
+
+function renderCalendar() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const monthNames = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+
+  const headerEl = document.getElementById('cal-header');
+  if (headerEl) headerEl.textContent = monthNames[month] + ' ' + year;
+
+  const gridEl = document.getElementById('cal-grid');
+  if (!gridEl) return;
+
+  const firstDay = new Date(year, month, 1);
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  let startDow = firstDay.getDay();
+  startDow = startDow === 0 ? 6 : startDow - 1;
+
+  const dur = ST.cycleDuration || 28;
+  let cells = '';
+  for (let i = 0; i < startDow; i++) cells += '<div class="cal-day cal-day-empty"></div>';
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(year, month, d);
+    const dateStr = date.toDateString();
+    let phase = 'printemps';
+    if (ST.cycleStart) {
+      const [sy, sm, sd] = ST.cycleStart.split('-').map(Number);
+      const startLocal = new Date(sy, sm - 1, sd);
+      const diff = Math.floor((date - startLocal) / 86400000);
+      const dayOfCycle = ((diff % dur) + dur) % dur;
+      phase = phaseForDay(dayOfCycle + 1, dur);
+    }
+    const isToday = d === now.getDate();
+    const seanceDone = !!(ST.seanceDashDone && ST.seanceDashDone[dateStr]) || !!(ST.seanceDone && ST.seanceDone[dateStr]);
+    const prayers = ST.prayers && ST.prayers[dateStr] ? Object.values(ST.prayers[dateStr]).filter(Boolean).length : 0;
+    cells += `
+      <div class="cal-day cal-day-${phase}${isToday ? ' cal-today' : ''}" onclick="openDayModal('${dateStr}','${phase}')">
+        <span class="cal-day-num">${d}</span>
+        <div class="cal-day-icons">
+          ${seanceDone ? '<span class="cal-dot">●</span>' : ''}
+          ${prayers >= 3 && phase !== 'hiver' ? '<span class="cal-crescent">☽</span>' : ''}
+        </div>
+      </div>`;
+  }
+  gridEl.innerHTML = cells;
+}
+
+function openDayModal(dateStr, phase) {
+  const d = new Date(dateStr);
+  const monthNames = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+  const phaseEmojis = { hiver:'🌙', printemps:'🌸', ete:'☀️', automne:'🍂' };
+  const phaseNames  = { hiver:'Hiver', printemps:'Printemps', ete:'Été', automne:'Automne' };
+  const seanceDone = !!(ST.seanceDashDone && ST.seanceDashDone[dateStr]) || !!(ST.seanceDone && ST.seanceDone[dateStr]);
+  const prayers = ST.prayers && ST.prayers[dateStr] ? Object.values(ST.prayers[dateStr]).filter(Boolean).length : 0;
+  const coranDone = !!(ST.coranDone && ST.coranDone[dateStr]);
+
+  const el = document.getElementById('day-modal-content');
+  if (!el) return;
+  el.innerHTML = `
+    <div style="text-align:center;margin-bottom:16px;">
+      <div style="font-size:32px;margin-bottom:8px;">${phaseEmojis[phase] || '🌸'}</div>
+      <div style="font-family:var(--serif);font-size:18px;color:var(--noir);font-weight:600;">${d.getDate()} ${monthNames[d.getMonth()]}</div>
+      <div style="font-size:12px;color:var(--gris);margin-top:4px;">${phaseNames[phase] || phase}</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:${seanceDone?'#E8F8F3':'var(--creme)'};border-radius:12px;">
+        <span style="font-size:18px;">💪</span><span style="font-size:13px;color:var(--noir);">Séance — ${seanceDone?'Accomplie ✓':'Non faite'}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:${prayers>=3?'#E8F8F3':'var(--creme)'};border-radius:12px;">
+        <span style="font-size:18px;">🕌</span><span style="font-size:13px;color:var(--noir);">Prières — ${prayers}/5</span>
+      </div>
+      ${coranDone ? '<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:#E8F8F3;border-radius:12px;"><span style="font-size:18px;">📖</span><span style="font-size:13px;color:var(--noir);">Coran — Lu ✓</span></div>' : ''}
+    </div>`;
+  document.getElementById('day-modal').classList.add('open');
+}
+
+function closeDayModal() {
+  document.getElementById('day-modal').classList.remove('open');
+}
+
 function checkWeeklyReset() {
   const now = new Date();
   const day = now.getDay() || 7;
@@ -1266,6 +1557,8 @@ function checkWeeklyReset() {
   const weekKey = monday.toISOString().split('T')[0];
   if (ST.lastWeeklyReset === weekKey) return;
   ST.mouvDone = {};
+  ST.weeklyObjChecks = {};
+  ST.customObjChecks = {};
   ST.lastWeeklyReset = weekKey;
   saveState();
 }
@@ -1406,7 +1699,7 @@ function switchTabById(name, section) {
   document.querySelectorAll('.tab-page').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('tab-' + name)?.classList.add('active');
-  const tabMap = {accueil:0, cycle:1, ame:2, vie:3, moi:4};
+  const tabMap = {accueil:0, cycle:1, ame:2, vie:3, objectifs:4, moi:5};
   const navItems = document.querySelectorAll('.nav-item');
   if (navItems[tabMap[name]]) navItems[tabMap[name]].classList.add('active');
   setTimeout(() => showTabTour(name), 300);
@@ -2024,7 +2317,8 @@ function confirmDeleteMyData() {
     waitlistEmail: null, feedbackSent: false, installBannerDismissed: false,
     lastDailyReset: null, lastWeeklyReset: null, eveningCheckinDate: null,
     eveningCheckinMood: null, cycleHistory: [],
-    isPremium: false, seanceValidatedCount: 0, seanceLevel: 1
+    isPremium: false, seanceValidatedCount: 0, seanceLevel: 1,
+    weeklyObjChecks: {}, customObjectifs: [], customObjChecks: {}
   };
   closeDeleteModal();
   document.getElementById('app').style.display = 'none';
@@ -2054,6 +2348,11 @@ const TAB_TOURS = {
     emoji: '🌿',
     title: 'Ta vie au rythme du cycle',
     text: 'Alimentation, sport et skincare changent à chaque phase. Retrouve ici les conseils adaptés à ce que ton corps traverse en ce moment.',
+  },
+  objectifs: {
+    emoji: '🎯',
+    title: 'Tes objectifs de la semaine',
+    text: 'Coche tes petits défis quotidiens et suis leur progression. Le calendrier colore chaque jour selon ta phase de cycle.',
   },
   moi: {
     emoji: '✨',
