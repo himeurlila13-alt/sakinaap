@@ -900,97 +900,148 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
 .day-card-eviter { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; }
 
 /* ═══ OBJECTIFS ═══ */
-.obj-section-title {
+.obj-summary-card {
+  margin: 14px 14px 0;
+  border-radius: 18px;
+  padding: 16px 18px;
+  background: var(--season-grad);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 64px;
+}
+.obj-summary-emoji { font-size: 32px; line-height: 1; flex-shrink: 0; }
+.obj-summary-text { flex: 1; }
+.obj-summary-count { font-family: var(--script); font-size: 26px; line-height: 1.1; }
+.obj-summary-label { font-size: 11px; color: rgba(255,255,255,.75); margin-top: 2px; }
+.obj-summary-pct {
+  font-size: 13px;
+  font-weight: 700;
+  background: rgba(255,255,255,.2);
+  border-radius: 20px;
+  padding: 4px 12px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.obj-card {
+  margin: 12px 14px 0;
+  background: white;
+  border-radius: 20px;
+  border: 1.5px solid var(--sable);
+  padding: 16px;
+  box-shadow: 0 2px 10px rgba(45,36,32,.05);
+}
+.obj-cal-card { padding-bottom: 14px; }
+.obj-card-hdr {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 14px;
+}
+.obj-card-hdr-icon { font-size: 14px; }
+.obj-card-hdr-title {
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--gris);
-  margin-bottom: 12px;
 }
+
 .obj-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
-  background: white;
-  border: 1.5px solid var(--sable);
-  border-radius: 16px;
-  margin-bottom: 8px;
+  gap: 13px;
+  padding: 11px 2px;
+  border-bottom: 1px solid var(--sable);
   cursor: pointer;
-  transition: border-color .2s, background .2s;
+  transition: opacity .15s;
 }
-.obj-item.done { border-color: var(--season); background: var(--season-soft); }
+.obj-item:last-of-type { border-bottom: none; padding-bottom: 4px; }
+.obj-item:active { opacity: .7; }
 .obj-check {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   border: 2px solid var(--sable);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
-  color: var(--season);
+  color: white;
   flex-shrink: 0;
-  transition: all .2s;
+  transition: background .2s, border-color .2s, transform .15s;
 }
-.obj-item.done .obj-check { background: var(--season); border-color: var(--season); color: white; }
+.obj-item.done .obj-check {
+  background: var(--season);
+  border-color: var(--season);
+  transform: scale(1.08);
+}
 .obj-content { flex: 1; min-width: 0; }
-.obj-label { font-size: 13px; color: var(--noir); font-weight: 500; margin-bottom: 6px; }
-.obj-progress-bar-wrap {
-  height: 4px;
-  background: var(--sable);
-  border-radius: 2px;
-  overflow: hidden;
-  margin-bottom: 4px;
+.obj-label {
+  font-size: 13px;
+  color: var(--noir);
+  font-weight: 500;
+  margin-bottom: 7px;
+  transition: color .2s;
 }
-.obj-progress-bar { height: 100%; background: var(--season); border-radius: 2px; transition: width .4s; }
-.obj-progress-txt { font-size: 10px; color: var(--gris); }
+.obj-item.done .obj-label { color: var(--season); }
+.obj-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.obj-progress-bar-wrap {
+  flex: 1;
+  height: 6px;
+  background: var(--sable);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.obj-progress-bar { height: 100%; background: var(--season); border-radius: 3px; transition: width .5s cubic-bezier(.22,1,.36,1); }
+.obj-progress-txt { font-size: 10px; color: var(--gris); white-space: nowrap; flex-shrink: 0; }
+
 .obj-custom-wrap {
   display: flex;
   gap: 8px;
   margin-top: 12px;
-  margin-bottom: 4px;
 }
 .obj-add-btn {
   background: var(--season-grad);
   color: white;
   border: none;
-  border-radius: 12px;
-  width: 40px;
-  height: 40px;
-  font-size: 20px;
+  border-radius: 14px;
+  width: 42px;
+  height: 42px;
+  font-size: 22px;
   cursor: pointer;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  line-height: 1;
 }
+.obj-add-btn:active { opacity: .85; }
 .obj-remove-btn {
   background: none;
   border: none;
   color: var(--gris);
-  font-size: 18px;
+  font-size: 16px;
   cursor: pointer;
-  padding: 0 4px;
+  padding: 4px 6px;
   flex-shrink: 0;
-  opacity: .5;
+  opacity: .4;
+  line-height: 1;
 }
+.obj-remove-btn:active { opacity: .8; }
 
 /* ═══ CALENDRIER CYCLE ═══ */
-.cal-month-header {
-  font-family: var(--serif);
-  font-size: 15px;
-  color: var(--noir);
-  font-weight: 600;
-  text-align: center;
-  margin-bottom: 12px;
-}
 .cal-weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 .cal-weekdays div {
   text-align: center;
@@ -1004,7 +1055,7 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
 .cal-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 3px;
+  gap: 4px;
 }
 .cal-day {
   aspect-ratio: 1;
@@ -1014,17 +1065,39 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  position: relative;
-  transition: opacity .15s;
+  transition: transform .12s, opacity .12s;
 }
-.cal-day:active { opacity: .75; }
+.cal-day:active { transform: scale(.92); opacity: .8; }
 .cal-day-empty { background: transparent; cursor: default; }
-.cal-day-hiver   { background: #EDE6F6; }
-.cal-day-printemps { background: #DFF2EA; }
-.cal-day-ete     { background: #FDE9D5; }
-.cal-day-automne { background: #F9E0D8; }
-.cal-today { outline: 2px solid var(--season); outline-offset: -2px; }
+.cal-day-hiver    { background: #EAE0F5; }
+.cal-day-printemps { background: #D8F0E6; }
+.cal-day-ete      { background: #FCE5C5; }
+.cal-day-automne  { background: #F5DACE; }
+.cal-today {
+  box-shadow: 0 0 0 2px var(--season);
+  background: var(--season-soft) !important;
+}
 .cal-day-num { font-size: 12px; font-weight: 600; color: var(--noir); line-height: 1; }
-.cal-day-icons { display: flex; gap: 2px; margin-top: 1px; }
-.cal-dot  { font-size: 6px; color: var(--season); line-height: 1; }
-.cal-crescent { font-size: 8px; color: #7B5EA7; line-height: 1; }
+.cal-day-icons { display: flex; gap: 2px; margin-top: 2px; height: 8px; align-items: center; }
+.cal-dot      { width: 5px; height: 5px; border-radius: 50%; background: var(--season); flex-shrink: 0; }
+.cal-crescent { font-size: 7px; color: #7B5EA7; line-height: 1; }
+.cal-legend {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.cal-leg-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  color: var(--gris);
+}
+.cal-leg-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}

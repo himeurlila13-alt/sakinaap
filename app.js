@@ -1407,40 +1407,63 @@ function renderWeeklyObjs() {
   const weekKey = _getWeekKey();
   const todayStr = new Date().toDateString();
   const checks = (ST.weeklyObjChecks && ST.weeklyObjChecks[weekKey]) || {};
-
-  const container = document.getElementById('obj-weekly-list');
-  if (!container) return;
-
-  container.innerHTML = WEEKLY_OBJECTIVES.map(obj => {
-    const daysArr = checks[obj.id] || [];
-    const todayDone = daysArr.includes(todayStr);
-    const count = daysArr.length;
-    const pct = Math.min(100, Math.round((count / obj.target) * 100));
-    return `
-      <div class="obj-item ${todayDone ? 'done' : ''}" onclick="toggleWeeklyObj('${obj.id}')">
-        <div class="obj-check">${todayDone ? '✓' : ''}</div>
-        <div class="obj-content">
-          <div class="obj-label">${obj.emoji} ${obj.label}</div>
-          <div class="obj-progress-bar-wrap"><div class="obj-progress-bar" style="width:${pct}%"></div></div>
-          <div class="obj-progress-txt">${count}/${obj.target} cette semaine</div>
-        </div>
-      </div>`;
-  }).join('');
-
-  const customContainer = document.getElementById('obj-custom-list');
-  if (!customContainer) return;
   const customs = ST.customObjectifs || [];
   const customChecks = (ST.customObjChecks && ST.customObjChecks[weekKey]) || {};
-  customContainer.innerHTML = customs.map((label, i) => {
-    const daysArr = customChecks[i] || [];
-    const todayDone = daysArr.includes(todayStr);
-    return `
-      <div class="obj-item ${todayDone ? 'done' : ''}" onclick="toggleCustomObj(${i})">
-        <div class="obj-check">${todayDone ? '✓' : ''}</div>
-        <div class="obj-content"><div class="obj-label">📌 ${label}</div></div>
-        <button onclick="event.stopPropagation();removeCustomObj(${i})" class="obj-remove-btn">×</button>
-      </div>`;
-  }).join('');
+
+  // ─ Résumé du jour ─
+  const doneToday = WEEKLY_OBJECTIVES.filter(o => (checks[o.id] || []).includes(todayStr)).length
+    + customs.filter((_, i) => (customChecks[i] || []).includes(todayStr)).length;
+  const total = WEEKLY_OBJECTIVES.length + customs.length;
+  const pctDay = total > 0 ? Math.round((doneToday / total) * 100) : 0;
+  const summaryEmojis = ['🌱', '🌸', '⚡', '🔥', '✨'];
+  const summaryEmoji = summaryEmojis[Math.min(doneToday, summaryEmojis.length - 1)];
+  const summaryCard = document.getElementById('obj-summary-card');
+  if (summaryCard) {
+    summaryCard.innerHTML = `
+      <div class="obj-summary-emoji">${summaryEmoji}</div>
+      <div class="obj-summary-text">
+        <div class="obj-summary-count">${doneToday}/${total} aujourd'hui</div>
+        <div class="obj-summary-label">${doneToday === 0 ? 'Commence ta journée ✦' : doneToday === total ? 'Tous les objectifs cochés !' : 'Tu avances — continue'}</div>
+      </div>
+      <div class="obj-summary-pct">${pctDay}%</div>`;
+  }
+
+  // ─ Objectifs prédéfinis ─
+  const container = document.getElementById('obj-weekly-list');
+  if (container) {
+    container.innerHTML = WEEKLY_OBJECTIVES.map(obj => {
+      const daysArr = checks[obj.id] || [];
+      const todayDone = daysArr.includes(todayStr);
+      const count = daysArr.length;
+      const pct = Math.min(100, Math.round((count / obj.target) * 100));
+      return `
+        <div class="obj-item ${todayDone ? 'done' : ''}" onclick="toggleWeeklyObj('${obj.id}')">
+          <div class="obj-check">${todayDone ? '✓' : ''}</div>
+          <div class="obj-content">
+            <div class="obj-label">${obj.emoji} ${obj.label}</div>
+            <div class="obj-progress-row">
+              <div class="obj-progress-bar-wrap"><div class="obj-progress-bar" style="width:${pct}%"></div></div>
+              <div class="obj-progress-txt">${count}/${obj.target}</div>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  // ─ Objectifs perso ─
+  const customContainer = document.getElementById('obj-custom-list');
+  if (customContainer) {
+    customContainer.innerHTML = customs.map((label, i) => {
+      const daysArr = customChecks[i] || [];
+      const todayDone = daysArr.includes(todayStr);
+      return `
+        <div class="obj-item ${todayDone ? 'done' : ''}" onclick="toggleCustomObj(${i})">
+          <div class="obj-check">${todayDone ? '✓' : ''}</div>
+          <div class="obj-content"><div class="obj-label">📌 ${label}</div></div>
+          <button onclick="event.stopPropagation();removeCustomObj(${i})" class="obj-remove-btn">×</button>
+        </div>`;
+    }).join('');
+  }
 }
 
 function toggleWeeklyObj(id) {
@@ -1530,7 +1553,7 @@ function renderCalendar() {
       <div class="cal-day cal-day-${phase}${isToday ? ' cal-today' : ''}" onclick="openDayModal('${dateStr}','${phase}')">
         <span class="cal-day-num">${d}</span>
         <div class="cal-day-icons">
-          ${seanceDone ? '<span class="cal-dot">●</span>' : ''}
+          ${seanceDone ? '<span class="cal-dot"></span>' : ''}
           ${prayers >= 3 && phase !== 'hiver' ? '<span class="cal-crescent">☽</span>' : ''}
         </div>
       </div>`;

@@ -511,33 +511,53 @@
     <div class="tab-topbar-title">Mes Objectifs</div>
     <div class="tab-topbar-sub">Semaine &amp; cycle</div>
   </div>
-  <div style="height:14px;"></div>
 
-  <!-- SECTION A : OBJECTIFS HEBDOMADAIRES -->
-  <div style="margin:0 14px 16px;">
-    <div class="obj-section-title">&#10022; CETTE SEMAINE</div>
-    <div id="obj-weekly-list"></div>
+  <!-- RÉSUMÉ SEMAINE -->
+  <div class="obj-summary-card" id="obj-summary-card"></div>
 
-    <div class="obj-custom-wrap">
-      <input type="text" id="obj-custom-input" placeholder="Ajouter un objectif personnel..." maxlength="60"
-             onkeydown="if(event.key==='Enter'){addCustomObj();this.blur()}"
-             style="flex:1;border:1.5px solid var(--sable);border-radius:12px;padding:10px 14px;font-size:13px;font-family:var(--sans);color:var(--noir);background:white;outline:none;-webkit-appearance:none;">
-      <button onclick="addCustomObj()" class="obj-add-btn">+</button>
+  <!-- OBJECTIFS HEBDO -->
+  <div class="obj-card">
+    <div class="obj-card-hdr">
+      <span class="obj-card-hdr-icon">&#10022;</span>
+      <span class="obj-card-hdr-title">CETTE SEMAINE</span>
     </div>
-    <div id="obj-custom-list"></div>
+    <div id="obj-weekly-list"></div>
   </div>
 
-  <!-- SECTION B : CALENDRIER DU CYCLE -->
-  <div style="margin:0 14px 20px;">
-    <div class="obj-section-title">&#128197; MON CYCLE DU MOIS</div>
-    <div class="cal-month-header" id="cal-header"></div>
+  <!-- OBJECTIFS PERSO -->
+  <div class="obj-card">
+    <div class="obj-card-hdr">
+      <span class="obj-card-hdr-icon">&#128204;</span>
+      <span class="obj-card-hdr-title">MES OBJECTIFS PERSO</span>
+    </div>
+    <div id="obj-custom-list"></div>
+    <div class="obj-custom-wrap">
+      <input type="text" id="obj-custom-input" placeholder="Ajouter un objectif..." maxlength="60"
+             onkeydown="if(event.key==='Enter'){addCustomObj();this.blur()}"
+             style="flex:1;border:1.5px solid var(--sable);border-radius:14px;padding:11px 14px;font-size:13px;font-family:var(--sans);color:var(--noir);background:var(--creme);outline:none;-webkit-appearance:none;appearance:none;">
+      <button onclick="addCustomObj()" class="obj-add-btn">+</button>
+    </div>
+  </div>
+
+  <!-- CALENDRIER -->
+  <div class="obj-card obj-cal-card">
+    <div class="obj-card-hdr">
+      <span class="obj-card-hdr-icon">&#128197;</span>
+      <span class="obj-card-hdr-title" id="cal-header">Mai 2026</span>
+    </div>
     <div class="cal-weekdays">
       <div>L</div><div>M</div><div>M</div><div>J</div><div>V</div><div>S</div><div>D</div>
     </div>
     <div class="cal-grid" id="cal-grid"></div>
+    <div class="cal-legend">
+      <div class="cal-leg-item"><span class="cal-leg-dot" style="background:#C9B8E8;"></span>Hiver</div>
+      <div class="cal-leg-item"><span class="cal-leg-dot" style="background:#A8DBC5;"></span>Printemps</div>
+      <div class="cal-leg-item"><span class="cal-leg-dot" style="background:#F5C99A;"></span>Été</div>
+      <div class="cal-leg-item"><span class="cal-leg-dot" style="background:#F0B5A5;"></span>Automne</div>
+    </div>
   </div>
 
-  <div style="height:16px;"></div>
+  <div style="height:20px;"></div>
 </div>
 
 <!-- MODAL JOUR CALENDRIER -->
