@@ -759,11 +759,35 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
 }
 .pmod-close-btn:active { transform: scale(.98); }
 
+/* ═══ HOME TOPBAR ═══ */
+.home-topbar {
+  display: flex;
+  align-items: center;
+  padding: 14px 18px 6px;
+  background: white;
+}
+.home-topbar-logo {
+  font-family: var(--script);
+  font-size: 22px;
+  color: var(--season);
+}
+
 /* ═══ HOME HEADER ═══ */
 .home-header {
   position: relative;
-  padding: 52px 20px 18px;
+  margin: 6px 14px 0;
+  padding: 20px 20px 18px;
   background: var(--season-grad);
+  border-radius: 20px;
+  border: 1.5px solid var(--season-light);
+  overflow: hidden;
+}
+.home-header-greeting {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: rgba(255,255,255,.6);
+  letter-spacing: .5px;
+  margin-bottom: 6px;
 }
 .home-header-name {
   font-family: var(--script);
@@ -780,8 +804,10 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
 }
 .home-message-band {
   background: var(--season-soft);
-  padding: 12px 20px;
-  border-bottom: 1px solid rgba(0,0,0,.04);
+  margin: 10px 14px 0;
+  border-radius: 14px;
+  padding: 12px 16px;
+  border: 1px solid rgba(0,0,0,.05);
 }
 .home-message-text {
   font-family: var(--serif);
