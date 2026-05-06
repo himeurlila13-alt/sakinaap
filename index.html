@@ -167,7 +167,13 @@
 
   <!-- SCORE DU JOUR -->
   <div class="day-score-card">
-    <div class="day-score-title">MON JOUR</div>
+    <div class="day-score-header">
+      <div class="day-score-title">MA JOURN&#201;E &#10022;</div>
+      <div class="day-score-fraction" id="day-score-fraction">0/4</div>
+    </div>
+    <div class="day-score-bar-wrap">
+      <div class="day-score-bar-fill" id="day-score-bar-fill" style="width:0%"></div>
+    </div>
     <div class="day-score-grid" id="day-score-grid"></div>
   </div>
 
@@ -275,7 +281,7 @@
   <!-- BOUTON NOUVEAU CYCLE -->
   <div style="margin:0 14px 14px;">
     <button onclick="startNewCycleToday()" id="btn-new-cycle" style="width:100%;padding:14px;background:white;border:2px solid #7B5EA7;border-radius:16px;color:#7B5EA7;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:'DM Sans',sans-serif;">
-      <span style="font-size:18px;">🌙</span> Mes menstrues ont commencé aujourd'hui
+      <span style="font-size:18px;">🌙</span> Mon Hiver a commencé aujourd'hui
     </button>
     <div id="new-cycle-msg" style="display:none;margin-top:10px;background:#F0EBF8;border-radius:12px;padding:12px 14px;text-align:center;">
       <div style="font-size:16px;margin-bottom:4px;">🤍</div>

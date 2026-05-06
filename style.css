@@ -9,7 +9,7 @@
 /* ═══ RESET ═══ */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow-x:hidden}
-body{font-family:var(--sans);background:var(--creme);max-width:430px;margin:0 auto;color:var(--noir);font-size:15px}
+body{font-family:var(--sans);background:var(--bg-phase,var(--creme));max-width:430px;margin:0 auto;color:var(--noir);font-size:15px;transition:background 1.2s ease}
 ::-webkit-scrollbar{width:0}
 
 /* ═══ ANIMATIONS ═══ */
@@ -17,6 +17,9 @@ body{font-family:var(--sans);background:var(--creme);max-width:430px;margin:0 au
 @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 @keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.18)}100%{transform:scale(1)}}
+@keyframes starBurst{0%{transform:scale(0) rotate(0deg);opacity:1}70%{transform:scale(1.4) rotate(180deg);opacity:.9}100%{transform:scale(1.8) rotate(360deg);opacity:0}}
+@keyframes ctaGlow{0%,100%{box-shadow:0 4px 18px rgba(0,0,0,.14)}50%{box-shadow:0 4px 28px var(--season-light),0 0 0 3px rgba(123,94,167,.1)}}
+.celebrate-star{position:fixed;pointer-events:none;font-size:22px;z-index:9999;animation:starBurst .9s cubic-bezier(.22,1,.36,1) forwards}
 .fade-in{animation:fadeUp .4s cubic-bezier(.22,1,.36,1) both}
 .fade-in-2{animation:fadeUp .4s cubic-bezier(.22,1,.36,1) .08s both}
 .fade-in-3{animation:fadeUp .4s cubic-bezier(.22,1,.36,1) .16s both}
@@ -126,8 +129,12 @@ body{font-family:var(--sans);background:var(--creme);max-width:430px;margin:0 au
 .hero-message-bar-text{font-family:var(--serif);font-size:13px;color:var(--noir);line-height:1.5;font-style:italic;flex:1}
 
 /* Score du jour */
-.day-score-card{margin:12px 14px 0;background:white;border:1.5px solid var(--sable);border-radius:20px;padding:14px 16px}
-.day-score-title{font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:12px}
+.day-score-card{margin:12px 14px 0;background:white;border:1.5px solid var(--sable);border-radius:20px;padding:14px 16px 16px}
+.day-score-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.day-score-title{font-size:10px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--season)}
+.day-score-fraction{font-size:13px;font-weight:700;color:var(--noir)}
+.day-score-bar-wrap{height:4px;background:var(--sable);border-radius:2px;margin-bottom:12px;overflow:hidden}
+.day-score-bar-fill{height:100%;border-radius:2px;background:var(--season-grad);transition:width .6s cubic-bezier(.22,1,.36,1)}
 .day-score-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .day-score-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
 .day-score-ring{width:44px;height:44px;border-radius:50%;border:2.5px solid var(--sable);display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .25s;background:white}
@@ -803,18 +810,22 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
   letter-spacing: .3px;
 }
 .home-message-band {
-  background: var(--season-soft);
+  background: white;
   margin: 10px 14px 0;
-  border-radius: 14px;
-  padding: 12px 16px;
-  border: 1px solid rgba(0,0,0,.05);
+  border-radius: 16px;
+  padding: 14px 18px;
+  border-left: 3px solid var(--season);
+  border-right: 1px solid var(--sable);
+  border-top: 1px solid var(--sable);
+  border-bottom: 1px solid var(--sable);
+  box-shadow: 0 2px 10px rgba(45,36,32,.05);
 }
 .home-message-text {
   font-family: var(--serif);
-  font-size: 13px;
+  font-size: 14px;
   font-style: italic;
-  color: var(--gris);
-  line-height: 1.6;
+  color: var(--noir);
+  line-height: 1.7;
 }
 
 /* ═══ DAY-CARDS ═══ */
@@ -858,6 +869,7 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
 }
 .day-card-meta { font-size: 12px; color: var(--gris); margin-bottom: 6px; }
 .day-card-btn {
+  animation: ctaGlow 2.8s ease-in-out infinite;
   width: 100%;
   padding: 13px;
   background: var(--season-grad);
@@ -869,7 +881,7 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
   font-family: var(--sans);
   cursor: pointer;
 }
-.day-card-btn:active { opacity: .88; }
+.day-card-btn:active { opacity: .88; animation: none; transform: scale(.97); }
 .day-card-chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .day-card-chip {
   background: var(--season-soft);

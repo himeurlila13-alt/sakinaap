@@ -553,6 +553,8 @@ function computeCycle() {
   else ST.currentSaison = 'automne';
 }
 
+const BG_PHASE = { hiver: '#FAF0FF', printemps: '#F0FAF6', ete: '#FFFBF0', automne: '#FDF5F0' };
+
 function applySaisonTheme() {
   const s = SAISONS[ST.currentSaison];
   const r = document.documentElement.style;
@@ -560,6 +562,7 @@ function applySaisonTheme() {
   r.setProperty('--season-light', s.light);
   r.setProperty('--season-soft', s.soft);
   r.setProperty('--season-grad', s.grad);
+  r.setProperty('--bg-phase', BG_PHASE[ST.currentSaison] || '#FAF6F0');
   const av = document.querySelector('.av-btn');
   if (av) { av.style.background = s.grad; av.textContent = s.emoji; }
 
@@ -667,6 +670,15 @@ function renderDayScore() {
     { emoji: '💪', label: 'Séance',  done: !!seanceDone, onclick: '' },
     ...(ST.currentSaison !== 'hiver' ? [{ emoji: '📖', label: 'Coran', done: !!coranDone, onclick: "switchTabById('ame')" }] : []),
   ];
+
+  const doneCount = items.filter(it => it.done).length;
+  const total = items.length;
+  const pct = total > 0 ? Math.round(doneCount / total * 100) : 0;
+
+  const fracEl = document.getElementById('day-score-fraction');
+  const barEl  = document.getElementById('day-score-bar-fill');
+  if (fracEl) fracEl.textContent = doneCount + '/' + total;
+  if (barEl) barEl.style.width = pct + '%';
 
   container.innerHTML = items.map(it => `
     <div class="day-score-item ${it.done ? 'done' : ''}" onclick="${it.onclick}">
@@ -1125,7 +1137,25 @@ function validerSeanceDash() {
   restoreSeanceDone();
   renderDayScore();
   checkEndOfPrintemps();
+  burstCelebration(document.getElementById('qs-btn-wrap') || document.body);
   showToast('💪 Alhamdulillah — séance accomplie ! 🌸');
+}
+
+function burstCelebration(originEl) {
+  const stars = ['🌸','✨','⭐','🌟','💫','🌺'];
+  const rect = originEl ? originEl.getBoundingClientRect() : { left: window.innerWidth/2, top: window.innerHeight/2, width: 0 };
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  for (let i = 0; i < 9; i++) {
+    const el = document.createElement('div');
+    el.className = 'celebrate-star';
+    el.textContent = stars[i % stars.length];
+    el.style.left = (cx + (Math.random() - 0.5) * 180) + 'px';
+    el.style.top  = (cy + (Math.random() - 0.5) * 120) + 'px';
+    el.style.animationDelay = (i * 0.07) + 's';
+    document.body.appendChild(el);
+    setTimeout(() => { if (el.parentNode) el.parentNode.removeChild(el); }, 1200);
+  }
 }
 
 function checkEndOfPrintemps() {
