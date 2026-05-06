@@ -848,32 +848,29 @@ function renderCarteRepas(s) {
   const alim = s.alimentation;
   if (!alim) return;
 
-  // Repas du jour (données statiques)
-  const dur = ST.cycleDuration || 28;
-  const dayIdx = dayWithinPhase(ST.currentDay, dur);
-  const repasPhase = (typeof REPAS_QUOTIDIENS !== 'undefined' && REPAS_QUOTIDIENS[ST.currentSaison]) || [];
-  const repasJour = repasPhase.length ? repasPhase[dayIdx % repasPhase.length] : null;
+  // Source unique : RECETTES — même plat pour toutes, détail recette pour premium
+  const recettes = RECETTES[ST.currentSaison] || [];
+  const idx = (ST.currentDay - 1) % Math.max(recettes.length, 1);
+  const r = recettes[idx];
 
   const starsEl = document.getElementById('dc-repas-stars');
   if (starsEl) {
-    if (repasJour) {
-      starsEl.innerHTML = `<span class="day-card-chip day-card-chip-repas">🍽️ ${repasJour.nom}</span>`;
-    } else {
-      starsEl.innerHTML = (alim.star || []).map(f => `<span class="day-card-chip">⭐ ${f}</span>`).join('');
-    }
+    starsEl.innerHTML = r
+      ? `<span class="day-card-chip day-card-chip-repas">${r.emoji} ${r.nom}</span>`
+      : (alim.star || []).map(f => `<span class="day-card-chip">⭐ ${f}</span>`).join('');
   }
 
   const nutrimEl = document.getElementById('dc-repas-nutriments');
   if (nutrimEl) {
-    const beneficeHtml = repasJour
-      ? `<div class="day-card-nutriment-row"><span class="day-card-nutriment-why dc-repas-benefice">${repasJour.benefice}</span></div>`
+    const pourquoiHtml = r
+      ? `<div class="day-card-nutriment-row"><span class="day-card-nutriment-why dc-repas-benefice">${r.pourquoi}</span></div>`
       : '';
     const nutriHtml = (alim.nutriments || []).slice(0, 2).map(n => `
       <div class="day-card-nutriment-row">
         <span class="day-card-nutriment-nom">${n.nom}</span>
         <span class="day-card-nutriment-why">${n.why}</span>
       </div>`).join('');
-    nutrimEl.innerHTML = beneficeHtml + nutriHtml;
+    nutrimEl.innerHTML = pourquoiHtml + nutriHtml;
   }
 
   const eviterEl = document.getElementById('dc-repas-eviter');
@@ -885,28 +882,26 @@ function renderCarteRepas(s) {
   const premEl = document.getElementById('action-manger-premium');
   if (!premEl) return;
   if (ST.isPremium) {
-    const recettes = RECETTES[ST.currentSaison] || [];
-    const idx = (ST.currentDay - 1) % Math.max(recettes.length, 1);
-    const r = recettes[idx];
     if (!r) return;
     premEl.innerHTML = `
       <div class="action-premium-unlocked" onclick="openRecipeModal('${ST.currentSaison}',${idx})">
         <span class="action-prem-unlocked-emoji">${r.emoji}</span>
         <div class="action-prem-unlocked-text">
-          <div class="action-prem-unlocked-name">${r.nom}</div>
-          <div class="action-prem-unlocked-sub">Voir la recette →</div>
+          <div class="action-prem-unlocked-name">Voir la recette complète</div>
+          <div class="action-prem-unlocked-sub">Ingrédients + étapes →</div>
         </div>
         <span class="action-prem-unlocked-arrow">›</span>
       </div>`;
   } else {
+    const previewIngr = r ? r.ingredients.slice(0, 2).join(' · ') + '...' : 'Ingrédients de saison';
     premEl.innerHTML = `
       <div class="action-premium-locked">
         <div class="action-prem-blur">
-          <div class="action-prem-recipe-preview">Recette de saison · adaptée à ta phase</div>
-          <div class="action-prem-steps-preview">Étape 1 · Étape 2 · Étape 3</div>
+          <div class="action-prem-recipe-preview">${r ? r.nom : 'Recette de saison'}</div>
+          <div class="action-prem-steps-preview">${previewIngr}</div>
         </div>
         <div class="action-prem-cta">
-          <div class="action-prem-label">✦ Recette du jour</div>
+          <div class="action-prem-label">✦ Recette complète</div>
           <button class="action-prem-btn" onclick="switchTabById('moi')">Débloquer Premium</button>
         </div>
       </div>`;
