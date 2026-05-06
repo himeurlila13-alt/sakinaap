@@ -1101,3 +1101,161 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
   border-radius: 50%;
   flex-shrink: 0;
 }
+
+/* ── Données quotidiennes (data.js) ── */
+.day-card-chip-repas {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--noir);
+  background: var(--season-soft);
+  border: 1.5px solid var(--season-light);
+  border-radius: 10px;
+  padding: 5px 10px;
+  display: inline-block;
+  margin-bottom: 2px;
+}
+.dc-repas-benefice {
+  font-size: 11.5px;
+  color: var(--gris);
+  line-height: 1.55;
+  font-style: italic;
+}
+.dc-skin-duree {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--season);
+  background: var(--season-soft);
+  border-radius: 6px;
+  padding: 2px 6px;
+  margin-left: 6px;
+  letter-spacing: 0.3px;
+  vertical-align: middle;
+}
+
+/* ── Carte sport (SEANCES_SPORT) ── */
+.sport-level-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--season);
+  background: var(--season-soft);
+  border: 1.5px solid var(--season-light);
+  border-radius: 8px;
+  padding: 3px 10px;
+  margin-bottom: 8px;
+}
+.sport-amanah {
+  font-family: var(--serif);
+  font-size: 12px;
+  color: var(--gris);
+  font-style: italic;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+.sport-ex-row {
+  background: var(--creme);
+  border-radius: 10px;
+  padding: 9px 12px;
+  margin-bottom: 5px;
+}
+.sport-ex-name-reps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+.sport-ex-name { font-size: 12px; font-weight: 600; color: var(--noir); flex: 1; }
+.sport-ex-reps {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--season);
+  background: var(--season-soft);
+  border-radius: 6px;
+  padding: 2px 7px;
+  flex-shrink: 0;
+}
+.sport-ex-detail {
+  font-size: 11px;
+  color: var(--gris);
+  line-height: 1.45;
+}
+.sport-repos-info {
+  font-size: 11px;
+  color: var(--season);
+  font-weight: 600;
+  margin-top: 8px;
+  padding: 6px 10px;
+  background: var(--season-soft);
+  border-radius: 8px;
+}
+.sport-repos-block {
+  background: var(--creme);
+  border-radius: 12px;
+  padding: 14px;
+  margin: 4px 0;
+}
+.sport-repos-msg { font-family: var(--serif); font-size: 13px; color: var(--noir); margin-bottom: 6px; }
+.sport-repos-detail { font-size: 11px; color: var(--gris); }
+.sport-emom-block {
+  background: var(--creme);
+  border-radius: 12px;
+  padding: 14px;
+  margin: 4px 0;
+}
+.sport-emom-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--season);
+  margin-bottom: 8px;
+}
+.sport-emom-exo { font-size: 13px; font-weight: 600; color: var(--noir); margin-bottom: 5px; }
+.sport-amrap-exo { font-size: 12px; color: var(--noir); margin-bottom: 3px; padding-left: 8px; border-left: 2px solid var(--season-light); }
+.sport-amrap-record {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--season);
+  background: var(--season-soft);
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+.sport-amrap-input-wrap { margin-top: 10px; }
+.sport-amrap-input-label { font-size: 11px; color: var(--gris); display: block; margin-bottom: 5px; }
+.sport-amrap-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid var(--season-light);
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: var(--sans);
+  color: var(--noir);
+  background: white;
+  text-align: center;
+}
+.sport-calme-detail {
+  font-family: var(--serif);
+  font-size: 13px;
+  color: var(--noir);
+  line-height: 1.65;
+  background: var(--creme);
+  border-radius: 12px;
+  padding: 14px;
+  margin: 4px 0;
+}
+.sport-spiritual {
+  font-size: 11px;
+  color: var(--season);
+  font-style: italic;
+  margin-top: 10px;
+  text-align: center;
+  padding: 6px 0;
+}
+.checkin-option-calme {
+  border: 1.5px dashed var(--season-light) !important;
+  background: var(--season-soft) !important;
+  margin-top: 4px;
+}

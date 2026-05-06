@@ -20,7 +20,6 @@ let ST = {
   currentSaison: 'printemps',
   currentDay: 1,
   selectedSugg: [],
-  seanceDashDone: {}, // séance rapide cochée depuis le dashboard
   mouvDone: {},
   seanceDone: {},
   notifFreq: 2,
@@ -35,6 +34,11 @@ let ST = {
   isPremium: false,
   seanceValidatedCount: 0,
   seanceLevel: 1,
+  amrapRecord: null,
+  printempsUpgradeDone: false,
+  levelMaxShown: false,
+  printempsBasCount: 0,
+  _lastCycleNum: null,
   weeklyObjChecks: {},
   customObjectifs: [],
   customObjChecks: {},
@@ -525,7 +529,14 @@ function computeCycle() {
   const diff = Math.floor((todayLocal - startLocal) / (1000 * 60 * 60 * 24));
   if (diff < 0) { ST.currentDay = 1; ST.currentSaison = 'hiver'; return; }
   const dur = ST.cycleDuration || 28;
+  const cycleNum = Math.floor(diff / dur);
   const day = (diff % dur) + 1;
+  // Detect new cycle — reset per-cycle flags
+  if (!ST._lastCycleNum || ST._lastCycleNum !== cycleNum) {
+    ST._lastCycleNum = cycleNum;
+    ST.printempsUpgradeDone = false;
+    ST.printempsBasCount = 0;
+  }
   ST.currentDay = Math.max(1, Math.min(day, dur));
 
   // La phase lutéale est ~14j avant la fin — c'est elle qui est constante.
@@ -589,17 +600,7 @@ function populateAll() {
   restoreGlaire();
   restoreSymptomes();
   restoreSeanceDone();
-  updateMouvProgress((s.sport?.mouvements||[]).length);
   setTimeout(showInstallBanner, 1500);
-  restoreFeedback();
-  renderCycleHistory();
-  renderPatterns();
-  if (ST.waitlistEmail) {
-    const ei = document.getElementById('waitlist-email');
-    const wm = document.getElementById('waitlist-msg');
-    if (ei) { ei.disabled = true; ei.placeholder = ST.waitlistEmail; }
-    if (wm) { wm.style.color = '#3DAE8A'; wm.textContent = 'Alhamdulillah — tu seras la première informée ! 🌸'; }
-  }
 }
 
 // ═══════════════════════════════════════════════
@@ -641,7 +642,7 @@ function renderDayScore() {
   const prayersDone = ['fajr','dohr','asr','maghrib','isha'].filter(p => prayers[p]).length;
   const dhikrChecks = (ST.dhikrChecks && ST.dhikrChecks[today]) || {};
   const dhikrDone = Object.values(dhikrChecks).filter(Boolean).length >= 3;
-  const seanceDone = ST.seanceDashDone && ST.seanceDashDone[today];
+  const seanceDone = ST.seanceDone && ST.seanceDone[today];
   const coranDone = ST.coranDone && ST.coranDone[today];
 
   const container = document.getElementById('day-score-grid');
@@ -664,11 +665,25 @@ function renderDayScore() {
   `).join('');
 }
 
+function _sportExHtml(exercices, reposSec) {
+  if (!exercices || !exercices.length) return '';
+  const rows = exercices.map(ex => {
+    const repsStr = ex.reps
+      ? `${ex.sets || 1}×${ex.reps}`
+      : (ex.duree ? (ex.sets ? `${ex.sets}×${ex.duree}` : ex.duree) : '');
+    return `<div class="sport-ex-row">
+      <div class="sport-ex-name-reps"><span class="sport-ex-name">${ex.nom}</span><span class="sport-ex-reps">${repsStr}</span></div>
+      ${ex.detail ? `<div class="sport-ex-detail">${ex.detail}</div>` : ''}
+    </div>`;
+  }).join('');
+  const reposHtml = reposSec ? `<div class="sport-repos-info">⏱ Repos : ${reposSec}s entre séries</div>` : '';
+  return rows + reposHtml;
+}
+
 function renderCarteBouger(s) {
-  const seance = s.sport?.seance;
-  if (!seance) return;
+  const spec = getTodaySeanceSpec();
   const today = new Date().toDateString();
-  const isDone = ST.seanceDashDone && ST.seanceDashDone[today];
+  const isDone = ST.seanceDone && ST.seanceDone[today];
 
   const nameEl = document.getElementById('qs-name');
   const metaEl = document.getElementById('qs-meta');
@@ -676,157 +691,164 @@ function renderCarteBouger(s) {
   const exEl = document.getElementById('qs-exercises');
   const btnWrap = document.getElementById('qs-btn-wrap');
   const doneWrap = document.getElementById('qs-done-wrap');
+  const niveauxEl = document.getElementById('qs-niveaux-premium');
 
-  if (nameEl) nameEl.textContent = seance.name;
-  if (metaEl) metaEl.textContent = seance.meta;
-  if (durEl) durEl.textContent = seance.duration;
+  if (!spec) {
+    if (nameEl) nameEl.textContent = '—';
+    return;
+  }
+
+  const level = ST.seanceLevel || 1;
+  const reposSec = (typeof SEANCES_SPORT !== 'undefined') ? (SEANCES_SPORT.printemps.niveauxRepos[level] || 45) : 45;
+
+  let titleText = '', metaText = '', durText = '', exContent = '', msgHtml = '', spirituelHtml = '', levelLabel = '';
+
+  switch (spec.type) {
+    case 'hiver': {
+      const d = spec.data;
+      titleText = d.nom; metaText = 'Douceur menstruelle'; durText = d.duree;
+      exContent = _sportExHtml(d.exercices);
+      msgHtml = d.message; spirituelHtml = d.messageSpirituel;
+      break;
+    }
+    case 'repos': {
+      titleText = 'Récupération'; metaText = 'Pas d\'entraînement aujourd\'hui'; durText = '—';
+      exContent = `<div class="sport-repos-block">
+        <div class="sport-repos-msg">Marche douce ou étirements légers.</div>
+        <div class="sport-repos-detail">Repos entre séries au prochain entraînement : <strong>${spec.reposSec}s</strong></div>
+      </div>`;
+      if (spec.message) msgHtml = spec.message;
+      break;
+    }
+    case 'printemps-bas':
+    case 'printemps-haut': {
+      const d = spec.data;
+      titleText = d.nom;
+      metaText = spec.type === 'printemps-bas' ? '🦵 Bas du corps' : '💪 Haut du corps';
+      durText = d.duree || '~25 min';
+      levelLabel = `Niveau ${level}/4 · ${['Découverte','Aventurière','Guerrière','Élite'][level-1] || ''}`;
+      exContent = _sportExHtml(d.exercices, reposSec);
+      msgHtml = 'Bismillah — chaque mouvement est une ibada.';
+      spirituelHtml = 'Ton corps est une amânah. Prends-en soin avec intention.';
+      break;
+    }
+    case 'ete-intense': {
+      const d = spec.data;
+      titleText = d.label; durText = `${d.duree} min`;
+      levelLabel = `Niveau ${level}/4`;
+      if (d.type === 'emom') {
+        metaText = `${d.exercice} · ${d.reps} reps/min`;
+        exContent = `<div class="sport-emom-block">
+          <div class="sport-emom-label">EMOM ${d.duree} min</div>
+          <div class="sport-emom-exo">${d.exercice} — <strong>${d.reps} reps</strong> au début de chaque minute</div>
+          ${d.detail ? `<div class="sport-ex-detail">${d.detail}</div>` : ''}
+        </div>`;
+      } else {
+        metaText = 'Circuit AMRAP';
+        const record = ST.amrapRecord;
+        exContent = `<div class="sport-emom-block">
+          <div class="sport-emom-label">AMRAP ${d.duree} min</div>
+          ${(d.circuit || []).map(ex => `<div class="sport-amrap-exo">${ex.nom} — ${ex.reps} reps</div>`).join('')}
+          ${d.detail ? `<div class="sport-ex-detail">${d.detail}</div>` : ''}
+          ${record ? `<div class="sport-amrap-record">🏆 Ton record : <strong>${record} tours</strong></div>` : ''}
+          <div class="sport-amrap-input-wrap" id="amrap-input-wrap" ${isDone ? 'style="display:none"' : ''}>
+            <label class="sport-amrap-input-label">Combien de tours as-tu complétés ?</label>
+            <input type="number" id="amrap-score-input" min="1" max="99" placeholder="Nb de tours" class="sport-amrap-input">
+          </div>
+        </div>`;
+      }
+      msgHtml = 'Pousse fort — ton corps est à son pic de force.';
+      spirituelHtml = 'Allahou Akbar — rappelle-toi de Sa grandeur à chaque effort.';
+      break;
+    }
+    case 'ete-repos': {
+      titleText = 'Récupération'; metaText = 'Repos actif'; durText = '—';
+      exContent = `<div class="sport-repos-block"><div class="sport-repos-msg">${spec.message || ''}</div></div>`;
+      break;
+    }
+    case 'automne-actif': {
+      const d = spec.data;
+      titleText = d.nom; metaText = '🍂 Phase active';
+      durText = d.duree || '~25 min';
+      levelLabel = `Niveau ${level}/4`;
+      exContent = _sportExHtml(d.exercices, reposSec + (spec.reposExtra || 10));
+      msgHtml = spec.message || '';
+      break;
+    }
+    case 'automne-doux': {
+      const d = spec.data;
+      titleText = 'Mobilité douce'; metaText = '🍂 Phase de transition'; durText = '~15 min';
+      exContent = _sportExHtml(d.mobilite);
+      if (level >= 3 && typeof SEANCES_SPORT !== 'undefined') {
+        exContent += _sportExHtml(SEANCES_SPORT.printemps.bas[1]?.exercices, d.repos);
+      }
+      msgHtml = d.message;
+      break;
+    }
+    case 'automne-fin': {
+      const d = spec.data;
+      titleText = 'Douceur profonde'; metaText = '🍂 Fin de cycle'; durText = '~10 min';
+      exContent = _sportExHtml(d.exercices);
+      msgHtml = d.message;
+      break;
+    }
+    case 'calme': {
+      const d = spec.data;
+      titleText = d.nom; metaText = 'Ton cœur a besoin de calme'; durText = d.duree;
+      exContent = `<div class="sport-calme-detail">${d.detail}</div>`;
+      msgHtml = d.message; spirituelHtml = d.messageSpirituel;
+      break;
+    }
+  }
+
+  if (nameEl) nameEl.textContent = titleText;
+  if (metaEl) metaEl.textContent = metaText;
+  if (durEl) durEl.textContent = durText;
   if (exEl) {
-    exEl.innerHTML = (seance.exercices || []).map(ex => `
-      <div class="qs-exercise">
-        <span class="qs-ex-num">${ex.num}</span>
-        <span class="qs-ex-name">${ex.name}</span>
-        <span class="qs-ex-time">${ex.detail.split('.')[0]}</span>
-      </div>
-    `).join('');
+    exEl.innerHTML =
+      (levelLabel ? `<div class="sport-level-badge">${levelLabel}</div>` : '') +
+      (msgHtml ? `<div class="sport-amanah">${msgHtml}</div>` : '') +
+      exContent +
+      (spirituelHtml ? `<div class="sport-spiritual">${spirituelHtml}</div>` : '');
   }
   if (btnWrap) btnWrap.style.display = isDone ? 'none' : 'block';
   if (doneWrap) doneWrap.style.display = isDone ? 'flex' : 'none';
-
-  // Mise à jour aussi dans l'onglet Vie
-  const _sn = document.getElementById('sport-name'); if (_sn) _sn.textContent = seance.name;
-  const _sm = document.getElementById('sport-meta'); if (_sm) _sm.textContent = seance.meta;
-  const _se = document.getElementById('sport-exercises');
-  if (_se) _se.innerHTML = (seance.exercices||[]).map(ex =>
-    `<div class="sport-exercise"><div class="sport-ex-num">${ex.num}</div><div><div class="sport-ex-name">${ex.name}</div><div class="sport-ex-detail">${ex.detail}</div></div></div>`
-  ).join('');
-
-  // Section niveaux Premium
-  const niveauxEl = document.getElementById('qs-niveaux-premium');
-  if (!niveauxEl) return;
-  const niveaux = SPORT_NIVEAUX[ST.currentSaison] || [];
-  const level = ST.seanceLevel || 1;
-  if (ST.isPremium) {
-    niveauxEl.innerHTML = `
-      <div class="action-prem-title">✦ Niveaux Premium · Ton niveau : ${level}/4</div>
-      <div class="qs-niveaux-grid">
-        ${niveaux.map(n => `
-          <div class="qs-niveau-card ${n.niveau <= level ? 'unlocked' : 'locked'}"
-               ${n.niveau <= level ? `onclick="openNiveauModal(${n.niveau - 2})"` : ''}>
-            <div class="qs-niveau-badge">N${n.niveau}</div>
-            <div class="qs-niveau-name">${n.name}</div>
-            <div class="qs-niveau-dur">${n.duration}</div>
-            ${n.niveau > level ? '<div class="qs-niveau-lock">🔒</div>' : '<div class="qs-niveau-lock">▶</div>'}
-          </div>
-        `).join('')}
-      </div>
-    `;
-  } else {
-    niveauxEl.innerHTML = `
-      <div class="action-premium-locked">
-        <div class="action-prem-blur">
-          <div class="action-prem-recipe-preview">Niveaux 2, 3 &amp; 4 débloqués</div>
-          <div class="action-prem-steps-preview">Adaptatif · Progressif · Auto-ajusté</div>
-        </div>
-        <div class="action-prem-cta">
-          <div class="action-prem-label">✦ Progression guidée</div>
-          <button class="action-prem-btn" onclick="switchTabById('moi')">Débloquer Premium</button>
-        </div>
-      </div>
-    `;
-  }
+  if (niveauxEl) niveauxEl.innerHTML = '';
 }
 
 // ═══════════════════════════════════════════════
 // CARTES MANGER & PRENDRE SOIN
 // ═══════════════════════════════════════════════
-function renderCarteManger(s) {
-  const freeEl = document.getElementById('action-manger-free');
-  const premEl = document.getElementById('action-manger-premium');
-  if (!freeEl || !premEl) return;
-
-  const stars = (s.alimentation?.star || []);
-  freeEl.innerHTML = stars.map(f => `<span class="action-star-chip">${f}</span>`).join('');
-
-  if (ST.isPremium) {
-    const recettes = RECETTES[ST.currentSaison] || [];
-    const idx = (ST.currentDay - 1) % Math.max(recettes.length, 1);
-    const r = recettes[idx];
-    if (!r) return;
-    premEl.innerHTML = `
-      <div class="action-premium-unlocked" onclick="openRecipeModal('${ST.currentSaison}',${idx})">
-        <span class="action-prem-unlocked-emoji">${r.emoji}</span>
-        <div class="action-prem-unlocked-text">
-          <div class="action-prem-unlocked-name">${r.nom}</div>
-          <div class="action-prem-unlocked-sub">Voir la recette →</div>
-        </div>
-        <span class="action-prem-unlocked-arrow">›</span>
-      </div>`;
-  } else {
-    premEl.innerHTML = `
-      <div class="action-premium-locked">
-        <div class="action-prem-blur">
-          <div class="action-prem-recipe-preview">Curry patate douce · lait de coco · épices</div>
-          <div class="action-prem-steps-preview">Étape 1 · Étape 2 · Étape 3 · Étape 4</div>
-        </div>
-        <div class="action-prem-cta">
-          <div class="action-prem-label">✦ Recette du jour</div>
-          <button class="action-prem-btn" onclick="switchTabById('moi')">Débloquer Premium</button>
-        </div>
-      </div>`;
-  }
-}
-
-function renderCarteSoin(s) {
-  const freeEl = document.getElementById('action-soin-free');
-  const premEl = document.getElementById('action-soin-premium');
-  if (!freeEl || !premEl) return;
-
-  freeEl.innerHTML = `<span class="action-free-tip">${s.skincare?.today || s.skinTeaser || ''}</span>`;
-
-  if (ST.isPremium) {
-    const routine = ROUTINES_PREMIUM[ST.currentSaison];
-    const steps = routine ? routine.matin.length + routine.soir.length : 0;
-    premEl.innerHTML = `
-      <div class="action-premium-unlocked" onclick="openSkinModal('${ST.currentSaison}')">
-        <span class="action-prem-unlocked-emoji">🌿</span>
-        <div class="action-prem-unlocked-text">
-          <div class="action-prem-unlocked-name">Routine matin &amp; soir</div>
-          <div class="action-prem-unlocked-sub">${steps} gestes adaptés à ta phase →</div>
-        </div>
-        <span class="action-prem-unlocked-arrow">›</span>
-      </div>`;
-  } else {
-    premEl.innerHTML = `
-      <div class="action-premium-locked">
-        <div class="action-prem-blur">
-          <div class="action-prem-recipe-preview">Matin · Soir · 7 gestes adaptés</div>
-          <div class="action-prem-steps-preview">Nettoyage · Actif · Soin · SPF · Masque</div>
-        </div>
-        <div class="action-prem-cta">
-          <div class="action-prem-label">✦ Routine complète</div>
-          <button class="action-prem-btn" onclick="switchTabById('moi')">Débloquer Premium</button>
-        </div>
-      </div>`;
-  }
-}
-
 function renderCarteRepas(s) {
   const alim = s.alimentation;
   if (!alim) return;
 
+  // Repas du jour (données statiques)
+  const dur = ST.cycleDuration || 28;
+  const dayIdx = dayWithinPhase(ST.currentDay, dur);
+  const repasPhase = (typeof REPAS_QUOTIDIENS !== 'undefined' && REPAS_QUOTIDIENS[ST.currentSaison]) || [];
+  const repasJour = repasPhase.length ? repasPhase[dayIdx % repasPhase.length] : null;
+
   const starsEl = document.getElementById('dc-repas-stars');
   if (starsEl) {
-    starsEl.innerHTML = (alim.star || []).map(f => `<span class="day-card-chip">⭐ ${f}</span>`).join('');
+    if (repasJour) {
+      starsEl.innerHTML = `<span class="day-card-chip day-card-chip-repas">🍽️ ${repasJour.nom}</span>`;
+    } else {
+      starsEl.innerHTML = (alim.star || []).map(f => `<span class="day-card-chip">⭐ ${f}</span>`).join('');
+    }
   }
 
   const nutrimEl = document.getElementById('dc-repas-nutriments');
   if (nutrimEl) {
-    nutrimEl.innerHTML = (alim.nutriments || []).slice(0, 3).map(n => `
+    const beneficeHtml = repasJour
+      ? `<div class="day-card-nutriment-row"><span class="day-card-nutriment-why dc-repas-benefice">${repasJour.benefice}</span></div>`
+      : '';
+    const nutriHtml = (alim.nutriments || []).slice(0, 2).map(n => `
       <div class="day-card-nutriment-row">
         <span class="day-card-nutriment-nom">${n.nom}</span>
         <span class="day-card-nutriment-why">${n.why}</span>
-      </div>
-    `).join('');
+      </div>`).join('');
+    nutrimEl.innerHTML = beneficeHtml + nutriHtml;
   }
 
   const eviterEl = document.getElementById('dc-repas-eviter');
@@ -870,19 +892,36 @@ function renderCarteSkincare(s) {
   const skin = s.skincare;
   if (!skin) return;
 
+  // Soin du jour (données statiques)
+  const dur = ST.cycleDuration || 28;
+  const dayIdx = dayWithinPhase(ST.currentDay, dur);
+  const soinPhase = (typeof SOINS_QUOTIDIENS !== 'undefined' && SOINS_QUOTIDIENS[ST.currentSaison]) || [];
+  const soinJour = soinPhase.length ? soinPhase[dayIdx % soinPhase.length] : null;
+
   const actifEl = document.getElementById('dc-skin-actifs');
   if (actifEl) {
-    actifEl.innerHTML = (skin.actifs || []).slice(0, 2).map(a => `
-      <div class="day-card-actif-row">
-        <span class="day-card-actif-nom">${a.nom}</span>
-        <span class="day-card-actif-usage">${a.usage}</span>
-      </div>
-    `).join('');
+    if (soinJour) {
+      actifEl.innerHTML = `
+        <div class="day-card-actif-row">
+          <span class="day-card-actif-nom">✨ ${soinJour.nom} <span class="dc-skin-duree">${soinJour.duree}</span></span>
+          <span class="day-card-actif-usage">${soinJour.geste}</span>
+        </div>`;
+    } else {
+      actifEl.innerHTML = (skin.actifs || []).slice(0, 2).map(a => `
+        <div class="day-card-actif-row">
+          <span class="day-card-actif-nom">${a.nom}</span>
+          <span class="day-card-actif-usage">${a.usage}</span>
+        </div>`).join('');
+    }
   }
 
   const gestesEl = document.getElementById('dc-skin-gestes');
   if (gestesEl) {
-    gestesEl.innerHTML = (skin.gestes || []).map(g => `<span class="day-card-chip">${g}</span>`).join('');
+    if (soinJour) {
+      gestesEl.innerHTML = `<span class="day-card-chip">💡 ${soinJour.benefice}</span>`;
+    } else {
+      gestesEl.innerHTML = (skin.gestes || []).map(g => `<span class="day-card-chip">${g}</span>`).join('');
+    }
   }
 
   const premEl = document.getElementById('action-soin-premium');
@@ -1049,17 +1088,92 @@ function applyPremiumCode() {
 
 function validerSeanceDash() {
   const today = new Date().toDateString();
-  if (!ST.seanceDashDone) ST.seanceDashDone = {};
-  ST.seanceDashDone[today] = true;
   if (!ST.seanceDone) ST.seanceDone = {};
   ST.seanceDone[today] = true;
+
+  // Save AMRAP record (Été N4)
+  const spec = getTodaySeanceSpec();
+  if (spec && spec.type === 'ete-intense' && spec.data?.type === 'amrap') {
+    const inp = document.getElementById('amrap-score-input');
+    const score = inp ? parseInt(inp.value, 10) : NaN;
+    if (!isNaN(score) && score > 0) {
+      if (!ST.amrapRecord || score > ST.amrapRecord) ST.amrapRecord = score;
+    }
+  }
+
+  // Increment Printemps Bas counter for level-4 rotation
+  if (spec && spec.type === 'printemps-bas') {
+    ST.printempsBasCount = (ST.printempsBasCount || 0) + 1;
+  }
+
   saveState();
   const s = SAISONS[ST.currentSaison];
   renderCarteBouger(s);
   restoreSeanceDone();
   renderDayScore();
-  checkSeanceProgression();
+  checkEndOfPrintemps();
   showToast('💪 Alhamdulillah — séance accomplie ! 🌸');
+}
+
+function checkEndOfPrintemps() {
+  if (ST.currentSaison !== 'printemps') return;
+  const dur = ST.cycleDuration || 28;
+  const ovDay = Math.max(10, dur - 14);
+  const eteStart = Math.max(8, ovDay - 2);
+  if (ST.currentDay < eteStart - 1) return;
+  if (ST.printempsUpgradeDone) return;
+  ST.printempsUpgradeDone = true;
+  saveState();
+  const level = ST.seanceLevel || 1;
+  if (level >= 4) {
+    if (!ST.levelMaxShown) {
+      ST.levelMaxShown = true;
+      saveState();
+      setTimeout(showLevelMax, 900);
+    }
+    return;
+  }
+  setTimeout(showPrintempsUpgrade, 900);
+}
+
+function showPrintempsUpgrade() {
+  const el = document.getElementById('printemps-upgrade-modal');
+  if (el) el.classList.add('open');
+}
+
+function handlePrintempsUpgrade(ans) {
+  const el = document.getElementById('printemps-upgrade-modal');
+  if (el) el.classList.remove('open');
+  const level = ST.seanceLevel || 1;
+  if (ans === 'facile' && level < 4) {
+    ST.seanceLevel = level + 1;
+    if (ST.seanceLevel >= 4) {
+      ST.levelMaxShown = true;
+      saveState();
+      setTimeout(showLevelMax, 600);
+      return;
+    }
+    showToast(`🔥 Niveau ${ST.seanceLevel} débloqué ! Alhamdulillah 💪`);
+  } else if (ans === 'dur' && level > 1) {
+    ST.seanceLevel = level - 1;
+    showToast(`💛 Niveau ${ST.seanceLevel} — on avance à ton rythme.`);
+  } else {
+    showToast('✨ Parfait — on continue au même rythme.');
+  }
+  saveState();
+  renderCarteBouger(SAISONS[ST.currentSaison]);
+}
+
+function showLevelMax() {
+  const el = document.getElementById('level-max-modal');
+  if (el) el.classList.add('open');
+}
+function closeLevelMaxModal() {
+  const el = document.getElementById('level-max-modal');
+  if (el) el.classList.remove('open');
+}
+function contactLevelMax() {
+  window.location.href = 'mailto:sakina.evolution.contact@gmail.com?subject=Niveau%20Élite%20débloqué&body=Alhamdulillah%20j\'ai%20atteint%20le%20niveau%20élite%20!';
 }
 
 function renderSuggestionsEngage(s) {
@@ -1294,56 +1408,6 @@ function restoreCoranCheck() {
 }
 
 // ═══════════════════════════════════════════════
-// VIE RENDER
-// ═══════════════════════════════════════════════
-function renderVie(s) {
-  const alim = s.alimentation || {};
-  const _ng = document.getElementById('nutriment-grid');
-  if (_ng) _ng.innerHTML = (alim.nutriments||[]).map(n =>
-    `<div class="nutriment-chip"><div class="nutriment-name">${n.nom||''}</div><div class="nutriment-why">${n.why||''}</div></div>`
-  ).join('');
-  const _at = document.getElementById('aliment-tags');
-  if (_at) _at.innerHTML = (alim.aliments||[]).map(a => {
-    const isStar = (alim.star||[]).includes(a);
-    return `<span class="aliment-tag${isStar?' star':''}">${a}</span>`;
-  }).join('');
-  const _ae = document.getElementById('aliment-eviter');
-  if (_ae) _ae.innerHTML = (alim.eviter||[]).map(e => `<span class="aliment-tag" style="border-color:#E8A090;color:#C4694A;">${e}</span>`).join('');
-
-  // Sport
-  const sp = s.sport || {};
-  const seance = sp.seance || {};
-  const mouvements = sp.mouvements || [];
-  const _smo = document.getElementById('sport-mouvements');
-  if (_smo) {
-    const today2 = new Date().toDateString();
-    if (!ST.mouvDone) ST.mouvDone = {};
-    if (!ST.mouvDone[today2]) ST.mouvDone[today2] = [];
-    const done2 = ST.mouvDone[today2];
-    _smo.innerHTML = mouvements.map((m, i) => {
-      const isDone = done2.includes(i);
-      return `<div onclick="toggleMouv(${i},this)" style="display:flex;align-items:center;gap:12px;padding:11px 13px;border-radius:14px;border:1.5px solid ${isDone?'var(--season)':'var(--sable)'};background:${isDone?'var(--season-soft)':'white'};margin-bottom:7px;cursor:pointer;transition:all .2s;">
-        <div style="width:24px;height:24px;border-radius:50%;border:1.5px solid ${isDone?'var(--season)':'var(--sable)'};background:${isDone?'var(--season)':'transparent'};display:flex;align-items:center;justify-content:center;font-size:11px;color:white;flex-shrink:0;">${isDone?'✓':''}</div>
-        <span style="font-size:13px;color:var(--noir);font-weight:500;flex:1;">${m}</span></div>`;
-    }).join('');
-    updateMouvProgress(mouvements.length);
-  }
-
-  // Skincare
-  const sk2 = s.skincare || {};
-  const _swh = document.getElementById('skin-what-happens'); if (_swh) _swh.textContent = sk2.whatHappens || '';
-  const _sac = document.getElementById('skin-actifs');
-  if (_sac) _sac.innerHTML = (sk2.actifs||[]).map(a => typeof a === 'string' ?
-    `<span class="aliment-tag">${a}</span>` :
-    `<div class="actif-card"><div class="actif-name">${a.nom||''}</div><div class="actif-why">${a.why||''}</div><span class="actif-usage">${a.usage||''}</span></div>`
-  ).join('');
-  const _sge = document.getElementById('skin-gestes');
-  if (_sge) _sge.innerHTML = (sk2.gestes||[]).map(g => `<span class="aliment-tag star">${g}</span>`).join('');
-  const _sev2 = document.getElementById('skin-eviter');
-  if (_sev2) _sev2.innerHTML = (sk2.eviter||[]).map(e => `<span class="aliment-tag" style="border-color:#E8A090;color:#C4694A;">${e}</span>`).join('');
-}
-
-// ═══════════════════════════════════════════════
 // MOI RENDER
 // ═══════════════════════════════════════════════
 function renderMoi(s) {
@@ -1365,16 +1429,19 @@ function selectDuration(el, val) {
 function checkDailyReset() {
   const today = new Date().toDateString();
   if (ST.lastDailyReset === today) return;
-  ST.prayers = {};
-  ST.dhikrChecks = {};
-  ST.coranDone = {};
-  ST.seanceDashDone = {};
-  ST.seanceDone = {};
+  // Réinitialiser uniquement les états non datés
   ST.selectedSugg = [];
   ST.glaire = null;
   ST.glaireDate = null;
   ST.checkin = null;
   ST.checkinDate = null;
+  // Élaguer les entrées vieilles de plus de 30 jours pour limiter le localStorage
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - 30);
+  ['prayers','dhikrChecks','coranDone','seanceDone','symptomes','mouvDone','autreSymptomesText'].forEach(key => {
+    if (!ST[key] || typeof ST[key] !== 'object') return;
+    Object.keys(ST[key]).forEach(k => { if (new Date(k) < cutoff) delete ST[key][k]; });
+  });
   ST.lastDailyReset = today;
   saveState();
 }
@@ -1494,7 +1561,15 @@ function removeCustomObj(i) {
   ST.customObjectifs.splice(i, 1);
   if (ST.customObjChecks) {
     Object.keys(ST.customObjChecks).forEach(wk => {
-      if (ST.customObjChecks[wk]) delete ST.customObjChecks[wk][i];
+      const week = ST.customObjChecks[wk];
+      if (!week) return;
+      const rebuilt = {};
+      Object.keys(week).forEach(k => {
+        const ki = Number(k);
+        if (ki < i) rebuilt[ki] = week[k];
+        else if (ki > i) rebuilt[ki - 1] = week[k];
+      });
+      ST.customObjChecks[wk] = rebuilt;
     });
   }
   saveState();
@@ -1547,7 +1622,7 @@ function renderCalendar() {
       phase = phaseForDay(dayOfCycle + 1, dur);
     }
     const isToday = d === now.getDate();
-    const seanceDone = !!(ST.seanceDashDone && ST.seanceDashDone[dateStr]) || !!(ST.seanceDone && ST.seanceDone[dateStr]);
+    const seanceDone = !!(ST.seanceDone && ST.seanceDone[dateStr]);
     const prayers = ST.prayers && ST.prayers[dateStr] ? Object.values(ST.prayers[dateStr]).filter(Boolean).length : 0;
     cells += `
       <div class="cal-day cal-day-${phase}${isToday ? ' cal-today' : ''}" onclick="openDayModal('${dateStr}','${phase}')">
@@ -1566,7 +1641,7 @@ function openDayModal(dateStr, phase) {
   const monthNames = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
   const phaseEmojis = { hiver:'🌙', printemps:'🌸', ete:'☀️', automne:'🍂' };
   const phaseNames  = { hiver:'Hiver', printemps:'Printemps', ete:'Été', automne:'Automne' };
-  const seanceDone = !!(ST.seanceDashDone && ST.seanceDashDone[dateStr]) || !!(ST.seanceDone && ST.seanceDone[dateStr]);
+  const seanceDone = !!(ST.seanceDone && ST.seanceDone[dateStr]);
   const prayers = ST.prayers && ST.prayers[dateStr] ? Object.values(ST.prayers[dateStr]).filter(Boolean).length : 0;
   const coranDone = !!(ST.coranDone && ST.coranDone[dateStr]);
 
@@ -1716,13 +1791,17 @@ function enterApp() {
 function doCheckin(mood) {
   ST.checkin = mood; ST.checkinDate = new Date().toDateString();
   document.getElementById('checkin-overlay').style.display = 'none';
-  updateMessage(); saveState();
+  updateMessage();
+  renderCarteBouger(SAISONS[ST.currentSaison]);
+  saveState();
 }
 function updateMessage() {
   const s = SAISONS[ST.currentSaison];
   const mood = ST.checkin || 'bien';
   const el = document.getElementById('daily-message');
-  if (el) el.textContent = s.messages[mood] || s.messages.bien;
+  if (!el) return;
+  const dayMsg = typeof MESSAGES_JOUR !== 'undefined' && MESSAGES_JOUR[ST.currentDay];
+  el.textContent = (dayMsg && dayMsg[mood]) || s.messages[mood] || s.messages.bien;
 }
 
 // ═══════════════════════════════════════════════
@@ -1750,23 +1829,6 @@ function switchTabById(name, section) {
   setTimeout(() => showTabTour(name), 300);
   const _ac2 = document.getElementById('app-content');
   if (_ac2) _ac2.scrollTop = 0;
-  if (section) {
-    setTimeout(() => {
-      document.querySelectorAll('.vie-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.vie-section').forEach(s => s.classList.remove('active'));
-      const targetTab = document.querySelector('.vie-tab[onclick*="' + section + '"]');
-      if (targetTab) targetTab.classList.add('active');
-      const targetSection = document.getElementById('vie-' + section);
-      if (targetSection) targetSection.classList.add('active');
-    }, 50);
-  }
-}
-
-function switchVieTab(el, section) {
-  document.querySelectorAll('.vie-tab').forEach(t => { t.classList.remove('active'); t.style.background='white'; t.style.color='var(--gris)'; t.style.borderColor='var(--sable)'; });
-  document.querySelectorAll('.vie-section').forEach(s => s.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('vie-' + section).classList.add('active');
 }
 
 function toggleSuggestion(el, idx) {
@@ -1862,8 +1924,6 @@ function validerSeance() {
   const today = new Date().toDateString();
   ST.seanceDone = ST.seanceDone || {};
   ST.seanceDone[today] = true;
-  ST.seanceDashDone = ST.seanceDashDone || {};
-  ST.seanceDashDone[today] = true;
   saveState();
   afficherSeanceDone();
   const s = SAISONS[ST.currentSaison];
@@ -1934,6 +1994,93 @@ function restoreGlaire() {
 // ═══════════════════════════════════════════════
 // ENERGY BARS & CYCLE RING
 // ═══════════════════════════════════════════════
+// Retourne l'index 0-basé dans la phase courante (pour pick dans REPAS/SOINS_QUOTIDIENS)
+function dayWithinPhase(cycleDay, cycleDur) {
+  const ovDay = Math.max(10, cycleDur - 14);
+  const eteStart = Math.max(8, ovDay - 2);
+  const eteEnd = Math.min(cycleDur - 2, ovDay + 2);
+  if (cycleDay <= 5) return cycleDay - 1;
+  if (cycleDay < eteStart) return cycleDay - 6;
+  if (cycleDay <= eteEnd) return cycleDay - eteStart;
+  return cycleDay - (eteEnd + 1);
+}
+
+function getAutomneMicroPhase(cycleDay, cycleDur) {
+  const ovDay = Math.max(10, cycleDur - 14);
+  const eteEnd = Math.min(cycleDur - 2, ovDay + 2);
+  const autLen = cycleDur - eteEnd;
+  const autDay = cycleDay - eteEnd;
+  if (autDay <= Math.floor(autLen * 0.35)) return 'actif';
+  if (autDay <= Math.floor(autLen * 0.70)) return 'doux';
+  return 'fin';
+}
+
+function getTodaySeanceSpec() {
+  if (typeof SEANCES_SPORT === 'undefined') return null;
+  const phase = ST.currentSaison;
+  const day = ST.currentDay;
+  const dur = ST.cycleDuration || 28;
+  const level = ST.seanceLevel || 1;
+  const checkin = ST.checkin;
+  const sport = SEANCES_SPORT;
+
+  if (checkin === 'calme') return { type: 'calme', data: sport.calme };
+
+  switch (phase) {
+    case 'hiver':
+      return { type: 'hiver', data: sport.hiver };
+
+    case 'printemps': {
+      const dayIdx = dayWithinPhase(day, dur);
+      const planning = sport.printemps.planning;
+      const dayType = planning[dayIdx % planning.length];
+      if (dayType === 'repos') {
+        return { type: 'repos', reposSec: sport.printemps.niveauxRepos[level] || 45, level };
+      }
+      const niveauData = sport.printemps[dayType][level];
+      if (!niveauData) return null;
+      if (dayType === 'bas' && level === 4 && niveauData.rotation) {
+        const rotIdx = (ST.printempsBasCount || 0) % 3;
+        const rot = niveauData.rotation[rotIdx];
+        return { type: 'printemps-bas', data: { nom: rot.nom, duree: niveauData.duree, exercices: rot.exercices }, level, rotIdx };
+      }
+      return { type: 'printemps-' + dayType, data: niveauData, level };
+    }
+
+    case 'ete': {
+      const dayIdx = dayWithinPhase(day, dur);
+      const planning = sport.ete.planning;
+      const dayType = planning[dayIdx % planning.length];
+      if (dayType === 'repos') {
+        return { type: 'ete-repos', message: sport.ete.messageApresIntense };
+      }
+      const niveauData = sport.ete.niveaux[level];
+      if (!niveauData) return null;
+      return { type: 'ete-intense', data: niveauData, level };
+    }
+
+    case 'automne': {
+      const micro = getAutomneMicroPhase(day, dur);
+      if (micro === 'actif') {
+        const dayIdx = dayWithinPhase(day, dur);
+        const planning = sport.printemps.planning;
+        const dayType = planning[dayIdx % planning.length];
+        if (dayType === 'repos') {
+          return { type: 'repos', reposSec: (sport.printemps.niveauxRepos[level] || 45) + sport.automne.actif.reposExtra, level, message: sport.automne.actif.message };
+        }
+        const niveauData = sport.printemps[dayType]?.[level];
+        if (!niveauData) return null;
+        return { type: 'automne-actif', data: niveauData, level, message: sport.automne.actif.message, reposExtra: sport.automne.actif.reposExtra };
+      }
+      if (micro === 'doux') return { type: 'automne-doux', data: sport.automne.doux, level };
+      return { type: 'automne-fin', data: sport.automne.fin };
+    }
+
+    default:
+      return null;
+  }
+}
+
 function phaseForDay(i, dur) {
   const ovulationDay = Math.max(10, dur - 14);
   const eteStart = Math.max(8, ovulationDay - 2);
@@ -1942,27 +2089,6 @@ function phaseForDay(i, dur) {
   if (i < eteStart) return 'printemps';
   if (i <= eteEnd) return 'ete';
   return 'automne';
-}
-
-function renderEnergyBars() {
-  const el = document.getElementById('energy-bars-moi');
-  if (!el) return;
-  const day = ST.currentDay || 1;
-  const dur = ST.cycleDuration || 28;
-  const colors = {hiver:'#7B5EA7',printemps:'#3DAE8A',ete:'#E8834A',automne:'#C4694A'};
-  const energyBase = {hiver:25,printemps:70,ete:95,automne:50};
-  const title = document.getElementById('energy-title');
-  if (title) title.textContent = `Mon énergie sur ${dur} jours`;
-  let html = '';
-  for (let i = 1; i <= dur; i++) {
-    const phase = phaseForDay(i, dur);
-    const h = Math.max(8, Math.min(100, energyBase[phase] + Math.sin(i * 1.3) * 10));
-    const isToday = i === day;
-    const opacity = i > day ? '0.2' : '0.55';
-    const ring = isToday ? 'box-shadow:0 0 0 2px var(--season);' : '';
-    html += `<div style="flex:1;border-radius:3px 3px 0 0;background:${colors[phase]};height:${h}%;opacity:${isToday?'1':opacity};${ring}min-height:4px;"></div>`;
-  }
-  el.innerHTML = html;
 }
 
 function drawCycleRing() {
@@ -2358,11 +2484,12 @@ function confirmDeleteMyData() {
     prenom: '', cycleStart: null, cycleDuration: 28, checkin: null, checkinDate: null,
     prayers: {}, dhikrChecks: {}, dhikrDate: null, coranDone: {}, asmaKnown: [],
     glaire: null, glaireDate: null, symptomes: {}, autreSymptomesText: {}, currentSaison: 'printemps', currentDay: 1,
-    selectedSugg: [], seanceDashDone: {}, mouvDone: {}, seanceDone: {}, notifFreq: 2,
+    selectedSugg: [], mouvDone: {}, seanceDone: {}, notifFreq: 2,
     waitlistEmail: null, feedbackSent: false, installBannerDismissed: false,
     lastDailyReset: null, lastWeeklyReset: null, eveningCheckinDate: null,
     eveningCheckinMood: null, cycleHistory: [],
     isPremium: false, seanceValidatedCount: 0, seanceLevel: 1,
+    amrapRecord: null, printempsUpgradeDone: false, levelMaxShown: false, printempsBasCount: 0, _lastCycleNum: null,
     weeklyObjChecks: {}, customObjectifs: [], customObjChecks: {}
   };
   closeDeleteModal();

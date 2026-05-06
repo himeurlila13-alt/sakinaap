@@ -91,6 +91,7 @@
       <div class="checkin-option" onclick="doCheckin('fatiguee')"><span class="checkin-option-emoji">&#128564;</span><span class="checkin-option-text">Je suis fatiguee</span></div>
       <div class="checkin-option" onclick="doCheckin('difficile')"><span class="checkin-option-emoji">&#127754;</span><span class="checkin-option-text">C'est difficile en ce moment</span></div>
       <div class="checkin-option" onclick="doCheckin('foi')"><span class="checkin-option-emoji">&#129330;</span><span class="checkin-option-text">Ma foi est en bas</span></div>
+      <div class="checkin-option checkin-option-calme" onclick="doCheckin('calme')"><span class="checkin-option-emoji">&#127807;</span><span class="checkin-option-text">Mon coeur a besoin de calme</span></div>
     </div>
   </div>
 </div>
@@ -806,6 +807,33 @@
   </div>
 </div>
 
+<!-- MODAL UPGRADE FIN PRINTEMPS -->
+<div class="modal-overlay" id="printemps-upgrade-modal">
+  <div class="modal-sheet" style="text-align:center;padding:32px 24px 28px;">
+    <div style="font-size:44px;margin-bottom:14px;">&#127960;</div>
+    <div style="font-family:var(--serif);font-size:20px;color:var(--noir);margin-bottom:8px;">Fin du Printemps !</div>
+    <div style="font-size:13px;color:var(--gris);line-height:1.7;margin-bottom:24px;">Comment tu t'es sentie sur tes s&eacute;ances ce cycle ?</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <button onclick="handlePrintempsUpgrade('facile')" style="background:var(--season-grad);color:white;border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">&#128293; C'&eacute;tait accessible — je monte</button>
+      <button onclick="handlePrintempsUpgrade('bien')" style="background:var(--season-soft);color:var(--noir);border:1.5px solid var(--season-light);border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">&#128522; &Ccedil;a me convient bien</button>
+      <button onclick="handlePrintempsUpgrade('dur')" style="background:var(--sable);color:var(--gris);border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">&#128549; C'&eacute;tait encore intense pour moi</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL LEVEL MAX -->
+<div class="modal-overlay" id="level-max-modal" onclick="if(event.target===this)closeLevelMaxModal()">
+  <div class="modal-sheet" style="text-align:center;padding:36px 24px 32px;">
+    <div style="font-size:56px;margin-bottom:12px;">&#127942;</div>
+    <div style="font-family:var(--serif);font-size:22px;color:var(--noir);margin-bottom:8px;">Niveau &Eacute;lite atteint</div>
+    <div style="font-size:13px;color:var(--gris);line-height:1.75;margin-bottom:8px;">Alhamdulillah — tu as travaill&eacute; dur pour arriver ici.</div>
+    <div style="font-family:var(--serif);font-size:14px;color:var(--season);font-style:italic;margin-bottom:28px;">&laquo; Et quiconque fait le bien, f&ucirc;t-ce du poids d'un atome, le verra. &raquo;</div>
+    <button onclick="contactLevelMax()" style="background:var(--season-grad);color:white;border:none;border-radius:14px;padding:14px 24px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;width:100%;margin-bottom:10px;">&#9993; Partager avec Sakina</button>
+    <button onclick="closeLevelMaxModal()" style="background:none;border:none;font-size:13px;color:var(--gris);cursor:pointer;font-family:var(--sans);">Fermer</button>
+  </div>
+</div>
+
+<script src="/data.js" defer></script>
 <script src="/app.js" defer></script>
 </body>
 </html>

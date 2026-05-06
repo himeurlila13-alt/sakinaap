@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SakinApp — Preview données quotidiennes</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, sans-serif; background: #f5f0eb; color: #1a1a1a; }
+
+  .top-bar {
+    background: white; border-bottom: 2px solid #e0d8cf; padding: 16px 24px;
+    position: sticky; top: 0; z-index: 100; display: flex; align-items: center; gap: 20px;
+  }
+  .top-bar h1 { font-size: 18px; font-weight: 700; }
+  .top-bar select, .top-bar button {
+    padding: 8px 14px; border-radius: 8px; border: 1.5px solid #d0c8be; font-size: 13px;
+    background: white; cursor: pointer;
+  }
+  .top-bar button { background: #7B5EA7; color: white; border-color: #7B5EA7; font-weight: 600; }
+
+  .legend {
+    display: flex; gap: 12px; padding: 12px 24px; background: white;
+    border-bottom: 1px solid #e0d8cf; flex-wrap: wrap; font-size: 12px;
+  }
+  .leg { display: flex; align-items: center; gap: 6px; }
+  .leg-dot { width: 12px; height: 12px; border-radius: 50%; }
+
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    background: #3d2060; color: white; padding: 12px 14px; font-size: 12px;
+    font-weight: 600; text-align: left; position: sticky; top: 61px; z-index: 99;
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.5); }
+  td { padding: 14px; border-bottom: 1px solid #e0d8cf; vertical-align: top; font-size: 13px; }
+
+  .phase-hiver td:first-child { border-left: 4px solid #7B5EA7; }
+  .phase-printemps td:first-child { border-left: 4px solid #3DAE8A; }
+  .phase-ete td:first-child { border-left: 4px solid #E8834A; }
+  .phase-automne td:first-child { border-left: 4px solid #C4694A; }
+
+  .bg-hiver { background: #F0EBF8 !important; }
+  .bg-printemps { background: #E8F8F3 !important; }
+  .bg-ete { background: #FFF8EE !important; }
+  .bg-automne { background: #FDF0EE !important; }
+
+  .day-num { font-size: 20px; font-weight: 800; color: #3d2060; display: block; }
+  .phase-badge {
+    display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+    padding: 3px 8px; border-radius: 6px; margin-top: 4px; text-transform: uppercase;
+  }
+  .badge-hiver { background: #7B5EA7; color: white; }
+  .badge-printemps { background: #3DAE8A; color: white; }
+  .badge-ete { background: #E8834A; color: white; }
+  .badge-automne { background: #C4694A; color: white; }
+
+  .meal-name { font-weight: 600; font-size: 13px; color: #1a1a1a; margin-bottom: 4px; }
+  .meal-benefice { font-size: 11px; color: #666; line-height: 1.5; font-style: italic; }
+
+  .soin-name { font-weight: 600; font-size: 13px; color: #1a1a1a; }
+  .soin-duree { font-size: 11px; color: #3DAE8A; font-weight: 600; margin-left: 6px; }
+  .soin-geste { font-size: 11px; color: #666; line-height: 1.5; margin-top: 3px; }
+  .soin-benefice { font-size: 11px; color: #7B5EA7; font-style: italic; margin-top: 3px; }
+
+  .msg-item { margin-bottom: 6px; }
+  .msg-mood { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #999; }
+  .msg-text { font-size: 12px; color: #444; line-height: 1.5; }
+
+  .msg-bien .msg-mood { color: #3DAE8A; }
+  .msg-fatiguee .msg-mood { color: #E8834A; }
+  .msg-difficile .msg-mood { color: #C4694A; }
+  .msg-foi .msg-mood { color: #7B5EA7; }
+
+  .stats-bar {
+    padding: 12px 24px; background: white; border-bottom: 1px solid #e0d8cf;
+    font-size: 13px; color: #666;
+  }
+  .stats-bar strong { color: #3d2060; }
+
+  @media print {
+    .top-bar, .legend { display: none; }
+    th { position: static; }
+    td { font-size: 11px; padding: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <h1>📋 SakinApp — Preview données</h1>
+  <label>Cycle :
+    <select id="cycle-select" onchange="buildTable()">
+      <option value="24">24 jours (court)</option>
+      <option value="26">26 jours (court)</option>
+      <option value="28" selected>28 jours (moyen)</option>
+      <option value="30">30 jours</option>
+      <option value="32">32 jours (long)</option>
+      <option value="35">35 jours (long)</option>
+    </select>
+  </label>
+  <label>Afficher :
+    <select id="view-select" onchange="buildTable()">
+      <option value="all">Tout</option>
+      <option value="repas">Alimentation</option>
+      <option value="soin">Skincare</option>
+      <option value="message">Messages</option>
+    </select>
+  </label>
+  <button onclick="window.print()">🖨️ Imprimer</button>
+</div>
+
+<div class="legend">
+  <span class="leg"><span class="leg-dot" style="background:#7B5EA7"></span> Hiver — Phase menstruelle</span>
+  <span class="leg"><span class="leg-dot" style="background:#3DAE8A"></span> Printemps — Phase folliculaire</span>
+  <span class="leg"><span class="leg-dot" style="background:#E8834A"></span> Été — Phase ovulatoire</span>
+  <span class="leg"><span class="leg-dot" style="background:#C4694A"></span> Automne — Phase lutéale</span>
+</div>
+
+<div class="stats-bar" id="stats-bar"></div>
+
+<div style="overflow-x:auto; padding: 0 0 40px;">
+  <table id="preview-table">
+    <thead id="table-head"></thead>
+    <tbody id="table-body"></tbody>
+  </table>
+</div>
+
+<script src="../data.js"></script>
+<script>
+// ── Calcul phase pour un jour donné ──────────────────────
+function phaseForDay(i, dur) {
+  const ovDay = Math.max(10, dur - 14);
+  const eteStart = Math.max(8, ovDay - 2);
+  const eteEnd = Math.min(dur - 2, ovDay + 2);
+  if (i <= 5) return 'hiver';
+  if (i < eteStart) return 'printemps';
+  if (i <= eteEnd) return 'ete';
+  return 'automne';
+}
+
+function dayWithinPhase(cycleDay, cycleDur) {
+  const ovDay = Math.max(10, cycleDur - 14);
+  const eteStart = Math.max(8, ovDay - 2);
+  const eteEnd = Math.min(cycleDur - 2, ovDay + 2);
+  if (cycleDay <= 5) return cycleDay - 1;
+  if (cycleDay < eteStart) return cycleDay - 6;
+  if (cycleDay <= eteEnd) return cycleDay - eteStart;
+  return cycleDay - (eteEnd + 1);
+}
+
+const PHASE_NAMES = { hiver: '🌙 Hiver', printemps: '🌸 Printemps', ete: '☀️ Été', automne: '🍂 Automne' };
+const PHASE_LABELS = { hiver: 'Menstruelle', printemps: 'Folliculaire', ete: 'Ovulatoire', automne: 'Lutéale' };
+
+function buildTable() {
+  const dur = parseInt(document.getElementById('cycle-select').value);
+  const view = document.getElementById('view-select').value;
+
+  // Compute phase spans
+  const ovDay = Math.max(10, dur - 14);
+  const eteStart = Math.max(8, ovDay - 2);
+  const eteEnd = Math.min(dur - 2, ovDay + 2);
+  const spans = {
+    hiver: [1, 5],
+    printemps: [6, eteStart - 1],
+    ete: [eteStart, eteEnd],
+    automne: [eteEnd + 1, dur]
+  };
+
+  // Stats bar
+  document.getElementById('stats-bar').innerHTML =
+    `Cycle <strong>${dur} jours</strong> — ` +
+    Object.entries(spans).map(([p, [s, e]]) =>
+      `<strong>${PHASE_NAMES[p]}</strong> J${s}–J${e} (${e - s + 1}j)`
+    ).join(' · ');
+
+  // Build headers
+  const showRepas = view === 'all' || view === 'repas';
+  const showSoin = view === 'all' || view === 'soin';
+  const showMsg = view === 'all' || view === 'message';
+
+  const head = document.getElementById('table-head');
+  head.innerHTML = '<tr>' +
+    '<th style="width:80px">Jour</th>' +
+    (showRepas ? '<th style="width:28%">🍽️ Alimentation</th>' : '') +
+    (showSoin  ? '<th style="width:28%">✨ Skincare</th>' : '') +
+    (showMsg   ? '<th>💬 Messages matin</th>' : '') +
+    '</tr>';
+
+  // Build rows
+  const tbody = document.getElementById('table-body');
+  let html = '';
+
+  for (let d = 1; d <= dur; d++) {
+    const phase = phaseForDay(d, dur);
+    const dayIdx = dayWithinPhase(d, dur);
+
+    const repasPhase = REPAS_QUOTIDIENS[phase] || [];
+    const repas = repasPhase.length ? repasPhase[dayIdx % repasPhase.length] : null;
+
+    const soinPhase = SOINS_QUOTIDIENS[phase] || [];
+    const soin = soinPhase.length ? soinPhase[dayIdx % soinPhase.length] : null;
+
+    const msgs = MESSAGES_JOUR[d] || null;
+
+    html += `<tr class="phase-${phase} bg-${phase}">`;
+
+    // Day + phase
+    html += `<td>
+      <span class="day-num">J${d}</span>
+      <span class="phase-badge badge-${phase}">${PHASE_LABELS[phase]}</span>
+      <div style="font-size:10px;color:#999;margin-top:4px;">idx ${dayIdx}</div>
+    </td>`;
+
+    // Alimentation
+    if (showRepas) {
+      html += `<td>`;
+      if (repas) {
+        html += `<div class="meal-name">🍽️ ${repas.nom}</div>
+                 <div class="meal-benefice">${repas.benefice}</div>`;
+      } else {
+        html += `<span style="color:#ccc;font-size:11px;">—</span>`;
+      }
+      html += `</td>`;
+    }
+
+    // Skincare
+    if (showSoin) {
+      html += `<td>`;
+      if (soin) {
+        html += `<div class="soin-name">✨ ${soin.nom}<span class="soin-duree">${soin.duree}</span></div>
+                 <div class="soin-geste">${soin.geste}</div>
+                 <div class="soin-benefice">${soin.benefice}</div>`;
+      } else {
+        html += `<span style="color:#ccc;font-size:11px;">—</span>`;
+      }
+      html += `</td>`;
+    }
+
+    // Messages
+    if (showMsg) {
+      html += `<td>`;
+      if (msgs) {
+        ['bien', 'fatiguee', 'difficile', 'foi'].forEach(mood => {
+          const labels = { bien: '😊 Bien', fatiguee: '😴 Fatiguée', difficile: '😔 Difficile', foi: '🤲 Foi' };
+          html += `<div class="msg-item msg-${mood}">
+            <div class="msg-mood">${labels[mood]}</div>
+            <div class="msg-text">${msgs[mood]}</div>
+          </div>`;
+        });
+      } else {
+        html += `<span style="color:#ccc;font-size:11px;">Pas de message J${d} — fallback phase utilisé</span>`;
+      }
+      html += `</td>`;
+    }
+
+    html += '</tr>';
+  }
+
+  tbody.innerHTML = html;
+}
+
+buildTable();
+</script>
+</body>
+</html>
