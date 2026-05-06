@@ -124,7 +124,7 @@ const REPAS_QUOTIDIENS = {
     },
     {
       nom: 'Bol myrtilles, grenade, amandes effilées et yaourt à boire',
-      benefice: 'Anthocyanes et resvératrol — protection cellulaire maximale pour ce pic d\'Été.'
+      benefice: 'Anthocyanes des myrtilles et ellagitanines de la grenade — protection antioxydante maximale pour ce pic d\'Été.'
     },
   ],
 
@@ -232,10 +232,10 @@ const SOINS_QUOTIDIENS = {
       benefice: 'Élimine les cellules mortes de l\'Hiver pour révéler l\'éclat naturel du Printemps.'
     },
     {
-      nom: 'Sérum vitamine C naturel (jus de citron très dilué)',
+      nom: 'Soin hydratant eau de rose et huile de noisette',
       duree: '3 min',
-      geste: '1 goutte de jus de citron pour 10 gouttes d\'eau de rose. Applique le matin sur peau propre avant la crème.',
-      benefice: 'Vitamine C naturelle pour unifier le teint et stimuler l\'éclat — phase idéale pour les actifs.'
+      geste: '4-5 gouttes d\'huile de noisette sur peau légèrement humide d\'eau de rose. Tapote doucement jusqu\'à absorption complète.',
+      benefice: 'Huile de noisette sébo-régulatrice + eau de rose tonifiante — éclat naturel du Printemps sans risque de photosensibilisation.'
     },
     {
       nom: 'Masque argile blanche et eau de rose',
@@ -316,8 +316,8 @@ const SOINS_QUOTIDIENS = {
     {
       nom: 'Brume eau de rose et aloe vera',
       duree: '2 min',
-      geste: 'Dans un spray : eau de rose + gel d\'aloé vera. Vaporise toute la journée sur visage et décolleté.',
-      benefice: 'Hydratation ultra-légère sans surcharger la peau au pic naturel de sébum.'
+      geste: 'Dans un spray : eau de rose + gel d\'aloé vera. Vaporise toute la journée sur visage et décolleté. Complète avec une crème solaire SPF30 le matin.',
+      benefice: 'Hydratation ultra-légère sans surcharger la peau au pic naturel de sébum — protection UV essentielle en phase d\'Été.'
     },
     {
       nom: 'Masque argile verte express (5 min)',
@@ -378,10 +378,10 @@ const SOINS_QUOTIDIENS = {
       benefice: 'Purifie sans assécher — adapté à la peau hypersensible prémenstruelle.'
     },
     {
-      nom: 'Masque au yaourt nature',
+      nom: 'Masque yaourt nature et niacinamide',
       duree: '12 min',
-      geste: '1 c.à.s yaourt entier nature. Applique en couche régulière, laisse 10-12 min, rince à l\'eau tiède.',
-      benefice: 'Acide lactique doux + probiotiques apaisants — peau plus unie instantanément.'
+      geste: '1 c.à.s yaourt entier nature + 2 gouttes de sérum niacinamide 10%. Applique en couche régulière, laisse 10-12 min, rince à l\'eau tiède.',
+      benefice: 'Acide lactique doux + niacinamide — renforce la barrière cutanée et réduit les taches liées aux fluctuations hormonales d\'Automne.'
     },
     {
       nom: 'Mélange huile de noisette et chanvre',
@@ -704,10 +704,10 @@ const SEANCES_SPORT = {
         { nom: 'Isométrie bras', sets: 3, duree: '20 sec', detail: 'Bras tendus à 90°, immobile, comme si tu portais un plateau.' },
       ]},
       4: { nom: 'Haut N4', duree: '~30 min', exercices: [
-        { nom: 'Pompes',           sets: 3, reps: 15,    detail: 'Pleine amplitude, rythme soutenu, engagement total.' },
-        { nom: 'Dips déclinées',   sets: 3, reps: 10,    detail: 'Pieds surélevés sur la chaise, corps incliné, dips complets.' },
-        { nom: 'Dips chaise',      sets: 3, reps: 12,    detail: 'Classique, enchaîné rapidement entre les séries.' },
-        { nom: 'Gainage latéral',  sets: 3, duree: '20 sec', detail: 'Sur le côté, corps droit, hanches dans l\'axe. Change.' },
+        { nom: 'Pompes',              sets: 3, reps: 15,    detail: 'Pleine amplitude, rythme soutenu, engagement total.' },
+        { nom: 'Dips déclinées',      sets: 3, reps: 10,    detail: 'Pieds surélevés sur la chaise, corps incliné, dips complets.' },
+        { nom: 'Superman dos',        sets: 3, reps: 12,    detail: 'Allongée sur le ventre, lève bras et jambes ensemble, tiens 2 sec en haut. Renforce la chaîne postérieure.' },
+        { nom: 'Gainage latéral',     sets: 3, duree: '20 sec', detail: 'Sur le côté, corps droit, hanches dans l\'axe. Change.' },
       ]},
     },
   },
@@ -721,8 +721,8 @@ const SEANCES_SPORT = {
            detail: 'Au début de chaque minute : 5 squats. Récupère le reste de la minute. 10 rounds.' },
       2: { type: 'emom', duree: 10, label: 'EMOM 10 min', exercice: 'Fente arrière', reps: 8,
            detail: 'Au début de chaque minute : 8 fentes arrières. Récupère le reste. 10 rounds.' },
-      3: { type: 'emom', duree: 10, label: 'EMOM 10 min', exercice: 'Squat sauté', reps: 10,
-           detail: 'Au début de chaque minute : 10 squats sautés. Récupère le reste. 10 rounds.' },
+      3: { type: 'emom', duree: 10, label: 'EMOM 10 min', exercice: 'Squat sauté', reps: 8,
+           detail: 'Au début de chaque minute : 8 squats sautés. Récupère le reste. 10 rounds.' },
       4: { type: 'amrap', duree: 10, label: 'AMRAP 10 min',
            circuit: [
              { nom: 'Squats sautés',    reps: 5 },
