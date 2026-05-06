@@ -532,7 +532,7 @@ function computeCycle() {
   const cycleNum = Math.floor(diff / dur);
   const day = (diff % dur) + 1;
   // Detect new cycle — reset per-cycle flags
-  if (!ST._lastCycleNum || ST._lastCycleNum !== cycleNum) {
+  if (ST._lastCycleNum !== cycleNum) {
     ST._lastCycleNum = cycleNum;
     ST.printempsUpgradeDone = false;
     ST.printempsBasCount = 0;
@@ -601,6 +601,19 @@ function populateAll() {
   restoreSymptomes();
   restoreSeanceDone();
   setTimeout(showInstallBanner, 1500);
+  // Rattrapage : si l'upgrade Printemps n'a pas été montré et qu'on est en début d'Été
+  if (ST.currentSaison === 'ete' && !ST.printempsUpgradeDone) {
+    const dur2 = ST.cycleDuration || 28;
+    const ovDay2 = Math.max(10, dur2 - 14);
+    const eteStart2 = Math.max(8, ovDay2 - 2);
+    if (ST.currentDay <= eteStart2 + 1) {
+      ST.printempsUpgradeDone = true;
+      saveState();
+      const lv = ST.seanceLevel || 1;
+      if (lv >= 4 && !ST.levelMaxShown) { ST.levelMaxShown = true; saveState(); setTimeout(showLevelMax, 2000); }
+      else if (lv < 4) setTimeout(showPrintempsUpgrade, 2000);
+    }
+  }
 }
 
 // ═══════════════════════════════════════════════
@@ -2070,7 +2083,14 @@ function getTodaySeanceSpec() {
         }
         const niveauData = sport.printemps[dayType]?.[level];
         if (!niveauData) return null;
-        return { type: 'automne-actif', data: niveauData, level, message: sport.automne.actif.message, reposExtra: sport.automne.actif.reposExtra };
+        // Niveau 4 Bas : résoudre la rotation comme en Printemps
+        let resolvedData = niveauData;
+        if (dayType === 'bas' && level === 4 && niveauData.rotation) {
+          const rotIdx = (ST.printempsBasCount || 0) % 3;
+          const rot = niveauData.rotation[rotIdx];
+          resolvedData = { nom: rot.nom, duree: niveauData.duree, exercices: rot.exercices };
+        }
+        return { type: 'automne-actif', data: resolvedData, level, message: sport.automne.actif.message, reposExtra: sport.automne.actif.reposExtra };
       }
       if (micro === 'doux') return { type: 'automne-doux', data: sport.automne.doux, level };
       return { type: 'automne-fin', data: sport.automne.fin };
