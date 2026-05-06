@@ -1448,6 +1448,8 @@ function checkDailyReset() {
   ST.glaireDate = null;
   ST.checkin = null;
   ST.checkinDate = null;
+  ST.eveningCheckinDate = null;
+  ST.eveningCheckinMood = null;
   // Élaguer les entrées vieilles de plus de 30 jours pour limiter le localStorage
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - 30);
@@ -1690,8 +1692,12 @@ function checkWeeklyReset() {
   const weekKey = monday.toISOString().split('T')[0];
   if (ST.lastWeeklyReset === weekKey) return;
   ST.mouvDone = {};
-  ST.weeklyObjChecks = {};
-  ST.customObjChecks = {};
+  // Élaguer les entrées hebdomadaires > 4 semaines (ne pas tout effacer)
+  const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 28);
+  ['weeklyObjChecks', 'customObjChecks'].forEach(key => {
+    if (!ST[key] || typeof ST[key] !== 'object') return;
+    Object.keys(ST[key]).forEach(wk => { if (new Date(wk) < cutoff) delete ST[key][wk]; });
+  });
   ST.lastWeeklyReset = weekKey;
   saveState();
 }
@@ -1839,6 +1845,8 @@ function switchTabById(name, section) {
   const tabMap = {accueil:0, cycle:1, ame:2, objectifs:3, moi:4};
   const navItems = document.querySelectorAll('.nav-item');
   if (navItems[tabMap[name]]) navItems[tabMap[name]].classList.add('active');
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
   setTimeout(() => showTabTour(name), 300);
   const _ac2 = document.getElementById('app-content');
   if (_ac2) _ac2.scrollTop = 0;
@@ -1932,29 +1940,11 @@ function updateMouvProgress(total) {
   if (pctEl) pctEl.textContent = pct + '%';
   if (fill) fill.style.width = pct + '%';
 }
-const SPORT_MSGS = {hiver:"Alhamdulillah — tu as pris soin de ton corps pendant l'Hiver.",printemps:"Alhamdulillah — ton corps t'a portée. Il méritait ce soin.",ete:"Alhamdulillah — tu as honoré ce pic d'énergie. Barak Allahou fik.",automne:"Alhamdulillah — malgré la lourdeur de l'Automne, tu as bougé."};
-function validerSeance() {
-  const today = new Date().toDateString();
-  ST.seanceDone = ST.seanceDone || {};
-  ST.seanceDone[today] = true;
-  saveState();
-  afficherSeanceDone();
-  const s = SAISONS[ST.currentSaison];
-  renderQuickSeance(s);
-  renderDayScore();
-}
-function afficherSeanceDone() {
-  const btn = document.getElementById('sport-validate-btn');
-  const done = document.getElementById('sport-done-state');
-  const msg = document.getElementById('sport-done-msg');
-  if (btn) btn.style.display = 'none';
-  if (done) done.style.display = 'block';
-  if (msg) msg.textContent = SPORT_MSGS[ST.currentSaison] || SPORT_MSGS.hiver;
-}
 function restoreSeanceDone() {
   const today = new Date().toDateString();
-  if (ST.seanceDone && ST.seanceDone[today]) afficherSeanceDone();
-  else {
+  if (ST.seanceDone && ST.seanceDone[today]) {
+    // noop — renderCarteBouger gère déjà qs-btn-wrap / qs-done-wrap
+  } else {
     const btn = document.getElementById('sport-validate-btn');
     const done = document.getElementById('sport-done-state');
     if (btn) btn.style.display = 'block';
@@ -2535,11 +2525,6 @@ const TAB_TOURS = {
     emoji: '🤲',
     title: 'Ta connexion spirituelle',
     text: 'Coche tes prières, tes adhkar et ta lecture du Coran. Pendant tes règles, un espace doux et adapté remplace la carte des prières.',
-  },
-  vie: {
-    emoji: '🌿',
-    title: 'Ta vie au rythme du cycle',
-    text: 'Alimentation, sport et skincare changent à chaque phase. Retrouve ici les conseils adaptés à ce que ton corps traverse en ce moment.',
   },
   objectifs: {
     emoji: '🎯',
