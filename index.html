@@ -240,6 +240,26 @@
     <div class="sugg-engage-list" id="sugg-engage-list"></div>
   </div>
 
+  <!-- TRIAL LOCK ACCUEIL -->
+  <div id="trial-lock-accueil" style="display:none;margin:12px 14px 16px;">
+    <div class="trial-lock-card">
+      <div class="trial-lock-top">
+        <div class="trial-lock-emoji">&#127807;</div>
+        <div class="trial-lock-texts">
+          <div class="trial-lock-title">Ton essai gratuit est termin&#233;</div>
+          <div class="trial-lock-sub">L&#8217;onglet &#194;me reste toujours accessible gratuitement.</div>
+        </div>
+      </div>
+      <div class="trial-lock-features">
+        <div class="trial-lock-feat">&#128170; S&#233;ances de sport adapt&#233;es</div>
+        <div class="trial-lock-feat">&#10024; Routine skincare quotidienne</div>
+        <div class="trial-lock-feat">&#127869; Recettes &amp; Mon March&#233;</div>
+        <div class="trial-lock-feat">&#127919; Objectifs personnalis&#233;s</div>
+      </div>
+      <button class="trial-lock-btn" onclick="switchTabById('moi')">D&#233;couvrir SakinApp Premium &#8250;</button>
+    </div>
+  </div>
+
   <div style="height:16px;"></div>
 </div>
 
@@ -367,6 +387,15 @@
       </div>
     </div>
   </div>
+  <!-- TRIAL LOCK CYCLE -->
+  <div id="trial-lock-cycle" style="display:none;margin:0 14px 14px;">
+    <div class="trial-lock-banner">
+      <span class="trial-lock-banner-icon">&#128274;</span>
+      <div class="trial-lock-banner-text">Suivi des sympt&#244;mes et glaire disponibles avec Premium</div>
+      <button class="trial-lock-banner-btn" onclick="switchTabById('moi')">Premium</button>
+    </div>
+  </div>
+
   <div style="height:14px;"></div>
 </div>
 
@@ -532,6 +561,15 @@
   <div class="tab-topbar">
     <div class="tab-topbar-title">Mes Objectifs</div>
     <div class="tab-topbar-sub">Semaine &amp; cycle</div>
+  </div>
+
+  <!-- TRIAL LOCK OBJECTIFS -->
+  <div id="trial-lock-objectifs" style="display:none;margin:12px 14px 0;">
+    <div class="trial-lock-banner">
+      <span class="trial-lock-banner-icon">&#128274;</span>
+      <div class="trial-lock-banner-text">Objectifs personnalis&#233;s disponibles avec Premium</div>
+      <button class="trial-lock-banner-btn" onclick="switchTabById('moi')">Premium</button>
+    </div>
   </div>
 
   <!-- RÉSUMÉ SEMAINE -->
@@ -851,6 +889,22 @@
     <div style="font-family:var(--serif);font-size:14px;color:var(--season);font-style:italic;margin-bottom:28px;">&laquo; Et quiconque fait le bien, f&ucirc;t-ce du poids d'un atome, le verra. &raquo;</div>
     <button onclick="contactLevelMax()" style="background:var(--season-grad);color:white;border:none;border-radius:14px;padding:14px 24px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;width:100%;margin-bottom:10px;">&#9993; Partager avec Sakina</button>
     <button onclick="closeLevelMaxModal()" style="background:none;border:none;font-size:13px;color:var(--gris);cursor:pointer;font-family:var(--sans);">Fermer</button>
+  </div>
+</div>
+
+<!-- MODAL BILAN FIN D'ESSAI -->
+<div class="modal-overlay" id="bilan-modal" onclick="if(event.target===this)closeBilanModal()">
+  <div class="modal-sheet" style="text-align:center;padding:32px 24px 32px;">
+    <div style="font-size:52px;margin-bottom:12px;">&#127774;</div>
+    <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--season);font-weight:700;margin-bottom:8px;">Ton bilan du premier cycle</div>
+    <div style="font-family:var(--serif);font-size:20px;color:var(--noir);margin-bottom:6px;line-height:1.3;">Alhamdulillah,<br>tu as travers&#233; un cycle complet</div>
+    <div style="font-family:var(--serif);font-size:13px;color:var(--gris);font-style:italic;margin-bottom:22px;">&#171;&#160;Et quiconque fait le bien, f&#251;t-ce du poids d&#8217;un atome, le verra.&#160;&#187; — Coran 99:7</div>
+    <div id="bilan-stats" class="bilan-stats-grid"></div>
+    <div style="background:var(--season-soft);border-radius:14px;padding:14px 16px;margin:20px 0 22px;border-left:3px solid var(--season);">
+      <div style="font-family:var(--serif);font-size:13px;color:var(--noir);line-height:1.7;font-style:italic;">L&#8217;onglet &#194;me reste toujours accessible gratuitement. Tes prières, ton dhikr et le Coran t&#8217;appartiennent.</div>
+    </div>
+    <button onclick="bilanUpgrade()" style="width:100%;padding:15px;background:var(--season-grad);color:white;border:none;border-radius:16px;font-size:15px;font-weight:700;font-family:var(--sans);cursor:pointer;margin-bottom:10px;">&#10022; Continuer avec Premium</button>
+    <button onclick="closeBilanModal()" style="background:none;border:none;font-size:13px;color:var(--gris);cursor:pointer;font-family:var(--sans);padding:4px;">Continuer gratuitement</button>
   </div>
 </div>
 

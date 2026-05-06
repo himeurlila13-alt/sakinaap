@@ -43,6 +43,8 @@ let ST = {
   customObjectifs: [],
   customObjChecks: {},
   marche: { phase: null, checks: {}, custom: [] },
+  trialEnded: false,
+  bilanShown: false,
 };
 
 function saveState() {
@@ -538,6 +540,17 @@ function computeCycle() {
     ST.printempsUpgradeDone = false;
     ST.printempsBasCount = 0;
   }
+  // Trial end detection — after 1 full cycle
+  if (!ST.isPremium && !ST.trialEnded && cycleNum >= 1) {
+    ST.trialEnded = true;
+    if (!ST.bilanShown) {
+      ST.bilanShown = true;
+      saveState();
+      setTimeout(showBilanModal, 900);
+    } else {
+      saveState();
+    }
+  }
   ST.currentDay = Math.max(1, Math.min(day, dur));
 
   // La phase lutéale est ~14j avant la fin — c'est elle qui est constante.
@@ -555,6 +568,63 @@ function computeCycle() {
 }
 
 const BG_PHASE = { hiver: '#FAF0FF', printemps: '#F0FAF6', ete: '#FFFBF0', automne: '#FDF5F0' };
+
+// ═══════════════════════════════════════════════
+// TRIAL
+// ═══════════════════════════════════════════════
+function isTrialActive() { return ST.isPremium || !ST.trialEnded; }
+
+function _bilanStats() {
+  const seanceCount = Object.keys(ST.seanceDone || {}).length;
+  const prayerDays = Object.keys(ST.prayers || {}).filter(d => {
+    const p = ST.prayers[d] || {};
+    return ['fajr','dohr','asr','maghrib','isha'].filter(n => p[n]).length >= 3;
+  }).length;
+  const dhikrDays = Object.keys(ST.dhikrChecks || {}).filter(d =>
+    Object.values(ST.dhikrChecks[d] || {}).filter(Boolean).length >= 3
+  ).length;
+  const coranDays = Object.keys(ST.coranDone || {}).filter(d => ST.coranDone[d]).length;
+  return { seanceCount, prayerDays, dhikrDays, coranDays };
+}
+
+function showBilanModal() {
+  const el = document.getElementById('bilan-modal');
+  const content = document.getElementById('bilan-stats');
+  if (!el) return;
+  const { seanceCount, prayerDays, dhikrDays, coranDays } = _bilanStats();
+  const dur = ST.cycleDuration || 28;
+  if (content) content.innerHTML = `
+    <div class="bilan-stat"><span class="bilan-stat-num">${seanceCount}</span><span class="bilan-stat-lbl">séances de sport</span></div>
+    <div class="bilan-stat"><span class="bilan-stat-num">${prayerDays}</span><span class="bilan-stat-lbl">jours de prières (3/5+)</span></div>
+    <div class="bilan-stat"><span class="bilan-stat-num">${dhikrDays}</span><span class="bilan-stat-lbl">jours de dhikr</span></div>
+    <div class="bilan-stat"><span class="bilan-stat-num">${coranDays}</span><span class="bilan-stat-lbl">jours de Coran</span></div>
+    <div class="bilan-stat"><span class="bilan-stat-num">${dur}j</span><span class="bilan-stat-lbl">cycle traversé</span></div>`;
+  el.classList.add('open');
+}
+function closeBilanModal() {
+  const el = document.getElementById('bilan-modal');
+  if (el) el.classList.remove('open');
+  applyTrialLocks();
+}
+function bilanUpgrade() {
+  closeBilanModal();
+  switchTabById('moi');
+}
+
+function applyTrialLocks() {
+  const active = isTrialActive();
+  // Accueil — masque les 3 cartes, affiche le lock
+  ['day-card-skin','day-card-seance','day-card-repas'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.style.display = active ? '' : 'none';
+  });
+  const sugg = document.querySelector('.sugg-engage-card');
+  if (sugg) sugg.style.display = active ? '' : 'none';
+  const la = document.getElementById('trial-lock-accueil'); if (la) la.style.display = active ? 'none' : 'block';
+  // Cycle
+  const lc = document.getElementById('trial-lock-cycle'); if (lc) lc.style.display = active ? 'none' : 'block';
+  // Objectifs
+  const lo = document.getElementById('trial-lock-objectifs'); if (lo) lo.style.display = active ? 'none' : 'block';
+}
 
 function applySaisonTheme() {
   const s = SAISONS[ST.currentSaison];
@@ -643,6 +713,9 @@ function renderDashboard(s) {
 
   // ─ Suggestions engageantes ─
   renderSuggestionsEngage(s);
+
+  // Trial locks
+  applyTrialLocks();
 
   // Toggle Premium btn state
   const pBtn = document.getElementById('premium-toggle-btn');
@@ -1398,6 +1471,9 @@ function renderCycle(s) {
 
   // Symptômes
   renderSymptomes();
+
+  // Trial lock (cycle)
+  applyTrialLocks();
 }
 
 function startNewCycleToday() {
@@ -1710,6 +1786,9 @@ function renderWeeklyObjs() {
         </div>`;
     }).join('');
   }
+
+  // Trial lock
+  applyTrialLocks();
 }
 
 function toggleWeeklyObj(id) {
@@ -2665,7 +2744,8 @@ function confirmDeleteMyData() {
     isPremium: false, seanceValidatedCount: 0, seanceLevel: 1,
     amrapRecord: null, printempsUpgradeDone: false, levelMaxShown: false, printempsBasCount: 0, _lastCycleNum: null,
     weeklyObjChecks: {}, customObjectifs: [], customObjChecks: {},
-    marche: { phase: null, checks: {}, custom: [] }
+    marche: { phase: null, checks: {}, custom: [] },
+    trialEnded: false, bilanShown: false
   };
   closeDeleteModal();
   document.getElementById('app').style.display = 'none';

@@ -1156,6 +1156,28 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
 .marche-action-btn{flex:1;padding:10px 8px;font-size:12px;font-weight:600;border-radius:12px;border:1.5px solid var(--sable);background:white;color:var(--gris);cursor:pointer;font-family:var(--sans);transition:all .15s}
 .marche-action-btn:active{background:var(--season-soft);border-color:var(--season);color:var(--season)}
 .marche-action-share{border-color:var(--season-light);color:var(--season)}
+
+/* ═══ BILAN MODAL & TRIAL LOCKS ═══ */
+.bilan-stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:center;margin-bottom:4px}
+.bilan-stat{background:var(--creme);border-radius:14px;padding:12px 8px;border:1.5px solid var(--sable)}
+.bilan-stat-num{display:block;font-family:var(--script);font-size:28px;color:var(--season);line-height:1.1;margin-bottom:4px}
+.bilan-stat-lbl{font-size:10px;color:var(--gris);line-height:1.3}
+
+.trial-lock-card{background:white;border-radius:20px;padding:20px 18px;border:1.5px solid var(--sable);box-shadow:0 4px 20px rgba(45,36,32,.08)}
+.trial-lock-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+.trial-lock-emoji{font-size:28px;flex-shrink:0}
+.trial-lock-texts{flex:1}
+.trial-lock-title{font-family:var(--serif);font-size:16px;color:var(--noir);font-weight:600;margin-bottom:3px}
+.trial-lock-sub{font-size:12px;color:var(--gris);line-height:1.5}
+.trial-lock-features{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.trial-lock-feat{font-size:13px;color:var(--noir);display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--creme);border-radius:10px}
+.trial-lock-btn{width:100%;padding:14px;background:var(--season-grad);color:white;border:none;border-radius:14px;font-size:14px;font-weight:700;font-family:var(--sans);cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.12)}
+.trial-lock-btn:active{opacity:.88}
+
+.trial-lock-banner{display:flex;align-items:center;gap:10px;background:white;border:1.5px solid var(--season-light);border-radius:14px;padding:12px 14px}
+.trial-lock-banner-icon{font-size:18px;flex-shrink:0}
+.trial-lock-banner-text{font-size:12px;color:var(--gris);flex:1;line-height:1.4}
+.trial-lock-banner-btn{background:var(--season-grad);color:white;border:none;border-radius:10px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--sans);flex-shrink:0}
 .dc-skin-duree {
   font-size: 10px;
   font-weight: 700;
