@@ -42,6 +42,7 @@ let ST = {
   weeklyObjChecks: {},
   customObjectifs: [],
   customObjChecks: {},
+  marche: { phase: null, checks: {}, custom: [] },
 };
 
 function saveState() {
@@ -905,6 +906,144 @@ function renderCarteRepas(s) {
           <button class="action-prem-btn" onclick="switchTabById('moi')">Débloquer Premium</button>
         </div>
       </div>`;
+  }
+}
+
+// ═══════════════════════════════════════════════
+// MON MARCHÉ
+// ═══════════════════════════════════════════════
+function switchRepasTab(tab) {
+  ['recettes', 'marche'].forEach(t => {
+    const btn = document.getElementById('repas-tab-btn-' + t);
+    const pane = document.getElementById('repas-tab-' + t);
+    if (btn) btn.classList.toggle('active', t === tab);
+    if (pane) pane.style.display = t === tab ? 'block' : 'none';
+  });
+  if (tab === 'marche') renderMarcheTab();
+}
+
+function _getMarcheItems(saison) {
+  const items = [];
+  const alim = SAISONS[saison]?.alimentation;
+  if (alim?.aliments) {
+    alim.aliments.forEach(a => {
+      items.push({ id: 'alim_' + a.replace(/[\s'']/g, '_'), text: a, section: 'phase', star: (alim.star || []).includes(a) });
+    });
+  }
+  const seen = new Set();
+  (RECETTES[saison] || []).forEach(r => {
+    (r.ingredients || []).forEach(ing => {
+      const key = 'ingr_' + ing.replace(/[\s'']/g, '_').slice(0, 40);
+      if (!seen.has(key)) {
+        seen.add(key);
+        items.push({ id: key, text: ing, section: 'recette' });
+      }
+    });
+  });
+  return items;
+}
+
+function _marcheItemHtml(item, checked, canDelete) {
+  const star = item.star ? ' ⭐' : '';
+  return `<div class="marche-item${checked ? ' checked' : ''}" id="mitem-${item.id}">
+    <div class="marche-item-chk" onclick="marcheToggleItem('${item.id}')">${checked ? '✓' : ''}</div>
+    <span class="marche-item-text" onclick="marcheToggleItem('${item.id}')">${item.text}${star}</span>
+    ${canDelete ? `<span class="marche-item-del" onclick="marcheRemoveCustom('${item.id}')">×</span>` : ''}
+  </div>`;
+}
+
+function renderMarcheTab() {
+  const saison = ST.currentSaison;
+  if (!ST.marche) ST.marche = { phase: null, checks: {}, custom: [] };
+  const m = ST.marche;
+  if (m.phase !== saison) {
+    m.phase = saison;
+    m.checks = {};
+    saveState();
+  }
+  const container = document.getElementById('marche-content');
+  if (!container) return;
+  const s = SAISONS[saison];
+  const items = _getMarcheItems(saison);
+  const phaseItems = items.filter(it => it.section === 'phase');
+  const recetteItems = items.filter(it => it.section === 'recette');
+  let html = '';
+  html += `<div class="marche-section-lbl">${s.emoji} Aliments cl&#233;s &middot; ${s.nom}</div>`;
+  html += phaseItems.map(it => _marcheItemHtml(it, !!m.checks[it.id], false)).join('');
+  html += `<div class="marche-section-lbl">&#128203; Recettes du moment</div>`;
+  html += recetteItems.map(it => _marcheItemHtml(it, !!m.checks[it.id], false)).join('');
+  html += `<div class="marche-section-lbl">&#10133; Mes ajouts</div>`;
+  (m.custom || []).forEach(c => { html += _marcheItemHtml({ id: c.id, text: c.text, section: 'custom' }, !!m.checks[c.id], true); });
+  html += `<div class="marche-input-row">
+    <input class="marche-input" id="marche-input" type="text" placeholder="Ajouter un article&#8230;" inputmode="text"
+           onkeydown="if(event.key==='Enter'){this.blur();marcheAddItem();}">
+    <button class="marche-add-btn" onclick="marcheAddItem()">+</button>
+  </div>
+  <div class="marche-actions-row">
+    <button class="marche-action-btn" onclick="marcheNouvelleListe()">&#128465; Nouvelle liste</button>
+    <button class="marche-action-btn marche-action-share" onclick="marchePartager()">&#128228; Partager</button>
+  </div>`;
+  container.innerHTML = html;
+}
+
+function marcheToggleItem(itemId) {
+  if (!ST.marche) ST.marche = { phase: ST.currentSaison, checks: {}, custom: [] };
+  ST.marche.checks[itemId] = !ST.marche.checks[itemId];
+  saveState();
+  const el = document.getElementById('mitem-' + itemId);
+  if (!el) return;
+  const checked = !!ST.marche.checks[itemId];
+  el.classList.toggle('checked', checked);
+  const chk = el.querySelector('.marche-item-chk');
+  if (chk) chk.textContent = checked ? '✓' : '';
+}
+
+function marcheAddItem() {
+  const inp = document.getElementById('marche-input');
+  if (!inp) return;
+  const text = inp.value.trim();
+  if (!text) return;
+  if (!ST.marche) ST.marche = { phase: ST.currentSaison, checks: {}, custom: [] };
+  const id = 'custom_' + Date.now();
+  ST.marche.custom.push({ id, text });
+  inp.value = '';
+  saveState();
+  renderMarcheTab();
+  document.getElementById('marche-input')?.focus();
+}
+
+function marcheRemoveCustom(id) {
+  if (!ST.marche) return;
+  ST.marche.custom = (ST.marche.custom || []).filter(c => c.id !== id);
+  delete ST.marche.checks[id];
+  saveState();
+  renderMarcheTab();
+}
+
+function marcheNouvelleListe() {
+  if (!ST.marche) return;
+  ST.marche.checks = {};
+  saveState();
+  renderMarcheTab();
+  showToast('🛒 Liste remise à zéro');
+}
+
+function marchePartager() {
+  if (!ST.marche) return;
+  const m = ST.marche;
+  const saison = ST.currentSaison;
+  const s = SAISONS[saison];
+  const allItems = _getMarcheItems(saison);
+  const unchecked = [
+    ...allItems.filter(it => !m.checks[it.id]),
+    ...(m.custom || []).filter(c => !m.checks[c.id])
+  ];
+  if (!unchecked.length) { showToast('✅ Tout est déjà coché !'); return; }
+  const text = '🛒 Mon Marché SakinApp — ' + s.nom + '\n\n' + unchecked.map(it => '• ' + it.text).join('\n');
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => showToast('📤 Liste copiée dans le presse-papier !'));
+  } else {
+    showToast('❌ Copie non disponible sur ce navigateur');
   }
 }
 
@@ -2525,7 +2664,8 @@ function confirmDeleteMyData() {
     eveningCheckinMood: null, cycleHistory: [],
     isPremium: false, seanceValidatedCount: 0, seanceLevel: 1,
     amrapRecord: null, printempsUpgradeDone: false, levelMaxShown: false, printempsBasCount: 0, _lastCycleNum: null,
-    weeklyObjChecks: {}, customObjectifs: [], customObjChecks: {}
+    weeklyObjChecks: {}, customObjectifs: [], customObjChecks: {},
+    marche: { phase: null, checks: {}, custom: [] }
   };
   closeDeleteModal();
   document.getElementById('app').style.display = 'none';

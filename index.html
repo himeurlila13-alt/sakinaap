@@ -216,10 +216,19 @@
       <span class="day-card-icon">&#127869;&#65039;</span>
       <span class="day-card-title">Ton repas du jour</span>
     </div>
-    <div id="dc-repas-stars" class="day-card-chips"></div>
-    <div id="dc-repas-nutriments" class="day-card-nutriments"></div>
-    <div id="dc-repas-eviter" class="day-card-eviter"></div>
-    <div id="action-manger-premium" style="margin-top:10px;"></div>
+    <div class="repas-tab-bar">
+      <button class="repas-tab-btn active" id="repas-tab-btn-recettes" onclick="switchRepasTab('recettes')">&#127869;&#65039; Recettes</button>
+      <button class="repas-tab-btn" id="repas-tab-btn-marche" onclick="switchRepasTab('marche')">&#128722; Mon March&#233;</button>
+    </div>
+    <div id="repas-tab-recettes">
+      <div id="dc-repas-stars" class="day-card-chips"></div>
+      <div id="dc-repas-nutriments" class="day-card-nutriments"></div>
+      <div id="dc-repas-eviter" class="day-card-eviter"></div>
+      <div id="action-manger-premium" style="margin-top:10px;"></div>
+    </div>
+    <div id="repas-tab-marche" style="display:none;">
+      <div id="marche-content"></div>
+    </div>
   </div>
 
   <!-- SUGGESTIONS DU JOUR -->

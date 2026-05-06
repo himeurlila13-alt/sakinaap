@@ -1132,6 +1132,30 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
   line-height: 1.55;
   font-style: italic;
 }
+
+/* ═══ MON MARCHÉ ═══ */
+.repas-tab-bar{display:flex;gap:5px;background:var(--creme);border-radius:12px;padding:4px;margin:10px 0 12px}
+.repas-tab-btn{flex:1;padding:8px 6px;font-size:12px;font-weight:600;color:var(--gris);background:transparent;border:none;border-radius:9px;cursor:pointer;font-family:var(--sans);transition:all .18s;white-space:nowrap}
+.repas-tab-btn.active{background:white;color:var(--season);box-shadow:0 2px 8px rgba(45,36,32,.08)}
+.marche-section-lbl{font-size:9px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--season);margin:14px 0 8px}
+.marche-section-lbl:first-child{margin-top:2px}
+.marche-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:12px;margin-bottom:4px;background:var(--creme);cursor:pointer;transition:opacity .15s}
+.marche-item.checked{opacity:.45}
+.marche-item.checked .marche-item-text{text-decoration:line-through}
+.marche-item-chk{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--sable);background:white;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:white;transition:all .18s}
+.marche-item.checked .marche-item-chk{background:var(--season);border-color:var(--season)}
+.marche-item-text{font-size:13px;color:var(--noir);flex:1;line-height:1.3}
+.marche-item-del{font-size:17px;color:var(--gris);padding:2px 4px;cursor:pointer;flex-shrink:0;opacity:.4;transition:opacity .15s}
+.marche-item-del:active{opacity:1}
+.marche-input-row{display:flex;gap:8px;margin:10px 0 4px}
+.marche-input{flex:1;padding:10px 13px;border:1.5px solid var(--sable);border-radius:12px;font-size:13px;font-family:var(--sans);color:var(--noir);background:white;outline:none;-webkit-appearance:none}
+.marche-input:focus{border-color:var(--season)}
+.marche-add-btn{width:42px;height:42px;border-radius:12px;background:var(--season-grad);color:white;border:none;font-size:26px;font-weight:300;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;line-height:1}
+.marche-add-btn:active{opacity:.85}
+.marche-actions-row{display:flex;gap:8px;margin-top:14px}
+.marche-action-btn{flex:1;padding:10px 8px;font-size:12px;font-weight:600;border-radius:12px;border:1.5px solid var(--sable);background:white;color:var(--gris);cursor:pointer;font-family:var(--sans);transition:all .15s}
+.marche-action-btn:active{background:var(--season-soft);border-color:var(--season);color:var(--season)}
+.marche-action-share{border-color:var(--season-light);color:var(--season)}
 .dc-skin-duree {
   font-size: 10px;
   font-weight: 700;
