@@ -1,5 +1,3 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-
 module.exports = async (req, res) => {
   const { id } = req.query;
 
@@ -7,8 +5,17 @@ module.exports = async (req, res) => {
     return res.status(400).json({ valid: false });
   }
 
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) {
+    return res.status(500).json({ valid: false });
+  }
+
   try {
-    const session = await stripe.checkout.sessions.retrieve(id);
+    const r = await fetch(`https://api.stripe.com/v1/checkout/sessions/${id}`, {
+      headers: { Authorization: `Bearer ${key}` },
+    });
+
+    const session = await r.json();
     const valid = session.payment_status === 'paid';
     res.json({ valid, plan: session.metadata?.plan || 'premium' });
   } catch {
