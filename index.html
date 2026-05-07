@@ -660,7 +660,7 @@
       <div style="display:flex;flex-direction:column;">
         <div style="display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid #EAD9C0;">
           <span style="font-size:24px;width:30px;text-align:center;flex-shrink:0;">&#127869;&#65039;</span>
-          <div><div style="font-size:14px;font-weight:600;color:#1C1008;">Une recette cyclique chaque jour</div><div style="font-size:11px;color:#8A7060;margin-top:2px;">Adaptée à ta phase, sans grammage</div></div>
+          <div><div style="font-size:14px;font-weight:600;color:#1C1008;">Une recette cyclique chaque jour</div><div style="font-size:11px;color:#8A7060;margin-top:2px;">Adaptée à ta phase, ingrédients &amp; étapes inclus</div></div>
         </div>
         <div style="display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid #EAD9C0;">
           <span style="font-size:24px;width:30px;text-align:center;flex-shrink:0;">&#128170;</span>
@@ -694,16 +694,8 @@
       <div style="text-align:center;margin-bottom:16px;">
         <div style="font-size:11px;color:#8A7060;font-style:italic;">Résilie quand tu veux. Aucun engagement.</div>
       </div>
-      <!-- Waitlist -->
-      <div style="text-align:center;margin-bottom:10px;">
-        <div style="font-family:var(--serif);font-size:14px;color:#1C1008;margin-bottom:4px;">Sois la première informée</div>
-        <div style="font-size:11px;color:#8A7060;line-height:1.5;">Accès anticipé et tarif fondatrice réservé.</div>
-      </div>
-      <div style="display:flex;gap:8px;">
-        <input id="waitlist-email" type="email" placeholder="ton@email.com" style="flex:1;padding:12px 14px;border:1.5px solid #D4B87A;border-radius:12px;font-size:13px;font-family:var(--sans);color:#1C1008;background:white;outline:none;-webkit-appearance:none;appearance:none;">
-        <button onclick="joinWaitlist()" style="background:linear-gradient(135deg,#C9A96E,#A87A30);color:#1C1008;border:none;border-radius:12px;padding:12px 16px;font-size:13px;font-weight:700;font-family:var(--sans);cursor:pointer;white-space:nowrap;flex-shrink:0;">Rejoindre ✦</button>
-      </div>
-      <div id="waitlist-msg" style="text-align:center;font-size:12px;color:#3DAE8A;margin-top:8px;font-family:var(--serif);font-style:italic;min-height:18px;"></div>
+      <button onclick="startStripeCheckout()" style="width:100%;padding:16px;background:linear-gradient(135deg,#C9A96E,#A87A30);color:#1C1008;border:none;border-radius:14px;font-size:15px;font-weight:700;font-family:var(--sans);cursor:pointer;letter-spacing:.3px;">&#10022; S&rsquo;abonner maintenant</button>
+      <div style="text-align:center;font-size:11px;color:#8A7060;margin-top:10px;">&#128274; Paiement s&eacute;curis&eacute; par Stripe &middot; R&eacute;siliation &agrave; tout moment</div>
     </div>
   </div>
 
