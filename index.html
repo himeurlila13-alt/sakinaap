@@ -718,6 +718,8 @@
     <div class="ps-row" onclick="openNotifSettings()"><div class="ps-ico">&#128276;</div><div><div class="ps-lbl">Rappels Sakina</div><div class="ps-sub">Configurer mes notifications</div></div><div class="ps-arr">&#8250;</div></div>
     <div class="ps-row" onclick="deleteMyData()"><div class="ps-ico">&#128465;</div><div><div class="ps-lbl" style="color:#C4694A;">Réinitialiser mes données</div><div class="ps-sub">Efface tout de cet appareil — RGPD</div></div><div class="ps-arr">&#8250;</div></div>
     <div class="ps-row" onclick="openMentionsLegales()"><div class="ps-ico">&#9878;</div><div><div class="ps-lbl">Mentions légales</div><div class="ps-sub">Éditrice, hébergeur, données</div></div><div class="ps-arr">&#8250;</div></div>
+    <div class="ps-row" onclick="openConfidentialite()"><div class="ps-ico">&#128274;</div><div><div class="ps-lbl">Politique de confidentialité</div><div class="ps-sub">Tes données &amp; tes droits RGPD</div></div><div class="ps-arr">&#8250;</div></div>
+    <div class="ps-row" onclick="openCGU()"><div class="ps-ico">&#128203;</div><div><div class="ps-lbl">CGU &amp; Conditions d'abonnement</div><div class="ps-sub">Conditions d'utilisation de SakinApp</div></div><div class="ps-arr">&#8250;</div></div>
   </div>
 
   <div style="text-align:center;padding:24px 20px 32px;color:var(--gris);font-size:12px;">
@@ -812,6 +814,131 @@
 
     <div style="text-align:center;font-size:11px;color:var(--gris);margin-top:20px;padding-top:16px;border-top:1px solid var(--sable);">
       SakinApp — Dernière mise à jour : mai 2026
+    </div>
+  </div>
+</div>
+
+<!-- MODAL POLITIQUE DE CONFIDENTIALITÉ -->
+<div class="modal-overlay" id="confidentialite-modal" onclick="if(event.target.id==='confidentialite-modal')closeConfidentialite()">
+  <div class="modal-sheet" style="max-height:85vh;overflow-y:auto;">
+    <div class="modal-handle"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--noir);">Politique de confidentialité</div>
+      <button onclick="closeConfidentialite()" style="background:var(--sable);border:none;border-radius:50%;width:32px;height:32px;font-size:18px;cursor:pointer;">&#215;</button>
+    </div>
+
+    <div class="ml-section">
+      <div class="ml-titre">Responsable du traitement</div>
+      <div class="ml-ligne"><span class="ml-lbl">Nom</span> Lila Himeur</div>
+      <div class="ml-ligne"><span class="ml-lbl">Contact</span> sakina.evolution.contact@gmail.com</div>
+    </div>
+
+    <div class="ml-section">
+      <div class="ml-titre">Données collectées</div>
+      <p class="ml-txt"><strong>Aucune donnée n'est transmise à nos serveurs.</strong> Toutes les informations que tu saisis dans SakinApp (cycle menstruel, prières, humeurs, symptômes, objectifs, prénom) sont stockées exclusivement sur ton appareil via le localStorage de ton navigateur.</p>
+      <p class="ml-txt" style="margin-top:10px;">Ces données ne peuvent être lues ni par nous, ni par des tiers. Seule toi y as accès, sur ton appareil.</p>
+    </div>
+
+    <div class="ml-section">
+      <div class="ml-titre">Données de la liste d'attente (Waitlist)</div>
+      <p class="ml-txt">Si tu t'inscris à la waitlist Premium, ton adresse e-mail est transmise au service <strong>Formspree</strong> (Formspree, Inc., États-Unis) dans le seul but de t'informer de l'ouverture de l'abonnement.</p>
+      <div class="ml-ligne" style="margin-top:10px;"><span class="ml-lbl">Finalité</span> Information sur l'ouverture Premium</div>
+      <div class="ml-ligne"><span class="ml-lbl">Base légale</span> Consentement (tu remplis le formulaire volontairement)</div>
+      <div class="ml-ligne"><span class="ml-lbl">Conservation</span> Jusqu'à l'ouverture Premium ou sur demande de suppression</div>
+      <div class="ml-ligne"><span class="ml-lbl">Transfert</span> Formspree (États-Unis) — encadré par les clauses contractuelles types UE</div>
+    </div>
+
+    <div class="ml-section">
+      <div class="ml-titre">Cookies et traceurs</div>
+      <p class="ml-txt">SakinApp n'utilise <strong>aucun cookie</strong>, aucun outil d'analyse (Google Analytics, etc.), aucun pixel publicitaire. Le localStorage utilisé est techniquement nécessaire au fonctionnement de l'app et n'est pas accessible par des tiers.</p>
+    </div>
+
+    <div class="ml-section">
+      <div class="ml-titre">Tes droits (RGPD)</div>
+      <p class="ml-txt">Conformément au Règlement Général sur la Protection des Données (RGPD — Règlement UE 2016/679), tu disposes des droits suivants :</p>
+      <div class="ml-ligne" style="margin-top:10px;flex-direction:column;gap:6px;">
+        <div>• <strong>Accès</strong> : tu peux exporter tes données depuis Paramètres → Exporter mes données</div>
+        <div>• <strong>Suppression</strong> : Paramètres → Réinitialiser mes données efface tout de ton appareil</div>
+        <div>• <strong>Portabilité</strong> : export JSON disponible dans Paramètres</div>
+        <div>• <strong>Opposition / Rectification</strong> : pour les données waitlist, contacte-nous par email</div>
+      </div>
+      <p class="ml-txt" style="margin-top:10px;">Pour toute demande relative à tes données : <strong>sakina.evolution.contact@gmail.com</strong></p>
+      <p class="ml-txt" style="margin-top:8px;">Tu as également le droit d'introduire une réclamation auprès de la <strong>CNIL</strong> (cnil.fr).</p>
+    </div>
+
+    <div class="ml-section">
+      <div class="ml-titre">Sécurité</div>
+      <p class="ml-txt">Les données locales sont protégées par la sécurité de ton appareil et de ton navigateur. L'application est hébergée sur Vercel avec connexion HTTPS chiffrée.</p>
+    </div>
+
+    <div style="text-align:center;font-size:11px;color:var(--gris);margin-top:20px;padding-top:16px;border-top:1px solid var(--sable);">
+      SakinApp — Politique de confidentialité — Dernière mise à jour : mai 2026
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CGU -->
+<div class="modal-overlay" id="cgu-modal" onclick="if(event.target.id==='cgu-modal')closeCGU()">
+  <div class="modal-sheet" style="max-height:85vh;overflow-y:auto;">
+    <div class="modal-handle"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <div style="font-family:'Playfair Display',serif;font-size:17px;color:var(--noir);">CGU &amp; Conditions d'abonnement</div>
+      <button onclick="closeCGU()" style="background:var(--sable);border:none;border-radius:50%;width:32px;height:32px;font-size:18px;cursor:pointer;">&#215;</button>
+    </div>
+
+    <div class="ml-section">
+      <div class="ml-titre">1. Présentation</div>
+      <p class="ml-txt">SakinApp est une application web progressive (PWA) de suivi du cycle menstruel et de bien-être islamique, éditée par Lila Himeur. L'utilisation de SakinApp implique l'acceptation pleine et entière des présentes Conditions Générales d'Utilisation.</p>
+    </div>
+
+    <div class="ml-section">
+      <div class="ml-titre">2. Accès au service</div>
+      <p class="ml-txt">SakinApp est accessible depuis tout appareil disposant d'un navigateur web et d'une connexion internet. L'app peut être installée sur l'écran d'accueil et fonctionne en mode hors-ligne pour les fonctionnalités de base.</p>
+      <p class="ml-txt" style="margin-top:8px;">L'éditrice se réserve le droit de modifier, suspendre ou interrompre tout ou partie du service à tout moment.</p>
+    </div>
+
+    <div class="ml-section">
+      <div class="ml-titre">3. Version gratuite — Période d'essai</div>
+      <p class="ml-txt">SakinApp est accessible gratuitement pendant une période d'essai de <strong>20 jours</strong> à compter de la première utilisation. À l'issue de cette période, l'accès aux fonctionnalités complètes nécessite un abonnement Premium.</p>
+    </div>
+
+    <div class="ml-section">
+      <div class="ml-titre">4. Abonnement Premium</div>
+      <div class="ml-ligne"><span class="ml-lbl">Mensuel</span> 2,99 € / mois</div>
+      <div class="ml-ligne"><span class="ml-lbl">Annuel</span> 24,99 € / an (économie de 36%)</div>
+      <p class="ml-txt" style="margin-top:10px;">Durant la phase bêta, l'accès Premium est accordé via des codes d'accès personnels, non transférables et à usage unique. Tout code partagé pourra être désactivé sans préavis.</p>
+      <p class="ml-txt" style="margin-top:8px;">Les tarifs sont indiqués en euros TTC. L'éditrice se réserve le droit de modifier les tarifs avec un préavis de 30 jours.</p>
+    </div>
+
+    <div class="ml-section">
+      <div class="ml-titre">5. Propriété intellectuelle</div>
+      <p class="ml-txt">L'ensemble des éléments de SakinApp (contenus, design, code, textes spirituels, traductions, nom et logo) est protégé par le droit de la propriété intellectuelle et est la propriété exclusive de Lila Himeur. Toute reproduction ou utilisation sans autorisation est interdite.</p>
+    </div>
+
+    <div class="ml-section">
+      <div class="ml-titre">6. Responsabilité</div>
+      <p class="ml-txt">SakinApp fournit des informations à caractère général sur le cycle menstruel, la nutrition, le sport et le bien-être spirituel. Ces informations ne constituent pas un avis médical ou religieux. L'éditrice décline toute responsabilité en cas d'utilisation des contenus à des fins médicales ou de diagnostic.</p>
+      <p class="ml-txt" style="margin-top:8px;">Toute décision de santé doit être prise en concertation avec un professionnel de santé qualifié.</p>
+    </div>
+
+    <div class="ml-section">
+      <div class="ml-titre">7. Données personnelles</div>
+      <p class="ml-txt">Le traitement des données personnelles est régi par la Politique de confidentialité de SakinApp, consultable dans Paramètres → Politique de confidentialité.</p>
+    </div>
+
+    <div class="ml-section">
+      <div class="ml-titre">8. Droit applicable &amp; litiges</div>
+      <p class="ml-txt">Les présentes CGU sont soumises au droit français. En cas de litige, une solution amiable sera recherchée en priorité. À défaut, les tribunaux français seront compétents.</p>
+      <p class="ml-txt" style="margin-top:8px;">Pour tout litige lié à la consommation, tu peux recourir à une plateforme de médiation de la consommation agréée.</p>
+    </div>
+
+    <div class="ml-section">
+      <div class="ml-titre">9. Contact</div>
+      <p class="ml-txt">sakina.evolution.contact@gmail.com</p>
+    </div>
+
+    <div style="text-align:center;font-size:11px;color:var(--gris);margin-top:20px;padding-top:16px;border-top:1px solid var(--sable);">
+      SakinApp — CGU v1.0 — Mai 2026
     </div>
   </div>
 </div>

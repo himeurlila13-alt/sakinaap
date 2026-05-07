@@ -2905,6 +2905,18 @@ function openMentionsLegales() {
 function closeMentionsLegales() {
   document.getElementById('mentions-modal').classList.remove('open');
 }
+function openConfidentialite() {
+  document.getElementById('confidentialite-modal').classList.add('open');
+}
+function closeConfidentialite() {
+  document.getElementById('confidentialite-modal').classList.remove('open');
+}
+function openCGU() {
+  document.getElementById('cgu-modal').classList.add('open');
+}
+function closeCGU() {
+  document.getElementById('cgu-modal').classList.remove('open');
+}
 
 // ═══════════════════════════════════════════════
 // TOUR GUIDÉ — un tooltip par onglet à la 1ère ouverture
