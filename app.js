@@ -1165,7 +1165,12 @@ function _getMarcheItems(saison) {
   const seen = new Set();
   (RECETTES[saison] || []).forEach(r => {
     (r.ingredients || []).forEach(ing => {
-      const key = 'ingr_' + ing.replace(/[\s'']/g, '_').slice(0, 40);
+      const norm = ing.toLowerCase()
+        .replace(/^[\d.,/½¼¾]+\s*(g|kg|ml|cl|l|cs|cc)?\s*/i, '')
+        .replace(/^(grosses?|petites?|grandes?)?\s*(poign[ée]+s?|verres?|tranches?|boîtes?|carr[ée]+s?|botte)\s+(d[e']\s*|de\s+l[a']?\s*)?/i, '')
+        .replace(/^(quelques|un|une|des|du|de la|de l')\s+/i, '')
+        .trim().slice(0, 35);
+      const key = 'ingr_' + norm.replace(/[\s''(),]/g, '_');
       if (!seen.has(key)) {
         seen.add(key);
         items.push({ id: key, text: ing, section: 'recette' });
