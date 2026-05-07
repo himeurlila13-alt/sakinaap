@@ -2923,7 +2923,9 @@ async function sendFeedback() {
 }
 function restoreFeedback() {
   const section=document.getElementById('feedback-section'); if(!section) return;
-  if (ST.cycleStart) { const daysSince=Math.floor((new Date()-new Date(ST.cycleStart))/86400000); if(daysSince<3&&!ST.feedbackSent){section.style.display='none';return;} }
+  if (!ST.cycleStart) { section.style.display='none'; return; }
+  const daysSince=Math.floor((Date.now()-new Date(ST.cycleStart))/86400000);
+  if (daysSince<3&&!ST.feedbackSent) { section.style.display='none'; return; }
   section.style.display='block';
   if (ST.feedbackSent) { const form=document.getElementById('feedback-form-wrap'); const sent=document.getElementById('feedback-sent-wrap'); if(form) form.style.display='none'; if(sent) sent.style.display='block'; }
 }
@@ -3031,32 +3033,49 @@ function renderPatterns() {
     ${minD !== maxD ? `<div style="font-size:11px;color:var(--gris);margin-bottom:14px;line-height:1.5;">Tes cycles varient entre <b style="color:var(--noir);">${minD}</b> et <b style="color:var(--noir);">${maxD}</b> jours — ${isRegular ? 'une belle régularité.' : 'des variations normales.'}</div>` : `<div style="font-size:11px;color:var(--gris);margin-bottom:14px;">Tes cycles sont très stables ✨</div>`}
   `;
 
-  // Section premium verrouillée
-  const previewSymptoms = topSymp.length >= 2 ? topSymp : [
-    { emoji: '😴', label: 'Fatigue', cnt: 8 },
-    { emoji: '🌀', label: 'Crampes', cnt: 5 },
-    { emoji: '🌸', label: 'Bonne humeur', cnt: 4 },
-  ];
-
-  document.getElementById('patterns-premium').innerHTML = `
-    <div style="position:relative;border-radius:14px;overflow:hidden;margin-top:4px;">
-      <div style="filter:blur(3px);pointer-events:none;user-select:none;padding:14px;background:var(--creme);">
-        <div style="font-size:10px;font-weight:600;color:var(--gris);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">Tes symptômes les plus fréquents</div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">
-          ${previewSymptoms.map(s => `<div style="background:white;border-radius:10px;padding:6px 12px;font-size:12px;display:flex;align-items:center;gap:6px;">${s.emoji} <span>${s.label}</span> <span style="color:var(--gris);">·</span> <b>${s.cnt}×</b></div>`).join('')}
+  const premEl = document.getElementById('patterns-premium');
+  if (isFullAccess()) {
+    // Premium / trial : données réelles débloquées
+    if (topSymp.length === 0) {
+      premEl.innerHTML = `
+        <div style="border-radius:14px;padding:14px 16px;background:var(--creme);margin-top:4px;">
+          <div style="font-size:12px;color:var(--gris);line-height:1.6;">Note tes symptômes chaque jour depuis l'onglet Cycle — tes patterns apparaîtront ici au fil des semaines.</div>
+        </div>`;
+    } else {
+      const daysUntilNext = Math.max(0, (ST.cycleDuration || 28) - (ST.currentDay - 1));
+      premEl.innerHTML = `
+        <div style="border-radius:14px;padding:14px 16px;background:var(--creme);margin-top:4px;">
+          <div style="font-size:10px;font-weight:600;color:var(--gris);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">Tes symptômes les plus fréquents</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;">
+            ${topSymp.map(s => `<div style="background:white;border-radius:10px;padding:6px 12px;font-size:12px;display:flex;align-items:center;gap:6px;">${s.emoji} <span>${s.label}</span> <span style="color:var(--gris);">·</span> <b>${s.cnt}×</b></div>`).join('')}
+          </div>
+          <div style="font-size:11px;color:var(--gris);">🔮 Prochaines règles prévues dans <b style="color:var(--noir);">≈ ${daysUntilNext} jour${daysUntilNext > 1 ? 's' : ''}</b></div>
+        </div>`;
+    }
+  } else {
+    // Non premium : aperçu flouté
+    const previewSymptoms = topSymp.length >= 2 ? topSymp : [
+      { emoji: '😴', label: 'Fatigue', cnt: 8 },
+      { emoji: '🌀', label: 'Crampes', cnt: 5 },
+      { emoji: '🌸', label: 'Bonne humeur', cnt: 4 },
+    ];
+    premEl.innerHTML = `
+      <div style="position:relative;border-radius:14px;overflow:hidden;margin-top:4px;">
+        <div style="filter:blur(3px);pointer-events:none;user-select:none;padding:14px;background:var(--creme);">
+          <div style="font-size:10px;font-weight:600;color:var(--gris);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">Tes symptômes les plus fréquents</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">
+            ${previewSymptoms.map(s => `<div style="background:white;border-radius:10px;padding:6px 12px;font-size:12px;display:flex;align-items:center;gap:6px;">${s.emoji} <span>${s.label}</span> <span style="color:var(--gris);">·</span> <b>${s.cnt}×</b></div>`).join('')}
+          </div>
+          <div style="font-size:12px;color:var(--gris);">🔮 Prochaines règles prévues dans ≈ 8 jours</div>
         </div>
-        <div style="font-size:10px;font-weight:600;color:var(--gris);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Analyse par phase</div>
-        <div style="font-size:12px;color:var(--gris);line-height:1.6;">🌙 Hiver · Fatigue et crampes reviennent souvent<br>☀️ Été · Énergie max, quelques maux de tête</div>
-        <div style="margin-top:10px;font-size:12px;color:var(--gris);">🔮 Prochaines règles prévues dans ≈ 8 jours</div>
-      </div>
-      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,0.72);backdrop-filter:blur(1px);">
-        <div style="font-size:28px;margin-bottom:8px;">✨</div>
-        <div style="font-size:14px;font-weight:700;color:var(--noir);margin-bottom:4px;font-family:var(--serif);">Fonctionnalité Premium</div>
-        <div style="font-size:12px;color:var(--gris);margin-bottom:14px;text-align:center;max-width:200px;line-height:1.5;">Patterns, prédictions et analyse<br>de tes cycles complets</div>
-        <div style="background:linear-gradient(135deg,#C4A95A,#E8C97A);color:white;border-radius:12px;padding:10px 22px;font-size:12px;font-weight:700;letter-spacing:0.5px;">Bientôt disponible</div>
-      </div>
-    </div>
-  `;
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,0.72);backdrop-filter:blur(1px);">
+          <div style="font-size:28px;margin-bottom:8px;">✨</div>
+          <div style="font-size:14px;font-weight:700;color:var(--noir);margin-bottom:4px;font-family:var(--serif);">Fonctionnalité Premium</div>
+          <div style="font-size:12px;color:var(--gris);margin-bottom:14px;text-align:center;max-width:200px;line-height:1.5;">Patterns, prédictions et analyse<br>de tes cycles complets</div>
+          <button onclick="showBilanModal()" style="background:var(--season-grad);color:white;border:none;border-radius:12px;padding:10px 22px;font-size:12px;font-weight:700;font-family:var(--sans);cursor:pointer;letter-spacing:.5px;">Débloquer Premium</button>
+        </div>
+      </div>`;
+  }
 }
 
 function exportData() {
