@@ -2179,6 +2179,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('onboarding').style.display = 'none';
     document.getElementById('app').style.display = 'flex';
     initApp();
+    scheduleLocalNotifications();
     if (_stripeSessionId) verifyStripeSession(_stripeSessionId);
     const now = new Date();
     const today = now.toDateString();
@@ -2705,6 +2706,67 @@ function saveEditCycle() {
 // ═══════════════════════════════════════════════
 // NOTIFICATIONS
 // ═══════════════════════════════════════════════
+const NOTIF_SCHEDULE = {
+  1: [{ h:20, m:30, slot:'soir' }],
+  2: [{ h:8, m:0, slot:'matin' }, { h:20, m:30, slot:'soir' }],
+  3: [{ h:8, m:0, slot:'matin' }, { h:13, m:30, slot:'midi' }, { h:20, m:30, slot:'soir' }],
+};
+const NOTIF_MSGS = {
+  matin: {
+    hiver:    'Comment tu te réveilles ce matin ? Prends soin de toi. 🌙',
+    printemps:'Ton énergie revient — c\'est l\'heure de ton check-in matin ! 🌸',
+    ete:      'Tu rayonnes aujourd\'hui. Prête pour une belle journée ? ☀️',
+    automne:  'Prends soin de toi ce matin. Ton corps a besoin de douceur. 🍂',
+  },
+  midi: {
+    hiver:    'Mi-journée. Tu as mangé quelque chose de chaud ? 🌙',
+    printemps:'Mi-journée ! Comment tu te sens depuis ce matin ? 🌸',
+    ete:      'Le milieu de ta journée — tu prends soin de toi ? ☀️',
+    automne:  'Pause de mi-journée. Comment tu gères ton énergie ? 🍂',
+  },
+  soir: {
+    hiver:    'Le bilan du soir t\'attend. Quelques minutes pour toi. 🌙',
+    printemps:'Fin de journée. C\'était comment ? Ton check-in du soir. 🌸',
+    ete:      'Soirée ! Comment s\'est passée ta journée ? Check-in soir. ☀️',
+    automne:  'Ton check-in du soir — 2 minutes pour toi ce soir. 🍂',
+  },
+};
+const _notifTimers = [];
+
+function scheduleLocalNotifications() {
+  _notifTimers.forEach(t => clearTimeout(t));
+  _notifTimers.length = 0;
+  const freq = ST.notifFreq || 0;
+  if (!freq) return;
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  const slots = NOTIF_SCHEDULE[freq] || [];
+  const now = new Date();
+  slots.forEach(({ h, m, slot }) => {
+    const target = new Date();
+    target.setHours(h, m, 0, 0);
+    if (target <= now) target.setDate(target.getDate() + 1);
+    const delay = target - now;
+    const t = setTimeout(() => {
+      _fireNotification(slot);
+      setTimeout(scheduleLocalNotifications, 60000);
+    }, delay);
+    _notifTimers.push(t);
+  });
+}
+
+function _fireNotification(slot) {
+  const prenom = ST.prenom || '';
+  const saison = ST.currentSaison || 'printemps';
+  const body = NOTIF_MSGS[slot]?.[saison] || 'SakinApp t\'attend. 🌸';
+  const title = prenom ? 'Salam ' + prenom + ' 🌸' : 'SakinApp 🌸';
+  const opts = { body, icon: '/icons/icon-192.png', badge: '/icons/icon-192.png', tag: 'sakinapp-' + slot, renotify: true, vibrate: [200, 100, 200] };
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.ready.then(reg => reg.showNotification(title, opts)).catch(() => {});
+  } else if (Notification.permission === 'granted') {
+    new Notification(title, { body, icon: '/icons/icon-192.png' });
+  }
+}
+
 let selectedFreq = 2;
 function selectFreq(el, freq) {
   selectedFreq=freq;
@@ -2714,7 +2776,7 @@ function selectFreq(el, freq) {
 function openNotifSettings() {
   document.getElementById('notif-modal').classList.add('open');
   const status=document.getElementById('notif-permission-status');
-  if (!('Notification' in window)) status.innerHTML="📱 Installe l'app sur l'écran d'accueil pour activer les rappels.";
+  if (!('Notification' in window)) status.innerHTML='📱 Installe l\'app sur l\'écran d\'accueil pour activer les rappels.';
   else if (Notification.permission==='granted') { status.innerHTML='✅ <strong>Notifications activées</strong>'; status.style.color='#3DAE8A'; }
   else if (Notification.permission==='denied') { status.innerHTML='❌ Bloquées — Réglages → Safari → Notifications.'; status.style.color='#C4694A'; }
   else status.innerHTML='🔔 Appuie sur Activer pour recevoir tes rappels.';
@@ -2722,10 +2784,11 @@ function openNotifSettings() {
 function closeNotifModal() { document.getElementById('notif-modal').classList.remove('open'); }
 function saveNotifSettings() {
   ST.notifFreq=selectedFreq; saveState();
-  if (!selectedFreq) { showToast('Rappels désactivés.'); closeNotifModal(); return; }
-  if (!('Notification' in window)) { showToast("📱 Installe l'app depuis l'écran d'accueil pour les rappels."); closeNotifModal(); return; }
+  if (!selectedFreq) { _notifTimers.forEach(t => clearTimeout(t)); _notifTimers.length=0; showToast('Rappels désactivés.'); closeNotifModal(); return; }
+  if (!('Notification' in window)) { showToast('📱 Installe l\'app depuis l\'écran d\'accueil pour les rappels.'); closeNotifModal(); return; }
   Notification.requestPermission().then(permission => {
-    if (permission==='granted') { closeNotifModal(); showToast('Rappels activés ! 🌸'); }
+    if (permission==='granted') { scheduleLocalNotifications(); closeNotifModal(); showToast('Rappels activés ! 🌸'); }
+    else { closeNotifModal(); }
   }).catch(() => { closeNotifModal(); });
 }
 
