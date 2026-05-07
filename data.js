@@ -87,7 +87,7 @@ const REPAS_QUOTIDIENS = {
     },
     {
       nom: 'Soupe de pois cassés à la menthe fraîche',
-      benefice: 'Phytoœstrogènes naturels et folates pour accompagner la croissance folliculaire.'
+      benefice: 'Les folates des pois cassés soutiennent la division cellulaire folliculaire — nutriment clé de cette phase de croissance.'
     },
     {
       nom: 'Curry de lentilles vertes, coriandre fraîche et riz',
@@ -165,7 +165,7 @@ const REPAS_QUOTIDIENS = {
     },
     {
       nom: 'Dattes farcies aux amandes, lait chaud à la cannelle',
-      benefice: 'Magnésium des dattes et amandes — soir, pour favoriser un sommeil réparateur.'
+      benefice: 'Magnésium des amandes pour le sommeil. Choisis 2-3 dattes maximum — si tu as tendance aux insomnies en fin de cycle, mise sur les amandes et le lait à la cannelle seuls.'
     },
     {
       nom: 'Gratin de quinoa aux légumes d\'automne et herbes fraîches',
@@ -256,10 +256,10 @@ const SOINS_QUOTIDIENS = {
       benefice: 'Vitamines E et B5 de l\'avocat pour peau éclatante et bien nourrie — léger et efficace.'
     },
     {
-      nom: 'Tonique au vinaigre de cidre dilué',
+      nom: 'Tonique à l\'eau florale d\'hamamélis',
       duree: '3 min',
-      geste: '1 part vinaigre de cidre + 4 parts d\'eau. Applique au coton après nettoyage, laisse sécher naturellement.',
-      benefice: 'Rééquilibre le pH cutané et resserre les pores — doux si bien dilué.'
+      geste: 'Verse de l\'eau florale d\'hamamélis pur sur un coton. Passe sur visage propre après nettoyage, sans rincer. Matin ou soir.',
+      benefice: 'Rééquilibre le pH cutané naturellement, resserre les pores — astringent doux sans risque d\'irritation.'
     },
     {
       nom: 'Rouleau facial froid (ou glaçon dans tissu)',
@@ -721,15 +721,15 @@ const SEANCES_SPORT = {
            detail: 'Au début de chaque minute : 5 squats. Récupère le reste de la minute. 10 rounds.' },
       2: { type: 'emom', duree: 10, label: 'EMOM 10 min', exercice: 'Fente arrière', reps: 8,
            detail: 'Au début de chaque minute : 8 fentes arrières. Récupère le reste. 10 rounds.' },
-      3: { type: 'emom', duree: 10, label: 'EMOM 10 min', exercice: 'Squat sauté', reps: 8,
-           detail: 'Au début de chaque minute : 8 squats sautés. Récupère le reste. 10 rounds.' },
+      3: { type: 'emom', duree: 10, label: 'EMOM 10 min', exercice: 'Squat sauté', reps: 6,
+           detail: 'Échauffe tes genoux 2-3 min avant de démarrer. Au début de chaque minute : 6 squats sautés, atterrissage fléchi et silencieux. Récupère le reste de la minute. 10 rounds.' },
       4: { type: 'amrap', duree: 10, label: 'AMRAP 10 min',
            circuit: [
              { nom: 'Squats sautés',    reps: 5 },
              { nom: 'Fentes croisées',  reps: 5 },
              { nom: 'Hips thrust',      reps: 5 },
            ],
-           detail: 'Enchaîne les 3 exercices sans arrêt. Compte le nombre de tours complets en 10 min.',
+           detail: 'Prends 3-5 min pour échauffer tes articulations avant de démarrer le timer. Enchaîne les 3 exercices sans arrêt. Compte le nombre de tours complets en 10 min.',
       },
     },
   },
@@ -738,7 +738,7 @@ const SEANCES_SPORT = {
   automne: {
     // Actif J18-J21 (standard) : reprend Printemps + repos +10s
     actif: {
-      message: 'Ton corps tient encore — honore-le sans te dépasser.',
+      message: 'Ton corps tient encore — honore-le sans te dépasser. Reprends ton niveau de Printemps avec 10 secondes de repos supplémentaires entre chaque exercice.',
       reposExtra: 10,
     },
     // Doux J22-J24 (standard) : mobilité + 2 exos légers
@@ -751,6 +751,8 @@ const SEANCES_SPORT = {
           detail: 'À quatre pattes, cercles lents dans les deux sens.' },
         { nom: 'Étirement hanches',      duree: '1 min / côté',
           detail: 'Fente basse, tiens et respire sans forcer.' },
+        { nom: 'Gainage profond · Pilates', duree: '2 min',
+          detail: 'Allongée sur le dos, genoux fléchis. Contracte doucement le plancher pelvien et le ventre en expirant, relâche en inspirant. 3 séries de 10 respirations lentes. Renforce sans fatiguer.' },
       ],
       // N1-N2 : mobilité seule | N3-N4 : mobilité + circuit Découverte (printemps.bas.1)
       repos: 45,
