@@ -21,7 +21,7 @@
     <div id="tour-emoji" style="font-size:52px;margin-bottom:16px;line-height:1;">🏠</div>
     <div id="tour-title" style="font-family:'Playfair Display',serif;font-size:20px;color:#1C1008;margin-bottom:10px;font-weight:600;"></div>
     <div id="tour-text" style="font-size:13px;color:#8A7060;line-height:1.7;margin-bottom:28px;"></div>
-    <button onclick="tourNext()" style="width:100%;padding:15px;background:var(--season,#3DAE8A);color:white;border:none;border-radius:16px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:0.3px;">Compris 🌸</button>
+    <button onclick="tourNext()" style="width:100%;padding:15px;background:var(--season,#3DAE8A);color:white;border:none;border-radius:16px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:0.3px;">Je commence ✦</button>
     <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:18px;" id="tour-dots"></div>
   </div>
 </div>
@@ -43,8 +43,8 @@
 <div class="ob-wrap">
   <div class="ob-step active" id="step-0">
     <div class="ob-logo">SakinApp</div>
-    <div class="ob-eye">Bienvenue, ma soeur</div>
-    <div class="ob-title">Ton corps a un rythme.<br><em>Apprends a l'ecouter.</em></div>
+    <div class="ob-eye">As-salamu alaykum, lune ✨</div>
+    <div class="ob-title">Ton corps a sa propre sagesse.<br><em>Apprends a l'ecouter.</em></div>
     <div class="ob-sub">SakinApp t'accompagne chaque jour selon ton cycle, ta foi et ton energie.</div>
     <div class="ob-fl">Ton prenom</div>
     <input class="ob-input" id="input-prenom" type="text" placeholder="Lisa, Aya, Lila..." maxlength="30" autocomplete="given-name" autocorrect="off" autocapitalize="words" spellcheck="false" inputmode="text">
@@ -78,7 +78,7 @@
   <div class="rev-title" id="rev-title">Tu es en Printemps</div>
   <div class="rev-subtitle" id="rev-subtitle">Phase folliculaire - Jour 8</div>
   <div class="rev-message" id="rev-message">L'energie revient. C'est le moment de commencer ce qui attend.</div>
-  <button class="rev-btn" onclick="enterApp()">Commencer ma journee</button>
+  <button class="rev-btn" onclick="enterApp()">Entrer dans ma journ&#233;e</button>
 </div>
 
 <!-- CHECK-IN MATIN -->
@@ -123,7 +123,7 @@
         <div style="font-size:18px;direction:rtl;color:var(--noir);line-height:1.8;margin-bottom:6px;">&#1576;&#1616;&#1575;&#1587;&#1618;&#1605;&#1616;&#1603;&#1ى اللَّهُمَّ أَمُوتُ وَأَحْيَا</div>
         <div style="font-size:12px;color:var(--gris);font-style:italic;">"En Ton Nom, o Allah, je meurs et je vis." - Boukhari</div>
       </div>
-      <button onclick="closeEveningCheckin()" style="width:100%;padding:14px;background:var(--season-grad);color:white;border:none;border-radius:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">Bonne nuit</button>
+      <button onclick="closeEveningCheckin()" style="width:100%;padding:14px;background:var(--season-grad);color:white;border:none;border-radius:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">Bonne nuit &#8212; qu&#8217;Allah te prot&#232;ge 🤍</button>
     </div>
   </div>
 </div>
@@ -145,7 +145,7 @@
       <div style="background:white;border-radius:10px;padding:10px 12px;display:flex;align-items:flex-start;gap:8px;"><span style="font-size:15px;flex-shrink:0;">&#127822;</span><div><div style="font-size:12px;font-weight:600;color:var(--noir);margin-bottom:2px;">iPhone (Safari)</div><div style="font-size:11px;color:var(--gris);line-height:1.5;">Appuie sur Partager puis Sur l'ecran d'accueil puis Ajouter</div></div></div>
       <div style="background:white;border-radius:10px;padding:10px 12px;display:flex;align-items:flex-start;gap:8px;"><span style="font-size:15px;flex-shrink:0;">&#129302;</span><div><div style="font-size:12px;font-weight:600;color:var(--noir);margin-bottom:2px;">Android (Chrome)</div><div style="font-size:11px;color:var(--gris);line-height:1.5;">Appuie sur le menu puis Ajouter a l'ecran d'accueil</div></div></div>
     </div>
-    <div style="display:flex;justify-content:flex-end;"><button onclick="dismissInstallBanner()" style="background:none;border:none;color:var(--gris);font-size:12px;cursor:pointer;text-decoration:underline;font-family:var(--sans);">Ne plus afficher</button></div>
+    <div style="display:flex;justify-content:flex-end;"><button onclick="dismissInstallBanner()" style="background:none;border:none;color:var(--gris);font-size:12px;cursor:pointer;text-decoration:underline;font-family:var(--sans);">J&#8217;installerai plus tard</button></div>
   </div>
 
   <!-- TOPBAR -->
@@ -201,7 +201,7 @@
     <div class="day-card-meta" id="qs-meta">Mix sol + debout</div>
     <div class="qs-exercises" id="qs-exercises" style="margin-top:10px;"></div>
     <div id="qs-btn-wrap" style="margin-top:12px;">
-      <button class="day-card-btn" onclick="validerSeanceDash()">&#10003; Séance accomplie — Alhamdulillah</button>
+      <button class="day-card-btn" onclick="validerSeanceDash()">&#10003; Alhamdulillah, c&#8217;est fait !</button>
     </div>
     <div class="qs-done" id="qs-done-wrap" style="display:none;">
       <div class="qs-done-check">&#10003;</div>
@@ -307,16 +307,10 @@
     </div>
   </div>
 
-  <!-- BOUTON NOUVEAU CYCLE -->
-  <div style="margin:0 14px 14px;">
-    <button onclick="startNewCycleToday()" id="btn-new-cycle" style="width:100%;padding:14px;background:white;border:2px solid #7B5EA7;border-radius:16px;color:#7B5EA7;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:'DM Sans',sans-serif;">
-      <span style="font-size:18px;">🌙</span> Mon Hiver a commencé aujourd'hui
-    </button>
-    <div id="new-cycle-msg" style="display:none;margin-top:10px;background:#F0EBF8;border-radius:12px;padding:12px 14px;text-align:center;">
-      <div style="font-size:16px;margin-bottom:4px;">🤍</div>
-      <div style="font-family:'Playfair Display',serif;font-size:14px;color:#7B5EA7;font-weight:600;">Nouveau cycle commencé</div>
-      <div style="font-size:12px;color:var(--gris);margin-top:4px;line-height:1.5;">Prends soin de toi — ton corps travaille pour toi.</div>
-    </div>
+  <!-- BOUTONS GESTION PHASES -->
+  <div style="margin:0 14px 14px;display:flex;flex-direction:column;gap:8px;">
+    <button onclick="startNewCycleToday()" id="btn-nouveau-hiver" class="cycle-phase-btn" style="display:none;">🌙 Mon Hiver commence aujourd'hui</button>
+    <button onclick="declarerPrintemps()" id="btn-fin-hiver" class="cycle-phase-btn" style="display:none;">🌸 Mon Hiver est termin&#233;</button>
   </div>
 
   <!-- SYMPTOMES DU JOUR -->
@@ -894,17 +888,17 @@
 
 <!-- MODAL BILAN FIN D'ESSAI -->
 <div class="modal-overlay" id="bilan-modal" onclick="if(event.target===this)closeBilanModal()">
-  <div class="modal-sheet" style="text-align:center;padding:32px 24px 32px;">
-    <div style="font-size:52px;margin-bottom:12px;">&#127774;</div>
-    <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--season);font-weight:700;margin-bottom:8px;">Ton bilan du premier cycle</div>
-    <div style="font-family:var(--serif);font-size:20px;color:var(--noir);margin-bottom:6px;line-height:1.3;">Alhamdulillah,<br>tu as travers&#233; un cycle complet</div>
-    <div style="font-family:var(--serif);font-size:13px;color:var(--gris);font-style:italic;margin-bottom:22px;">&#171;&#160;Et quiconque fait le bien, f&#251;t-ce du poids d&#8217;un atome, le verra.&#160;&#187; — Coran 99:7</div>
-    <div id="bilan-stats" class="bilan-stats-grid"></div>
-    <div style="background:var(--season-soft);border-radius:14px;padding:14px 16px;margin:20px 0 22px;border-left:3px solid var(--season);">
-      <div style="font-family:var(--serif);font-size:13px;color:var(--noir);line-height:1.7;font-style:italic;">L&#8217;onglet &#194;me reste toujours accessible gratuitement. Tes prières, ton dhikr et le Coran t&#8217;appartiennent.</div>
+  <div class="modal-sheet bilan-sheet">
+    <div class="bilan-header">
+      <div class="bilan-header-emoji">🌙</div>
+      <div class="bilan-header-label">Ton premier cycle</div>
+      <div class="bilan-header-title">Alhamdulillah ✦<br><span style="font-size:16px;font-family:var(--sans);font-weight:400;">tu as travers&#233; un cycle complet</span></div>
     </div>
-    <button onclick="bilanUpgrade()" style="width:100%;padding:15px;background:var(--season-grad);color:white;border:none;border-radius:16px;font-size:15px;font-weight:700;font-family:var(--sans);cursor:pointer;margin-bottom:10px;">&#10022; Continuer avec Premium</button>
-    <button onclick="closeBilanModal()" style="background:none;border:none;font-size:13px;color:var(--gris);cursor:pointer;font-family:var(--sans);padding:4px;">Continuer gratuitement</button>
+    <div class="bilan-body" id="bilan-body"></div>
+    <div class="bilan-footer">
+      <button onclick="bilanUpgrade()" class="bilan-cta-premium">&#10022; Continuer avec Premium</button>
+      <button onclick="closeBilanModal()" class="bilan-cta-free">Continuer gratuitement</button>
+    </div>
   </div>
 </div>
 

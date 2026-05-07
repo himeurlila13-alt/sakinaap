@@ -45,6 +45,8 @@ let ST = {
   marche: { phase: null, checks: {}, custom: [] },
   trialEnded: false,
   bilanShown: false,
+  _lastSaison: null,
+  hiverEnd: null,
 };
 
 function saveState() {
@@ -561,13 +563,48 @@ function computeCycle() {
   const eteEnd = Math.min(dur - 2, ovulationDay + 2); // 2j après ovulation
   const automneStart = eteEnd + 1;
 
-  if (d <= 5) ST.currentSaison = 'hiver';
-  else if (d < eteStart) ST.currentSaison = 'printemps';
-  else if (d <= eteEnd) ST.currentSaison = 'ete';
+  // springStartD = premier jour (1-indexed) de Printemps — J6 par défaut, ou lendemain du hiverEnd déclaré
+  let springStartD = 6;
+  if (ST.hiverEnd) {
+    const [hey, hem, hed] = ST.hiverEnd.split('-').map(Number);
+    const hiverEndLocal = new Date(hey, hem - 1, hed);
+    const hiverEndDiff = Math.floor((hiverEndLocal - startLocal) / (1000 * 60 * 60 * 24));
+    springStartD = Math.max(2, hiverEndDiff + 1);
+  }
+  const eteStartFinal = Math.max(springStartD, eteStart);
+  const eteEndFinal   = Math.max(eteStartFinal, eteEnd);
+
+  if (d < springStartD) ST.currentSaison = 'hiver';
+  else if (d < eteStartFinal) ST.currentSaison = 'printemps';
+  else if (d <= eteEndFinal) ST.currentSaison = 'ete';
   else ST.currentSaison = 'automne';
+
+  if (ST._lastSaison && ST._lastSaison !== ST.currentSaison) {
+    const phaseToasts = {
+      hiver:     ['❄️', 'Ton Hiver est là', 'Prends soin de toi, doucement.'],
+      printemps: ['🌱', 'Bienvenue au Printemps !', 'L\'énergie revient — savoure-la.'],
+      ete:       ['☀️', 'Tu entres en Été', 'Rayonne, c\'est ta saison.'],
+      automne:   ['🍂', 'L\'Automne commence', 'Tourne-toi vers l\'intérieur.'],
+    };
+    const [emoji, title, sub] = phaseToasts[ST.currentSaison] || ['✨', 'Nouvelle phase', ''];
+    setTimeout(() => showPhaseToast(emoji, title, sub), 1800);
+  }
+  ST._lastSaison = ST.currentSaison;
 }
 
 const BG_PHASE = { hiver: '#FAF0FF', printemps: '#F0FAF6', ete: '#FFFBF0', automne: '#FDF5F0' };
+
+function showPhaseToast(emoji, title, sub) {
+  const el = document.createElement('div');
+  el.className = 'phase-toast';
+  el.innerHTML = `<span class="phase-toast-emoji">${emoji}</span><div class="phase-toast-body"><div class="phase-toast-title">${title}</div><div class="phase-toast-sub">${sub}</div></div>`;
+  document.body.appendChild(el);
+  requestAnimationFrame(() => { requestAnimationFrame(() => el.classList.add('visible')); });
+  setTimeout(() => {
+    el.classList.remove('visible');
+    setTimeout(() => el.remove(), 500);
+  }, 4500);
+}
 
 // ═══════════════════════════════════════════════
 // TRIAL
@@ -576,29 +613,85 @@ function isTrialActive() { return ST.isPremium || !ST.trialEnded; }
 
 function _bilanStats() {
   const seanceCount = Object.keys(ST.seanceDone || {}).length;
+  const seanceLevel = ST.seanceLevel || 1;
+  const symptomDays = Object.keys(ST.symptomes || {}).filter(d => (ST.symptomes[d]||[]).length > 0).length;
   const prayerDays = Object.keys(ST.prayers || {}).filter(d => {
     const p = ST.prayers[d] || {};
     return ['fajr','dohr','asr','maghrib','isha'].filter(n => p[n]).length >= 3;
+  }).length;
+  const allPrayersDays = Object.keys(ST.prayers || {}).filter(d => {
+    const p = ST.prayers[d] || {};
+    return ['fajr','dohr','asr','maghrib','isha'].filter(n => p[n]).length === 5;
   }).length;
   const dhikrDays = Object.keys(ST.dhikrChecks || {}).filter(d =>
     Object.values(ST.dhikrChecks[d] || {}).filter(Boolean).length >= 3
   ).length;
   const coranDays = Object.keys(ST.coranDone || {}).filter(d => ST.coranDone[d]).length;
-  return { seanceCount, prayerDays, dhikrDays, coranDays };
+  let objCheckCount = 0;
+  Object.values(ST.weeklyObjChecks || {}).forEach(week => {
+    Object.values(week).forEach(arr => { objCheckCount += (arr||[]).length; });
+  });
+  Object.values(ST.customObjChecks || {}).forEach(week => {
+    Object.values(week).forEach(arr => { objCheckCount += (arr||[]).length; });
+  });
+  const cycleDuration = ST.cycleDuration || 28;
+  return { seanceCount, seanceLevel, symptomDays, prayerDays, allPrayersDays, dhikrDays, coranDays, objCheckCount, cycleDuration };
 }
 
 function showBilanModal() {
   const el = document.getElementById('bilan-modal');
-  const content = document.getElementById('bilan-stats');
+  const body = document.getElementById('bilan-body');
   if (!el) return;
-  const { seanceCount, prayerDays, dhikrDays, coranDays } = _bilanStats();
-  const dur = ST.cycleDuration || 28;
-  if (content) content.innerHTML = `
-    <div class="bilan-stat"><span class="bilan-stat-num">${seanceCount}</span><span class="bilan-stat-lbl">séances de sport</span></div>
-    <div class="bilan-stat"><span class="bilan-stat-num">${prayerDays}</span><span class="bilan-stat-lbl">jours de prières (3/5+)</span></div>
-    <div class="bilan-stat"><span class="bilan-stat-num">${dhikrDays}</span><span class="bilan-stat-lbl">jours de dhikr</span></div>
-    <div class="bilan-stat"><span class="bilan-stat-num">${coranDays}</span><span class="bilan-stat-lbl">jours de Coran</span></div>
-    <div class="bilan-stat"><span class="bilan-stat-num">${dur}j</span><span class="bilan-stat-lbl">cycle traversé</span></div>`;
+  const { seanceCount, seanceLevel, symptomDays, prayerDays, allPrayersDays, dhikrDays, coranDays, objCheckCount, cycleDuration } = _bilanStats();
+
+  const spiritualScore = prayerDays + dhikrDays + coranDays;
+  const corpsScore = seanceCount * 2;
+  const mainStrength = spiritualScore >= corpsScore ? '🕌 Âme' : '💪 Corps';
+
+  const sportMsg = seanceCount === 0 ? 'Prête à démarrer le prochain cycle 💪'
+    : seanceCount < 4 ? 'Tu as fait tes premiers pas — continue !'
+    : seanceCount < 8 ? 'Tu as bâti une vraie habitude 🌱'
+    : 'Tu es une guerrière du mouvement 🔥';
+
+  if (body) body.innerHTML = `
+    <div class="bilan-journey">
+      <span class="bilan-phase-chip bilan-hiver">❄️ Hiver</span>
+      <span class="bilan-phase-arrow">→</span>
+      <span class="bilan-phase-chip bilan-printemps">🌱 Printemps</span>
+      <span class="bilan-phase-arrow">→</span>
+      <span class="bilan-phase-chip bilan-ete">☀️ Été</span>
+      <span class="bilan-phase-arrow">→</span>
+      <span class="bilan-phase-chip bilan-automne">🍂 Automne</span>
+    </div>
+    <div class="bilan-strength-line">Ta force ce cycle&nbsp;: <strong>${mainStrength}</strong> · ${cycleDuration} jours traversés</div>
+
+    <div class="bilan-section-lbl">💪 Corps</div>
+    <div class="bilan-grid-3">
+      <div class="bilan-stat"><span class="bilan-stat-num">${seanceCount}</span><span class="bilan-stat-lbl">séances sport</span></div>
+      <div class="bilan-stat"><span class="bilan-stat-num bilan-level">Niv.${seanceLevel}</span><span class="bilan-stat-lbl">niveau atteint</span></div>
+      <div class="bilan-stat"><span class="bilan-stat-num">${symptomDays}</span><span class="bilan-stat-lbl">jours de symptômes</span></div>
+    </div>
+    <div class="bilan-note">${sportMsg}${symptomDays > 0 ? ' · ' + symptomDays + ' jour' + (symptomDays>1?'s':'') + ' d\'écoute de ton corps 🌸' : ''}</div>
+
+    <div class="bilan-section-lbl">🕌 Âme</div>
+    <div class="bilan-grid-2">
+      <div class="bilan-stat"><span class="bilan-stat-num">${prayerDays}</span><span class="bilan-stat-lbl">jours 3+ prières</span></div>
+      <div class="bilan-stat"><span class="bilan-stat-num">${allPrayersDays}</span><span class="bilan-stat-lbl">prières 5/5 complètes</span></div>
+      <div class="bilan-stat"><span class="bilan-stat-num">${dhikrDays}</span><span class="bilan-stat-lbl">jours de dhikr</span></div>
+      <div class="bilan-stat"><span class="bilan-stat-num">${coranDays}</span><span class="bilan-stat-lbl">jours de Coran</span></div>
+    </div>
+
+    ${objCheckCount > 0 ? `
+    <div class="bilan-section-lbl">🎯 Objectifs</div>
+    <div class="bilan-obj-line"><span class="bilan-obj-num">${objCheckCount}</span>objectifs cochés au fil du cycle</div>
+    ` : ''}
+
+    <div class="bilan-quote">
+      <div class="bilan-quote-text">&laquo;&nbsp;Et quiconque fait le bien, f&#251;t-ce du poids d&apos;un atome, le verra.&nbsp;&raquo;</div>
+      <div class="bilan-quote-ref">— Coran 99:7</div>
+    </div>
+    <div class="bilan-ame-note">L&apos;onglet &#194;me reste toujours accessible gratuitement.<br>Tes pri&#232;res, ton dhikr et le Coran t&apos;appartiennent.</div>
+  `;
   el.classList.add('open');
 }
 function closeBilanModal() {
@@ -1465,8 +1558,34 @@ function renderCycle(s) {
   const _ovD = Math.max(10, dur - 14);
   const _etS = Math.max(8, _ovD - 2);
   const _etE = Math.min(dur - 2, _ovD + 2);
-  const phaseMap = {hiver:'J1 → J5', printemps:'J6 → J'+(_etS-1), ete:'J'+_etS+' → J'+_etE, automne:'J'+(_etE+1)+' → J'+dur};
+
+  // Compute dynamic spring start from hiverEnd (mirrors computeCycle logic)
+  let _spD = 6;
+  if (ST.hiverEnd && ST.cycleStart) {
+    const [hey, hem, hed] = ST.hiverEnd.split('-').map(Number);
+    const [sy2, sm2, sd2] = ST.cycleStart.split('-').map(Number);
+    const hiverEndLocal2 = new Date(hey, hem - 1, hed);
+    const startLocal2    = new Date(sy2, sm2 - 1, sd2);
+    const hiverEndDiff2  = Math.floor((hiverEndLocal2 - startLocal2) / (1000 * 60 * 60 * 24));
+    _spD = Math.max(2, hiverEndDiff2 + 1);
+  }
+  const _etSF = Math.max(_spD, _etS);
+  const _etEF = Math.max(_etSF, _etE);
+  const phaseMap = {
+    hiver:     'J1 → J' + (_spD - 1),
+    printemps: 'J' + _spD + ' → J' + (_etSF - 1),
+    ete:       'J' + _etSF + ' → J' + _etEF,
+    automne:   'J' + (_etEF + 1) + ' → J' + dur,
+  };
   const _cpd = document.getElementById('cycle-phase-days'); if (_cpd) _cpd.textContent = phaseMap[ST.currentSaison] || '';
+
+  // Afficher le bon bouton selon la saison actuelle
+  const _bnh = document.getElementById('btn-nouveau-hiver');
+  const _bfh = document.getElementById('btn-fin-hiver');
+  const _isH = ST.currentSaison === 'hiver';
+  if (_bnh) _bnh.style.display = _isH ? 'none' : 'flex';
+  if (_bfh) _bfh.style.display = _isH ? 'flex' : 'none';
+
   drawCycleRing();
 
   // Symptômes
@@ -1486,12 +1605,24 @@ function startNewCycleToday() {
     if (ST.cycleHistory.length > 6) ST.cycleHistory = ST.cycleHistory.slice(0, 6);
   }
   ST.cycleStart = todayStr;
+  ST.hiverEnd = null; // nouveau cycle — réinitialise la fin d'Hiver déclarée
   saveState();
   computeCycle();
   applySaisonTheme();
   populateAll();
-  const msg = document.getElementById('new-cycle-msg');
-  if (msg) { msg.style.display = 'block'; setTimeout(() => { msg.style.display = 'none'; }, 5000); }
+  showPhaseToast('🌙', 'Hiver déclaré', 'Prends soin de toi 🌙');
+}
+
+function declarerPrintemps() {
+  const today = new Date();
+  const todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
+  if (ST.hiverEnd === todayStr) return;
+  ST.hiverEnd = todayStr;
+  saveState();
+  computeCycle();
+  applySaisonTheme();
+  populateAll();
+  showPhaseToast('🌸', 'Printemps déclaré', 'L\'énergie revient 🌸');
 }
 
 // ═══════════════════════════════════════════════
