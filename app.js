@@ -121,7 +121,7 @@ const DHIKR_CHECKS = [
   { id: 'subhan',     arabic: 'سُبْحَانَ اللَّهِ',  fr: 'SubhanAllah · Gloire à Allah',          count: '33×' },
   { id: 'alhamdu',    arabic: 'اَلْحَمْدُ لِلَّهِ', fr: 'Alhamdulillah · Louange à Allah',        count: '33×' },
   { id: 'akbar',      arabic: 'اللَّهُ أَكْبَرُ',    fr: 'Allahu Akbar · Allah est le Plus Grand', count: '34×' },
-  { id: 'istighfar',  arabic: 'أَسْتَغْفِرُ اللَّهَ', fr: 'Astaghfirullah · Je demande pardon à Allah', count: '100×', verse: '« afin qu\'Allah te pardonne tes péchés, passés et futurs, qu\'Il parachève sur toi Son bienfait et te guide sur une voie droite. » — Coran 48:2' },
+  { id: 'istighfar',  arabic: 'أَسْتَغْفِرُ اللَّهَ', fr: 'Astaghfirullah · Je demande pardon à Allah', count: '100×', verse: '« Demandez pardon à votre Seigneur, puis revenez à Lui — Il vous enverra une pluie abondante du ciel et vous accordera force et enfants. » — Coran 71:10-11' },
 ];
 
 const SAISONS = {
@@ -137,7 +137,7 @@ const SAISONS = {
       foi: "Les hormones influencent ton état intérieur — c'est physiologique, pas de l'hypocrisie. Un seul dhikr aujourd'hui, c'est déjà immense."
     },
     suggestions: ['🌿 Étirements doux','😴 Repos — c\'est ton entraînement','📖 Lecture ou tafsir','🤲 Dhikr doux','🫖 Tisane chaude'],
-    invocation: { arabic:'حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ', fr:'"Allah me suffit, et Il est le meilleur garant."', source:'Coran 3:173' },
+    invocation: { arabic:'حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ', fr:'"Allah nous suffit, et Il est le meilleur garant."', source:'Coran 3:173' },
     suggTitle: '🌙 Suggestions de l\'Hiver',
     suggDesc: 'Douce, intentionnelle, sans pression.',
     alimentation: {
@@ -518,11 +518,11 @@ const ASMA = [
   {num:41,ar:'الْحَسِيبُ',fr:'Al-Hasib · Le Teneur de comptes'},{num:42,ar:'الْجَلِيلُ',fr:'Al-Jalil · Le Majestueux'},{num:43,ar:'الْكَرِيمُ',fr:'Al-Karim · Le Généreux'},{num:44,ar:'الرَّقِيبُ',fr:'Ar-Raqib · Le Vigilant'},{num:45,ar:'الْمُجِيبُ',fr:'Al-Mujib · Celui qui répond'},
   {num:46,ar:'الْوَاسِعُ',fr:'Al-Wasi · Le Vaste'},{num:47,ar:'الْحَكِيمُ',fr:'Al-Hakim · Le Sage'},{num:48,ar:'الْوَدُودُ',fr:"Al-Wadud · Le Plein d'Amour"},{num:49,ar:'الْمَجِيدُ',fr:'Al-Majid · Le Très Glorieux'},{num:50,ar:'الْبَاعِثُ',fr:"Al-Ba'ith · Le Ressuscitateur"},
   {num:51,ar:'الشَّهِيدُ',fr:'Ash-Shahid · Le Témoin'},{num:52,ar:'الْحَقُّ',fr:'Al-Haqq · La Vérité'},{num:53,ar:'الْوَكِيلُ',fr:'Al-Wakil · Le Garant'},{num:54,ar:'الْقَوِيُّ',fr:'Al-Qawi · Le Très Fort'},{num:55,ar:'الْمَتِينُ',fr:'Al-Matin · Le Ferme'},
-  {num:56,ar:'الْوَلِيُّ',fr:'Al-Wali · Le Proche'},{num:57,ar:'الْحَمِيدُ',fr:'Al-Hamid · Le Digne de louanges'},{num:58,ar:'الْمُحْصِي',fr:'Al-Muhsi · Le Dénombrateur'},{num:59,ar:'الْمُبْدِئُ',fr:'Al-Mubdi · Le Principe'},{num:60,ar:'الْمُعِيدُ',fr:"Al-Mu'id · Celui qui restaure"},
+  {num:56,ar:'الْوَلِيُّ',fr:'Al-Waliyy · Le Proche Protecteur'},{num:57,ar:'الْحَمِيدُ',fr:'Al-Hamid · Le Digne de louanges'},{num:58,ar:'الْمُحْصِي',fr:'Al-Muhsi · Le Dénombrateur'},{num:59,ar:'الْمُبْدِئُ',fr:'Al-Mubdi · Le Principe'},{num:60,ar:'الْمُعِيدُ',fr:"Al-Mu'id · Celui qui restaure"},
   {num:61,ar:'الْمُحْيِي',fr:'Al-Muhyi · Le Vivificateur'},{num:62,ar:'الْمُمِيتُ',fr:'Al-Mumit · Le Donneur de mort'},{num:63,ar:'الْحَيُّ',fr:'Al-Hayy · Le Vivant'},{num:64,ar:'الْقَيُّومُ',fr:'Al-Qayyum · Le Subsistant'},{num:65,ar:'الْوَاجِدُ',fr:'Al-Wajid · Celui qui trouve'},
   {num:66,ar:'الْمَاجِدُ',fr:'Al-Majid · Le Glorieux'},{num:67,ar:'الْوَاحِدُ',fr:"Al-Wahid · L'Unique"},{num:68,ar:'الصَّمَدُ',fr:"As-Samad · L'Indépendant"},{num:69,ar:'الْقَادِرُ',fr:'Al-Qadir · Le Puissant'},{num:70,ar:'الْمُقْتَدِرُ',fr:'Al-Muqtadir · Le Très Puissant'},
   {num:71,ar:'الْمُقَدِّمُ',fr:'Al-Muqaddim · Celui qui avance'},{num:72,ar:'الْمُؤَخِّرُ',fr:"Al-Mu'akhkhir · Celui qui retarde"},{num:73,ar:'الأَوَّلُ',fr:'Al-Awwal · Le Premier'},{num:74,ar:'الآخِرُ',fr:'Al-Akhir · Le Dernier'},{num:75,ar:'الظَّاهِرُ',fr:"Az-Zahir · L'Apparent"},
-  {num:76,ar:'الْبَاطِنُ',fr:'Al-Batin · Le Caché'},{num:77,ar:'الْوَالِي',fr:'Al-Wali · Le Gouverneur'},{num:78,ar:'الْمُتَعَالِي',fr:"Al-Muta'ali · Le Très Élevé"},{num:79,ar:'الْبَرُّ',fr:'Al-Barr · Le Bienfaisant'},{num:80,ar:'التَّوَّابُ',fr:'At-Tawwab · Le Grand Repentant'},
+  {num:76,ar:'الْبَاطِنُ',fr:'Al-Batin · Le Caché'},{num:77,ar:'الْوَالِي',fr:'Al-Wālī · Le Maître de toute chose'},{num:78,ar:'الْمُتَعَالِي',fr:"Al-Muta'ali · Le Très Élevé"},{num:79,ar:'الْبَرُّ',fr:'Al-Barr · Le Bienfaisant'},{num:80,ar:'التَّوَّابُ',fr:'At-Tawwāb · Celui qui accepte le repentir'},
   {num:81,ar:'الْمُنْتَقِمُ',fr:'Al-Muntaqim · Celui qui punit'},{num:82,ar:'الْعَفُوُّ',fr:'Al-Afuww · Celui qui pardonne'},{num:83,ar:'الرَّؤُوفُ',fr:"Ar-Ra'uf · Le Très Compatissant"},{num:84,ar:'مَالِكُ الْمُلْكِ',fr:'Malik-ul-Mulk · Maître du Royaume'},{num:85,ar:'ذُو الْجَلَالِ',fr:'Dhu-l-Jalal · Maître de la Majesté'},
   {num:86,ar:'الْمُقْسِطُ',fr:"Al-Muqsit · L'Équitable"},{num:87,ar:'الْجَامِعُ',fr:'Al-Jami · Le Rassembleur'},{num:88,ar:'الْغَنِيُّ',fr:'Al-Ghani · Le Riche'},{num:89,ar:'الْمُغْنِي',fr:'Al-Mughni · Celui qui enrichit'},{num:90,ar:'الْمَانِعُ',fr:"Al-Mani'u · Celui qui empêche"},
   {num:91,ar:'الضَّارُّ',fr:'Ad-Darr · Celui qui affecte'},{num:92,ar:'النَّافِعُ',fr:'An-Nafi · Le Bienfaiteur'},{num:93,ar:'النُّورُ',fr:'An-Nur · La Lumière'},{num:94,ar:'الْهَادِي',fr:'Al-Hadi · Le Guide'},{num:95,ar:'الْبَدِيعُ',fr:"Al-Badi · L'Innovateur Absolu"},

@@ -524,7 +524,7 @@ const MESSAGES_JOUR = {
     bien: 'Bonne journée pour un projet créatif, une présentation ou une conversation importante.',
     fatiguee: 'Même 10 min de marche à l\'air libre peuvent relancer l\'énergie. Essaie si tu peux.',
     difficile: 'Il n\'y a pas de bonne humeur obligatoire. Tu peux être en Été et ne pas te sentir bien.',
-    foi: 'ادعُ ربك تضرعاً وخفيةً — invoque ton Seigneur avec humilité et discrétion. Même au sommet.'
+    foi: 'ادْعُوا رَبَّكُمْ تَضَرُّعًا وَخُفْيَةً — « Invoquez votre Seigneur avec humilité et en secret. » (Coran 7:55). Même au sommet.'
   },
   17: {
     bien: 'Dernier jour d\'Été — profite de cette clarté avant la descente douce de l\'Automne.',
@@ -562,7 +562,7 @@ const MESSAGES_JOUR = {
     bien: 'Tu commences à sentir la fin du cycle — honore ce que tu as traversé ce mois-ci.',
     fatiguee: 'Plus que quelques jours. Tu peux te reposer vraiment sans culpabilité.',
     difficile: 'Ce moment difficile a une date de fin. L\'Hiver arrive, et avec lui le renouvellement.',
-    foi: 'الصبر نور — La patience est une lumière. Tu l\'exerces plus que tu ne le réalises.'
+    foi: 'الصَّبْرُ ضِيَاء — « La patience est un éclat. » (hadith Muslim). Tu l\'exerces plus que tu ne le réalises.'
   },
   23: {
     bien: 'Tes besoins changent en fin de cycle — écoute ce dont tu as vraiment envie sans te juger.',
@@ -580,7 +580,7 @@ const MESSAGES_JOUR = {
     bien: 'Tu traverses l\'Automne avec conscience de ce qui se passe. C\'est une vraie force.',
     fatiguee: 'Hydrate-toi, mange quelque chose de chaud, dors tôt. Simple, mais vraiment efficace.',
     difficile: 'Si les émotions sont intenses, elles ne sont pas toi — elles sont de passage.',
-    foi: 'رَبِّ إِنِّي لِمَا أَنزَلْتَ إِلَيَّ مِنْ خَيْرٍ فَقِيرٌ — "Seigneur, j\'ai besoin du bien que Tu m\'envoies."'
+    foi: 'رَبِّ إِنِّي لِمَا أَنزَلْتَ إِلَيَّ مِنْ خَيْرٍ فَقِيرٌ — « Seigneur, de tout bien que Tu fais descendre vers moi, j\'en suis dans le besoin. » (Coran 28:24 — du\'â de Musa ﷺ)'
   },
   26: {
     bien: 'Bientôt l\'Hiver — une page qui se tourne, un nouveau départ qui s\'approche doucement.',
