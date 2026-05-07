@@ -1436,21 +1436,20 @@ function validerSeanceDash() {
   restoreSeanceDone();
   renderDayScore();
   checkEndOfPrintemps();
-  burstCelebration(document.getElementById('qs-btn-wrap') || document.body);
+  burstCelebration();
   showToast('💪 Alhamdulillah — séance accomplie ! 🌸');
 }
 
-function burstCelebration(originEl) {
+function burstCelebration() {
   const stars = ['🌸','✨','⭐','🌟','💫','🌺'];
-  const rect = originEl ? originEl.getBoundingClientRect() : { left: window.innerWidth/2, top: window.innerHeight/2, width: 0 };
-  const cx = rect.left + rect.width / 2;
-  const cy = rect.top + rect.height / 2;
+  const cx = window.innerWidth / 2;
+  const cy = window.innerHeight / 2;
   for (let i = 0; i < 9; i++) {
     const el = document.createElement('div');
     el.className = 'celebrate-star';
     el.textContent = stars[i % stars.length];
-    el.style.left = (cx + (Math.random() - 0.5) * 180) + 'px';
-    el.style.top  = (cy + (Math.random() - 0.5) * 120) + 'px';
+    el.style.left = (cx + (Math.random() - 0.5) * 220) + 'px';
+    el.style.top  = (cy + (Math.random() - 0.5) * 260) + 'px';
     el.style.animationDelay = (i * 0.07) + 's';
     document.body.appendChild(el);
     setTimeout(() => { if (el.parentNode) el.parentNode.removeChild(el); }, 1200);
