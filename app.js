@@ -2899,6 +2899,13 @@ function confirmDeleteMyData() {
   document.getElementById('onboarding').style.display = 'block';
 }
 
+function openMentionsLegales() {
+  document.getElementById('mentions-modal').classList.add('open');
+}
+function closeMentionsLegales() {
+  document.getElementById('mentions-modal').classList.remove('open');
+}
+
 // ═══════════════════════════════════════════════
 // TOUR GUIDÉ — un tooltip par onglet à la 1ère ouverture
 // ═══════════════════════════════════════════════

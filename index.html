@@ -717,6 +717,7 @@
     <div class="ps-row" onclick="openEditCycle()"><div class="ps-ico">&#128197;</div><div><div class="ps-lbl">Modifier mon cycle</div><div class="ps-sub" id="psCycle">Configurer</div></div><div class="ps-arr">&#8250;</div></div>
     <div class="ps-row" onclick="openNotifSettings()"><div class="ps-ico">&#128276;</div><div><div class="ps-lbl">Rappels Sakina</div><div class="ps-sub">Configurer mes notifications</div></div><div class="ps-arr">&#8250;</div></div>
     <div class="ps-row" onclick="deleteMyData()"><div class="ps-ico">&#128465;</div><div><div class="ps-lbl" style="color:#C4694A;">Réinitialiser mes données</div><div class="ps-sub">Efface tout de cet appareil — RGPD</div></div><div class="ps-arr">&#8250;</div></div>
+    <div class="ps-row" onclick="openMentionsLegales()"><div class="ps-ico">&#9878;</div><div><div class="ps-lbl">Mentions légales</div><div class="ps-sub">Éditrice, hébergeur, données</div></div><div class="ps-arr">&#8250;</div></div>
   </div>
 
   <div style="text-align:center;padding:24px 20px 32px;color:var(--gris);font-size:12px;">
@@ -760,6 +761,58 @@
       <div class="ob-option" onclick="selectFreq(this,0)" data-freq="0"><span class="ob-option-emoji">&#128277;</span><div><div class="ob-option-text">Desactiver</div></div><div class="ob-option-chk">&#10003;</div></div>
     </div>
     <button onclick="saveNotifSettings()" class="modal-cta">Activer mes rappels</button>
+  </div>
+</div>
+
+<!-- MODAL MENTIONS LÉGALES -->
+<div class="modal-overlay" id="mentions-modal" onclick="if(event.target.id==='mentions-modal')closeMentionsLegales()">
+  <div class="modal-sheet" style="max-height:85vh;overflow-y:auto;">
+    <div class="modal-handle"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--noir);">Mentions légales</div>
+      <button onclick="closeMentionsLegales()" style="background:var(--sable);border:none;border-radius:50%;width:32px;height:32px;font-size:18px;cursor:pointer;">&#215;</button>
+    </div>
+
+    <div class="ml-section">
+      <div class="ml-titre">Éditrice</div>
+      <div class="ml-ligne"><span class="ml-lbl">Nom</span> Lila Himeur</div>
+      <div class="ml-ligne"><span class="ml-lbl">Statut</span> Particulière</div>
+      <div class="ml-ligne"><span class="ml-lbl">Contact</span> sakina.evolution.contact@gmail.com</div>
+      <div class="ml-ligne"><span class="ml-lbl">Directrice de publication</span> Lila Himeur</div>
+    </div>
+
+    <div class="ml-section">
+      <div class="ml-titre">Hébergeur</div>
+      <div class="ml-ligne"><span class="ml-lbl">Société</span> Vercel Inc.</div>
+      <div class="ml-ligne"><span class="ml-lbl">Adresse</span> 340 S Lemon Ave #4133, Walnut, CA 91789, États-Unis</div>
+      <div class="ml-ligne"><span class="ml-lbl">Site</span> vercel.com</div>
+    </div>
+
+    <div class="ml-section">
+      <div class="ml-titre">Propriété intellectuelle</div>
+      <p class="ml-txt">L'ensemble du contenu de SakinApp (textes, design, code, icônes, invocations, contenus spirituels) est la propriété exclusive de Lila Himeur. Toute reproduction, même partielle, est interdite sans autorisation écrite préalable.</p>
+    </div>
+
+    <div class="ml-section">
+      <div class="ml-titre">Données personnelles</div>
+      <p class="ml-txt">SakinApp ne collecte aucune donnée personnelle sur ses serveurs. Toutes tes informations (cycle, prières, humeurs, objectifs) sont stockées <strong>uniquement sur ton appareil</strong> via le localStorage de ton navigateur.</p>
+      <p class="ml-txt" style="margin-top:8px;">La fonctionnalité waitlist collecte volontairement une adresse e-mail via le service Formspree (formspree.io) dans le seul but de t'informer de l'ouverture de l'abonnement Premium. Tu peux demander sa suppression à tout moment à l'adresse sakina.evolution.contact@gmail.com.</p>
+      <p class="ml-txt" style="margin-top:8px;">Conformément au RGPD, tu peux effacer toutes les données locales depuis Paramètres → Réinitialiser mes données.</p>
+    </div>
+
+    <div class="ml-section">
+      <div class="ml-titre">Cookies</div>
+      <p class="ml-txt">SakinApp n'utilise pas de cookies. Le stockage local (localStorage) est utilisé exclusivement pour le fonctionnement de l'application et ne peut pas être lu par des tiers.</p>
+    </div>
+
+    <div class="ml-section">
+      <div class="ml-titre">Responsabilité</div>
+      <p class="ml-txt">Les contenus spirituels et de bien-être de SakinApp (cycle menstruel, nutrition, sport, invocations) sont fournis à titre informatif et ne remplacent pas un avis médical ou religieux qualifié. Consulte un professionnel de santé pour toute question médicale.</p>
+    </div>
+
+    <div style="text-align:center;font-size:11px;color:var(--gris);margin-top:20px;padding-top:16px;border-top:1px solid var(--sable);">
+      SakinApp — Dernière mise à jour : mai 2026
+    </div>
   </div>
 </div>
 
