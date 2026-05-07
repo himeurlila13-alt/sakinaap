@@ -49,6 +49,8 @@ let ST = {
   hiverEnd: null,
   premiumPlan: null,
   premiumSince: null,
+  installDate: null,
+  trialBannerDismissed: false,
 };
 
 function saveState() {
@@ -560,17 +562,6 @@ function computeCycle() {
     ST.printempsUpgradeDone = false;
     ST.printempsBasCount = 0;
   }
-  // Trial end detection — after 20 days
-  if (!ST.isPremium && !ST.trialEnded && diff >= 19) {
-    ST.trialEnded = true;
-    if (!ST.bilanShown) {
-      ST.bilanShown = true;
-      saveState();
-      setTimeout(showBilanModal, 900);
-    } else {
-      saveState();
-    }
-  }
   ST.currentDay = Math.max(1, Math.min(day, dur));
 
   // La phase lutéale est ~14j avant la fin — c'est elle qui est constante.
@@ -644,7 +635,84 @@ function checkPaymentSuccess() {
 // ═══════════════════════════════════════════════
 // TRIAL
 // ═══════════════════════════════════════════════
-function isTrialActive() { return ST.isPremium || !ST.trialEnded; }
+function getTrialDays() {
+  if (!ST.installDate) return 0;
+  return Math.floor((Date.now() - ST.installDate) / 86400000);
+}
+function isFullAccess() { return ST.isPremium || getTrialDays() < 20; }
+function isTrialActive() { return isFullAccess(); }
+
+function checkTrialEnd() {
+  if (ST.isPremium || ST.trialEnded) return;
+  if (getTrialDays() >= 20) {
+    ST.trialEnded = true;
+    if (!ST.bilanShown) {
+      ST.bilanShown = true;
+      saveState();
+      setTimeout(showBilanModal, 1200);
+    } else {
+      saveState();
+    }
+  }
+}
+
+function renderTrialCard() {
+  const el = document.getElementById('trial-status-card');
+  if (!el) return;
+  const days = getTrialDays();
+  const remaining = Math.max(0, 20 - days);
+  if (ST.isPremium) {
+    const planLabel = ST.premiumPlan === 'monthly' ? 'mensuel' : ST.premiumPlan === 'annual' ? 'annuel' : '';
+    el.innerHTML = `
+      <div style="display:flex;align-items:center;gap:12px;background:var(--season-grad);border-radius:16px;padding:14px 16px;">
+        <span style="font-size:22px;">✨</span>
+        <div>
+          <div style="font-size:14px;font-weight:700;color:white;font-family:var(--sans);">Membre Premium 🌸</div>
+          ${planLabel ? `<div style="font-size:11px;color:rgba(255,255,255,.78);margin-top:2px;">Abonnement ${planLabel}</div>` : ''}
+        </div>
+      </div>`;
+  } else if (remaining > 0) {
+    const pct = Math.round((days / 20) * 100);
+    el.innerHTML = `
+      <div style="background:white;border:1.5px solid var(--sable);border-radius:16px;padding:14px 16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <div style="font-size:13px;font-weight:700;color:var(--noir);font-family:var(--sans);">✨ Essai gratuit</div>
+          <div style="font-size:11px;color:var(--gris);font-weight:600;">Jour ${days} / 20</div>
+        </div>
+        <div style="background:var(--sable);border-radius:6px;height:6px;margin-bottom:8px;overflow:hidden;">
+          <div style="height:100%;width:${pct}%;background:var(--season-grad);border-radius:6px;"></div>
+        </div>
+        <div style="font-size:11px;color:var(--gris);">Il te reste <strong>${remaining} jour${remaining > 1 ? 's' : ''}</strong> pour tout explorer</div>
+      </div>`;
+  } else {
+    el.innerHTML = `
+      <div style="background:var(--creme);border:1.5px solid var(--sable);border-radius:16px;padding:14px 16px;text-align:center;">
+        <div style="font-size:13px;font-weight:700;color:var(--noir);margin-bottom:10px;font-family:var(--sans);">Ton essai est terminé 🌸</div>
+        <button onclick="showBilanModal()" style="background:var(--season-grad);color:white;border:none;border-radius:12px;padding:10px 20px;font-size:13px;font-weight:700;font-family:var(--sans);cursor:pointer;">Voir les offres Premium</button>
+      </div>`;
+  }
+}
+
+function checkJ17Banner() {
+  const el = document.getElementById('trial-banner-j17');
+  if (!el) return;
+  const days = getTrialDays();
+  if (ST.isPremium || ST.trialBannerDismissed || days < 17 || days >= 20) {
+    el.style.display = 'none';
+    return;
+  }
+  const remaining = 20 - days;
+  const textEl = document.getElementById('trial-banner-text');
+  if (textEl) textEl.textContent = `🌸 Plus que ${remaining} jour${remaining > 1 ? 's' : ''} pour profiter de tout SakinApp. L'onglet Âme reste toujours gratuit ✨`;
+  el.style.display = 'block';
+}
+
+function dismissTrialBanner() {
+  ST.trialBannerDismissed = true;
+  saveState();
+  const el = document.getElementById('trial-banner-j17');
+  if (el) el.style.display = 'none';
+}
 
 function _bilanStats() {
   const seanceCount = Object.keys(ST.seanceDone || {}).length;
@@ -760,29 +828,14 @@ function startStripeCheckout() {
 }
 
 function applyTrialLocks() {
-  if (ST.isPremium) {
-    // Premium actif — aucun lock, tout visible
-    ['day-card-skin','day-card-seance','day-card-repas'].forEach(id => {
-      const el = document.getElementById(id); if (el) el.style.display = '';
-    });
-    const sugg = document.querySelector('.sugg-engage-card');
-    if (sugg) sugg.style.display = '';
-    const la = document.getElementById('trial-lock-accueil'); if (la) la.style.display = 'none';
-    const lc = document.getElementById('trial-lock-cycle'); if (lc) lc.style.display = 'none';
-    const lo = document.getElementById('trial-lock-objectifs'); if (lo) lo.style.display = 'none';
-    return;
-  }
-  const active = isTrialActive();
-  // Accueil — masque les 3 cartes, affiche le lock
+  const active = isFullAccess();
   ['day-card-skin','day-card-seance','day-card-repas'].forEach(id => {
     const el = document.getElementById(id); if (el) el.style.display = active ? '' : 'none';
   });
   const sugg = document.querySelector('.sugg-engage-card');
   if (sugg) sugg.style.display = active ? '' : 'none';
   const la = document.getElementById('trial-lock-accueil'); if (la) la.style.display = active ? 'none' : 'block';
-  // Cycle
   const lc = document.getElementById('trial-lock-cycle'); if (lc) lc.style.display = active ? 'none' : 'block';
-  // Objectifs
   const lo = document.getElementById('trial-lock-objectifs'); if (lo) lo.style.display = active ? 'none' : 'block';
 }
 
@@ -826,9 +879,11 @@ function populateAll() {
 
   // ── MOI ──
   renderMoi(s);
+  renderTrialCard();
   renderCycleHistory();
   renderPatterns();
   restoreFeedback();
+  checkJ17Banner();
 
   // RESTORE
   restorePrayers();
@@ -1118,7 +1173,7 @@ function renderCarteRepas(s) {
 
   const premEl = document.getElementById('action-manger-premium');
   if (!premEl) return;
-  if (ST.isPremium) {
+  if (isFullAccess()) {
     if (!r) return;
     premEl.innerHTML = `
       <div class="action-premium-unlocked" onclick="openRecipeModal('${ST.currentSaison}',${idx})">
@@ -1326,7 +1381,7 @@ function renderCarteSkincare(s) {
 
   const premEl = document.getElementById('action-soin-premium');
   if (!premEl) return;
-  if (ST.isPremium) {
+  if (isFullAccess()) {
     const routine = ROUTINES_PREMIUM[ST.currentSaison];
     const steps = routine ? routine.matin.length + routine.soir.length : 0;
     premEl.innerHTML = `
@@ -1417,7 +1472,7 @@ function openNiveauModal(idx) {
 function closeNiveauModal() { document.getElementById('niveau-modal').classList.remove('open'); }
 
 function checkSeanceProgression() {
-  if (!ST.isPremium) return;
+  if (!isFullAccess()) return;
   ST.seanceValidatedCount = (ST.seanceValidatedCount || 0) + 1;
   if (ST.seanceValidatedCount >= 5) {
     ST.seanceValidatedCount = 0;
@@ -2169,7 +2224,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (inp) inp.addEventListener('blur', () => { setTimeout(() => { window.scrollTo(0, 0); }, 100); });
 
   loadState();
+  if (!ST.installDate) { ST.installDate = Date.now(); saveState(); }
   checkPaymentSuccess();
+  checkTrialEnd();
   checkDailyReset();
   checkWeeklyReset();
 
@@ -3040,7 +3097,8 @@ function confirmDeleteMyData() {
     weeklyObjChecks: {}, customObjectifs: [], customObjChecks: {},
     marche: { phase: null, checks: {}, custom: [] },
     trialEnded: false, bilanShown: false, _lastSaison: null, hiverEnd: null,
-    premiumPlan: null, premiumSince: null
+    premiumPlan: null, premiumSince: null,
+    installDate: Date.now(), trialBannerDismissed: false,
   };
   closeDeleteModal();
   document.getElementById('app').style.display = 'none';
