@@ -47,6 +47,8 @@ let ST = {
   bilanShown: false,
   _lastSaison: null,
   hiverEnd: null,
+  premiumPlan: null,
+  premiumSince: null,
 };
 
 function saveState() {
@@ -622,6 +624,24 @@ function showPhaseToast(emoji, title, sub) {
 }
 
 // ═══════════════════════════════════════════════
+// PAIEMENT STRIPE — DÉTECTION RETOUR SUCCESS URL
+// ═══════════════════════════════════════════════
+function checkPaymentSuccess() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('payment') !== 'success') return;
+  const plan = params.get('plan') || 'unknown';
+  ST.isPremium = true;
+  ST.trialEnded = false;
+  ST.premiumPlan = plan;
+  ST.premiumSince = new Date().toISOString().split('T')[0];
+  saveState();
+  // Nettoie l'URL pour ne pas rejouer au refresh
+  window.history.replaceState({}, '', '/');
+  // Toast de bienvenue après init de l'app
+  setTimeout(() => showPhaseToast('🌸', 'Bienvenue en Premium !', 'Toutes les fonctionnalités sont débloquées.'), 1200);
+}
+
+// ═══════════════════════════════════════════════
 // TRIAL
 // ═══════════════════════════════════════════════
 function isTrialActive() { return ST.isPremium || !ST.trialEnded; }
@@ -740,6 +760,18 @@ function startStripeCheckout() {
 }
 
 function applyTrialLocks() {
+  if (ST.isPremium) {
+    // Premium actif — aucun lock, tout visible
+    ['day-card-skin','day-card-seance','day-card-repas'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.style.display = '';
+    });
+    const sugg = document.querySelector('.sugg-engage-card');
+    if (sugg) sugg.style.display = '';
+    const la = document.getElementById('trial-lock-accueil'); if (la) la.style.display = 'none';
+    const lc = document.getElementById('trial-lock-cycle'); if (lc) lc.style.display = 'none';
+    const lo = document.getElementById('trial-lock-objectifs'); if (lo) lo.style.display = 'none';
+    return;
+  }
   const active = isTrialActive();
   // Accueil — masque les 3 cartes, affiche le lock
   ['day-card-skin','day-card-seance','day-card-repas'].forEach(id => {
@@ -2137,6 +2169,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (inp) inp.addEventListener('blur', () => { setTimeout(() => { window.scrollTo(0, 0); }, 100); });
 
   loadState();
+  checkPaymentSuccess();
   checkDailyReset();
   checkWeeklyReset();
 
@@ -3006,7 +3039,8 @@ function confirmDeleteMyData() {
     amrapRecord: null, printempsUpgradeDone: false, levelMaxShown: false, printempsBasCount: 0, _lastCycleNum: null,
     weeklyObjChecks: {}, customObjectifs: [], customObjChecks: {},
     marche: { phase: null, checks: {}, custom: [] },
-    trialEnded: false, bilanShown: false, _lastSaison: null, hiverEnd: null
+    trialEnded: false, bilanShown: false, _lastSaison: null, hiverEnd: null,
+    premiumPlan: null, premiumSince: null
   };
   closeDeleteModal();
   document.getElementById('app').style.display = 'none';
