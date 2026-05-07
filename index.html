@@ -1076,8 +1076,19 @@
     </div>
     <div class="bilan-body" id="bilan-body"></div>
     <div class="bilan-footer">
-      <button onclick="bilanUpgrade()" class="bilan-cta-premium">&#10022; Continuer avec Premium</button>
-      <button onclick="closeBilanModal()" class="bilan-cta-free">Continuer gratuitement</button>
+      <div class="bilan-plan-row">
+        <div class="bilan-plan-card selected" id="plan-monthly" onclick="selectBilanPlan('monthly')">
+          <div class="bilan-plan-name">Mensuel</div>
+          <div class="bilan-plan-price">2,99 €<span class="bilan-plan-period"> / mois</span></div>
+        </div>
+        <div class="bilan-plan-card" id="plan-annual" onclick="selectBilanPlan('annual')">
+          <div class="bilan-plan-badge">&#8722;36%</div>
+          <div class="bilan-plan-name">Annuel</div>
+          <div class="bilan-plan-price">24,99 €<span class="bilan-plan-period"> / an</span></div>
+        </div>
+      </div>
+      <button id="bilan-checkout-btn" onclick="startStripeCheckout()" class="bilan-cta-premium">&#10022; Commencer l'abonnement</button>
+      <button onclick="closeBilanModal()" class="bilan-cta-free">Continuer gratuitement &rarr;</button>
     </div>
   </div>
 </div>

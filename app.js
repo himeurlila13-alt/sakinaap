@@ -703,6 +703,57 @@ function bilanUpgrade() {
   switchTabById('moi');
 }
 
+// ── STRIPE ────────────────────────────────────────
+let _selectedBilanPlan = 'monthly';
+
+function selectBilanPlan(plan) {
+  _selectedBilanPlan = plan;
+  document.querySelectorAll('.bilan-plan-card').forEach(c => c.classList.remove('selected'));
+  const card = document.getElementById('plan-' + plan);
+  if (card) card.classList.add('selected');
+}
+
+function startStripeCheckout() {
+  initStripeCheckout(_selectedBilanPlan);
+}
+
+async function initStripeCheckout(plan) {
+  const btn = document.getElementById('bilan-checkout-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Chargement…'; }
+  try {
+    const res = await fetch('/api/create-checkout?plan=' + plan);
+    const data = await res.json();
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      if (btn) { btn.disabled = false; btn.textContent = '✦ Commencer l\'abonnement'; }
+      alert('Une erreur est survenue. Réessaie dans quelques instants.');
+    }
+  } catch {
+    if (btn) { btn.disabled = false; btn.textContent = '✦ Commencer l\'abonnement'; }
+    alert('Une erreur est survenue. Vérifie ta connexion et réessaie.');
+  }
+}
+
+async function verifyStripeSession(sessionId) {
+  try {
+    const res = await fetch('/api/verify-session?id=' + sessionId);
+    const data = await res.json();
+    if (data.valid) {
+      ST.isPremium = true;
+      saveState();
+      window.history.replaceState({}, '', '/');
+      populateAll();
+      applyTrialLocks();
+      setTimeout(() => showPhaseToast('✨', 'Bienvenue Premium !', 'Barakallahu fiki pour ta confiance 🤍'), 600);
+    } else {
+      window.history.replaceState({}, '', '/');
+    }
+  } catch {
+    window.history.replaceState({}, '', '/');
+  }
+}
+
 function applyTrialLocks() {
   const active = isTrialActive();
   // Accueil — masque les 3 cartes, affiche le lock
@@ -2094,6 +2145,9 @@ document.addEventListener('DOMContentLoaded', () => {
   checkDailyReset();
   checkWeeklyReset();
 
+  // Retour depuis Stripe Checkout
+  const _stripeSessionId = new URLSearchParams(window.location.search).get('session_id');
+
   document.getElementById('revelation').style.display = 'none';
   document.getElementById('app').style.display = 'none';
 
@@ -2101,6 +2155,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('onboarding').style.display = 'none';
     document.getElementById('app').style.display = 'flex';
     initApp();
+    if (_stripeSessionId) verifyStripeSession(_stripeSessionId);
     const now = new Date();
     const today = now.toDateString();
     const hour = now.getHours();

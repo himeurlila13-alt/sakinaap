@@ -1,4 +1,4 @@
-const CACHE = 'sakinapp-v41';
+const CACHE = 'sakinapp-v42';
 const ASSETS = ['/', '/index.html', '/style.css', '/data.js', '/app.js', '/manifest.json', '/icons/icon.svg'];
 
 self.addEventListener('install', e => {
@@ -21,6 +21,7 @@ self.addEventListener('message', e => {
 
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
+  if (new URL(e.request.url).pathname.startsWith('/api/')) return;
   e.respondWith(
     fetch(e.request).then(res => {
       if (!res || res.status !== 200 || res.type === 'opaque') return res;
