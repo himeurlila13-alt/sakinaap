@@ -1,5 +1,5 @@
-const CACHE = 'sakinapp-v34';
-const ASSETS = ['/', '/index.html', '/style.css', '/data.js', '/app.js', '/manifest.json'];
+const CACHE = 'sakinapp-v35';
+const ASSETS = ['/', '/index.html', '/style.css', '/data.js', '/app.js', '/manifest.json', '/icons/icon.svg'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));

@@ -1582,7 +1582,7 @@ function renderCycle(s) {
   const _bnh = document.getElementById('btn-nouveau-hiver');
   const _bfh = document.getElementById('btn-fin-hiver');
   const _isH = ST.currentSaison === 'hiver';
-  if (_bnh) _bnh.style.display = _isH ? 'none' : 'flex';
+  if (_bnh) _bnh.style.display = (ST.currentSaison === 'automne') ? 'flex' : 'none';
   if (_bfh) _bfh.style.display = _isH ? 'flex' : 'none';
 
   drawCycleRing();
