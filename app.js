@@ -542,8 +542,8 @@ function computeCycle() {
     ST.printempsUpgradeDone = false;
     ST.printempsBasCount = 0;
   }
-  // Trial end detection — after 1 full cycle
-  if (!ST.isPremium && !ST.trialEnded && cycleNum >= 1) {
+  // Trial end detection — after 20 days
+  if (!ST.isPremium && !ST.trialEnded && diff >= 19) {
     ST.trialEnded = true;
     if (!ST.bilanShown) {
       ST.bilanShown = true;
@@ -662,7 +662,7 @@ function showBilanModal() {
       <span class="bilan-phase-arrow">→</span>
       <span class="bilan-phase-chip bilan-automne">🍂 Automne</span>
     </div>
-    <div class="bilan-strength-line">Ta force ce cycle&nbsp;: <strong>${mainStrength}</strong> · ${cycleDuration} jours traversés</div>
+    <div class="bilan-strength-line">Ta force ce cycle&nbsp;: <strong>${mainStrength}</strong> · 20 jours traversés</div>
 
     <div class="bilan-section-lbl">💪 Corps</div>
     <div class="bilan-grid-3">
