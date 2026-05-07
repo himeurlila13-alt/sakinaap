@@ -711,6 +711,53 @@
     <div id="premium-code-msg" style="font-size:12px;color:var(--gris);margin-top:8px;font-family:var(--serif);font-style:italic;min-height:16px;"></div>
   </div>
 
+  <!-- HISTORIQUE DES CYCLES -->
+  <div id="cycle-history-card" style="margin:0 14px 14px;background:white;border-radius:20px;border:1.5px solid var(--sable);padding:18px 20px;display:none;">
+    <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:14px;">&#128197; Historique des cycles</div>
+    <div id="cycle-history-list"></div>
+  </div>
+
+  <!-- PATTERNS DE CYCLE -->
+  <div id="patterns-card" style="margin:0 14px 14px;background:white;border-radius:20px;border:1.5px solid var(--sable);padding:18px 20px;display:none;">
+    <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:14px;">&#128302; Patterns de cycle</div>
+    <div id="patterns-free"></div>
+    <div id="patterns-premium"></div>
+  </div>
+
+  <!-- FEEDBACK BETA -->
+  <div id="feedback-section" style="margin:0 14px 14px;background:white;border-radius:20px;border:1.5px solid var(--sable);padding:18px 20px;display:none;">
+    <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:14px;">&#10038; Ton avis compte</div>
+    <div id="feedback-form-wrap">
+      <div style="font-size:13px;color:var(--gris);line-height:1.6;margin-bottom:16px;">Comment tu vis SakinApp jusqu&rsquo;ici ?</div>
+      <div id="rating-stars" style="display:flex;gap:8px;margin-bottom:8px;">
+        <div onclick="setRating(1)" style="flex:1;text-align:center;padding:10px 4px;border-radius:12px;border:1.5px solid var(--sable);font-size:13px;font-weight:700;color:var(--gris);cursor:pointer;transition:all .2s;">1</div>
+        <div onclick="setRating(2)" style="flex:1;text-align:center;padding:10px 4px;border-radius:12px;border:1.5px solid var(--sable);font-size:13px;font-weight:700;color:var(--gris);cursor:pointer;transition:all .2s;">2</div>
+        <div onclick="setRating(3)" style="flex:1;text-align:center;padding:10px 4px;border-radius:12px;border:1.5px solid var(--sable);font-size:13px;font-weight:700;color:var(--gris);cursor:pointer;transition:all .2s;">3</div>
+        <div onclick="setRating(4)" style="flex:1;text-align:center;padding:10px 4px;border-radius:12px;border:1.5px solid var(--sable);font-size:13px;font-weight:700;color:var(--gris);cursor:pointer;transition:all .2s;">4</div>
+        <div onclick="setRating(5)" style="flex:1;text-align:center;padding:10px 4px;border-radius:12px;border:1.5px solid var(--sable);font-size:13px;font-weight:700;color:var(--gris);cursor:pointer;transition:all .2s;">5</div>
+      </div>
+      <div id="rating-label" style="font-size:12px;color:var(--season);font-family:var(--serif);font-style:italic;min-height:18px;margin-bottom:14px;text-align:center;"></div>
+      <div style="font-size:11px;font-weight:600;letter-spacing:.5px;color:var(--gris);margin-bottom:8px;text-transform:uppercase;">Ce que j&rsquo;aime :</div>
+      <div id="likes-chips" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;">
+        <div onclick="toggleChip(this)" data-selected="false" style="padding:7px 14px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;transition:all .15s;">Les recettes &#127869;&#65039;</div>
+        <div onclick="toggleChip(this)" data-selected="false" style="padding:7px 14px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;transition:all .15s;">Le sport &#128170;</div>
+        <div onclick="toggleChip(this)" data-selected="false" style="padding:7px 14px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;transition:all .15s;">La spiritualit&eacute; &#128332;</div>
+        <div onclick="toggleChip(this)" data-selected="false" style="padding:7px 14px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;transition:all .15s;">L&rsquo;aspect cycle &#127769;</div>
+        <div onclick="toggleChip(this)" data-selected="false" style="padding:7px 14px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;transition:all .15s;">Le design &#127800;</div>
+        <div onclick="toggleChip(this)" data-selected="false" style="padding:7px 14px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;transition:all .15s;">Mon march&eacute; &#128722;</div>
+      </div>
+      <textarea id="feedback-text" rows="3" placeholder="Ce qu&rsquo;on pourrait am&eacute;liorer&hellip; (optionnel)" style="width:100%;padding:12px 14px;border:1.5px solid var(--sable);border-radius:14px;font-size:13px;font-family:var(--sans);color:var(--noir);background:var(--creme);resize:none;outline:none;box-sizing:border-box;margin-bottom:10px;-webkit-appearance:none;appearance:none;"></textarea>
+      <input id="feedback-email" type="email" placeholder="Ton email (optionnel, pour qu&rsquo;on te r&eacute;ponde)" style="width:100%;padding:12px 14px;border:1.5px solid var(--sable);border-radius:14px;font-size:13px;font-family:var(--sans);color:var(--noir);background:var(--creme);outline:none;box-sizing:border-box;margin-bottom:12px;-webkit-appearance:none;appearance:none;">
+      <div id="feedback-msg" style="font-size:12px;color:var(--gris);min-height:16px;margin-bottom:10px;"></div>
+      <button onclick="sendFeedback()" style="width:100%;padding:14px;background:var(--season-grad);color:white;border:none;border-radius:14px;font-size:14px;font-weight:700;font-family:var(--sans);cursor:pointer;">Envoyer mon avis &#10022;</button>
+    </div>
+    <div id="feedback-sent-wrap" style="display:none;text-align:center;padding:16px 0;">
+      <div style="font-size:32px;margin-bottom:10px;">&#127800;</div>
+      <div style="font-family:var(--serif);font-size:16px;color:var(--noir);margin-bottom:6px;">Merci pour ton retour !</div>
+      <div style="font-size:12px;color:var(--gris);line-height:1.6;">Ton avis aide SakinApp &agrave; s&rsquo;am&eacute;liorer pour toutes les utilisatrices. Barak Allahu fik. &#127800;</div>
+    </div>
+  </div>
+
   <!-- PARAMÈTRES -->
   <div class="prof-sec">
     <div class="ps-hdr">Paramètres</div>

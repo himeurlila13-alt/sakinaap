@@ -825,6 +825,9 @@ function populateAll() {
 
   // ── MOI ──
   renderMoi(s);
+  renderCycleHistory();
+  renderPatterns();
+  restoreFeedback();
 
   // RESTORE
   restorePrayers();
