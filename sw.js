@@ -1,4 +1,4 @@
-const CACHE = 'sakinapp-v50';
+const CACHE = 'sakinapp-v51';
 const ASSETS = ['/', '/index.html', '/style.css', '/data.js', '/app.js', '/manifest.json', '/icons/icon.svg', '/icons/icon-192.png', '/icons/icon-512.png', '/icons/apple-touch-icon.png'];
 
 self.addEventListener('install', e => {

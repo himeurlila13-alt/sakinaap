@@ -729,45 +729,14 @@ function selectBilanPlan(plan) {
   if (card) card.classList.add('selected');
 }
 
+const STRIPE_LINKS = {
+  mensuel: 'https://buy.stripe.com/test_7sYfZg2QJcNa3S21gBbwk00',
+  annual:  'https://buy.stripe.com/test_14A7sKajb7sQgEOe3nbwk01',
+};
+
 function startStripeCheckout() {
-  initStripeCheckout(_selectedBilanPlan);
-}
-
-async function initStripeCheckout(plan) {
-  const btn = document.getElementById('bilan-checkout-btn');
-  if (btn) { btn.disabled = true; btn.textContent = 'Chargement…'; }
-  try {
-    const res = await fetch('/api/create-checkout?plan=' + plan);
-    const data = await res.json();
-    if (data.url) {
-      window.location.href = data.url;
-    } else {
-      if (btn) { btn.disabled = false; btn.textContent = '✦ Commencer l\'abonnement'; }
-      alert('Une erreur est survenue. Réessaie dans quelques instants.');
-    }
-  } catch {
-    if (btn) { btn.disabled = false; btn.textContent = '✦ Commencer l\'abonnement'; }
-    alert('Une erreur est survenue. Vérifie ta connexion et réessaie.');
-  }
-}
-
-async function verifyStripeSession(sessionId) {
-  try {
-    const res = await fetch('/api/verify-session?id=' + sessionId);
-    const data = await res.json();
-    if (data.valid) {
-      ST.isPremium = true;
-      saveState();
-      window.history.replaceState({}, '', '/');
-      populateAll();
-      applyTrialLocks();
-      setTimeout(() => showPhaseToast('✨', 'Bienvenue Premium !', 'Barakallahu fiki pour ta confiance 🤍'), 600);
-    } else {
-      window.history.replaceState({}, '', '/');
-    }
-  } catch {
-    window.history.replaceState({}, '', '/');
-  }
+  const url = STRIPE_LINKS[_selectedBilanPlan] || STRIPE_LINKS.annual;
+  window.location.href = url;
 }
 
 function applyTrialLocks() {
@@ -2171,9 +2140,6 @@ document.addEventListener('DOMContentLoaded', () => {
   checkDailyReset();
   checkWeeklyReset();
 
-  // Retour depuis Stripe Checkout
-  const _stripeSessionId = new URLSearchParams(window.location.search).get('session_id');
-
   document.getElementById('revelation').style.display = 'none';
   document.getElementById('app').style.display = 'none';
 
@@ -2182,7 +2148,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('app').style.display = 'flex';
     initApp();
     scheduleLocalNotifications();
-    if (_stripeSessionId) verifyStripeSession(_stripeSessionId);
     const now = new Date();
     const today = now.toDateString();
     const hour = now.getHours();
