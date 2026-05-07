@@ -2166,6 +2166,13 @@ function enterApp() {
   document.getElementById('revelation').style.display = 'none';
   document.getElementById('app').style.display = 'flex';
   initApp();
+  // Toujours atterrir sur Accueil après l'onboarding
+  document.querySelectorAll('.tab-page').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('tab-accueil').classList.add('active');
+  document.getElementById('nav-accueil').classList.add('active');
+  const appContent = document.getElementById('app-content');
+  if (appContent) appContent.scrollTop = 0;
   const today = new Date().toDateString();
   setTimeout(() => {
     if (!localStorage.getItem('tabSeen_accueil')) {
