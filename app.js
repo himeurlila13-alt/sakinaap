@@ -808,7 +808,7 @@ function bilanUpgrade() {
 }
 
 // ── STRIPE ────────────────────────────────────────
-let _selectedBilanPlan = 'annual';
+let _selectedBilanPlan = 'annual'; // 'monthly' | 'annual'
 
 function selectBilanPlan(plan) {
   _selectedBilanPlan = plan;
@@ -817,8 +817,28 @@ function selectBilanPlan(plan) {
   if (card) card.classList.add('selected');
 }
 
+function selectPlan(plan) {
+  _selectedBilanPlan = plan;
+  // Sync bilan modal cards
+  document.querySelectorAll('.bilan-plan-card').forEach(c => c.classList.remove('selected'));
+  const modalCard = document.getElementById('plan-' + plan);
+  if (modalCard) modalCard.classList.add('selected');
+  // Sync Moi tab cards
+  ['monthly','annual'].forEach(p => {
+    const el = document.getElementById('moi-plan-' + p);
+    if (!el) return;
+    if (p === plan) {
+      el.style.borderColor = '#C9A96E';
+      el.style.boxShadow = '0 0 0 2px #C9A96E';
+    } else {
+      el.style.borderColor = '#D4B87A';
+      el.style.boxShadow = 'none';
+    }
+  });
+}
+
 const STRIPE_LINKS = {
-  mensuel: 'https://buy.stripe.com/test_7sYfZg2QJcNa3S21gBbwk00',
+  monthly: 'https://buy.stripe.com/test_7sYfZg2QJcNa3S21gBbwk00',
   annual:  'https://buy.stripe.com/test_14A7sKajb7sQgEOe3nbwk01',
 };
 
