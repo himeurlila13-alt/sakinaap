@@ -269,7 +269,7 @@
         <div class="trial-lock-feat">&#127869; Recettes &amp; Mon March&#233;</div>
         <div class="trial-lock-feat">&#127919; Objectifs personnalis&#233;s</div>
       </div>
-      <button class="trial-lock-btn" onclick="switchTabById('moi')">D&#233;couvrir SakinApp Premium &#8250;</button>
+      <button class="trial-lock-btn" onclick="startStripeCheckout()">S&rsquo;abonner &agrave; Premium &#8250;</button>
     </div>
   </div>
 
@@ -399,7 +399,7 @@
     <div class="trial-lock-banner">
       <span class="trial-lock-banner-icon">&#128274;</span>
       <div class="trial-lock-banner-text">Suivi des sympt&#244;mes et glaire disponibles avec Premium</div>
-      <button class="trial-lock-banner-btn" onclick="switchTabById('moi')">Premium</button>
+      <button class="trial-lock-banner-btn" onclick="startStripeCheckout()">Premium</button>
     </div>
   </div>
 
@@ -575,7 +575,7 @@
     <div class="trial-lock-banner">
       <span class="trial-lock-banner-icon">&#128274;</span>
       <div class="trial-lock-banner-text">Objectifs personnalis&#233;s disponibles avec Premium</div>
-      <button class="trial-lock-banner-btn" onclick="switchTabById('moi')">Premium</button>
+      <button class="trial-lock-banner-btn" onclick="startStripeCheckout()">Premium</button>
     </div>
   </div>
 
@@ -1089,19 +1089,32 @@
     </div>
     <div class="bilan-body" id="bilan-body"></div>
     <div class="bilan-footer">
-      <div class="bilan-plan-row">
-        <div class="bilan-plan-card selected" id="plan-monthly" onclick="selectBilanPlan('monthly')">
-          <div class="bilan-plan-name">Mensuel</div>
-          <div class="bilan-plan-price">2,99 €<span class="bilan-plan-period"> / mois</span></div>
-        </div>
-        <div class="bilan-plan-card" id="plan-annual" onclick="selectBilanPlan('annual')">
-          <div class="bilan-plan-badge">&#8722;36%</div>
-          <div class="bilan-plan-name">Annuel</div>
-          <div class="bilan-plan-price">24,99 €<span class="bilan-plan-period"> / an</span></div>
+      <div class="bilan-prem-header">
+        <div class="bilan-prem-eyebrow">Ce qui t&rsquo;attend avec Premium</div>
+        <div class="bilan-prem-feats">
+          <span class="bilan-prem-feat">&#128170; Sport adapt&eacute;</span>
+          <span class="bilan-prem-feat">&#127807; Skincare</span>
+          <span class="bilan-prem-feat">&#127869; Recettes</span>
+          <span class="bilan-prem-feat">&#127919; Objectifs</span>
+          <span class="bilan-prem-feat">&#128202; Sympt&ocirc;mes</span>
         </div>
       </div>
-      <button id="bilan-checkout-btn" onclick="startStripeCheckout()" class="bilan-cta-premium">&#10022; Commencer l'abonnement</button>
-      <button onclick="closeBilanModal()" class="bilan-cta-free">Continuer gratuitement &rarr;</button>
+      <div class="bilan-plan-row">
+        <div class="bilan-plan-card" id="plan-monthly" onclick="selectBilanPlan('monthly')">
+          <div class="bilan-plan-name">Mensuel</div>
+          <div class="bilan-plan-price">2,99 <span class="bilan-plan-cur">&euro;</span></div>
+          <div class="bilan-plan-period">par mois</div>
+        </div>
+        <div class="bilan-plan-card selected" id="plan-annual" onclick="selectBilanPlan('annual')">
+          <div class="bilan-plan-badge">Recommand&eacute;</div>
+          <div class="bilan-plan-name">Annuel</div>
+          <div class="bilan-plan-price">24,99 <span class="bilan-plan-cur">&euro;</span></div>
+          <div class="bilan-plan-period">par an &middot; <strong>2,08&euro;/mois</strong></div>
+        </div>
+      </div>
+      <button id="bilan-checkout-btn" onclick="startStripeCheckout()" class="bilan-cta-premium">&#10022; Commencer mon abonnement</button>
+      <div class="bilan-stripe-note">&#128274; Paiement s&eacute;curis&eacute; par Stripe &middot; R&eacute;siliation &agrave; tout moment</div>
+      <button onclick="closeBilanModal()" class="bilan-cta-free">Continuer gratuitement</button>
     </div>
   </div>
 </div>

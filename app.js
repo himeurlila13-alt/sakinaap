@@ -704,7 +704,7 @@ function bilanUpgrade() {
 }
 
 // ── STRIPE ────────────────────────────────────────
-let _selectedBilanPlan = 'monthly';
+let _selectedBilanPlan = 'annual';
 
 function selectBilanPlan(plan) {
   _selectedBilanPlan = plan;
@@ -1119,7 +1119,7 @@ function renderCarteRepas(s) {
         </div>
         <div class="action-prem-cta">
           <div class="action-prem-label">✦ Recette complète</div>
-          <button class="action-prem-btn" onclick="switchTabById('moi')">Débloquer Premium</button>
+          <button class="action-prem-btn" onclick="startStripeCheckout()">D&eacute;bloquer Premium</button>
         </div>
       </div>`;
   }
@@ -1322,7 +1322,7 @@ function renderCarteSkincare(s) {
         </div>
         <div class="action-prem-cta">
           <div class="action-prem-label">✦ Routine complète</div>
-          <button class="action-prem-btn" onclick="switchTabById('moi')">Débloquer Premium</button>
+          <button class="action-prem-btn" onclick="startStripeCheckout()">D&eacute;bloquer Premium</button>
         </div>
       </div>`;
   }
