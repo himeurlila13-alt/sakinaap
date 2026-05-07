@@ -690,18 +690,18 @@
       </div>
       <!-- Séparateur -->
       <div style="height:1px;background:linear-gradient(90deg,transparent,#C9A96E,transparent);margin-bottom:18px;"></div>
-      <!-- Prix -->
+      <!-- Prix — sélecteur de plan -->
       <div style="display:flex;gap:10px;margin-bottom:12px;">
-        <div style="flex:1;background:white;border:1.5px solid #D4B87A;border-radius:14px;padding:14px;text-align:center;">
+        <div id="moi-plan-monthly" onclick="selectPlan('monthly')" style="flex:1;background:white;border:2px solid #D4B87A;border-radius:14px;padding:14px;text-align:center;cursor:pointer;transition:border-color .2s,box-shadow .2s;">
           <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#8A7060;margin-bottom:6px;">Mensuel</div>
           <div style="font-family:var(--script);font-size:28px;color:#3A2010;">3,99&#8364;</div>
           <div style="font-size:10px;color:#8A7060;margin-top:2px;">/ mois</div>
         </div>
-        <div style="flex:1;background:linear-gradient(145deg,#3A2010,#6A4018);border-radius:14px;padding:14px;text-align:center;position:relative;">
+        <div id="moi-plan-annual" onclick="selectPlan('annual')" style="flex:1;background:linear-gradient(145deg,#3A2010,#6A4018);border:2px solid transparent;border-radius:14px;padding:14px;text-align:center;position:relative;cursor:pointer;box-shadow:0 0 0 2px #C9A96E;">
           <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#C9A96E,#A87A30);color:#1C1008;font-size:9px;font-weight:700;padding:3px 10px;border-radius:10px;white-space:nowrap;">MEILLEURE OFFRE</div>
           <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:rgba(250,246,240,.5);margin-bottom:6px;">Annuel</div>
           <div style="font-family:var(--script);font-size:28px;color:#FAF6F0;">24,99&#8364;</div>
-          <div style="font-size:10px;color:rgba(201,169,110,.7);margin-top:2px;">/ an · économise 30%</div>
+          <div style="font-size:10px;color:rgba(201,169,110,.7);margin-top:2px;">/ an · économise 47%</div>
         </div>
       </div>
       <div style="text-align:center;margin-bottom:16px;">
