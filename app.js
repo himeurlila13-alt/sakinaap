@@ -2304,9 +2304,7 @@ function switchTabById(name, section) {
   document.querySelectorAll('.tab-page').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('tab-' + name)?.classList.add('active');
-  const tabMap = {accueil:0, cycle:1, ame:2, objectifs:3, moi:4};
-  const navItems = document.querySelectorAll('.nav-item');
-  if (navItems[tabMap[name]]) navItems[tabMap[name]].classList.add('active');
+  document.getElementById('nav-' + name)?.classList.add('active');
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
   setTimeout(() => showTabTour(name), 300);
@@ -2598,8 +2596,8 @@ function drawCycleRing() {
 // 99 NOMS D'ALLAH
 // ═══════════════════════════════════════════════
 function showNomDuJour() {
-  const dayOfYear = Math.floor((new Date()-new Date(new Date().getFullYear(),0,0))/86400000);
-  const nom = ASMA[(dayOfYear-1)%99];
+  const dayOfYear = Math.floor((new Date() - new Date(2024, 0, 1)) / 86400000);
+  const nom = ASMA[dayOfYear % 99];
   const ar = document.getElementById('asma-day-arabic');
   const fr = document.getElementById('asma-day-fr');
   const meaning = document.getElementById('asma-day-meaning');
@@ -2743,6 +2741,9 @@ function scheduleLocalNotifications() {
   if (!('Notification' in window) || Notification.permission !== 'granted') return;
   const slots = NOTIF_SCHEDULE[freq] || [];
   const now = new Date();
+  // Daily reset at midnight so next day's timers are always scheduled
+  const midnight = new Date(); midnight.setHours(24, 0, 1, 0);
+  _notifTimers.push(setTimeout(scheduleLocalNotifications, midnight - now));
   slots.forEach(({ h, m, slot }) => {
     const target = new Date();
     target.setHours(h, m, 0, 0);
@@ -2750,7 +2751,6 @@ function scheduleLocalNotifications() {
     const delay = target - now;
     const t = setTimeout(() => {
       _fireNotification(slot);
-      setTimeout(scheduleLocalNotifications, 60000);
     }, delay);
     _notifTimers.push(t);
   });
