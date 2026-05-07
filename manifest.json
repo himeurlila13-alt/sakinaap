@@ -1,13 +1,15 @@
 {
   "name": "SakinApp",
   "short_name": "SakinApp",
-  "description": "Ton cycle, ta foi, ton énergie",
+  "description": "Suis ton cycle menstruel avec ta foi. Sport, nutrition, prières et bien-être adaptés à chaque phase.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#FAF6F0",
-  "theme_color": "#FFF0F5",
+  "theme_color": "#3D2060",
   "orientation": "portrait",
   "icons": [
-    { "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+    { "src": "/icons/icon.svg",       "sizes": "any",     "type": "image/svg+xml" },
+    { "src": "/icons/icon-192.png",   "sizes": "192x192", "type": "image/png",     "purpose": "any" },
+    { "src": "/icons/icon-512.png",   "sizes": "512x512", "type": "image/png",     "purpose": "any maskable" }
   ]
 }
