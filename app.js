@@ -1041,7 +1041,7 @@ function renderCarteBouger(s) {
       titleText = 'Mobilité douce'; metaText = '🍂 Phase de transition'; durText = '~15 min';
       exContent = _sportExHtml(d.mobilite);
       if (level >= 3 && typeof SEANCES_SPORT !== 'undefined') {
-        exContent += _sportExHtml(SEANCES_SPORT.printemps.bas[1]?.exercices, d.repos);
+        exContent += _sportExHtml(SEANCES_SPORT.printemps.bas[level]?.exercices, d.repos);
       }
       msgHtml = d.message;
       break;
@@ -1129,7 +1129,7 @@ function renderCarteRepas(s) {
         <span class="action-prem-unlocked-arrow">›</span>
       </div>`;
   } else {
-    const previewIngr = r ? r.ingredients.slice(0, 2).join(' · ') + '...' : 'Ingrédients de saison';
+    const previewIngr = r ? (r.ingredients || []).slice(0, 2).join(' · ') + '...' : 'Ingrédients de saison';
     premEl.innerHTML = `
       <div class="action-premium-locked">
         <div class="action-prem-blur">
@@ -1456,6 +1456,7 @@ function togglePremium() {
   renderCarteBouger(s);
   renderCarteRepas(s);
   renderCarteSkincare(s);
+  applyTrialLocks();
   showToast(ST.isPremium ? '✦ Mode Premium activé' : 'Mode Premium désactivé');
 }
 
@@ -1476,6 +1477,7 @@ function applyPremiumCode() {
       btn.style.background = 'var(--season-grad)';
       btn.style.color = 'white';
     }
+    applyTrialLocks();
     msg.style.color = '#3DAE8A';
     msg.textContent = '✓ Premium activé — bienvenue !';
     inp.value = '';
@@ -2774,6 +2776,10 @@ function selectFreq(el, freq) {
   el.classList.add('selected');
 }
 function openNotifSettings() {
+  selectedFreq = ST.notifFreq || 2;
+  document.querySelectorAll('#notif-freq-options .ob-option').forEach(o => {
+    o.classList.toggle('selected', Number(o.dataset.freq) === selectedFreq);
+  });
   document.getElementById('notif-modal').classList.add('open');
   const status=document.getElementById('notif-permission-status');
   if (!('Notification' in window)) status.innerHTML='📱 Installe l\'app sur l\'écran d\'accueil pour activer les rappels.';
@@ -3021,6 +3027,7 @@ function closeDeleteModal() {
   document.getElementById('delete-modal').classList.remove('open');
 }
 function confirmDeleteMyData() {
+  _notifTimers.forEach(t => clearTimeout(t)); _notifTimers.length = 0;
   try { localStorage.clear(); } catch(e) {}
   ST = {
     prenom: '', cycleStart: null, cycleDuration: 28, checkin: null, checkinDate: null,
