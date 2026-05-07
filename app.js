@@ -1442,18 +1442,19 @@ function validerSeanceDash() {
 
 function burstCelebration() {
   const stars = ['🌸','✨','⭐','🌟','💫','🌺'];
-  const cx = window.innerWidth / 2;
-  const cy = window.innerHeight / 2;
+  const wrap = document.createElement('div');
+  wrap.className = 'burst-wrap';
   for (let i = 0; i < 9; i++) {
     const el = document.createElement('div');
     el.className = 'celebrate-star';
     el.textContent = stars[i % stars.length];
-    el.style.left = (cx + (Math.random() - 0.5) * 220) + 'px';
-    el.style.top  = (cy + (Math.random() - 0.5) * 260) + 'px';
+    el.style.left = ((Math.random() - 0.5) * 220) + 'px';
+    el.style.top  = ((Math.random() - 0.5) * 260) + 'px';
     el.style.animationDelay = (i * 0.07) + 's';
-    document.body.appendChild(el);
-    setTimeout(() => { if (el.parentNode) el.parentNode.removeChild(el); }, 1200);
+    wrap.appendChild(el);
   }
+  document.body.appendChild(wrap);
+  setTimeout(() => { if (wrap.parentNode) wrap.parentNode.removeChild(wrap); }, 1400);
 }
 
 function checkEndOfPrintemps() {
