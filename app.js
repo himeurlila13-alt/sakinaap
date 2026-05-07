@@ -561,7 +561,6 @@ function computeCycle() {
   const ovulationDay = Math.max(10, dur - 14); // ovulation ≈ 14j avant les prochaines règles
   const eteStart = Math.max(8, ovulationDay - 2); // fenêtre fertile : 2j avant ovulation
   const eteEnd = Math.min(dur - 2, ovulationDay + 2); // 2j après ovulation
-  const automneStart = eteEnd + 1;
 
   // springStartD = premier jour (1-indexed) de Printemps — J6 par défaut, ou lendemain du hiverEnd déclaré
   let springStartD = 6;
@@ -2469,9 +2468,18 @@ function phaseForDay(i, dur) {
   const ovulationDay = Math.max(10, dur - 14);
   const eteStart = Math.max(8, ovulationDay - 2);
   const eteEnd = Math.min(dur - 2, ovulationDay + 2);
-  if (i <= 5) return 'hiver';
-  if (i < eteStart) return 'printemps';
-  if (i <= eteEnd) return 'ete';
+  let springStartD = 6;
+  if (ST.hiverEnd && ST.cycleStart) {
+    const [hey, hem, hed] = ST.hiverEnd.split('-').map(Number);
+    const [sy, sm, sd] = ST.cycleStart.split('-').map(Number);
+    const diff = Math.floor((new Date(hey, hem-1, hed) - new Date(sy, sm-1, sd)) / 86400000);
+    springStartD = Math.max(2, diff + 1);
+  }
+  const eteStartF = Math.max(springStartD, eteStart);
+  const eteEndF   = Math.max(eteStartF, eteEnd);
+  if (i < springStartD) return 'hiver';
+  if (i < eteStartF) return 'printemps';
+  if (i <= eteEndF) return 'ete';
   return 'automne';
 }
 
@@ -2602,6 +2610,7 @@ function saveEditCycle() {
     ST.cycleHistory.unshift({ start: ST.cycleStart, duration: ST.cycleDuration || 28 });
     if (ST.cycleHistory.length > 6) ST.cycleHistory = ST.cycleHistory.slice(0, 6);
   }
+  if (ST.cycleStart !== dateVal) ST.hiverEnd = null; // nouvelle date → hiverEnd caduc
   ST.cycleStart=dateVal; ST.cycleDuration=editDuration; saveState(); closeEditCycle();
   computeCycle(); applySaisonTheme(); populateAll();
   showToast('✓ Cycle mis à jour — ' + SAISONS[ST.currentSaison].emoji + ' ' + SAISONS[ST.currentSaison].nom + ' · Jour ' + ST.currentDay);
@@ -2876,7 +2885,7 @@ function confirmDeleteMyData() {
     amrapRecord: null, printempsUpgradeDone: false, levelMaxShown: false, printempsBasCount: 0, _lastCycleNum: null,
     weeklyObjChecks: {}, customObjectifs: [], customObjChecks: {},
     marche: { phase: null, checks: {}, custom: [] },
-    trialEnded: false, bilanShown: false
+    trialEnded: false, bilanShown: false, _lastSaison: null, hiverEnd: null
   };
   closeDeleteModal();
   document.getElementById('app').style.display = 'none';

@@ -1,343 +1,325 @@
 # Rapport QA — SakinApp
-**Date :** 2026-05-06  
-**Analyste :** Claude Code (lecture statique — pas d'exécution navigateur)  
-**Fichiers analysés :** `app.js`, `index.html`, `data.js`
+**Date :** 2026-05-07  
+**Analyste :** Claude Code (lecture statique complète — index.html, app.js, data.js, style.css, sw.js)  
+**Périmètre :** 10 points d'audit systématiques
 
 ---
 
-## Synthèse
+## Résumé exécutif
 
 | Sévérité | Nombre |
 |---|---|
-| 🔴 Critique | 4 |
-| 🟡 Moyen | 5 |
-| 🟢 Mineur | 4 |
+| 🔴 Critique | 2 |
+| 🟡 Moyen | 4 |
+| 🟢 Mineur | 3 |
 
 ---
 
-## BUG-01 — `renderQuickSeance` appelée mais non définie
-**Sévérité :** 🔴 Critique  
-**Fichier :** `app.js` ligne ~1943  
+## BUG 1 — Dossier `icons/` absent du projet
 
-**Observé :** La fonction `validerSeance()` (la version "sport" de l'ancienne page Vie) appelle `renderQuickSeance(s)` après avoir validé une séance. Cette fonction n'existe nulle part dans `app.js` ni dans `data.js`.
+**Fichiers :** `manifest.json` (l.11), `index.html` (l.8), `sw.js` (ASSETS non listé)  
+**Sévérité :** 🔴 **Critique**
 
-```js
-// ligne 1943
-function validerSeance() {
-  ...
-  renderQuickSeance(s);   // ← ReferenceError au runtime
-  renderDayScore();
-}
+### Comportement attendu
+Le dossier `icons/` avec le fichier `icon.svg` doit exister à la racine du projet pour que :
+- L'apple-touch-icon (`<link rel="apple-touch-icon" href="/icons/icon.svg">`) s'affiche sur iOS
+- Le manifest PWA soit valide (la clé `"icons"` pointe vers `/icons/icon.svg`)
+- L'installation PWA fonctionne correctement
+
+### Comportement observé
 ```
-
-**Comportement attendu :** L'UI se rafraîchit après validation.  
-**Comportement observé :** `ReferenceError: renderQuickSeance is not defined` en console. La séance est marquée done en localStorage mais l'affichage ne se met pas à jour.
-
-**Fix proposé :** Remplacer l'appel par `renderCarteBouger(s)` (la fonction qui remplit la carte Séance de l'Accueil), ou supprimer cet appel si `validerSeance()` n'est plus accessible depuis l'UI.
-
----
-
-## BUG-02 — Onglet fantôme `vie` dans TAB_TOURS
-**Sévérité :** 🔴 Critique  
-**Fichier :** `app.js` lignes 2539–2543  
-
-**Observé :** `TAB_TOURS` contient une entrée `vie` :
-
-```js
-vie: {
-  emoji: '🌿',
-  title: 'Ta vie au rythme du cycle',
-  text: '...',
-},
+c:\Users\himeu\Desktop\sakinaap\icons\   ← dossier INEXISTANT
 ```
+- Le dossier `icons/` n'existe pas du tout.
+- `manifest.json` référence `/icons/icon.svg` → erreur 404 à l'installation.
+- `index.html` ligne 8 référence la même ressource → icône manquante sur iOS.
+- `sw.js` ne liste pas `/icons/icon.svg` dans les ASSETS → même en cas d'existence, l'icône ne serait pas mise en cache hors-ligne.
 
-Or l'onglet `<div class="tab-page" id="tab-vie">` n'existe **pas** dans `index.html` (supprimé dans le commit `407fc16`). Lorsque `showTabTour('vie')` est appelé, il essaie d'afficher un tour pour un onglet inexistant.
-
-**Comportement attendu :** `showTabTour` ne déclenche rien pour un onglet supprimé.  
-**Comportement observé :** L'overlay tour-guide s'affiche avec le contenu de l'onglet Vie, mais cliquer sur "Compris" essaie de marquer `tabSeen_vie` en localStorage — erreur silencieuse, mais le tour d'un autre onglet peut bloquer l'expérience.
-
-**Fix proposé :** Supprimer l'entrée `vie` de `TAB_TOURS` dans `app.js`.
-
----
-
-## BUG-03 — IDs DOM absents référencés par `renderDayScore()`
-**Sévérité :** 🔴 Critique  
-**Fichier :** `app.js` ligne 661  
-
-**Observé :** `renderDayScore()` cherche l'élément `day-score-grid` :
-
+### Fix proposé
+1. Créer le dossier `icons/` et y placer `icon.svg`.
+2. Dans `sw.js`, ajouter l'icône aux ASSETS :
 ```js
-const container = document.getElementById('day-score-grid');
-if (!container) return;
-```
-
-Cet ID n'existe nulle part dans `index.html`. La fonction retourne silencieusement sans rien rendre. La grille "score du jour" (prières/dhikr/séance/coran) ne s'affiche jamais dans l'onglet Accueil.
-
-**Comportement attendu :** 3–4 chips de score apparaissent sous le message du jour.  
-**Comportement observé :** Vide complet — le bloc n'est pas rendu.
-
-**Fix proposé :** Ajouter dans `index.html`, dans `#tab-accueil`, un conteneur :
-
-```html
-<div class="day-score-wrap">
-  <div class="day-score-grid" id="day-score-grid"></div>
-</div>
+const ASSETS = ['/', '/index.html', '/style.css', '/data.js', '/app.js', '/manifest.json', '/icons/icon.svg'];
 ```
 
 ---
 
-## BUG-04 — Nombreux IDs absents du HTML (fonctions orphelines)
-**Sévérité :** 🔴 Critique  
-**Fichiers :** `app.js`, `index.html`  
+## BUG 2 — `hiverEnd` antérieur au `cycleStart` : `springStartD` devient négatif ou zéro, la phase est faussée
 
-Les fonctions suivantes utilisent des `getElementById` vers des IDs qui **n'existent pas** dans `index.html`. Elles ne plantent pas (les appels sont protégés par `if (!el) return`) mais leur fonctionnalité est totalement perdue :
+**Fichier :** `app.js`, `computeCycle()`, lignes 568–573  
+**Sévérité :** 🔴 **Critique**
 
-| Fonction | IDs absents | Conséquence |
-|---|---|---|
-| `validerSeance()` / `afficherSeanceDone()` / `restoreSeanceDone()` | `sport-validate-btn`, `sport-done-state`, `sport-done-msg` | Le bouton de validation sport de l'ancienne page Vie ne fonctionne plus |
-| `toggleMouv()` / `updateMouvProgress()` | `sport-mouvements`, `mouv-progress-label`, `mouv-progress-pct`, `mouv-progress-fill` | Mouvements libres non rendus |
-| `renderCycleHistory()` | `cycle-history-card`, `cycle-history-list` | Historique des cycles invisible |
-| `renderPatterns()` | `patterns-card`, `patterns-free`, `patterns-premium` | Section patterns invisible |
-| `sendFeedback()` / `setRating()` / `toggleChip()` / `restoreFeedback()` | `feedback-section`, `feedback-form-wrap`, `feedback-sent-wrap`, `feedback-text`, `feedback-email`, `feedback-msg`, `rating-label`, `rating-stars`, `likes-chips` | Formulaire feedback inexistant dans le HTML actuel |
-| `applySaisonTheme()` | `sport-header` | Pas de crash, juste un `if` raté |
+### Comportement attendu
+Si `hiverEnd` est une date antérieure à `cycleStart` (scénario réel : l'utilisatrice a déclaré la fin de l'Hiver lors d'un ancien cycle, puis démarre un nouveau cycle via `startNewCycleToday()` qui réinitialise bien `hiverEnd = null` — **mais si elle modifie ensuite le cycle via `saveEditCycle()`, `hiverEnd` n'est pas réinitialisé**), `springStartD` doit rester à 6 par défaut.
 
-**Fix proposé :** Soit réintégrer ces sections dans `index.html`, soit supprimer les fonctions devenues mortes de `app.js` pour alléger la base.
-
----
-
-## BUG-05 — `checkWeeklyReset()` efface `weeklyObjChecks` intégralement chaque lundi
-**Sévérité :** 🟡 Moyen  
-**Fichier :** `app.js` lignes 1685–1697  
-
-**Observé :**
+### Comportement observé
+`saveEditCycle()` (ligne 2597–2608) change `ST.cycleStart` sans toucher à `ST.hiverEnd`. Si la nouvelle date de début est postérieure à l'ancien `hiverEnd`, alors :
 
 ```js
-function checkWeeklyReset() {
-  ...
-  ST.mouvDone = {};
-  ST.weeklyObjChecks = {};   // ← tout effacé, pas seulement la semaine précédente
-  ST.customObjChecks = {};
-  ...
-}
+hiverEndDiff = Math.floor((hiverEndLocal - startLocal) / ms_par_jour)
+// → valeur NÉGATIVE (ex: -3)
+springStartD = Math.max(2, -3 + 1) = Math.max(2, -2) = 2
 ```
 
-`weeklyObjChecks` est indexé par `weekKey` (ex. `"2026-04-27"`). La remise à zéro totale détruit aussi les semaines plus anciennes stockées — ce qui n'est pas un problème aujourd'hui (les données sont petites), mais détruit également `customObjChecks` en entier, effaçant la progression des objectifs perso de toutes les semaines passées au lieu de seulement la semaine en cours.
+Avec `springStartD = 2`, Hiver ne dure plus qu'1 jour (J1). Toutes les phases sont décalées — la phase Printemps commence au J2. L'utilisatrice en J3 sera en Printemps alors qu'elle devrait être en Hiver.
 
-**Comportement attendu :** Seule la semaine en cours est réinitialisée ; les semaines passées restent accessibles (pour un futur historique).  
-**Comportement observé :** Tout l'historique des coches hebdomadaires disparaît chaque lundi.
+### Scénario reproductible
+1. Déclarer fin d'Hiver le 2026-04-20 → `ST.hiverEnd = '2026-04-20'`
+2. Utiliser "Modifier mon cycle" et saisir un `cycleStart` à `2026-05-01` → `saveEditCycle()` ne réinitialise pas `hiverEnd`
+3. `computeCycle()` calcule `hiverEndDiff = (20 avril - 1er mai) = -11 jours` → `springStartD = max(2, -10) = 2`
 
-**Fix proposé :** Ne pas effacer les objets entiers. Supprimer uniquement les entrées trop vieilles si besoin :
-
-```js
-// Garder seulement les 4 dernières semaines
-const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 28);
-['weeklyObjChecks','customObjChecks'].forEach(key => {
-  Object.keys(ST[key]||{}).forEach(wk => { if (new Date(wk) < cutoff) delete ST[key][wk]; });
-});
-ST.mouvDone = {};
-```
-
----
-
-## BUG-06 — `getAutomneMicroPhase` : `autLen` calcul incorrect — la phase "fin" peut être vide
-**Sévérité :** 🟡 Moyen  
-**Fichier :** `app.js` lignes 2021–2029  
-
-**Observé :**
+### Fix proposé
+Dans `saveEditCycle()`, réinitialiser `hiverEnd` si la date de début change :
 
 ```js
-function getAutomneMicroPhase(cycleDay, cycleDur) {
-  const ovDay = Math.max(10, cycleDur - 14);
-  const eteEnd = Math.min(cycleDur - 2, ovDay + 2);
-  const autLen = cycleDur - eteEnd;   // ← longueur de l'automne en jours
-  const autDay = cycleDay - eteEnd;   // ← jour RELATIF dans l'automne
-  ...
-}
-```
-
-Pour un cycle de 28 jours : `ovDay=14`, `eteEnd=16`, `autLen=12`, `autDay = cycleDay - 16`.  
-- `actif` : autDay ≤ 4 (J17–J20)  
-- `doux`  : autDay ≤ 8 (J21–J24)  
-- `fin`   : J25–J28  
-
-C'est cohérent pour 28 jours. Mais pour un **cycle court de 26 jours** : `ovDay=12`, `eteEnd=14`, `autLen=12`, les seuils sont identiques — pas de bug.
-
-**Vrai bug :** Pour un cycle de 26 jours, `eteEnd = min(24, 14) = 14`, `autLen = 26 - 14 = 12`. Mais `computeCycle` fixe `eteEnd = min(dur-2, ovDay+2) = min(24,14) = 14`. L'Automne commence donc à J15. Si l'utilisatrice est à J25 (autDay=11), elle tombe en `doux` (seuil 8.4 → 8). Le calcul `Math.floor(12*0.70) = 8` — autDay=11 > 8, donc `fin`. C'est correct.
-
-**Réel problème détecté :** Si `cycleDay <= eteEnd` (l'utilisatrice n'est pas encore en Automne), `autDay` serait ≤ 0. `getTodaySeanceSpec()` appelle `getAutomneMicroPhase` seulement si `phase === 'automne'`, ce qui protège. Mais si `computeCycle` attribue 'automne' alors que `cycleDay == eteEnd+1`, `autDay = 1`, qui retourne 'actif' correctement. Pas de bug ici finalement.
-
-**Bug réel :** `autLen` vaut `cycleDur - eteEnd`, ce qui inclut le dernier jour du cycle. Mais le seuil 'actif' est `Math.floor(autLen * 0.35)`. Pour un cycle de 28j : `Math.floor(12 * 0.35) = 4`. Donc J17–J20 sont 'actif'. Mais le commentaire dans `data.js` dit "Actif J18-J21". Il y a un **décalage d'un jour** entre la documentation et le code — les bornes réelles sont J17–J20 au lieu de J18–J21 pour un cycle de 28j.
-
-**Fix proposé :** Ajuster les constantes multiplicatives : utiliser `0.40` et `0.75` pour coller aux commentaires, ou corriger la documentation.
-
----
-
-## BUG-07 — `computeCycle` : Hiver fixé à jours 1–5 mais `phaseForDay` aussi — incohérence avec les données MESSAGES_JOUR
-**Sévérité :** 🟡 Moyen  
-**Fichier :** `app.js` ligne 550, `data.js`  
-
-**Observé :** `computeCycle()` attribue 'hiver' si `d <= 5`. `MESSAGES_JOUR` couvre J1–J28. Pour un cycle de 28j, J14–J17 sont 'ete' selon `computeCycle` mais `MESSAGES_JOUR` dispose de messages jusqu'à J28. Aucun problème.
-
-**Bug réel détecté :** `MESSAGES_JOUR` ne contient que des messages pour J1–J28. Or pour un cycle de 33 jours, `ST.currentDay` peut atteindre 29–33. `updateMessage()` fait :
-
-```js
-const dayMsg = typeof MESSAGES_JOUR !== 'undefined' && MESSAGES_JOUR[ST.currentDay];
-```
-
-Si `ST.currentDay = 32`, `MESSAGES_JOUR[32]` est `undefined`, le fallback `s.messages[mood]` est utilisé. C'est géré proprement par le fallback — **pas de plantage**, mais les utilisatrices en cycle long (33j) reçoivent des messages génériques non personnalisés pour les J29–J33.
-
-**Fix proposé :** Ajouter des entrées J29–J33 dans `MESSAGES_JOUR` dans `data.js`, ou documenter le comportement intentionnel.
-
----
-
-## BUG-08 — `checkDailyReset` ne réinitialise pas `eveningCheckinDate` / `eveningCheckinMood`
-**Sévérité :** 🟡 Moyen  
-**Fichier :** `app.js` lignes 1442–1460  
-
-**Observé :**
-
-```js
-function checkDailyReset() {
-  const today = new Date().toDateString();
-  if (ST.lastDailyReset === today) return;
-  ST.selectedSugg = [];
-  ST.glaire = null;
-  ST.glaireDate = null;
-  ST.checkin = null;
-  ST.checkinDate = null;
-  // ... élagage des vieilles entrées datées ...
-  ST.lastDailyReset = today;
-  saveState();
-}
-```
-
-`eveningCheckinDate` et `eveningCheckinMood` ne sont pas remis à null. Ce n'est pas critique (ils sont comparés à `today` avant de s'afficher), mais c'est une incohérence : si l'utilisatrice a fait son check-in du soir hier, `ST.eveningCheckinDate` reste la date d'hier et `checkNotificationReturn()` peut ou non déclencher le check-in du soir selon l'heure.
-
-**Comportement attendu :** Reset cohérent de toutes les données "du jour".  
-**Fix proposé :** Ajouter dans `checkDailyReset` :
-
-```js
-ST.eveningCheckinDate = null;
-ST.eveningCheckinMood = null;
-```
-
----
-
-## BUG-09 — `switchTab()` ne fait pas de scroll reset sur `document.documentElement`
-**Sévérité :** 🟢 Mineur  
-**Fichier :** `app.js` lignes 1823–1833  
-
-**Observé :** `switchTab()` (appelé depuis le menu bas) réinitialise `document.body.scrollTop` et `document.documentElement.scrollTop` puis `app-content.scrollTop`. C'est correct. Mais `switchTabById()` (appelé depuis les boutons internes "Débloquer Premium" etc.) ne remet à zéro que `app-content.scrollTop` — pas `document.body` ni `document.documentElement`.
-
-Sur certains navigateurs mobiles (Safari iOS), le scroll peut être sur `body` ou `documentElement` selon le contexte. Résultat possible : la page reste scrollée en bas quand on navigue via `switchTabById`.
-
-**Fix proposé :**
-
-```js
-function switchTabById(name, section) {
-  ...
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-  const _ac2 = document.getElementById('app-content');
-  if (_ac2) _ac2.scrollTop = 0;
-}
-```
-
----
-
-## BUG-10 — `confirmDeleteMyData` : champ `dhikrDate` présent dans ST initial mais absent du reset
-**Sévérité :** 🟢 Mineur  
-**Fichier :** `app.js` lignes 2501–2518  
-
-**Observé :** L'objet ST initial (ligne 12) contient `dhikrDate: null`. Le reset dans `confirmDeleteMyData()` reconstruit ST en incluant `dhikrDate: null` (ligne 2505). Ce champ est bien présent. Aucun bug ici.
-
-**Vérification complémentaire :** Tous les champs du ST initial sont bien présents dans le reset de `confirmDeleteMyData` :  
-`prenom`, `cycleStart`, `cycleDuration`, `checkin`, `checkinDate`, `prayers`, `dhikrChecks`, `dhikrDate`, `coranDone`, `asmaKnown`, `glaire`, `glaireDate`, `symptomes`, `autreSymptomesText`, `currentSaison`, `currentDay`, `selectedSugg`, `mouvDone`, `seanceDone`, `notifFreq`, `waitlistEmail`, `feedbackSent`, `installBannerDismissed`, `lastDailyReset`, `lastWeeklyReset`, `eveningCheckinDate`, `eveningCheckinMood`, `cycleHistory`, `isPremium`, `seanceValidatedCount`, `seanceLevel`, `amrapRecord`, `printempsUpgradeDone`, `levelMaxShown`, `printempsBasCount`, `_lastCycleNum`, `weeklyObjChecks`, `customObjectifs`, `customObjChecks`.
-
-**Résultat : TOUS les champs sont bien réinitialisés.** Pas de bug sur ce point.
-
----
-
-## BUG-11 — `saveState()` exclut `currentSaison` et `currentDay` mais `loadState()` les exclut aussi
-**Sévérité :** 🟢 Mineur  
-**Fichier :** `app.js` lignes 47–64  
-
-**Observé :**
-
-```js
-function saveState() {
-  const toSave = {...ST};
-  delete toSave.currentSaison;
-  delete toSave.currentDay;
-  localStorage.setItem('sakinapp_v1', JSON.stringify(toSave));
-}
-function loadState() {
-  const saved = localStorage.getItem('sakinapp_v1');
-  if (saved) {
-    const parsed = JSON.parse(saved);
-    delete parsed.currentSaison;
-    delete parsed.currentDay;
-    ST = {...ST, ...parsed};
+function saveEditCycle() {
+  const dateVal = document.getElementById('edit-cycle-date').value;
+  if (!dateVal) { alert('Indique la date 🌙'); return; }
+  if (ST.cycleStart && ST.cycleStart !== dateVal) {
+    if (!ST.cycleHistory) ST.cycleHistory = [];
+    ST.cycleHistory.unshift({ start: ST.cycleStart, duration: ST.cycleDuration || 28 });
+    if (ST.cycleHistory.length > 6) ST.cycleHistory = ST.cycleHistory.slice(0, 6);
+    ST.hiverEnd = null;  // ← AJOUTER cette ligne
   }
+  ST.cycleStart = dateVal; ST.cycleDuration = editDuration; saveState(); closeEditCycle();
+  computeCycle(); applySaisonTheme(); populateAll();
+  showToast('✓ Cycle mis à jour — ' + SAISONS[ST.currentSaison].emoji + ' ' + SAISONS[ST.currentSaison].nom + ' · Jour ' + ST.currentDay);
 }
 ```
 
-Le comportement est intentionnel et correct (commentaire le confirme). `computeCycle()` est toujours appelé après `loadState()`. Pas de bug — la conception est bonne.
-
 ---
 
-## BUG-12 — `MESSAGES_JOUR` dans data.js ne couvre que J1–J28 ; cycles longs (33j) non couverts
-**Sévérité :** 🟢 Mineur  
-**Fichier :** `data.js` (fin du fichier) — voir BUG-07 ci-dessus pour détail complet.
+## BUG 3 — `phaseForDay()` utilise une frontière Hiver codée en dur (J1–J5) incompatible avec `hiverEnd` dynamique
 
----
+**Fichier :** `app.js`, `phaseForDay()`, lignes 2468–2476  
+**Sévérité :** 🟡 **Moyen**
 
-## BUG-13 — Tour guidé : entrée `vie` déclenche un tour pour un onglet supprimé
-**Sévérité :** 🟡 Moyen (doublon détaillé en BUG-02)  
+### Comportement attendu
+La fonction `phaseForDay()` est utilisée pour colorier chaque jour du calendrier (onglet Objectifs). Elle devrait utiliser la même logique que `computeCycle()` qui prend en compte `ST.hiverEnd`.
 
----
-
-## BUG-14 — `automne-doux` : accès potentiel à `SEANCES_SPORT.printemps.bas[1]?.exercices` sans vérification de `level`
-**Sévérité :** 🟡 Moyen  
-**Fichier :** `app.js` lignes 794–799  
-
-**Observé :**
-
+### Comportement observé
 ```js
-case 'automne-doux': {
-  const d = spec.data;
-  titleText = 'Mobilité douce'; metaText = '🍂 Phase de transition'; durText = '~15 min';
-  exContent = _sportExHtml(d.mobilite);
-  if (level >= 3 && typeof SEANCES_SPORT !== 'undefined') {
-    exContent += _sportExHtml(SEANCES_SPORT.printemps.bas[1]?.exercices, d.repos);
-  }
+function phaseForDay(i, dur) {
+  if (i <= 5) return 'hiver';   // ← toujours J1–5, ignore hiverEnd
   ...
 }
 ```
 
-`SEANCES_SPORT.printemps.bas[1]` accède à l'index `1` (notation bracket) mais `bas` dans `SEANCES_SPORT` est un objet dont les clés sont numériques (`1`, `2`, `3`, `4`). En JavaScript, `obj[1]` sur un objet `{1: {...}}` fonctionne car les clés sont coercées en string. Donc `bas[1]` retourne bien la séance Découverte niveau 1. Pas de crash.
+Si l'utilisatrice a déclaré la fin de son Hiver au J3, `computeCycle()` place le Printemps dès J4. Mais le calendrier coloriera J4 et J5 en Hiver (violet) au lieu de Printemps (vert). Les couleurs du calendrier sont donc incohérentes avec la phase affichée dans l'app.
 
-**Cependant :** Le commentaire dans `data.js` dit "N1-N2 : mobilité seule | N3-N4 : mobilité + circuit Découverte". Or le code ajoute les exercices de `bas[1]` (Découverte) pour `level >= 3`, y compris pour N4. C'est intentionnel selon le commentaire mais non documenté dans le code.
+### Fix proposé
+Passer `springStartD` en paramètre ou le recalculer dans `phaseForDay()` :
 
-**Fix proposé :** Ajouter un commentaire explicatif dans le code pour clarifier l'intention.
+```js
+function phaseForDay(i, dur, springStartD) {
+  springStartD = springStartD || 6;
+  const ovulationDay = Math.max(10, dur - 14);
+  const eteStart = Math.max(springStartD, Math.max(8, ovulationDay - 2));
+  const eteEnd = Math.min(dur - 2, ovulationDay + 2);
+  if (i < springStartD) return 'hiver';
+  if (i < eteStart) return 'printemps';
+  if (i <= eteEnd) return 'ete';
+  return 'automne';
+}
+```
+
+Et dans `renderCalendar()`, calculer et passer `springStartD` :
+
+```js
+// Calculer springStartD comme dans computeCycle()
+let springStartD = 6;
+if (ST.hiverEnd && ST.cycleStart) { /* même logique */ }
+phase = phaseForDay(dayOfCycle + 1, dur, springStartD);
+```
 
 ---
 
-## Récapitulatif prioritaire
+## BUG 4 — Variable `automneStart` déclarée mais jamais utilisée dans `computeCycle()`
 
-### Actions immédiates (bloquants ou fonctionnalités cassées)
+**Fichier :** `app.js`, ligne 564  
+**Sévérité :** 🟢 **Mineur**
 
-1. **BUG-01** — Ajouter `id="day-score-grid"` dans le HTML (accueil) + corriger `validerSeance()` → `renderCarteBouger`.
-2. **BUG-02** — Supprimer l'entrée `vie` de `TAB_TOURS` dans `app.js`.
-3. **BUG-03/04** — Auditer les fonctions mortes : supprimer ou réintégrer dans le HTML les IDs absents (`sport-*`, `mouv-*`, `cycle-history-card`, `patterns-card`, `feedback-*`).
+### Comportement observé
+```js
+const automneStart = eteEnd + 1;  // ligne 564 — jamais utilisée
+```
+La variable est déclarée mais la condition `automne` utilise directement `else` sans `automneStart`. Pas de bug fonctionnel mais confusion à la lecture et linting warning potentiel.
 
-### Actions recommandées
+### Fix proposé
+Supprimer la ligne 564 :
+```js
+// Supprimer : const automneStart = eteEnd + 1;
+```
 
-4. **BUG-05** — Corriger le reset hebdomadaire pour ne pas écraser l'historique des semaines précédentes.
-5. **BUG-08** — Ajouter le reset de `eveningCheckinDate/Mood` dans `checkDailyReset`.
-6. **BUG-09** — Uniformiser le scroll reset dans `switchTabById`.
+---
 
-### Améliorations mineures
+## BUG 5 — `confirmDeleteMyData()` oublie `_lastSaison` et `hiverEnd` dans la réinitialisation
 
-7. **BUG-06** — Ajuster les seuils `getAutomneMicroPhase` pour coller à la documentation.
-8. **BUG-07/12** — Ajouter des messages J29–J33 pour les utilisatrices avec un cycle long.
+**Fichier :** `app.js`, `confirmDeleteMyData()`, lignes 2865–2884  
+**Sévérité :** 🟡 **Moyen**
+
+### Comportement attendu
+Après "Réinitialiser mes données", tous les champs de `ST` doivent être remis à leur valeur initiale, comme défini dans la déclaration d'origine de `ST` (lignes 4–50).
+
+### Comportement observé
+La reconstruction de `ST` dans `confirmDeleteMyData()` oublie deux champs :
+- `hiverEnd` : absent → reste `undefined` après reset (la valeur initiale dans ST est `null`)
+- `_lastSaison` : absent → reste `undefined` après reset (la valeur initiale est `null`)
+
+Si une ancienne valeur `hiverEnd` persistait en mémoire (JS n'est pas rechargé car il n'y a pas de `location.reload()`), le prochain `computeCycle()` lirait un `hiverEnd` stale. Idem pour `_lastSaison` qui déclenche les toasts de transition de phase.
+
+### Fix proposé
+Ajouter les deux champs manquants dans la réinitialisation :
+
+```js
+function confirmDeleteMyData() {
+  try { localStorage.clear(); } catch(e) {}
+  ST = {
+    prenom: '', cycleStart: null, cycleDuration: 28, checkin: null, checkinDate: null,
+    prayers: {}, dhikrChecks: {}, dhikrDate: null, coranDone: {}, asmaKnown: [],
+    glaire: null, glaireDate: null, symptomes: {}, autreSymptomesText: {},
+    currentSaison: 'printemps', currentDay: 1,
+    selectedSugg: [], mouvDone: {}, seanceDone: {}, notifFreq: 2,
+    waitlistEmail: null, feedbackSent: false, installBannerDismissed: false,
+    lastDailyReset: null, lastWeeklyReset: null, eveningCheckinDate: null,
+    eveningCheckinMood: null, cycleHistory: [],
+    isPremium: false, seanceValidatedCount: 0, seanceLevel: 1,
+    amrapRecord: null, printempsUpgradeDone: false, levelMaxShown: false,
+    printempsBasCount: 0, _lastCycleNum: null,
+    weeklyObjChecks: {}, customObjectifs: [], customObjChecks: {},
+    marche: { phase: null, checks: {}, custom: [] },
+    trialEnded: false, bilanShown: false,
+    _lastSaison: null,   // ← AJOUTER
+    hiverEnd: null,      // ← AJOUTER
+  };
+  closeDeleteModal();
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('onboarding').style.display = 'block';
+}
+```
+
+---
+
+## BUG 6 — `btn-nouveau-hiver` toujours caché en phase Hiver (logique inversée)
+
+**Fichier :** `app.js`, `renderCycle()`, lignes 1585–1587  
+**Sévérité :** 🟡 **Moyen**
+
+### Comportement attendu
+- `btn-nouveau-hiver` ("Mon Hiver commence aujourd'hui") → visible quand on N'EST PAS en Hiver (pour déclarer un nouveau cycle/règles)
+- `btn-fin-hiver` ("Mon Hiver est terminé") → visible quand on EST en Hiver
+
+### Comportement observé — logique incohérente avec l'UX attendue
+```js
+const _isH = ST.currentSaison === 'hiver';
+if (_bnh) _bnh.style.display = _isH ? 'none' : 'flex';  // btn-nouveau-hiver visible si PAS hiver ✓
+if (_bfh) _bfh.style.display = _isH ? 'flex' : 'none';  // btn-fin-hiver visible si hiver ✓
+```
+
+La logique est en fait **correcte** côté code. Cependant, le label "Mon Hiver commence aujourd'hui" (`btn-nouveau-hiver`) apparaît pendant toutes les phases non-Hiver (Printemps, Été, Automne). Pendant l'Automne ou l'Été, proposer "Mon Hiver commence aujourd'hui" est sémantiquement bizarre — cela sous-entend que les règles arrivent, ce qui ne se produit qu'en fin de cycle. Ce bouton devrait idéalement n'être montré qu'en fin d'Automne ou en Printemps/Été si l'utilisatrice a des règles irrégulières.
+
+**Note :** Ce n'est pas un crash — c'est un problème d'UX qui peut dérouter. La logique technique est correcte, le libellé et la visibilité sont perfectibles.
+
+### Fix proposé (UX)
+Limiter l'affichage de `btn-nouveau-hiver` à la phase Automne :
+
+```js
+if (_bnh) _bnh.style.display = (ST.currentSaison === 'automne') ? 'flex' : 'none';
+if (_bfh) _bfh.style.display = (ST.currentSaison === 'hiver') ? 'flex' : 'none';
+```
+
+---
+
+## BUG 7 — Service Worker : `/icons/icon.svg` absent des ASSETS mis en cache
+
+**Fichier :** `sw.js`, ligne 2  
+**Sévérité :** 🟡 **Moyen**
+
+### Comportement observé
+```js
+const ASSETS = ['/', '/index.html', '/style.css', '/data.js', '/app.js', '/manifest.json'];
+```
+Même si le dossier `icons/` était créé (correction du BUG 1), le SW ne met pas l'icône en cache. En mode hors-ligne, l'icône serait absente (404).
+
+### Fix proposé
+```js
+const ASSETS = ['/', '/index.html', '/style.css', '/data.js', '/app.js', '/manifest.json', '/icons/icon.svg'];
+```
+
+---
+
+## AUDIT — Points vérifiés sans bug
+
+### 1. Calcul du cycle (`computeCycle()`)
+- `cycleStart null` → garde OK (`if (!ST.cycleStart) return;` ligne 529)
+- `diff < 0` → fallback hiver J1 OK (ligne 535)
+- `springStartD` avec `hiverEnd` → `Math.max(2, ...)` protège contre 0/négatif dans le cas standard (mais voir BUG 2 pour le cas edge `saveEditCycle`)
+- `eteStartFinal = Math.max(springStartD, eteStart)` → évite que l'Été commence avant le Printemps : OK
+- `eteEndFinal = Math.max(eteStartFinal, eteEnd)` → évite un Été de durée nulle : OK
+
+### 2. localStorage / persistance
+- `saveState()` exclut bien `currentSaison` et `currentDay` (`delete toSave.currentSaison; delete toSave.currentDay;`) : OK
+- `loadState()` les exclut aussi avant fusion : OK
+- `computeCycle()` est toujours appelé en premier dans `initApp()` : OK
+
+### 3. Navigation (onglets)
+- Tous les IDs HTML existent : `tab-accueil`, `tab-cycle`, `tab-ame`, `tab-objectifs`, `tab-moi` : OK
+- `switchTabById()` utilise un `tabMap` pour trouver l'index du nav-item : OK
+- `switchTab()` reçoit le `navEl` directement depuis `onclick` : OK
+
+### 4. Mode Premium TEST
+- `isTrialActive()` : `return ST.isPremium || !ST.trialEnded;` : logique correcte
+- `applyTrialLocks()` : masque les cartes + affiche les banners lock selon `isTrialActive()` : OK
+- IDs `trial-lock-accueil`, `trial-lock-cycle`, `trial-lock-objectifs` : tous présents dans index.html : OK
+
+### 5. Boutons Hiver/Printemps
+- `id="btn-nouveau-hiver"` : présent (index.html ligne 312) : OK
+- `id="btn-fin-hiver"` : présent (index.html ligne 313) : OK
+- `declarerPrintemps()` : définie dans app.js ligne 1616 : OK
+- `startNewCycleToday()` : réinitialise bien `ST.hiverEnd = null` (ligne 1608) : OK
+
+### 6. Mon Marché
+- `switchRepasTab()` : définie ligne 1081, IDs `repas-tab-btn-recettes`, `repas-tab-btn-marche`, `repas-tab-recettes`, `repas-tab-marche` : tous présents dans index.html lignes 220–230 : OK
+- `renderMarcheTab()` : définie ligne 1121 : OK
+- `marcheToggleItem()` : définie ligne 1155 : OK
+- `marcheAddItem()` : définie ligne 1167 : OK
+
+### 7. Bilan modal
+- `showBilanModal()` cible bien `#bilan-body` (ligne 643) : OK
+- L'ID `bilan-body` existe bien dans index.html (ligne 897) : OK
+- Pas d'erreur `#bilan-stats` (cet ID n'existe nulle part) : OK
+
+### 8. Phase toast
+- `showPhaseToast()` est définie ligne 597, AVANT tout appel (via `setTimeout(..., 1800)` dans `computeCycle()` ligne 590)
+- Même si définie après `computeCycle()` dans le code source, le `setTimeout` de 1800ms garantit que la fonction est disponible à l'exécution : OK
+
+### 9. Dark mode
+- La media query `@media(prefers-color-scheme:dark){...}` est syntaxiquement correcte (style.css ligne 1365) : OK
+- Les variables CSS et sélecteurs sont bien formés : OK
+
+---
+
+## Tableau récapitulatif
+
+| # | Point audité | Statut | Sévérité |
+|---|---|---|---|
+| 1 | Dossier `icons/` absent | 🔴 BUG | Critique |
+| 2 | `hiverEnd` antérieur → `springStartD` erroné via `saveEditCycle` | 🔴 BUG | Critique |
+| 3 | `phaseForDay()` ignore `hiverEnd` → calendrier incohérent | 🟡 BUG | Moyen |
+| 4 | Variable `automneStart` inutilisée | 🟢 INFO | Mineur |
+| 5 | `confirmDeleteMyData()` oublie `_lastSaison` et `hiverEnd` | 🟡 BUG | Moyen |
+| 6 | `btn-nouveau-hiver` visible hors-contexte (UX) | 🟡 UX | Moyen |
+| 7 | SW : `/icons/icon.svg` absent du cache hors-ligne | 🟡 BUG | Moyen |
+| 8 | Calcul cycle (cas limites cycleStart null, diff négatif) | ✅ OK | — |
+| 9 | localStorage persistance / exclusion currentSaison+Day | ✅ OK | — |
+| 10 | Navigation tabs + IDs HTML | ✅ OK | — |
+| 11 | Mode Premium TEST + trial locks | ✅ OK | — |
+| 12 | Boutons btn-nouveau-hiver / btn-fin-hiver / declarerPrintemps | ✅ OK | — |
+| 13 | Mon Marché (switchRepasTab, renderMarcheTab, marcheToggleItem, marcheAddItem) | ✅ OK | — |
+| 14 | Bilan modal → `#bilan-body` (pas `#bilan-stats`) | ✅ OK | — |
+| 15 | showPhaseToast avant computeCycle (ordre d'exécution) | ✅ OK | — |
+| 16 | Dark mode media query syntaxe | ✅ OK | — |
+
+---
+
+*Rapport généré par analyse statique complète des 5 fichiers sources.*
