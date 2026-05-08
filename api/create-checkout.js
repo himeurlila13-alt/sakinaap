@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
   }
 
   const body = new URLSearchParams({
-    mode: 'payment',
+    mode: 'subscription',
     locale: 'fr',
     'payment_method_types[]': 'card',
     'line_items[0][price]': PRICES[plan],

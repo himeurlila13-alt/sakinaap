@@ -838,8 +838,8 @@ function selectPlan(plan) {
 }
 
 const STRIPE_LINKS = {
-  monthly: 'https://buy.stripe.com/test_7sYfZg2QJcNa3S21gBbwk00',
-  annual:  'https://buy.stripe.com/test_14A7sKajb7sQgEOe3nbwk01',
+  monthly: 'https://buy.stripe.com/bJe8wO69R2HTcUbgys8Ra01',
+  annual:  'https://buy.stripe.com/8x2aEW8hZ4Q1cUbdmg8Ra00',
 };
 
 function startStripeCheckout() {
