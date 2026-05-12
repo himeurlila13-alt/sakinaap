@@ -7,6 +7,8 @@
     { "source": "/icons/(.*)",   "destination": "/icons/$1" },
     { "source": "/landing",      "destination": "/landing.html" },
     { "source": "/landing.html", "destination": "/landing.html" },
+    { "source": "/workbook",     "destination": "/workbook.html" },
+    { "source": "/workbook.html","destination": "/workbook.html" },
     { "source": "/data.js",       "destination": "/data.js" },
     { "source": "/sitemap.xml",  "destination": "/sitemap.xml" },
     { "source": "/robots.txt",   "destination": "/robots.txt" },
@@ -48,6 +50,12 @@
       "source": "/data.js",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=3600, stale-while-revalidate=86400" }
+      ]
+    },
+    {
+      "source": "/workbook.html",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
       ]
     },
     {
