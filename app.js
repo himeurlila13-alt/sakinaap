@@ -130,15 +130,48 @@ async function handleReconnect() {
   if (btn) { btn.disabled = true; btn.textContent = 'Envoi…'; }
   try {
     const sb = await initSupabase();
-    const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: 'https://sakinaap.com/' } });
+    const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
     if (error) throw error;
+    document.getElementById('reconnect-step1').style.display = 'none';
+    document.getElementById('reconnect-step2').style.display = 'block';
     const msg = document.getElementById('reconnect-msg');
-    if (msg) { msg.style.display = 'block'; msg.textContent = '✉️ Lien envoyé ! Clique dessus — tes données cloud seront synchronisées. (Vérifie les spams)'; }
-    if (btn) btn.style.display = 'none';
+    if (msg) msg.style.display = 'none';
   } catch(e) {
-    if (btn) { btn.disabled = false; btn.textContent = 'Recevoir le lien'; }
-    alert('Erreur : ' + (e.message || 'Réessaie.'));
+    if (btn) { btn.disabled = false; btn.textContent = 'Recevoir mon code 🌸'; }
+    const msg = document.getElementById('reconnect-msg');
+    if (msg) { msg.style.display = 'block'; msg.textContent = 'Erreur : ' + (e.message || 'Réessaie.'); msg.style.color = '#C4694A'; msg.style.background = 'rgba(196,105,74,0.08)'; }
   }
+}
+
+async function verifyReconnectCode() {
+  const email = document.getElementById('reconnect-email')?.value.trim();
+  const code = document.getElementById('reconnect-otp')?.value.trim().replace(/\s/g, '');
+  const msg = document.getElementById('reconnect-msg');
+  if (!code || code.length < 6) {
+    if (msg) { msg.style.display = 'block'; msg.textContent = 'Entre le code à 6 caractères.'; msg.style.color = '#C4694A'; msg.style.background = 'rgba(196,105,74,0.08)'; }
+    return;
+  }
+  const btn = document.getElementById('reconnect-verify-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Vérification…'; }
+  try {
+    const sb = await initSupabase();
+    const { error } = await sb.auth.verifyOtp({ email, token: code, type: 'email' });
+    if (error) throw error;
+    if (msg) { msg.style.display = 'block'; msg.textContent = '✅ Reconnectée ! Tes données sont synchronisées.'; msg.style.color = '#3DAE8A'; msg.style.background = '#F0FAF6'; }
+    setTimeout(() => document.getElementById('reconnect-modal')?.classList.remove('open'), 2000);
+  } catch(e) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Valider ✓'; }
+    if (msg) { msg.style.display = 'block'; msg.textContent = 'Code incorrect ou expiré — demande un nouveau code.'; msg.style.color = '#C4694A'; msg.style.background = 'rgba(196,105,74,0.08)'; }
+  }
+}
+
+function resetReconnectStep() {
+  document.getElementById('reconnect-step1').style.display = 'block';
+  document.getElementById('reconnect-step2').style.display = 'none';
+  const btn = document.getElementById('reconnect-send-btn');
+  if (btn) { btn.disabled = false; btn.textContent = 'Recevoir mon code 🌸'; }
+  const msg = document.getElementById('reconnect-msg');
+  if (msg) msg.style.display = 'none';
 }
 
 async function handleMagicLink() {
@@ -146,17 +179,50 @@ async function handleMagicLink() {
   if (!email || !email.includes('@')) { showAuthMsg('Entre une adresse email valide.', 'error'); return; }
   const btn = document.getElementById('auth-magic-btn');
   btn.disabled = true;
-  btn.textContent = 'Envoi en cours...';
+  btn.textContent = 'Envoi en cours…';
   try {
     const sb = await initSupabase();
-    const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: 'https://sakinaap.com/' } });
+    const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
     if (error) throw error;
-    showAuthMsg('✉️ Lien envoyé ! Ouvre ta boîte mail, clique sur le lien — tes données se chargeront automatiquement. (Vérifie aussi les spams)', 'success');
+    document.getElementById('auth-step1').style.display = 'none';
+    document.getElementById('auth-step2').style.display = 'block';
+    document.getElementById('auth-howto').style.display = 'none';
+    document.getElementById('auth-steps').style.display = 'none';
+    document.getElementById('auth-msg').style.display = 'none';
   } catch(e) {
     showAuthMsg('Erreur : ' + (e.message || 'Réessaie dans quelques instants.'), 'error');
     btn.disabled = false;
-    btn.textContent = 'Recevoir mon lien 🌸';
+    btn.textContent = 'Recevoir mon code 🌸';
   }
+}
+
+async function verifyAuthCode() {
+  const email = document.getElementById('auth-email').value.trim();
+  const code = document.getElementById('auth-otp-input').value.trim().replace(/\s/g, '');
+  if (!code || code.length < 6) { showAuthMsg('Entre le code à 6 caractères.', 'error'); return; }
+  const btn = document.getElementById('auth-verify-btn');
+  btn.disabled = true;
+  btn.textContent = 'Vérification…';
+  try {
+    const sb = await initSupabase();
+    const { error } = await sb.auth.verifyOtp({ email, token: code, type: 'email' });
+    if (error) throw error;
+    showAuthMsg('✅ Connectée !', 'success');
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = 'Valider le code ✓';
+    showAuthMsg('Code incorrect ou expiré — réessaie ou demande un nouveau code.', 'error');
+  }
+}
+
+function resetAuthStep() {
+  document.getElementById('auth-step1').style.display = 'block';
+  document.getElementById('auth-step2').style.display = 'none';
+  document.getElementById('auth-howto').style.display = 'flex';
+  document.getElementById('auth-steps').style.display = 'flex';
+  const btn = document.getElementById('auth-magic-btn');
+  if (btn) { btn.disabled = false; btn.textContent = 'Recevoir mon code 🌸'; }
+  document.getElementById('auth-msg').style.display = 'none';
 }
 
 function showAuthMsg(msg, type) {

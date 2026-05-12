@@ -78,31 +78,49 @@
     <div style="font-size:14px;color:#6B5B53;margin-bottom:8px;line-height:1.6;">Entre ton adresse email pour accéder à ton espace SakinApp.</div>
     <div style="font-size:12px;color:#C9A96E;margin-bottom:28px;line-height:1.5;">Nouveau téléphone ou premier accès ?<br>Tu retrouveras toutes tes données automatiquement.</div>
 
-    <input id="auth-email" type="email" placeholder="ton@email.com" inputmode="email" autocomplete="email"
-      style="width:100%;box-sizing:border-box;padding:15px;border:1.5px solid #E8DDD0;border-radius:16px;font-size:15px;color:#2D2420;background:white;margin-bottom:12px;font-family:'DM Sans',sans-serif;outline:none;">
-    <button id="auth-magic-btn" onclick="handleMagicLink()"
-      style="width:100%;padding:15px;background:linear-gradient(135deg,#3D2060,#7B5EA7);color:white;border:none;border-radius:16px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:16px;box-sizing:border-box;">
-      Recevoir mon lien 🌸
-    </button>
-    <div id="auth-msg" style="font-size:13px;color:#7B5EA7;display:none;padding:12px;background:rgba(123,94,167,0.08);border-radius:12px;line-height:1.5;margin-bottom:12px;"></div>
+    <div id="auth-step1">
+      <input id="auth-email" type="email" placeholder="ton@email.com" inputmode="email" autocomplete="email"
+        style="width:100%;box-sizing:border-box;padding:15px;border:1.5px solid #E8DDD0;border-radius:16px;font-size:15px;color:#2D2420;background:white;margin-bottom:12px;font-family:'DM Sans',sans-serif;outline:none;">
+      <button id="auth-magic-btn" onclick="handleMagicLink()"
+        style="width:100%;padding:15px;background:linear-gradient(135deg,#3D2060,#7B5EA7);color:white;border:none;border-radius:16px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:16px;box-sizing:border-box;">
+        Recevoir mon code 🌸
+      </button>
+    </div>
 
-    <div style="display:flex;align-items:center;gap:10px;margin:4px 0 20px;">
+    <div id="auth-step2" style="display:none;">
+      <div style="font-size:13px;color:#6B5B53;margin-bottom:16px;line-height:1.6;padding:12px;background:rgba(201,169,110,0.12);border-radius:12px;">
+        📧 Code envoyé&nbsp;! Ouvre ton email et entre les <strong>6 caractères</strong> ici.<br><span style="font-size:11px;color:#C9A96E;">(Vérifie aussi les spams)</span>
+      </div>
+      <input id="auth-otp-input" type="text" placeholder="· · · · · ·" inputmode="text" maxlength="6" autocomplete="one-time-code"
+        style="width:100%;box-sizing:border-box;padding:16px;border:2px solid #C9A96E;border-radius:16px;font-size:26px;color:#2D2420;background:white;margin-bottom:12px;font-family:'DM Sans',sans-serif;outline:none;text-align:center;letter-spacing:10px;">
+      <button id="auth-verify-btn" onclick="verifyAuthCode()"
+        style="width:100%;padding:15px;background:linear-gradient(135deg,#3D2060,#7B5EA7);color:white;border:none;border-radius:16px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:10px;box-sizing:border-box;">
+        Valider le code ✓
+      </button>
+      <button onclick="resetAuthStep()" style="background:none;border:none;color:#C9A96E;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;padding:4px;">
+        &#8592; Changer d&rsquo;email
+      </button>
+    </div>
+
+    <div id="auth-msg" style="font-size:13px;color:#7B5EA7;display:none;padding:12px;background:rgba(123,94,167,0.08);border-radius:12px;line-height:1.5;margin-bottom:12px;margin-top:8px;"></div>
+
+    <div id="auth-howto" style="display:flex;align-items:center;gap:10px;margin:16px 0 16px;">
       <div style="flex:1;height:1px;background:#E8DDD0;"></div>
       <span style="font-size:11px;color:#6B5B53;">Comment ça marche ?</span>
       <div style="flex:1;height:1px;background:#E8DDD0;"></div>
     </div>
-    <div style="text-align:left;display:flex;flex-direction:column;gap:10px;margin-bottom:28px;">
+    <div id="auth-steps" style="text-align:left;display:flex;flex-direction:column;gap:10px;margin-bottom:28px;">
       <div style="display:flex;align-items:flex-start;gap:10px;font-size:12px;color:#6B5B53;line-height:1.5;">
         <span style="color:#C9A96E;font-weight:700;flex-shrink:0;">1.</span>
         Tu entres ton email ci-dessus
       </div>
       <div style="display:flex;align-items:flex-start;gap:10px;font-size:12px;color:#6B5B53;line-height:1.5;">
         <span style="color:#C9A96E;font-weight:700;flex-shrink:0;">2.</span>
-        Tu reçois un lien dans ta boîte mail (vérifie les spams)
+        Tu reçois un email avec un code à 6 caractères (vérifie les spams)
       </div>
       <div style="display:flex;align-items:flex-start;gap:10px;font-size:12px;color:#6B5B53;line-height:1.5;">
         <span style="color:#C9A96E;font-weight:700;flex-shrink:0;">3.</span>
-        Tu cliques sur le lien → tu es connectée, tes données sont là 🌸
+        Tu entres le code ici → connectée directement dans l&rsquo;app 🌸
       </div>
     </div>
 
@@ -1348,11 +1366,22 @@
   <div class="modal-sheet" style="padding:32px 24px 28px;text-align:center;">
     <div style="font-size:44px;margin-bottom:14px;">&#128274;</div>
     <div style="font-family:var(--serif);font-size:20px;color:var(--noir);margin-bottom:8px;">Reconnecte-toi</div>
-    <div style="font-size:13px;color:var(--gris);line-height:1.7;margin-bottom:24px;">Entre ton adresse email pour recevoir un lien de connexion.<br>Tes données seront synchronisées automatiquement.</div>
-    <input id="reconnect-email" type="email" placeholder="ton@email.com" style="width:100%;box-sizing:border-box;padding:14px 16px;border:1.5px solid var(--sable);border-radius:14px;font-size:15px;font-family:var(--sans);outline:none;margin-bottom:14px;">
-    <button id="reconnect-send-btn" onclick="handleReconnect()" style="width:100%;padding:15px;background:var(--season-grad);color:white;border:none;border-radius:16px;font-size:15px;font-weight:600;font-family:var(--sans);cursor:pointer;letter-spacing:0.3px;">Recevoir le lien 🌸</button>
-    <div id="reconnect-msg" style="display:none;margin-top:16px;font-size:13px;color:#3DAE8A;line-height:1.6;padding:12px;background:#F0FAF6;border-radius:12px;"></div>
-    <button onclick="document.getElementById('reconnect-modal').classList.remove('open')" style="margin-top:18px;background:none;border:none;color:var(--gris);font-size:13px;cursor:pointer;font-family:var(--sans);">Fermer</button>
+    <div style="font-size:13px;color:var(--gris);line-height:1.7;margin-bottom:24px;">Entre ton adresse email pour recevoir un code de connexion.</div>
+    <div id="reconnect-step1">
+      <input id="reconnect-email" type="email" placeholder="ton@email.com" style="width:100%;box-sizing:border-box;padding:14px 16px;border:1.5px solid var(--sable);border-radius:14px;font-size:15px;font-family:var(--sans);outline:none;margin-bottom:14px;">
+      <button id="reconnect-send-btn" onclick="handleReconnect()" style="width:100%;padding:15px;background:var(--season-grad);color:white;border:none;border-radius:16px;font-size:15px;font-weight:600;font-family:var(--sans);cursor:pointer;letter-spacing:0.3px;">Recevoir mon code 🌸</button>
+    </div>
+    <div id="reconnect-step2" style="display:none;margin-top:4px;">
+      <div style="font-size:13px;color:var(--gris);margin-bottom:14px;line-height:1.6;padding:10px;background:rgba(201,169,110,0.1);border-radius:10px;">
+        📧 Code envoyé&nbsp;! Entre les 6 caractères de ton email&nbsp;:
+      </div>
+      <input id="reconnect-otp" type="text" placeholder="· · · · · ·" inputmode="text" maxlength="6" autocomplete="one-time-code"
+        style="width:100%;box-sizing:border-box;padding:14px;border:2px solid var(--gold,#C9A96E);border-radius:14px;font-size:26px;font-family:var(--sans);outline:none;text-align:center;letter-spacing:10px;margin-bottom:12px;">
+      <button id="reconnect-verify-btn" onclick="verifyReconnectCode()" style="width:100%;padding:15px;background:var(--season-grad);color:white;border:none;border-radius:16px;font-size:15px;font-weight:600;font-family:var(--sans);cursor:pointer;">Valider ✓</button>
+      <button onclick="resetReconnectStep()" style="background:none;border:none;color:var(--gris);font-size:12px;cursor:pointer;font-family:var(--sans);margin-top:8px;">&#8592; Changer d&rsquo;email</button>
+    </div>
+    <div id="reconnect-msg" style="display:none;margin-top:14px;font-size:13px;line-height:1.6;padding:12px;border-radius:12px;"></div>
+    <button onclick="document.getElementById('reconnect-modal').classList.remove('open')" style="margin-top:16px;background:none;border:none;color:var(--gris);font-size:13px;cursor:pointer;font-family:var(--sans);">Fermer</button>
   </div>
 </div>
 
