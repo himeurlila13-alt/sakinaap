@@ -617,19 +617,37 @@ function showPhaseToast(emoji, title, sub) {
 // ═══════════════════════════════════════════════
 // PAIEMENT STRIPE — DÉTECTION RETOUR SUCCESS URL
 // ═══════════════════════════════════════════════
-function checkPaymentSuccess() {
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('payment') !== 'success') return;
-  const plan = params.get('plan') || 'unknown';
+function _activatePremium(plan) {
   ST.isPremium = true;
   ST.trialEnded = false;
   ST.premiumPlan = plan;
   ST.premiumSince = new Date().toISOString().split('T')[0];
   saveState();
-  // Nettoie l'URL pour ne pas rejouer au refresh
   window.history.replaceState({}, '', '/');
-  // Toast de bienvenue après init de l'app
-  setTimeout(() => showPhaseToast('🌸', 'Bienvenue en Premium !', 'Toutes les fonctionnalités sont débloquées.'), 1200);
+  setTimeout(() => {
+    applyTrialLocks();
+    showPhaseToast('🌸', 'Bienvenue en Premium !', 'Toutes les fonctionnalités sont débloquées.');
+  }, 1200);
+}
+
+function checkPaymentSuccess() {
+  const params = new URLSearchParams(window.location.search);
+
+  // Cas 1 : Payment Link Stripe avec ?payment=success&plan=xxx
+  if (params.get('payment') === 'success') {
+    _activatePremium(params.get('plan') || 'monthly');
+    return;
+  }
+
+  // Cas 2 : API checkout Stripe avec ?session_id=cs_xxx — vérifie côté serveur
+  const sessionId = params.get('session_id');
+  if (sessionId && sessionId.startsWith('cs_')) {
+    window.history.replaceState({}, '', '/');
+    fetch('/api/verify-session?id=' + encodeURIComponent(sessionId))
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { if (data && data.valid) _activatePremium(data.plan || 'monthly'); })
+      .catch(() => {});
+  }
 }
 
 // ═══════════════════════════════════════════════
