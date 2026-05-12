@@ -1412,3 +1412,44 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
   .home-header{background:var(--season-grad)}
   .profil-hero{background:linear-gradient(180deg,var(--season-soft),#1E1A17)}
 }
+
+/* ═══ SPORT AMÉLIORÉ ═══ */
+@keyframes repPulse{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1)}}
+.sport-secondary-btn{flex:1;background:white;border:1.5px solid var(--sable);border-radius:12px;padding:10px 8px;font-size:12px;color:var(--gris);cursor:pointer;font-family:var(--sans);font-weight:500;transition:border-color .2s}
+.sport-secondary-btn:active{transform:scale(.97)}
+.sport-streak-badge{font-size:11px;color:var(--season);background:var(--season-soft);padding:4px 10px;border-radius:20px;display:inline-block;margin-bottom:10px}
+.sport-repos-options{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.sport-repos-option{background:white;border:1.5px solid var(--sable);border-radius:16px;padding:16px;cursor:pointer;display:flex;align-items:flex-start;gap:12px;transition:border-color .2s}
+.sport-repos-option:active{transform:scale(.98)}
+.sport-repos-opt-icon{font-size:24px;flex-shrink:0;line-height:1.2}
+.sport-repos-opt-title{font-size:14px;font-weight:600;color:var(--noir);margin-bottom:2px}
+.sport-repos-opt-desc{font-size:12px;color:var(--gris);line-height:1.4}
+.sport-repos-opt-badge{font-size:10px;color:var(--season);background:var(--season-soft);padding:2px 8px;border-radius:10px;display:inline-block;margin-top:4px}
+.sport-reported-wrap{padding:14px 0;text-align:center}
+.sport-histo-section{margin:0 14px 14px;background:white;border-radius:20px;padding:20px;border:1px solid var(--sable)}
+.sport-histo-title{font-family:var(--serif);font-size:16px;color:var(--noir);margin-bottom:14px;font-weight:600}
+.sport-histo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.sport-histo-stat{background:var(--creme);border-radius:14px;padding:14px 12px;text-align:center;border:1px solid var(--sable)}
+.sport-histo-num{font-family:var(--serif);font-size:22px;color:var(--season);font-weight:600}
+.sport-histo-lbl{font-size:11px;color:var(--gris);margin-top:2px}
+.sport-histo-streak{font-size:13px;color:var(--season);background:var(--season-soft);padding:8px 14px;border-radius:12px;text-align:center;margin-bottom:10px}
+.sport-histo-next{font-size:12px;color:var(--gris);text-align:center}
+.timer-progress{font-size:11px;color:var(--gris);text-align:center;margin-bottom:16px;letter-spacing:1px;text-transform:uppercase}
+.timer-ex-name{font-family:var(--serif);font-size:20px;color:var(--noir);text-align:center;margin-bottom:8px}
+.timer-ex-detail{font-size:12px;color:var(--gris);text-align:center;line-height:1.6;margin-bottom:20px}
+.timer-circle{position:relative;width:140px;height:140px;margin:0 auto 20px}
+.timer-svg{width:100%;height:100%}
+.timer-count{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--serif);font-size:42px;color:var(--season);font-weight:600}
+.timer-start-btn{display:block;width:100%;padding:14px;background:var(--season-grad);color:white;border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:var(--sans)}
+.timer-reps-target{font-size:13px;color:var(--gris);text-align:center;margin-bottom:12px}
+.timer-rep-counter{font-family:var(--serif);font-size:72px;color:var(--season);text-align:center;line-height:1;margin-bottom:4px}
+.timer-rep-pulse{animation:repPulse .15s ease}
+.timer-tap-zone{width:130px;height:130px;margin:0 auto 12px;border-radius:50%;background:var(--season-soft);border:2.5px solid var(--season-light);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:var(--season);font-weight:600;user-select:none}
+.timer-tap-hint{font-size:11px;color:var(--gris);text-align:center;margin-bottom:16px;letter-spacing:1px;text-transform:uppercase}
+.timer-next-btn{flex:1;padding:13px;background:var(--season-grad);color:white;border:none;border-radius:14px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--sans)}
+.timer-skip-btn{padding:13px 16px;background:var(--sable);color:var(--gris);border:none;border-radius:14px;font-size:13px;cursor:pointer;font-family:var(--sans)}
+.timer-rest-label{font-size:12px;color:var(--gris);text-align:center;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.timer-rest-count{font-family:var(--serif);font-size:56px;color:var(--season-light);text-align:center;margin-bottom:24px}
+.feedback-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.feedback-btn{background:var(--creme);border:1.5px solid var(--sable);border-radius:14px;padding:16px 8px;font-size:13px;font-weight:600;color:var(--noir);cursor:pointer;font-family:var(--sans);line-height:1.4}
+.feedback-btn:active{transform:scale(.97)}

@@ -81,7 +81,7 @@
 <div class="ob-wrap">
   <div class="ob-step active" id="step-0">
     <div class="ob-logo">SakinApp</div>
-    <div class="ob-eye">As-salamu alaykum, lune ✨</div>
+    <div class="ob-eye">As-salamu alaykum, ✨</div>
     <div class="ob-title">Ton corps a sa propre sagesse.<br><em>Apprends a l'ecouter.</em></div>
     <div class="ob-sub">SakinApp t'accompagne chaque jour selon ton cycle, ta foi et ton energie.</div>
     <div class="ob-fl">Ton prenom</div>
@@ -248,10 +248,19 @@
     <div class="qs-exercises" id="qs-exercises" style="margin-top:10px;"></div>
     <div id="qs-btn-wrap" style="margin-top:12px;">
       <button class="day-card-btn" onclick="validerSeanceDash()">&#10003; Alhamdulillah, c&#8217;est fait !</button>
+      <button class="day-card-btn" onclick="openTimer()" style="margin-top:8px;background:var(--season-soft);color:var(--season);border:1.5px solid var(--season-light);font-size:13px;">&#9654; Commencer avec le timer</button>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <button id="sport-express-btn" onclick="openSeanceExpress()" class="sport-secondary-btn">&#9889; Version 5 min</button>
+        <button onclick="reporterSeance()" class="sport-secondary-btn">&#128197; Reporter</button>
+      </div>
     </div>
     <div class="qs-done" id="qs-done-wrap" style="display:none;">
       <div class="qs-done-check">&#10003;</div>
-      <div class="qs-done-text">Alhamdulillah — séance accomplie &#127800;</div>
+      <div class="qs-done-text">Alhamdulillah — s&eacute;ance accomplie &#127800;</div>
+    </div>
+    <div class="sport-reported-wrap" id="qs-reported-wrap" style="display:none;">
+      <div style="font-size:18px;margin-bottom:4px;">&#128197;</div>
+      <div style="font-size:13px;color:var(--gris);">Report&eacute;e &agrave; demain &mdash; &agrave; ton rythme &#127800;</div>
     </div>
     <div id="qs-niveaux-premium" class="qs-niveaux-section"></div>
   </div>
@@ -677,6 +686,9 @@
     <div class="profil-badge" id="profil-sub"></div>
   </div>
   <div style="height:16px;"></div>
+
+  <!-- HISTORIQUE SPORT -->
+  <div class="sport-histo-section" id="sport-historique-section"></div>
 
   <!-- STATUT ESSAI / ABONNEMENT -->
   <div id="trial-status-card" style="margin:0 14px 14px;"></div>
@@ -1116,20 +1128,6 @@
   </div>
 </div>
 
-<!-- MODAL PROGRESSION SPORT -->
-<div class="modal-overlay" id="progression-modal">
-  <div class="modal-sheet" style="text-align:center;padding:32px 24px 28px;">
-    <div style="font-size:44px;margin-bottom:14px;">&#128170;</div>
-    <div style="font-family:var(--serif);font-size:20px;color:var(--noir);margin-bottom:8px;">5 séances validées !</div>
-    <div style="font-size:13px;color:var(--gris);line-height:1.7;margin-bottom:28px;">Comment tu te sens par rapport à tes séances du moment ?</div>
-    <div style="display:flex;flex-direction:column;gap:10px;">
-      <button onclick="handleProgressionAnswer('plus')" style="background:var(--season-grad);color:white;border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">&#128293; Je progresse — je veux aller plus loin</button>
-      <button onclick="handleProgressionAnswer('bien')" style="background:var(--season-soft);color:var(--noir);border:1.5px solid var(--season-light);border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">&#128522; Je suis bien à ce niveau</button>
-      <button onclick="handleProgressionAnswer('dur')" style="background:var(--sable);color:var(--gris);border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">&#128549; C'est encore intense pour moi</button>
-    </div>
-  </div>
-</div>
-
 <!-- MODAL UPGRADE FIN PRINTEMPS -->
 <div class="modal-overlay" id="printemps-upgrade-modal">
   <div class="modal-sheet" style="text-align:center;padding:32px 24px 28px;">
@@ -1192,6 +1190,99 @@
       <button id="bilan-checkout-btn" onclick="startStripeCheckout()" class="bilan-cta-premium">&#10022; Commencer mon abonnement</button>
       <div class="bilan-stripe-note">&#128274; Paiement s&eacute;curis&eacute; par Stripe &middot; R&eacute;siliation &agrave; tout moment</div>
       <button onclick="closeBilanModal()" class="bilan-cta-free">Continuer gratuitement</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL REPORT QUESTION -->
+<div class="modal-overlay" id="report-question-modal">
+  <div class="modal-sheet" style="text-align:center;padding:32px 24px 28px;">
+    <div style="font-size:36px;margin-bottom:12px;">&#128155;</div>
+    <div style="font-family:var(--serif);font-size:18px;color:var(--noir);margin-bottom:8px;">Je remarque que tu repousses ta s&eacute;ance</div>
+    <div style="font-size:13px;color:var(--gris);line-height:1.7;margin-bottom:24px;">Tout va bien&nbsp;? Tu veux qu&rsquo;on adapte quelque chose&nbsp;?</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <button onclick="handleReportQuestion('longue')" style="background:var(--season-soft);color:var(--season);border:1.5px solid var(--season-light);border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">La s&eacute;ance est trop longue</button>
+      <button onclick="handleReportQuestion('difficile')" style="background:var(--sable);color:var(--noir);border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">C&rsquo;est trop difficile</button>
+      <button onclick="handleReportQuestion('ok')" style="background:none;border:none;font-size:13px;color:var(--gris);cursor:pointer;font-family:var(--sans);padding:10px;">&Ccedil;a va, juste ce moment &#127800;</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FEEDBACK POST-SEANCE -->
+<div class="modal-overlay" id="feedback-seance-modal">
+  <div class="modal-sheet" style="text-align:center;padding:28px 24px 28px;">
+    <div style="font-size:28px;margin-bottom:8px;">&#128172;</div>
+    <div style="font-family:var(--serif);font-size:17px;color:var(--noir);margin-bottom:20px;">Comment tu te sens&nbsp;?</div>
+    <div class="feedback-grid">
+      <button class="feedback-btn" onclick="handleFeedbackSport('energisee')">&#128170;<br>&#201;nergis&eacute;e</button>
+      <button class="feedback-btn" onclick="handleFeedbackSport('bien')">&#128522;<br>Bien</button>
+      <button class="feedback-btn" onclick="handleFeedbackSport('fatiguee')">&#128564;<br>Fatigu&eacute;e</button>
+      <button class="feedback-btn" onclick="handleFeedbackSport('plus')">&#128293;<br>J&rsquo;aurais pu faire plus</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PROPOSITION AMELIORATION -->
+<div class="modal-overlay" id="proposition-modal" onclick="if(event.target===this)handleProposition('non')">
+  <div class="modal-sheet" style="text-align:center;padding:32px 24px 28px;">
+    <div id="proposition-body"></div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:24px;">
+      <button onclick="handleProposition('oui')" style="background:var(--season-grad);color:white;border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">Oui &#127800;</button>
+      <button onclick="handleProposition('non')" style="background:none;border:none;font-size:13px;color:var(--gris);cursor:pointer;font-family:var(--sans);padding:8px;">Pas maintenant</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL SEANCE SURPRISE -->
+<div class="modal-overlay" id="seance-surprise-modal" onclick="if(event.target===this)refuseSeanceSurprise()">
+  <div class="modal-sheet" style="text-align:center;padding:32px 24px 28px;">
+    <div style="font-size:42px;margin-bottom:12px;">&#10024;</div>
+    <div style="font-family:var(--serif);font-size:19px;color:var(--noir);margin-bottom:8px;">Tu es &agrave; ton pic aujourd&rsquo;hui</div>
+    <div style="font-size:13px;color:var(--gris);line-height:1.7;margin-bottom:24px;">Et si on essayait quelque chose de nouveau&nbsp;?</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <button onclick="acceptSeanceSurprise()" style="background:var(--season-grad);color:white;border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">Je tente &#10024;</button>
+      <button onclick="refuseSeanceSurprise()" style="background:none;border:none;font-size:12px;color:var(--gris);cursor:pointer;font-family:var(--sans);padding:8px;">Non merci</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EXPRESS 5 MIN -->
+<div class="modal-overlay" id="express-modal" onclick="if(event.target===this)document.getElementById('express-modal').classList.remove('open')">
+  <div class="modal-sheet" style="padding:28px 24px 24px;">
+    <div class="pmod-handle"></div>
+    <div style="text-align:center;margin-bottom:16px;">
+      <div style="font-size:28px;margin-bottom:6px;">&#9889;</div>
+      <div style="font-family:var(--serif);font-size:18px;color:var(--noir);">S&eacute;ance express</div>
+    </div>
+    <div id="express-body"></div>
+    <button onclick="validerSeanceExpress()" style="width:100%;padding:14px;background:var(--season-grad);color:white;border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:var(--sans);margin-top:16px;">&#10003; C&rsquo;est fait &mdash; 5 min accomplies !</button>
+    <button onclick="document.getElementById('express-modal').classList.remove('open')" style="width:100%;padding:10px;background:none;border:none;font-size:13px;color:var(--gris);cursor:pointer;font-family:var(--sans);margin-top:4px;">Finalement non</button>
+  </div>
+</div>
+
+<!-- MODAL TIMER -->
+<div class="modal-overlay" id="timer-modal" onclick="if(event.target===this)closeTimerModal()">
+  <div class="modal-sheet" style="padding:28px 24px 24px;">
+    <div class="pmod-handle"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <div style="font-family:var(--serif);font-size:16px;color:var(--noir);">Timer s&eacute;ance</div>
+      <button onclick="closeTimerModal()" style="background:var(--sable);border:none;border-radius:10px;padding:6px 12px;font-size:12px;color:var(--gris);cursor:pointer;font-family:var(--sans);">Fermer</button>
+    </div>
+    <div id="timer-body"></div>
+  </div>
+</div>
+
+<!-- MODAL PROGRESSION SPORT (mise à jour 4 options) -->
+<div class="modal-overlay" id="progression-modal">
+  <div class="modal-sheet" style="text-align:center;padding:32px 24px 28px;">
+    <div style="font-size:44px;margin-bottom:14px;">&#128170;</div>
+    <div style="font-family:var(--serif);font-size:20px;color:var(--noir);margin-bottom:8px;">5 s&eacute;ances valid&eacute;es !</div>
+    <div style="font-size:13px;color:var(--gris);line-height:1.7;margin-bottom:28px;">Comment tu te sens par rapport &agrave; tes s&eacute;ances du moment&nbsp;?</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <button onclick="handleProgressionAnswer('facile')" style="background:var(--season-grad);color:white;border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">&#128293; Trop facile &mdash; je veux aller plus loin</button>
+      <button onclick="handleProgressionAnswer('bien')" style="background:var(--season-soft);color:var(--noir);border:1.5px solid var(--season-light);border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">&#128522; Parfait &mdash; je reste &agrave; ce niveau</button>
+      <button onclick="handleProgressionAnswer('dur')" style="background:var(--sable);color:var(--gris);border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">&#128170; Dur mais je tiens &mdash; je continue</button>
+      <button onclick="handleProgressionAnswer('dur_trop')" style="background:none;border:1px solid var(--sable);border-radius:14px;padding:14px;font-size:13px;color:var(--gris);font-family:var(--sans);cursor:pointer;">&#128549; Trop difficile &mdash; descendre d&rsquo;un niveau</button>
     </div>
   </div>
 </div>

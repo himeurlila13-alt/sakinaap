@@ -53,6 +53,17 @@ let ST = {
   trialBannerDismissed: false,
   supabaseUserId: null,
   supabaseEmail: null,
+  reportConsecutif: 0,
+  lastReportDate: null,
+  feedbackSport: {},
+  streakPhaseSeances: 0,
+  streakPhaseNom: null,
+  seanceSurpriseShownCycle: false,
+  totalSeancesAll: 0,
+  totalReportsAll: 0,
+  checkpointProgress: 0,
+  _proposeNewEx5: false,
+  _proposeFatigue3: false,
 };
 
 function saveState() {
@@ -1176,7 +1187,9 @@ function _sportExHtml(exercices, reposSec) {
 function renderCarteBouger(s) {
   const spec = getTodaySeanceSpec();
   const today = new Date().toDateString();
-  const isDone = ST.seanceDone && ST.seanceDone[today];
+  const donVal = ST.seanceDone && ST.seanceDone[today];
+  const isDone = donVal === true || donVal === 'express';
+  const isReported = donVal === 'reportee';
 
   const nameEl = document.getElementById('qs-name');
   const metaEl = document.getElementById('qs-meta');
@@ -1184,6 +1197,7 @@ function renderCarteBouger(s) {
   const exEl = document.getElementById('qs-exercises');
   const btnWrap = document.getElementById('qs-btn-wrap');
   const doneWrap = document.getElementById('qs-done-wrap');
+  const reportedWrap = document.getElementById('qs-reported-wrap');
   const niveauxEl = document.getElementById('qs-niveaux-premium');
 
   if (!spec) {
@@ -1205,10 +1219,20 @@ function renderCarteBouger(s) {
       break;
     }
     case 'repos': {
-      titleText = 'Récupération'; metaText = 'Pas d\'entraînement aujourd\'hui'; durText = '—';
-      exContent = `<div class="sport-repos-block">
-        <div class="sport-repos-msg">Marche douce ou étirements légers.</div>
-        <div class="sport-repos-detail">Repos entre séries au prochain entraînement : <strong>${spec.reposSec}s</strong></div>
+      titleText = 'Jour de repos'; metaText = 'Choisis ton repos'; durText = '—';
+      const reposDone = ST.seanceDone && ST.seanceDone[today];
+      exContent = `<div class="sport-repos-options">
+        <div class="sport-repos-option" onclick="validerReposActif()">
+          <div class="sport-repos-opt-icon">🏃‍♀️</div>
+          <div><div class="sport-repos-opt-title">Repos actif</div>
+          <div class="sport-repos-opt-desc">Étirements 2 min + respiration</div>
+          <div class="sport-repos-opt-badge">Compte dans le streak</div></div>
+        </div>
+        <div class="sport-repos-option" onclick="choisirReposComplet()">
+          <div class="sport-repos-opt-icon">💤</div>
+          <div><div class="sport-repos-opt-title">Repos complet</div>
+          <div class="sport-repos-opt-desc">Ton corps construit pendant la récupération</div></div>
+        </div>
       </div>`;
       if (spec.message) msgHtml = spec.message;
       break;
@@ -1297,15 +1321,19 @@ function renderCarteBouger(s) {
   if (nameEl) nameEl.textContent = titleText;
   if (metaEl) metaEl.textContent = metaText;
   if (durEl) durEl.textContent = durText;
+
+  const streakLabel = _getStreakLabel();
   if (exEl) {
     exEl.innerHTML =
+      (streakLabel && !isDone ? `<div class="sport-streak-badge">${streakLabel}</div>` : '') +
       (levelLabel ? `<div class="sport-level-badge">${levelLabel}</div>` : '') +
       (msgHtml ? `<div class="sport-amanah">${msgHtml}</div>` : '') +
       exContent +
       (spirituelHtml ? `<div class="sport-spiritual">${spirituelHtml}</div>` : '');
   }
-  if (btnWrap) btnWrap.style.display = isDone ? 'none' : 'block';
+  if (btnWrap) btnWrap.style.display = (isDone || isReported) ? 'none' : 'block';
   if (doneWrap) doneWrap.style.display = isDone ? 'flex' : 'none';
+  if (reportedWrap) reportedWrap.style.display = isReported ? 'block' : 'none';
   if (niveauxEl) niveauxEl.innerHTML = '';
 }
 
@@ -1648,26 +1676,20 @@ function openNiveauModal(idx) {
 function closeNiveauModal() { document.getElementById('niveau-modal').classList.remove('open'); }
 
 function checkSeanceProgression() {
-  if (!isFullAccess()) return;
-  ST.seanceValidatedCount = (ST.seanceValidatedCount || 0) + 1;
-  if (ST.seanceValidatedCount >= 5) {
-    ST.seanceValidatedCount = 0;
-    saveState();
-    setTimeout(() => document.getElementById('progression-modal').classList.add('open'), 800);
-  } else {
-    saveState();
-  }
+  // Remplacé par checkpointProgress dans validerSeanceDash — gardé pour compatibilité
 }
 
 function handleProgressionAnswer(ans) {
   document.getElementById('progression-modal').classList.remove('open');
   const level = ST.seanceLevel || 1;
-  if (ans === 'plus' && level < 4) {
+  if (ans === 'facile' && level < 4) {
     ST.seanceLevel = level + 1;
     showToast(`🔥 Niveau ${ST.seanceLevel} débloqué ! Alhamdulillah 💪`);
-  } else if (ans === 'dur' && level > 1) {
+  } else if (ans === 'dur_trop' && level > 1) {
     ST.seanceLevel = level - 1;
-    showToast(`💛 Niveau ${ST.seanceLevel} — on avance à ton rythme.`);
+    showToast(`💛 Descendre d'un niveau, c'est écouter son corps — c'est de la sagesse.`);
+  } else if (ans === 'dur') {
+    showToast('💪 Tu tiens — c\'est de la force. Continue à ton rythme.');
   } else {
     showToast('✨ Parfait — on continue au même rythme.');
   }
@@ -1723,8 +1745,9 @@ function validerSeanceDash() {
   const today = new Date().toDateString();
   if (!ST.seanceDone) ST.seanceDone = {};
   ST.seanceDone[today] = true;
+  ST.totalSeancesAll = (ST.totalSeancesAll || 0) + 1;
+  ST.reportConsecutif = 0;
 
-  // Save AMRAP record (Été N4)
   const spec = getTodaySeanceSpec();
   if (spec && spec.type === 'ete-intense' && spec.data?.type === 'amrap') {
     const inp = document.getElementById('amrap-score-input');
@@ -1733,11 +1756,12 @@ function validerSeanceDash() {
       if (!ST.amrapRecord || score > ST.amrapRecord) ST.amrapRecord = score;
     }
   }
-
-  // Increment Printemps Bas counter for level-4 rotation
   if (spec && spec.type === 'printemps-bas') {
     ST.printempsBasCount = (ST.printempsBasCount || 0) + 1;
   }
+
+  _updateStreakPhase(1);
+  ST.checkpointProgress = (ST.checkpointProgress || 0) + 1;
 
   saveState();
   const s = SAISONS[ST.currentSaison];
@@ -1747,6 +1771,9 @@ function validerSeanceDash() {
   checkEndOfPrintemps();
   burstCelebration();
   showToast('💪 Alhamdulillah — séance accomplie ! 🌸');
+  setTimeout(showFeedbackPostSeance, 1000);
+  if (ST.checkpointProgress >= 5) setTimeout(_triggerCheckpoint, 3500);
+  checkPropositionsAmelioration();
 }
 
 function burstCelebration() {
@@ -1813,6 +1840,328 @@ function handlePrintempsUpgrade(ans) {
   }
   saveState();
   renderCarteBouger(SAISONS[ST.currentSaison]);
+}
+
+// ═══════════════════════════════════════════════
+// SPORT AMÉLIORÉ
+// ═══════════════════════════════════════════════
+
+function reporterSeance() {
+  const today = new Date().toDateString();
+  if (!ST.seanceDone) ST.seanceDone = {};
+  ST.seanceDone[today] = 'reportee';
+  ST.totalReportsAll = (ST.totalReportsAll || 0) + 1;
+  ST.reportConsecutif = (ST.reportConsecutif || 0) + 1;
+  ST.lastReportDate = today;
+  saveState();
+  renderCarteBouger(SAISONS[ST.currentSaison]);
+  if (ST.reportConsecutif >= 2) {
+    setTimeout(() => document.getElementById('report-question-modal')?.classList.add('open'), 400);
+  } else {
+    showToast('📅 Reporté à demain — à ton rythme 🌸');
+  }
+}
+
+function handleReportQuestion(ans) {
+  document.getElementById('report-question-modal')?.classList.remove('open');
+  ST.reportConsecutif = 0;
+  if (ans === 'longue') {
+    showToast('💛 La version 5 min est juste en dessous — tu peux la faire maintenant !');
+    setTimeout(() => { const b = document.getElementById('sport-express-btn'); if (b) { b.style.transform='scale(1.1)'; setTimeout(()=>b.style.transform='',500); } }, 200);
+  } else if (ans === 'difficile') {
+    const level = ST.seanceLevel || 1;
+    if (level > 1) { ST.seanceLevel = level - 1; showToast(`💛 Niveau ${ST.seanceLevel} — on avance à ton rythme.`); }
+    else { showToast('💛 La version 5 min est là pour toi 🌸'); }
+  } else {
+    showToast('🌸 C\'est noté, à demain 🌸');
+  }
+  saveState();
+}
+
+function openSeanceExpress() {
+  const el = document.getElementById('express-modal');
+  if (!el) return;
+  const spec = getTodaySeanceSpec();
+  const body = el.querySelector('#express-body');
+  if (!body) return;
+  let exs = [];
+  if (spec && spec.data && spec.data.exercices) exs = spec.data.exercices.slice(0, 2);
+  else if (spec && spec.data && spec.data.circuit) exs = spec.data.circuit.slice(0, 2);
+  if (!exs.length) { showToast('⚡ Fais 5 min de marche rapide — ça compte !'); validerSeanceExpress(); return; }
+  body.innerHTML = `
+    <div style="font-size:12px;color:var(--gris);text-align:center;margin-bottom:16px;">Pas le temps ? Voici 5 minutes qui changent tout.</div>
+    ${exs.map(ex=>`<div class="sport-ex-row"><div class="sport-ex-name-reps"><span class="sport-ex-name">${ex.nom||ex.name||''}</span></div>${ex.detail?`<div class="sport-ex-detail">${ex.detail}</div>`:''}</div>`).join('')}`;
+  el.classList.add('open');
+}
+
+function validerSeanceExpress() {
+  document.getElementById('express-modal')?.classList.remove('open');
+  const today = new Date().toDateString();
+  if (!ST.seanceDone) ST.seanceDone = {};
+  ST.seanceDone[today] = 'express';
+  ST.totalSeancesAll = (ST.totalSeancesAll || 0) + 0.5;
+  ST.reportConsecutif = 0;
+  ST.checkpointProgress = (ST.checkpointProgress || 0) + 0.5;
+  _updateStreakPhase(0.5);
+  saveState();
+  renderCarteBouger(SAISONS[ST.currentSaison]);
+  renderDayScore();
+  burstCelebration();
+  showToast('⚡ 5 minutes accomplies — Alhamdulillah ! 🌸');
+  setTimeout(showFeedbackPostSeance, 1000);
+  if (ST.checkpointProgress >= 5) setTimeout(_triggerCheckpoint, 3500);
+}
+
+function validerReposActif() {
+  const today = new Date().toDateString();
+  if (!ST.seanceDone) ST.seanceDone = {};
+  ST.seanceDone[today] = 'repos-actif';
+  ST.checkpointProgress = (ST.checkpointProgress || 0) + 0.5;
+  _updateStreakPhase(0.5);
+  saveState();
+  renderCarteBouger(SAISONS[ST.currentSaison]);
+  showToast('🧘‍♀️ Repos actif accompli — ton corps te remercie 🌸');
+}
+
+function choisirReposComplet() {
+  showToast('💤 Repos complet — ton corps construit pendant la récupération 🌸');
+}
+
+function _updateStreakPhase(count) {
+  const phase = ST.currentSaison;
+  if (ST.streakPhaseNom !== phase) { ST.streakPhaseNom = phase; ST.streakPhaseSeances = 0; }
+  ST.streakPhaseSeances = (ST.streakPhaseSeances || 0) + count;
+}
+
+function _getStreakLabel() {
+  const n = Math.floor(ST.streakPhaseSeances || 0);
+  if (n === 0) return null;
+  const emoji = { hiver:'❄️', printemps:'🌸', ete:'☀️', automne:'🍂' }[ST.streakPhaseNom] || '✨';
+  const nom = { hiver:'Hiver', printemps:'Printemps', ete:'Été', automne:'Automne' }[ST.streakPhaseNom] || '';
+  return `${n} séance${n > 1 ? 's' : ''} ce ${nom} ${emoji}`;
+}
+
+function showFeedbackPostSeance() {
+  document.getElementById('feedback-seance-modal')?.classList.add('open');
+}
+
+function handleFeedbackSport(mood) {
+  document.getElementById('feedback-seance-modal')?.classList.remove('open');
+  const today = new Date().toDateString();
+  if (!ST.feedbackSport) ST.feedbackSport = {};
+  ST.feedbackSport[today] = mood;
+  saveState();
+  const dates = Object.keys(ST.feedbackSport).sort().slice(-3);
+  const last3 = dates.map(d => ST.feedbackSport[d]);
+  if (last3.length >= 3) {
+    if (last3.every(f => f === 'fatiguee')) setTimeout(() => _showPropositionType('fatigue3'), 600);
+    else if (last3.every(f => f === 'plus')) setTimeout(() => _showPropositionType('niveau_up'), 600);
+  }
+}
+
+function checkPropositionsAmelioration() {
+  const done = Object.keys(ST.seanceDone || {});
+  const last5 = done.sort().slice(-5);
+  const last5AllDone = last5.length >= 5 && last5.every(d => ST.seanceDone[d] === true);
+  if (last5AllDone && !ST._proposeNewEx5) {
+    ST._proposeNewEx5 = true; saveState();
+    setTimeout(() => _showPropositionType('reguliere5'), 2000);
+  }
+}
+
+function _showPropositionType(type) {
+  const el = document.getElementById('proposition-modal');
+  if (!el) return;
+  const body = el.querySelector('#proposition-body');
+  const cfg = {
+    reguliere5: { icon:'🌟', txt:'Tu es régulière depuis 5 séances — tu veux essayer un nouvel exercice ?' },
+    fatigue3:   { icon:'💛', txt:'Tu sembles fatiguée depuis quelques jours — on passe en mode douceur cette semaine ?' },
+    niveau_up:  { icon:'🔥', txt:'Tu te sens à l\'aise — tu veux passer au niveau supérieur ?' },
+  };
+  const c = cfg[type] || cfg.reguliere5;
+  if (body) body.innerHTML = `<div style="font-size:36px;margin-bottom:12px;">${c.icon}</div><div style="font-size:14px;color:var(--gris);line-height:1.7;">${c.txt}</div>`;
+  el.dataset.propType = type;
+  el.classList.add('open');
+}
+
+function handleProposition(ans) {
+  const el = document.getElementById('proposition-modal');
+  if (el) { el.classList.remove('open'); }
+  if (ans === 'oui') {
+    const type = el?.dataset.propType;
+    if (type === 'fatigue3') {
+      const level = ST.seanceLevel || 1;
+      if (level > 1) { ST.seanceLevel = level - 1; saveState(); renderCarteBouger(SAISONS[ST.currentSaison]); }
+      showToast('💛 Mode douceur activé — prends soin de toi.');
+    } else if (type === 'niveau_up') {
+      const level = ST.seanceLevel || 1;
+      if (level < 4) { ST.seanceLevel = level + 1; saveState(); renderCarteBouger(SAISONS[ST.currentSaison]); }
+      showToast('🔥 Niveau monté — Alhamdulillah 💪');
+    } else {
+      showToast('🌟 Nouvelle séance en route pour toi !');
+    }
+  } else {
+    showToast('🌸 Pas de problème — à ton rythme.');
+  }
+}
+
+function checkSeanceSurprise() {
+  if (ST.currentSaison !== 'ete') return;
+  if (ST.seanceSurpriseShownCycle) return;
+  const today = new Date().toDateString();
+  if (ST.seanceDone && ST.seanceDone[today]) return;
+  ST.seanceSurpriseShownCycle = true;
+  saveState();
+  setTimeout(() => document.getElementById('seance-surprise-modal')?.classList.add('open'), 1200);
+}
+
+function acceptSeanceSurprise() {
+  document.getElementById('seance-surprise-modal')?.classList.remove('open');
+  showToast('✨ C\'est parti — donne tout ce que tu as aujourd\'hui !');
+}
+
+function refuseSeanceSurprise() {
+  document.getElementById('seance-surprise-modal')?.classList.remove('open');
+}
+
+function _triggerCheckpoint() {
+  if (!isFullAccess()) return;
+  ST.checkpointProgress = 0;
+  saveState();
+  document.getElementById('progression-modal')?.classList.add('open');
+}
+
+let _timerInterval = null;
+let _currentExIdx = 0;
+let _timerExercices = [];
+let _repCount = 0;
+
+function openTimer() {
+  const spec = getTodaySeanceSpec();
+  if (!spec || !spec.data) return;
+  const el = document.getElementById('timer-modal');
+  if (!el) return;
+  _timerExercices = (spec.data.exercices || spec.data.circuit || []);
+  if (!_timerExercices.length) return;
+  _currentExIdx = 0;
+  el.classList.add('open');
+  _renderCurrentEx();
+}
+
+function _renderCurrentEx() {
+  const ex = _timerExercices[_currentExIdx];
+  const total = _timerExercices.length;
+  const body = document.getElementById('timer-body');
+  if (!body) return;
+  if (!ex) { _finishTimer(); return; }
+  const nom = ex.nom || ex.name || '';
+  const detail = ex.detail || '';
+  const reps = ex.reps || null;
+  const dureeNum = ex.duree ? parseInt(ex.duree) : null;
+  const isSeconds = dureeNum && (String(ex.duree).includes('sec') || String(ex.duree).includes('s') || dureeNum <= 120);
+  let content = '';
+  if (isSeconds && dureeNum) {
+    content = `<div class="timer-ex-name">${nom}</div><div class="timer-ex-detail">${detail}</div>
+      <div class="timer-circle"><svg viewBox="0 0 100 100" class="timer-svg"><circle cx="50" cy="50" r="44" fill="none" stroke="var(--sable)" stroke-width="8"/><circle cx="50" cy="50" r="44" fill="none" stroke="var(--season)" stroke-width="8" stroke-dasharray="276.5" stroke-dashoffset="0" id="timer-arc" stroke-linecap="round" transform="rotate(-90 50 50)"/></svg><div class="timer-count" id="timer-count">${dureeNum}</div></div>
+      <button class="timer-start-btn" id="timer-start-btn" onclick="_startCountdown(${dureeNum})">▶ Démarrer</button>`;
+  } else if (reps) {
+    _repCount = 0;
+    content = `<div class="timer-ex-name">${nom}</div><div class="timer-ex-detail">${detail}</div>
+      <div class="timer-reps-target">Objectif : <strong>${reps} reps</strong></div>
+      <div class="timer-rep-counter" id="timer-rep-counter">0</div>
+      <div class="timer-tap-zone" onclick="tapRep()">Taper</div>
+      <div class="timer-tap-hint">Tape à chaque répétition</div>`;
+  } else {
+    content = `<div class="timer-ex-name">${nom}</div><div class="timer-ex-detail">${detail || 'Fais de ton mieux 💪'}</div>`;
+  }
+  body.innerHTML = `<div class="timer-progress">${_currentExIdx + 1} / ${total}</div>${content}
+    <div style="display:flex;gap:10px;margin-top:20px;">
+      <button class="timer-next-btn" onclick="timerNextEx()">Suivant →</button>
+      <button class="timer-skip-btn" onclick="timerNextEx()">Passer</button>
+    </div>`;
+}
+
+function tapRep() {
+  _repCount++;
+  const el = document.getElementById('timer-rep-counter');
+  if (el) { el.textContent = _repCount; el.classList.remove('timer-rep-pulse'); void el.offsetWidth; el.classList.add('timer-rep-pulse'); }
+  if (navigator.vibrate) navigator.vibrate(30);
+}
+
+function _startCountdown(secs) {
+  const btn = document.getElementById('timer-start-btn');
+  if (btn) btn.style.display = 'none';
+  let remaining = secs;
+  const arc = document.getElementById('timer-arc');
+  const count = document.getElementById('timer-count');
+  if (_timerInterval) clearInterval(_timerInterval);
+  _timerInterval = setInterval(() => {
+    remaining--;
+    if (count) count.textContent = remaining;
+    if (arc) arc.style.strokeDashoffset = 276.5 * (1 - remaining / secs);
+    if (remaining <= 0) { clearInterval(_timerInterval); _timerInterval = null; if (navigator.vibrate) navigator.vibrate([100,50,100]); }
+  }, 1000);
+}
+
+function timerNextEx() {
+  if (_timerInterval) { clearInterval(_timerInterval); _timerInterval = null; }
+  if (navigator.vibrate) navigator.vibrate(50);
+  _currentExIdx++;
+  if (_currentExIdx >= _timerExercices.length) { _finishTimer(); return; }
+  _showRestTimer(30);
+}
+
+function _showRestTimer(restSecs) {
+  const body = document.getElementById('timer-body');
+  if (!body) return;
+  let r = restSecs;
+  body.innerHTML = `<div class="timer-rest-label">Repos</div><div class="timer-rest-count" id="timer-rest-count">${r}s</div><button class="timer-skip-btn" style="display:block;margin:0 auto;" onclick="timerSkipRest()">Passer le repos →</button>`;
+  if (_timerInterval) clearInterval(_timerInterval);
+  _timerInterval = setInterval(() => {
+    r--;
+    const el = document.getElementById('timer-rest-count');
+    if (el) el.textContent = r + 's';
+    if (r <= 0) { clearInterval(_timerInterval); _timerInterval = null; if (navigator.vibrate) navigator.vibrate([50,30,50]); _renderCurrentEx(); }
+  }, 1000);
+}
+
+function timerSkipRest() {
+  if (_timerInterval) { clearInterval(_timerInterval); _timerInterval = null; }
+  _renderCurrentEx();
+}
+
+function _finishTimer() {
+  closeTimerModal();
+  validerSeanceDash();
+}
+
+function closeTimerModal() {
+  if (_timerInterval) { clearInterval(_timerInterval); _timerInterval = null; }
+  document.getElementById('timer-modal')?.classList.remove('open');
+}
+
+function renderHistoriqueSport() {
+  const el = document.getElementById('sport-historique-section');
+  if (!el) return;
+  const done = ST.seanceDone || {};
+  const totalFull = Object.keys(done).filter(d => done[d] === true).length;
+  const totalExpress = Object.keys(done).filter(d => done[d] === 'express').length;
+  const totalReported = Object.keys(done).filter(d => done[d] === 'reportee').length;
+  const level = ST.seanceLevel || 1;
+  const levelNames = ['Découverte','Aventurière','Guerrière','Élite'];
+  const streak = _getStreakLabel();
+  const prog = (ST.checkpointProgress || 0) % 5;
+  const nextCp = prog === 0 ? 5 : Math.ceil(5 - prog);
+  el.innerHTML = `
+    <div class="sport-histo-title">💪 Ton parcours sport</div>
+    <div class="sport-histo-grid">
+      <div class="sport-histo-stat"><div class="sport-histo-num">${totalFull}</div><div class="sport-histo-lbl">séances complètes</div></div>
+      <div class="sport-histo-stat"><div class="sport-histo-num">Niv.${level}</div><div class="sport-histo-lbl">${levelNames[level-1]}</div></div>
+      <div class="sport-histo-stat"><div class="sport-histo-num">${totalExpress}</div><div class="sport-histo-lbl">express (5 min)</div></div>
+      <div class="sport-histo-stat"><div class="sport-histo-num">${totalReported}</div><div class="sport-histo-lbl">reportées</div></div>
+    </div>
+    ${streak ? `<div class="sport-histo-streak">${streak}</div>` : ''}
+    <div class="sport-histo-next">Prochain checkpoint dans <strong>${nextCp} séance${nextCp > 1 ? 's' : ''}</strong></div>`;
 }
 
 function showLevelMax() {
@@ -2106,6 +2455,7 @@ function renderMoi(s) {
   const _pnm = document.getElementById('profil-name'); if (_pnm) _pnm.textContent = ST.prenom || '';
   const _psb = document.getElementById('profil-sub'); if (_psb) _psb.textContent = s.nom + ' · Jour ' + ST.currentDay;
   const pav = document.getElementById('profilAv'); if (pav) pav.textContent = s.emoji;
+  renderHistoriqueSport();
 }
 
 // ═══════════════════════════════════════════════
