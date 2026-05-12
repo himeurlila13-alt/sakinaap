@@ -88,7 +88,7 @@
     <input class="ob-input" id="input-prenom" type="text" placeholder="Lisa, Aya, Lila..." maxlength="30" autocomplete="given-name" autocorrect="off" autocapitalize="words" spellcheck="false" inputmode="text">
     <div class="ob-privacy" style="margin-top:12px;">
       <span style="font-size:16px">&#128274;</span>
-      <span class="ob-privacy-txt">Tes donnees restent sur ton telephone. Jamais partagees, jamais vendues.</span>
+      <span class="ob-privacy-txt">Tes donn&eacute;es sont sauvegard&eacute;es sur ton compte s&eacute;curis&eacute;. Jamais vendues, jamais partag&eacute;es.</span>
     </div>
     <button class="ob-btn" onclick="nextStep(1)" style="margin-top:24px;">Commencer</button>
   </div>
@@ -899,14 +899,22 @@
 
     <div class="ml-section">
       <div class="ml-titre">Données personnelles</div>
-      <p class="ml-txt">SakinApp ne collecte aucune donnée personnelle sur ses serveurs. Toutes tes informations (cycle, prières, humeurs, objectifs) sont stockées <strong>uniquement sur ton appareil</strong> via le localStorage de ton navigateur.</p>
-      <p class="ml-txt" style="margin-top:8px;">La fonctionnalité waitlist collecte volontairement une adresse e-mail via le service Formspree (formspree.io) dans le seul but de t'informer de l'ouverture de l'abonnement Premium. Tu peux demander sa suppression à tout moment à l'adresse sakina.evolution.contact@gmail.com.</p>
-      <p class="ml-txt" style="margin-top:8px;">Conformément au RGPD, tu peux effacer toutes les données locales depuis Paramètres → Réinitialiser mes données.</p>
+      <p class="ml-txt">SakinApp collecte ton adresse e-mail (pour l'authentification) et tes données d'utilisation (cycle, prières, humeurs, objectifs, sport), stockées sur les serveurs de <strong>Supabase</strong> (sous-traitant), ainsi qu'en local sur ton appareil (localStorage).</p>
+      <p class="ml-txt" style="margin-top:8px;">Les données de paiement sont traitées exclusivement par <strong>Stripe Inc.</strong> — SakinApp n'a jamais accès à tes coordonnées bancaires.</p>
+      <p class="ml-txt" style="margin-top:8px;">Conformément au RGPD, tu peux exporter ou supprimer tes données depuis Paramètres. Pour toute demande : sakina.evolution.contact@gmail.com</p>
+    </div>
+
+    <div class="ml-section">
+      <div class="ml-titre">Sous-traitants</div>
+      <div class="ml-ligne"><span class="ml-lbl">Vercel Inc.</span> H&eacute;bergement de l&rsquo;application &mdash; USA</div>
+      <div class="ml-ligne"><span class="ml-lbl">Supabase Inc.</span> Base de donn&eacute;es &amp; authentification &mdash; USA</div>
+      <div class="ml-ligne"><span class="ml-lbl">Stripe Inc.</span> Paiement s&eacute;curis&eacute; &mdash; USA</div>
+      <p class="ml-txt" style="margin-top:8px;">Les transferts vers les &Eacute;tats-Unis sont encadr&eacute;s par les clauses contractuelles types de la Commission europ&eacute;enne.</p>
     </div>
 
     <div class="ml-section">
       <div class="ml-titre">Cookies</div>
-      <p class="ml-txt">SakinApp n'utilise pas de cookies. Le stockage local (localStorage) est utilisé exclusivement pour le fonctionnement de l'application et ne peut pas être lu par des tiers.</p>
+      <p class="ml-txt">SakinApp n&rsquo;utilise <strong>aucun cookie publicitaire ou de tracking</strong>. Le localStorage et la session Supabase sont techniquement n&eacute;cessaires au fonctionnement de l&rsquo;app.</p>
     </div>
 
     <div class="ml-section">
@@ -936,45 +944,53 @@
     </div>
 
     <div class="ml-section">
-      <div class="ml-titre">Données collectées</div>
-      <p class="ml-txt"><strong>Aucune donnée n'est transmise à nos serveurs.</strong> Toutes les informations que tu saisis dans SakinApp (cycle menstruel, prières, humeurs, symptômes, objectifs, prénom) sont stockées exclusivement sur ton appareil via le localStorage de ton navigateur.</p>
-      <p class="ml-txt" style="margin-top:10px;">Ces données ne peuvent être lues ni par nous, ni par des tiers. Seule toi y as accès, sur ton appareil.</p>
+      <div class="ml-titre">Données collectées et finalités</div>
+      <p class="ml-txt" style="margin-bottom:10px;"><strong>1. Adresse e-mail</strong> — collect&eacute;e lors de la cr&eacute;ation du compte. Finalit&eacute; : authentification et s&eacute;curit&eacute; du compte. Base l&eacute;gale : ex&eacute;cution du contrat (art.&nbsp;6.1.b RGPD).</p>
+      <p class="ml-txt" style="margin-bottom:10px;"><strong>2. Donn&eacute;es d&rsquo;utilisation</strong> — cycle menstruel, pr&egrave;res, humeurs, sympt&ocirc;mes, objectifs, historique sport. Finalit&eacute; : personnalisation de l&rsquo;app et sauvegarde multi-appareils. Base l&eacute;gale : consentement explicite (art.&nbsp;6.1.a + art.&nbsp;9.2.a pour les donn&eacute;es de sant&eacute;).</p>
+      <p class="ml-txt"><strong>3. Donn&eacute;es de paiement</strong> — trait&eacute;es exclusivement par <strong>Stripe Inc.</strong> SakinApp ne voit jamais tes coordonn&eacute;es bancaires.</p>
     </div>
 
     <div class="ml-section">
-      <div class="ml-titre">Données de la liste d'attente (Waitlist)</div>
-      <p class="ml-txt">Si tu t'inscris à la waitlist Premium, ton adresse e-mail est transmise au service <strong>Formspree</strong> (Formspree, Inc., États-Unis) dans le seul but de t'informer de l'ouverture de l'abonnement.</p>
-      <div class="ml-ligne" style="margin-top:10px;"><span class="ml-lbl">Finalité</span> Information sur l'ouverture Premium</div>
-      <div class="ml-ligne"><span class="ml-lbl">Base légale</span> Consentement (tu remplis le formulaire volontairement)</div>
-      <div class="ml-ligne"><span class="ml-lbl">Conservation</span> Jusqu'à l'ouverture Premium ou sur demande de suppression</div>
-      <div class="ml-ligne"><span class="ml-lbl">Transfert</span> Formspree (États-Unis) — encadré par les clauses contractuelles types UE</div>
+      <div class="ml-titre">Stockage et sous-traitants</div>
+      <p class="ml-txt" style="margin-bottom:10px;">Tes donn&eacute;es sont stock&eacute;es sur ton appareil (localStorage) <strong>et</strong> sur les serveurs de nos sous-traitants :</p>
+      <div class="ml-ligne"><span class="ml-lbl">Supabase Inc.</span> Auth + base de donn&eacute;es &mdash; San Francisco, USA</div>
+      <div class="ml-ligne"><span class="ml-lbl">Stripe Inc.</span> Paiements &mdash; San Francisco, USA</div>
+      <div class="ml-ligne"><span class="ml-lbl">Vercel Inc.</span> H&eacute;bergement app &mdash; Walnut, CA, USA</div>
+      <p class="ml-txt" style="margin-top:10px;">Les transferts hors UE sont encadr&eacute;s par les <strong>clauses contractuelles types</strong> de la Commission europ&eacute;enne (d&eacute;cision 2021/914).</p>
+    </div>
+
+    <div class="ml-section">
+      <div class="ml-titre">Dur&eacute;e de conservation</div>
+      <div class="ml-ligne"><span class="ml-lbl">Compte actif</span> Pendant toute la dur&eacute;e de l&rsquo;abonnement</div>
+      <div class="ml-ligne"><span class="ml-lbl">Apr&egrave;s r&eacute;siliation</span> 3 ans (obligations comptables et l&eacute;gales)</div>
+      <div class="ml-ligne"><span class="ml-lbl">Sur demande</span> Suppression imm&eacute;diate possible</div>
     </div>
 
     <div class="ml-section">
       <div class="ml-titre">Cookies et traceurs</div>
-      <p class="ml-txt">SakinApp n'utilise <strong>aucun cookie</strong>, aucun outil d'analyse (Google Analytics, etc.), aucun pixel publicitaire. Le localStorage utilisé est techniquement nécessaire au fonctionnement de l'app et n'est pas accessible par des tiers.</p>
+      <p class="ml-txt">SakinApp n&rsquo;utilise <strong>aucun cookie publicitaire</strong>, aucun outil d&rsquo;analyse (Google Analytics, etc.), aucun pixel de tracking. Seul le localStorage et la session Supabase sont utilis&eacute;s pour le fonctionnement de l&rsquo;app.</p>
     </div>
 
     <div class="ml-section">
       <div class="ml-titre">Tes droits (RGPD)</div>
-      <p class="ml-txt">Conformément au Règlement Général sur la Protection des Données (RGPD — Règlement UE 2016/679), tu disposes des droits suivants :</p>
-      <div class="ml-ligne" style="margin-top:10px;flex-direction:column;gap:6px;">
-        <div>• <strong>Accès</strong> : tu peux exporter tes données depuis Paramètres → Exporter mes données</div>
-        <div>• <strong>Suppression</strong> : Paramètres → Réinitialiser mes données efface tout de ton appareil</div>
-        <div>• <strong>Portabilité</strong> : export JSON disponible dans Paramètres</div>
-        <div>• <strong>Opposition / Rectification</strong> : pour les données waitlist, contacte-nous par email</div>
+      <p class="ml-txt">Conform&eacute;ment au R&egrave;glement UE 2016/679, tu disposes des droits suivants :</p>
+      <div class="ml-ligne" style="margin-top:10px;flex-direction:column;gap:8px;">
+        <div>• <strong>Acc&egrave;s &amp; portabilit&eacute;</strong> : Param&egrave;tres → Exporter mes donn&eacute;es (JSON)</div>
+        <div>• <strong>Rectification</strong> : modifiable directement dans l&rsquo;app</div>
+        <div>• <strong>Suppression</strong> : Param&egrave;tres → R&eacute;initialiser, ou demande par e-mail</div>
+        <div>• <strong>Opposition</strong> : &agrave; tout moment par e-mail</div>
+        <div>• <strong>R&eacute;clamation</strong> : aupr&egrave;s de la <strong>CNIL</strong> (cnil.fr)</div>
       </div>
-      <p class="ml-txt" style="margin-top:10px;">Pour toute demande relative à tes données : <strong>sakina.evolution.contact@gmail.com</strong></p>
-      <p class="ml-txt" style="margin-top:8px;">Tu as également le droit d'introduire une réclamation auprès de la <strong>CNIL</strong> (cnil.fr).</p>
+      <p class="ml-txt" style="margin-top:10px;">Contact : <strong>sakina.evolution.contact@gmail.com</strong> &mdash; R&eacute;ponse sous 30 jours.</p>
     </div>
 
     <div class="ml-section">
-      <div class="ml-titre">Sécurité</div>
-      <p class="ml-txt">Les données locales sont protégées par la sécurité de ton appareil et de ton navigateur. L'application est hébergée sur Vercel avec connexion HTTPS chiffrée.</p>
+      <div class="ml-titre">S&eacute;curit&eacute;</div>
+      <p class="ml-txt">Connexion HTTPS chiffr&eacute;e, authentification s&eacute;curis&eacute;e via Supabase, donn&eacute;es de paiement jamais stock&eacute;es par SakinApp. Aucun mot de passe requis &mdash; connexion par lien magique uniquement.</p>
     </div>
 
     <div style="text-align:center;font-size:11px;color:var(--gris);margin-top:20px;padding-top:16px;border-top:1px solid var(--sable);">
-      SakinApp — Politique de confidentialité — Dernière mise à jour : mai 2026
+      SakinApp &mdash; Politique de confidentialit&eacute; &mdash; Derni&egrave;re mise &agrave; jour : mai 2026
     </div>
   </div>
 </div>
@@ -994,9 +1010,9 @@
     </div>
 
     <div class="ml-section">
-      <div class="ml-titre">2. Accès au service</div>
-      <p class="ml-txt">SakinApp est accessible depuis tout appareil disposant d'un navigateur web et d'une connexion internet. L'app peut être installée sur l'écran d'accueil et fonctionne en mode hors-ligne pour les fonctionnalités de base.</p>
-      <p class="ml-txt" style="margin-top:8px;">L'éditrice se réserve le droit de modifier, suspendre ou interrompre tout ou partie du service à tout moment.</p>
+      <div class="ml-titre">2. Acc&egrave;s au service</div>
+      <p class="ml-txt">SakinApp est accessible depuis tout appareil disposant d&rsquo;un navigateur web. Un <strong>compte est requis</strong> (cr&eacute;ation gratuite par lien magique envoy&eacute; par e-mail). L&rsquo;app peut &ecirc;tre install&eacute;e sur l&rsquo;&eacute;cran d&rsquo;accueil et fonctionne partiellement hors-ligne.</p>
+      <p class="ml-txt" style="margin-top:8px;">L&rsquo;&eacute;ditrice se r&eacute;serve le droit de modifier, suspendre ou interrompre tout ou partie du service &agrave; tout moment, avec information pr&eacute;alable autant que possible.</p>
     </div>
 
     <div class="ml-section">
@@ -1006,10 +1022,11 @@
 
     <div class="ml-section">
       <div class="ml-titre">4. Abonnement Premium</div>
-      <div class="ml-ligne"><span class="ml-lbl">Mensuel</span> 3,99 € / mois</div>
-      <div class="ml-ligne"><span class="ml-lbl">Annuel</span> 24,99 € / an (économie de 47%)</div>
-      <p class="ml-txt" style="margin-top:10px;">Durant la phase bêta, l'accès Premium est accordé via des codes d'accès personnels, non transférables et à usage unique. Tout code partagé pourra être désactivé sans préavis.</p>
-      <p class="ml-txt" style="margin-top:8px;">Les tarifs sont indiqués en euros TTC. L'éditrice se réserve le droit de modifier les tarifs avec un préavis de 30 jours.</p>
+      <div class="ml-ligne"><span class="ml-lbl">Mensuel</span> 3,99 &euro; / mois</div>
+      <div class="ml-ligne"><span class="ml-lbl">Annuel</span> 24,99 &euro; / an (&eacute;conomie de 47%)</div>
+      <p class="ml-txt" style="margin-top:10px;">Le paiement est trait&eacute; par <strong>Stripe Inc.</strong> (paiement s&eacute;curis&eacute; par carte). L&rsquo;abonnement se renouvelle automatiquement sauf r&eacute;siliation. Tu peux r&eacute;silier &agrave; tout moment depuis ton espace Stripe ou en contactant sakina.evolution.contact@gmail.com &mdash; sans frais, avec effet &agrave; la fin de la p&eacute;riode en cours.</p>
+      <p class="ml-txt" style="margin-top:8px;">Les tarifs sont indiqu&eacute;s en euros TTC. L&rsquo;&eacute;ditrice se r&eacute;serve le droit de modifier les tarifs avec un pr&eacute;avis de 30 jours.</p>
+      <p class="ml-txt" style="margin-top:8px;"><strong>Droit de r&eacute;tractation :</strong> conform&eacute;ment &agrave; l&rsquo;art. L221-18 du Code de la consommation, tu disposes de 14 jours pour te r&eacute;tracter. Pass&eacute; ce d&eacute;lai, l&rsquo;abonnement court jusqu&rsquo;&agrave; la fin de la p&eacute;riode.</p>
     </div>
 
     <div class="ml-section">
@@ -1024,8 +1041,9 @@
     </div>
 
     <div class="ml-section">
-      <div class="ml-titre">7. Données personnelles</div>
-      <p class="ml-txt">Le traitement des données personnelles est régi par la Politique de confidentialité de SakinApp, consultable dans Paramètres → Politique de confidentialité.</p>
+      <div class="ml-titre">7. Donn&eacute;es personnelles</div>
+      <p class="ml-txt">SakinApp collecte ton adresse e-mail (authentification) et tes donn&eacute;es d&rsquo;utilisation (cycle, pr&egrave;res, humeurs, sport), stock&eacute;es sur Supabase Inc. Les paiements sont trait&eacute;s par Stripe Inc. SakinApp n&rsquo;a jamais acc&egrave;s &agrave; tes donn&eacute;es bancaires.</p>
+      <p class="ml-txt" style="margin-top:8px;">Le traitement complet est d&eacute;crit dans la <strong>Politique de confidentialit&eacute;</strong> accessible dans Param&egrave;tres. Tu peux exporter ou supprimer tes donn&eacute;es &agrave; tout moment.</p>
     </div>
 
     <div class="ml-section">
