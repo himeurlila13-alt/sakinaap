@@ -110,7 +110,7 @@ async function handleMagicLink() {
   } catch(e) {
     showAuthMsg('Erreur : ' + (e.message || 'Réessaie dans quelques instants.'), 'error');
     btn.disabled = false;
-    btn.textContent = 'Recevoir le lien magique ✦';
+    btn.textContent = 'Recevoir mon lien 🌸';
   }
 }
 
