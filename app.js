@@ -114,15 +114,6 @@ async function handleMagicLink() {
   }
 }
 
-async function handleGoogleAuth() {
-  try {
-    const sb = await initSupabase();
-    await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: 'https://sakinaap.com/' } });
-  } catch(e) {
-    showAuthMsg('Erreur Google : ' + (e.message || 'Réessaie.'), 'error');
-  }
-}
-
 function showAuthMsg(msg, type) {
   const el = document.getElementById('auth-msg');
   if (!el) return;
