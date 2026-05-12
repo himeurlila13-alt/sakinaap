@@ -1106,7 +1106,7 @@ function selectPlan(plan) {
 
 const STRIPE_LINKS = {
   monthly: 'https://buy.stripe.com/bJe8wO69R2HTcUbgys8Ra01',
-  annual:  'https://buy.stripe.com/8x2aEW8hZ4Q1cUbdmg8Ra00',
+  annual:  'https://buy.stripe.com/8x26oG55NfuF5rJbe88Ra02',
 };
 
 function startStripeCheckout() {
