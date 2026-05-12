@@ -874,21 +874,49 @@
 
   <!-- PARAMÈTRES -->
   <div class="prof-sec">
-    <div class="ps-hdr">Paramètres</div>
-    <div class="ps-row" style="cursor:default;">
-      <div class="ps-ico">&#10022;</div>
-      <div style="flex:1;"><div class="ps-lbl">Mode Premium <span style="font-size:10px;background:#EAD9C0;color:#8A6A30;padding:2px 7px;border-radius:8px;margin-left:6px;font-weight:600;">TEST</span></div><div class="ps-sub">Active pour prévisualiser les fonctions</div></div>
-      <button id="premium-toggle-btn" onclick="togglePremium()" style="background:var(--sable);color:var(--gris);border:none;border-radius:10px;padding:7px 14px;font-size:12px;font-weight:700;font-family:var(--sans);cursor:pointer;flex-shrink:0;">Inactif</button>
+
+    <!-- Toujours visible : connexion -->
+    <div id="ps-auth-row" class="ps-row" onclick="openReconnectFromNudge()">
+      <div class="ps-ico">&#128100;</div>
+      <div><div class="ps-lbl" id="ps-auth-lbl">Se connecter</div><div class="ps-sub" id="ps-auth-sub">Sauvegarde tes donn&eacute;es sur tous tes appareils</div></div>
+      <div class="ps-arr">&#8250;</div>
     </div>
-    <div class="ps-row" onclick="openEditCycle()"><div class="ps-ico">&#128197;</div><div><div class="ps-lbl">Modifier mon cycle</div><div class="ps-sub" id="psCycle">Configurer</div></div><div class="ps-arr">&#8250;</div></div>
-    <div class="ps-row" onclick="openNotifSettings()"><div class="ps-ico">&#128276;</div><div><div class="ps-lbl">Rappels Sakina</div><div class="ps-sub">Configurer mes notifications</div></div><div class="ps-arr">&#8250;</div></div>
-    <div id="ps-auth-row" class="ps-row" onclick="openReconnectFromNudge()"><div class="ps-ico">&#128100;</div><div><div class="ps-lbl" id="ps-auth-lbl">Se connecter</div><div class="ps-sub" id="ps-auth-sub">Sauvegarde tes donn&eacute;es sur tous tes appareils</div></div><div class="ps-arr">&#8250;</div></div>
-    <div class="ps-row" onclick="exportData()"><div class="ps-ico">&#128229;</div><div><div class="ps-lbl">Exporter mes données</div><div class="ps-sub">Télécharger un fichier JSON — RGPD</div></div><div class="ps-arr">&#8250;</div></div>
-    <div class="ps-row" onclick="deleteMyData()"><div class="ps-ico">&#128465;</div><div><div class="ps-lbl" style="color:#C4694A;">Réinitialiser mes données</div><div class="ps-sub">Efface tout de cet appareil — RGPD</div></div><div class="ps-arr">&#8250;</div></div>
-    <div class="ps-row" onclick="openMentionsLegales()"><div class="ps-ico">&#9878;</div><div><div class="ps-lbl">Mentions légales</div><div class="ps-sub">Éditrice, hébergeur, données</div></div><div class="ps-arr">&#8250;</div></div>
-    <div class="ps-row" onclick="openConfidentialite()"><div class="ps-ico">&#128274;</div><div><div class="ps-lbl">Politique de confidentialité</div><div class="ps-sub">Tes données &amp; tes droits RGPD</div></div><div class="ps-arr">&#8250;</div></div>
-    <div class="ps-row" onclick="openCGU()"><div class="ps-ico">&#128203;</div><div><div class="ps-lbl">CGU &amp; Conditions d'abonnement</div><div class="ps-sub">Conditions d'utilisation de SakinApp</div></div><div class="ps-arr">&#8250;</div></div>
-    <a href="mailto:sakina.evolution.contact@gmail.com" class="ps-row" style="text-decoration:none;color:inherit;"><div class="ps-ico">&#9993;</div><div><div class="ps-lbl">Nous contacter</div><div class="ps-sub">sakina.evolution.contact@gmail.com</div></div><div class="ps-arr">&#8250;</div></a>
+
+    <!-- Accordéon 1 : Réglages -->
+    <div class="ps-accordion" onclick="toggleAccordion('acc-reglages')" id="acc-reglages-hdr">
+      <div style="display:flex;align-items:center;gap:13px;flex:1;">
+        <div class="ps-ico">&#9881;&#65039;</div>
+        <div><div class="ps-lbl">Réglages</div><div class="ps-sub">Cycle, rappels, premium</div></div>
+      </div>
+      <span class="ps-acc-arrow" id="arr-reglages">&#8250;</span>
+    </div>
+    <div class="ps-acc-body" id="acc-reglages">
+      <div class="ps-row" style="cursor:default;padding-left:20px;">
+        <div class="ps-ico">&#10022;</div>
+        <div style="flex:1;"><div class="ps-lbl">Mode Premium <span style="font-size:10px;background:#EAD9C0;color:#8A6A30;padding:2px 7px;border-radius:8px;margin-left:6px;font-weight:600;">TEST</span></div><div class="ps-sub">Active pour prévisualiser les fonctions</div></div>
+        <button id="premium-toggle-btn" onclick="event.stopPropagation();togglePremium()" style="background:var(--sable);color:var(--gris);border:none;border-radius:10px;padding:7px 14px;font-size:12px;font-weight:700;font-family:var(--sans);cursor:pointer;flex-shrink:0;">Inactif</button>
+      </div>
+      <div class="ps-row" style="padding-left:20px;" onclick="openEditCycle()"><div class="ps-ico">&#128197;</div><div><div class="ps-lbl">Modifier mon cycle</div><div class="ps-sub" id="psCycle">Configurer</div></div><div class="ps-arr">&#8250;</div></div>
+      <div class="ps-row" style="padding-left:20px;" onclick="openNotifSettings()"><div class="ps-ico">&#128276;</div><div><div class="ps-lbl">Rappels Sakina</div><div class="ps-sub">Configurer mes notifications</div></div><div class="ps-arr">&#8250;</div></div>
+    </div>
+
+    <!-- Accordéon 2 : Données & Légal -->
+    <div class="ps-accordion" onclick="toggleAccordion('acc-legal')" id="acc-legal-hdr">
+      <div style="display:flex;align-items:center;gap:13px;flex:1;">
+        <div class="ps-ico">&#128203;</div>
+        <div><div class="ps-lbl">Données &amp; Légal</div><div class="ps-sub">RGPD, mentions, CGU</div></div>
+      </div>
+      <span class="ps-acc-arrow" id="arr-legal">&#8250;</span>
+    </div>
+    <div class="ps-acc-body" id="acc-legal">
+      <div class="ps-row" style="padding-left:20px;" onclick="exportData()"><div class="ps-ico">&#128229;</div><div><div class="ps-lbl">Exporter mes données</div><div class="ps-sub">Télécharger un fichier JSON — RGPD</div></div><div class="ps-arr">&#8250;</div></div>
+      <div class="ps-row" style="padding-left:20px;" onclick="deleteMyData()"><div class="ps-ico">&#128465;</div><div><div class="ps-lbl" style="color:#C4694A;">Réinitialiser mes données</div><div class="ps-sub">Efface tout de cet appareil — RGPD</div></div><div class="ps-arr">&#8250;</div></div>
+      <div class="ps-row" style="padding-left:20px;" onclick="openMentionsLegales()"><div class="ps-ico">&#9878;</div><div><div class="ps-lbl">Mentions légales</div><div class="ps-sub">Éditrice, hébergeur, données</div></div><div class="ps-arr">&#8250;</div></div>
+      <div class="ps-row" style="padding-left:20px;" onclick="openConfidentialite()"><div class="ps-ico">&#128274;</div><div><div class="ps-lbl">Politique de confidentialité</div><div class="ps-sub">Tes données &amp; tes droits RGPD</div></div><div class="ps-arr">&#8250;</div></div>
+      <div class="ps-row" style="padding-left:20px;" onclick="openCGU()"><div class="ps-ico">&#128203;</div><div><div class="ps-lbl">CGU &amp; Conditions d'abonnement</div><div class="ps-sub">Conditions d'utilisation de SakinApp</div></div><div class="ps-arr">&#8250;</div></div>
+      <a href="mailto:sakina.evolution.contact@gmail.com" class="ps-row" style="padding-left:20px;text-decoration:none;color:inherit;"><div class="ps-ico">&#9993;</div><div><div class="ps-lbl">Nous contacter</div><div class="ps-sub">sakina.evolution.contact@gmail.com</div></div><div class="ps-arr">&#8250;</div></a>
+    </div>
+
   </div>
 
   <div style="text-align:center;padding:24px 20px 32px;color:var(--gris);font-size:12px;">

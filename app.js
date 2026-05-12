@@ -118,6 +118,15 @@ function dismissReconnectNudge() {
   if (el) el.style.display = 'none';
 }
 
+function toggleAccordion(id) {
+  const body = document.getElementById(id);
+  const key = id.replace('acc-', 'arr-');
+  const arrow = document.getElementById(key);
+  if (!body) return;
+  const isOpen = body.classList.toggle('open');
+  if (arrow) arrow.style.transform = isOpen ? 'rotate(90deg)' : 'rotate(0deg)';
+}
+
 function openReconnectFromNudge() {
   dismissReconnectNudge();
   document.getElementById('reconnect-modal')?.classList.add('open');
