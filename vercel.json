@@ -7,6 +7,7 @@
     { "source": "/icons/(.*)",   "destination": "/icons/$1" },
     { "source": "/landing",      "destination": "/landing.html" },
     { "source": "/landing.html", "destination": "/landing.html" },
+    { "source": "/data.js",       "destination": "/data.js" },
     { "source": "/sitemap.xml",  "destination": "/sitemap.xml" },
     { "source": "/robots.txt",   "destination": "/robots.txt" },
     { "source": "/(.*)",         "destination": "/index.html" }

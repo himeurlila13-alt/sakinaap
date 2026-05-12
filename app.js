@@ -51,6 +51,8 @@ let ST = {
   premiumSince: null,
   installDate: null,
   trialBannerDismissed: false,
+  supabaseUserId: null,
+  supabaseEmail: null,
 };
 
 function saveState() {
@@ -59,6 +61,7 @@ function saveState() {
   delete toSave.currentSaison;
   delete toSave.currentDay;
   try { localStorage.setItem('sakinapp_v1', JSON.stringify(toSave)); } catch(e) {}
+  syncToSupabase();
 }
 function loadState() {
   try {
@@ -68,6 +71,135 @@ function loadState() {
       delete parsed.currentSaison;
       delete parsed.currentDay;
       ST = {...ST, ...parsed};
+    }
+  } catch(e) {}
+}
+
+// ═══════════════════════════════════════════════
+// SUPABASE AUTH
+// ═══════════════════════════════════════════════
+let _supabase = null;
+async function initSupabase() {
+  if (_supabase) return _supabase;
+  try {
+    const cfg = await fetch('/api/public-config').then(r => r.json());
+    if (cfg.supabaseUrl && cfg.supabaseAnonKey) {
+      _supabase = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+    }
+  } catch(e) {}
+  return _supabase;
+}
+
+function showAuthScreen() {
+  document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('onboarding').style.display = 'none';
+  document.getElementById('app').style.display = 'none';
+}
+
+async function handleMagicLink() {
+  const email = document.getElementById('auth-email').value.trim();
+  if (!email || !email.includes('@')) { showAuthMsg('Entre une adresse email valide.', 'error'); return; }
+  const btn = document.getElementById('auth-magic-btn');
+  btn.disabled = true;
+  btn.textContent = 'Envoi en cours...';
+  try {
+    const sb = await initSupabase();
+    const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: 'https://sakinaap.com/' } });
+    if (error) throw error;
+    showAuthMsg('✉️ Vérifie ta boîte mail ! Clique sur le lien pour te connecter.', 'success');
+  } catch(e) {
+    showAuthMsg('Erreur : ' + (e.message || 'Réessaie dans quelques instants.'), 'error');
+    btn.disabled = false;
+    btn.textContent = 'Recevoir le lien magique ✦';
+  }
+}
+
+async function handleGoogleAuth() {
+  try {
+    const sb = await initSupabase();
+    await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: 'https://sakinaap.com/' } });
+  } catch(e) {
+    showAuthMsg('Erreur Google : ' + (e.message || 'Réessaie.'), 'error');
+  }
+}
+
+function showAuthMsg(msg, type) {
+  const el = document.getElementById('auth-msg');
+  if (!el) return;
+  el.style.display = 'block';
+  el.textContent = msg;
+  el.style.color = type === 'error' ? '#c0392b' : '#7B5EA7';
+  el.style.background = type === 'error' ? 'rgba(192,57,43,0.08)' : 'rgba(123,94,167,0.08)';
+}
+
+function setupAuthListener(sb) {
+  sb.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_IN' && session) {
+      ST.supabaseUserId = session.user.id;
+      ST.supabaseEmail = session.user.email;
+      document.getElementById('auth-screen').style.display = 'none';
+      await loadFromSupabase(sb, session.user.id);
+      await verifyPremiumFromDB(sb, session.user.id);
+      checkPaymentSuccess();
+      checkTrialEnd();
+      checkDailyReset();
+      checkWeeklyReset();
+      if (ST.prenom && ST.cycleStart) {
+        document.getElementById('onboarding').style.display = 'none';
+        document.getElementById('app').style.display = 'flex';
+        initApp();
+      } else {
+        document.getElementById('onboarding').style.display = 'block';
+      }
+    } else if (event === 'SIGNED_OUT') {
+      showAuthScreen();
+    }
+  });
+}
+
+async function loadFromSupabase(sb, userId) {
+  try {
+    const { data } = await sb.from('user_data').select('data').eq('user_id', userId).single();
+    if (data && data.data) {
+      const parsed = data.data;
+      delete parsed.currentSaison;
+      delete parsed.currentDay;
+      if (!ST.prenom || (parsed.installDate && ST.installDate && parsed.installDate > ST.installDate)) {
+        ST = { ...ST, ...parsed };
+      } else if (parsed.prenom && !ST.prenom) {
+        ST = { ...ST, ...parsed };
+      }
+      saveState();
+    }
+  } catch(e) {}
+}
+
+let _syncTimer = null;
+function syncToSupabase() {
+  if (!ST.supabaseUserId || !_supabase) return;
+  clearTimeout(_syncTimer);
+  _syncTimer = setTimeout(async () => {
+    try {
+      const toSave = { ...ST };
+      delete toSave.currentSaison;
+      delete toSave.currentDay;
+      await _supabase.from('user_data').upsert({
+        user_id: ST.supabaseUserId,
+        data: toSave,
+        updated_at: new Date().toISOString(),
+      });
+    } catch(e) {}
+  }, 2000);
+}
+
+async function verifyPremiumFromDB(sb, userId) {
+  try {
+    const { data } = await sb.from('subscriptions').select('status,plan').eq('user_id', userId).single();
+    if (data && data.status === 'active') {
+      ST.isPremium = true;
+      ST.trialEnded = false;
+      ST.premiumPlan = data.plan;
+      saveState();
     }
   } catch(e) {}
 }
@@ -639,7 +771,13 @@ function checkPaymentSuccess() {
     return;
   }
 
-  // Cas 2 : API checkout Stripe avec ?session_id=cs_xxx — vérifie côté serveur
+  // Cas 2 : API checkout avec ?success=true&plan=xxx
+  if (params.get('success') === 'true') {
+    _activatePremium(params.get('plan') || 'monthly');
+    return;
+  }
+
+  // Cas 3 : API checkout Stripe avec ?session_id=cs_xxx — vérifie côté serveur
   const sessionId = params.get('session_id');
   if (sessionId && sessionId.startsWith('cs_')) {
     window.history.replaceState({}, '', '/');
@@ -861,8 +999,17 @@ const STRIPE_LINKS = {
 };
 
 function startStripeCheckout() {
-  const url = STRIPE_LINKS[_selectedBilanPlan] || STRIPE_LINKS.annual;
-  window.location.href = url;
+  const plan = _selectedBilanPlan || 'annual';
+  if (ST.supabaseUserId) {
+    const params = new URLSearchParams({ plan, user_id: ST.supabaseUserId });
+    if (ST.supabaseEmail) params.set('email', ST.supabaseEmail);
+    fetch('/api/create-checkout?' + params.toString())
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { if (data && data.url) window.location.href = data.url; })
+      .catch(() => { window.location.href = STRIPE_LINKS[plan] || STRIPE_LINKS.annual; });
+  } else {
+    window.location.href = STRIPE_LINKS[plan] || STRIPE_LINKS.annual;
+  }
 }
 
 function applyTrialLocks() {
@@ -2257,19 +2404,39 @@ function initApp() {
   try { saveState(); } catch(e) {}
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const inp = document.getElementById('input-prenom');
   if (inp) inp.addEventListener('blur', () => { setTimeout(() => { window.scrollTo(0, 0); }, 100); });
 
   loadState();
   if (!ST.installDate) { ST.installDate = Date.now(); saveState(); }
+
+  document.getElementById('revelation').style.display = 'none';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('auth-screen').style.display = 'none';
+
+  // Check Supabase session
+  try {
+    const sb = await initSupabase();
+    if (sb) {
+      const { data: { session } } = await sb.auth.getSession();
+      if (!session) {
+        showAuthScreen();
+        setupAuthListener(sb);
+        return;
+      }
+      ST.supabaseUserId = session.user.id;
+      ST.supabaseEmail = session.user.email;
+      await loadFromSupabase(sb, session.user.id);
+      await verifyPremiumFromDB(sb, session.user.id);
+      setupAuthListener(sb);
+    }
+  } catch(e) {}
+
   checkPaymentSuccess();
   checkTrialEnd();
   checkDailyReset();
   checkWeeklyReset();
-
-  document.getElementById('revelation').style.display = 'none';
-  document.getElementById('app').style.display = 'none';
 
   if (ST.prenom && ST.cycleStart) {
     document.getElementById('onboarding').style.display = 'none';

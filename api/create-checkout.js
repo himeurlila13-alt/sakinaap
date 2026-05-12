@@ -1,10 +1,10 @@
 const PRICES = {
-  monthly: 'price_1TURF9BpdWP3jbdz75bLYC0w',
-  annual:  'price_1TURH6BpdWP3jbdzH1HKUEtz',
+  monthly: process.env.STRIPE_PRICE_MENSUEL || 'price_1TURF9BpdWP3jbdz75bLYC0w',
+  annual:  process.env.STRIPE_PRICE_ANNUEL  || 'price_1TURH6BpdWP3jbdzH1HKUEtz',
 };
 
 module.exports = async (req, res) => {
-  const { plan } = req.query;
+  const { plan, user_id, email } = req.query;
 
   if (!PRICES[plan]) {
     return res.status(400).json({ error: 'Plan invalide' });
@@ -15,33 +15,49 @@ module.exports = async (req, res) => {
     return res.status(500).json({ error: 'Clé Stripe manquante' });
   }
 
-  const body = new URLSearchParams({
-    mode: 'subscription',
-    locale: 'fr',
-    'payment_method_types[]': 'card',
-    'line_items[0][price]': PRICES[plan],
-    'line_items[0][quantity]': '1',
-    success_url: 'https://sakinaap.com/?session_id={CHECKOUT_SESSION_ID}',
-    cancel_url: 'https://sakinaap.com/',
-    'metadata[plan]': plan,
-  });
-
   try {
-    const r = await fetch('https://api.stripe.com/v1/checkout/sessions', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${key}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: body.toString(),
-    });
-
-    const data = await r.json();
-
-    if (!r.ok) {
-      return res.status(500).json({ error: data.error?.message || 'Erreur Stripe' });
+    let customerId;
+    if (email) {
+      const search = await fetch(
+        `https://api.stripe.com/v1/customers?email=${encodeURIComponent(email)}&limit=1`,
+        { headers: { Authorization: `Bearer ${key}` } }
+      );
+      const searchData = await search.json();
+      if (searchData.data && searchData.data.length > 0) {
+        customerId = searchData.data[0].id;
+      } else {
+        const params = new URLSearchParams({ email });
+        if (user_id) params.set('metadata[user_id]', user_id);
+        const create = await fetch('https://api.stripe.com/v1/customers', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: params.toString(),
+        });
+        const createData = await create.json();
+        customerId = createData.id;
+      }
     }
 
+    const body = new URLSearchParams({
+      mode: 'subscription',
+      locale: 'fr',
+      'payment_method_types[]': 'card',
+      'line_items[0][price]': PRICES[plan],
+      'line_items[0][quantity]': '1',
+      success_url: `https://sakinaap.com/?success=true&plan=${plan}`,
+      cancel_url: 'https://sakinaap.com/',
+      'metadata[plan]': plan,
+      'metadata[user_id]': user_id || '',
+    });
+    if (customerId) body.append('customer', customerId);
+
+    const r = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body.toString(),
+    });
+    const data = await r.json();
+    if (!r.ok) return res.status(500).json({ error: data.error?.message || 'Erreur Stripe' });
     res.json({ url: data.url });
   } catch (e) {
     res.status(500).json({ error: e.message });
