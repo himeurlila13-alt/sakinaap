@@ -148,7 +148,7 @@ async function verifyReconnectCode() {
   const code = document.getElementById('reconnect-otp')?.value.trim().replace(/\s/g, '');
   const msg = document.getElementById('reconnect-msg');
   if (!code || code.length < 6) {
-    if (msg) { msg.style.display = 'block'; msg.textContent = 'Entre le code à 6 caractères.'; msg.style.color = '#C4694A'; msg.style.background = 'rgba(196,105,74,0.08)'; }
+    if (msg) { msg.style.display = 'block'; msg.textContent = 'Entre le code complet.'; msg.style.color = '#C4694A'; msg.style.background = 'rgba(196,105,74,0.08)'; }
     return;
   }
   const btn = document.getElementById('reconnect-verify-btn');
@@ -199,7 +199,7 @@ async function handleMagicLink() {
 async function verifyAuthCode() {
   const email = document.getElementById('auth-email').value.trim();
   const code = document.getElementById('auth-otp-input').value.trim().replace(/\s/g, '');
-  if (!code || code.length < 6) { showAuthMsg('Entre le code à 6 caractères.', 'error'); return; }
+  if (!code || code.length < 6) { showAuthMsg('Entre le code complet.', 'error'); return; }
   const btn = document.getElementById('auth-verify-btn');
   btn.disabled = true;
   btn.textContent = 'Vérification…';

@@ -91,7 +91,7 @@
       <div style="font-size:13px;color:#6B5B53;margin-bottom:16px;line-height:1.6;padding:12px;background:rgba(201,169,110,0.12);border-radius:12px;">
         📧 Code envoyé&nbsp;! Ouvre ton email et entre les <strong>6 caractères</strong> ici.<br><span style="font-size:11px;color:#C9A96E;">(Vérifie aussi les spams)</span>
       </div>
-      <input id="auth-otp-input" type="text" placeholder="· · · · · ·" inputmode="text" maxlength="6" autocomplete="one-time-code"
+      <input id="auth-otp-input" type="text" placeholder="· · · · · · · ·" inputmode="text" maxlength="8" autocomplete="one-time-code"
         style="width:100%;box-sizing:border-box;padding:16px;border:2px solid #C9A96E;border-radius:16px;font-size:26px;color:#2D2420;background:white;margin-bottom:12px;font-family:'DM Sans',sans-serif;outline:none;text-align:center;letter-spacing:10px;">
       <button id="auth-verify-btn" onclick="verifyAuthCode()"
         style="width:100%;padding:15px;background:linear-gradient(135deg,#3D2060,#7B5EA7);color:white;border:none;border-radius:16px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:10px;box-sizing:border-box;">
@@ -1375,7 +1375,7 @@
       <div style="font-size:13px;color:var(--gris);margin-bottom:14px;line-height:1.6;padding:10px;background:rgba(201,169,110,0.1);border-radius:10px;">
         📧 Code envoyé&nbsp;! Entre les 6 caractères de ton email&nbsp;:
       </div>
-      <input id="reconnect-otp" type="text" placeholder="· · · · · ·" inputmode="text" maxlength="6" autocomplete="one-time-code"
+      <input id="reconnect-otp" type="text" placeholder="· · · · · · · ·" inputmode="text" maxlength="8" autocomplete="one-time-code"
         style="width:100%;box-sizing:border-box;padding:14px;border:2px solid var(--gold,#C9A96E);border-radius:14px;font-size:26px;font-family:var(--sans);outline:none;text-align:center;letter-spacing:10px;margin-bottom:12px;">
       <button id="reconnect-verify-btn" onclick="verifyReconnectCode()" style="width:100%;padding:15px;background:var(--season-grad);color:white;border:none;border-radius:16px;font-size:15px;font-weight:600;font-family:var(--sans);cursor:pointer;">Valider ✓</button>
       <button onclick="resetReconnectStep()" style="background:none;border:none;color:var(--gris);font-size:12px;cursor:pointer;font-family:var(--sans);margin-top:8px;">&#8592; Changer d&rsquo;email</button>
