@@ -3310,19 +3310,36 @@ function drawCycleRing() {
   const ovDay = Math.max(10, dur - 14);
   const eteS = Math.max(8, ovDay - 2);
   const eteE = Math.min(dur - 2, ovDay + 2);
-  const phases = [{id:'seg-hiver',start:1,end:5,color:'#7B5EA7'},{id:'seg-printemps',start:6,end:eteS-1,color:'#3DAE8A'},{id:'seg-ete',start:eteS,end:eteE,color:'#E8834A'},{id:'seg-automne',start:eteE+1,end:dur,color:'#C4694A'}];
+  // Même logique que computeCycle : Printemps commence au lendemain du hiverEnd déclaré
+  let springStartD = 6;
+  if (ST.hiverEnd && ST.cycleStart) {
+    const [hey,hem,hed] = ST.hiverEnd.split('-').map(Number);
+    const [sy,sm,sd]   = ST.cycleStart.split('-').map(Number);
+    const diff = Math.floor((new Date(hey,hem-1,hed) - new Date(sy,sm-1,sd)) / 86400000);
+    springStartD = Math.max(2, diff + 1);
+  }
+  const eteSF = Math.max(springStartD, eteS);
+  const eteEF = Math.max(eteSF, eteE);
+  const phases = [
+    {id:'seg-hiver',     start:1,           end:springStartD-1, color:'#7B5EA7'},
+    {id:'seg-printemps', start:springStartD, end:eteSF-1,        color:'#3DAE8A'},
+    {id:'seg-ete',       start:eteSF,        end:eteEF,          color:'#E8834A'},
+    {id:'seg-automne',   start:eteEF+1,      end:dur,            color:'#C4694A'},
+  ];
   function polarToCart(angle) { const rad=(angle-90)*Math.PI/180; return {x:cx+r*Math.cos(rad),y:cy+r*Math.sin(rad)}; }
   function dayToAngle(d) { return ((d-1)/dur)*360; }
   function arcPath(s2,e2) { const a1=dayToAngle(s2),a2=dayToAngle(e2+1); const p1=polarToCart(a1),p2=polarToCart(a2); const large=(a2-a1)>180?1:0; return 'M '+p1.x+' '+p1.y+' A '+r+' '+r+' 0 '+large+' 1 '+p2.x+' '+p2.y; }
   phases.forEach(ph => {
     const el = document.getElementById(ph.id); if (!el) return;
     const end = Math.min(ph.end, dur);
-    if (ph.start > dur) { el.setAttribute('d',''); return; }
+    if (ph.start > end || ph.start > dur) { el.setAttribute('d',''); return; }
     el.setAttribute('d', arcPath(ph.start, end));
     el.setAttribute('stroke', ph.color);
   });
+  // Le point se place au minimum à springStartD si la saison est déjà Printemps
+  const dotDay = (ST.currentSaison !== 'hiver' && day < springStartD) ? springStartD : day;
   const dot = document.getElementById('day-dot');
-  if (dot) { const pos=polarToCart(dayToAngle(day)); dot.setAttribute('cx',pos.x); dot.setAttribute('cy',pos.y); dot.setAttribute('stroke','var(--season)'); }
+  if (dot) { const pos=polarToCart(dayToAngle(dotDay)); dot.setAttribute('cx',pos.x); dot.setAttribute('cy',pos.y); dot.setAttribute('stroke','var(--season)'); }
 }
 
 // ═══════════════════════════════════════════════
