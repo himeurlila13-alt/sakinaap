@@ -42,6 +42,21 @@
   </div>
 </div>
 
+<!-- BANDEAU RECONNEXION -->
+<div id="reconnect-nudge" style="display:none;position:fixed;bottom:72px;left:12px;right:12px;z-index:8000;background:linear-gradient(135deg,#3D2060,#7B5EA7);padding:12px 14px;border-radius:16px;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 4px 20px rgba(61,32,96,.35);">
+  <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
+    <span style="font-size:18px;flex-shrink:0;">&#128274;</span>
+    <div style="min-width:0;">
+      <div style="font-size:12px;font-weight:600;color:white;line-height:1.3;">Connecte-toi pour sauvegarder</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.75);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Tes données seront sync&eacute;es sur tous tes appareils</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:6px;flex-shrink:0;">
+    <button onclick="openReconnectFromNudge()" style="background:white;color:#3D2060;border:none;border-radius:10px;padding:7px 12px;font-size:12px;font-weight:700;cursor:pointer;">Se connecter</button>
+    <button onclick="dismissReconnectNudge()" style="background:rgba(255,255,255,.15);color:white;border:none;border-radius:10px;padding:7px 10px;font-size:14px;cursor:pointer;">&#215;</button>
+  </div>
+</div>
+
 <!-- BANNIERE MISE A JOUR -->
 <div id="update-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(135deg,var(--season,#3DAE8A),var(--season-light,#80D4B8));padding:12px 16px;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 2px 12px rgba(0,0,0,0.15);">
   <div style="display:flex;align-items:center;gap:10px;flex:1;">
@@ -838,6 +853,7 @@
     </div>
     <div class="ps-row" onclick="openEditCycle()"><div class="ps-ico">&#128197;</div><div><div class="ps-lbl">Modifier mon cycle</div><div class="ps-sub" id="psCycle">Configurer</div></div><div class="ps-arr">&#8250;</div></div>
     <div class="ps-row" onclick="openNotifSettings()"><div class="ps-ico">&#128276;</div><div><div class="ps-lbl">Rappels Sakina</div><div class="ps-sub">Configurer mes notifications</div></div><div class="ps-arr">&#8250;</div></div>
+    <div id="ps-auth-row" class="ps-row" onclick="openReconnectFromNudge()"><div class="ps-ico">&#128100;</div><div><div class="ps-lbl" id="ps-auth-lbl">Se connecter</div><div class="ps-sub" id="ps-auth-sub">Sauvegarde tes donn&eacute;es sur tous tes appareils</div></div><div class="ps-arr">&#8250;</div></div>
     <div class="ps-row" onclick="exportData()"><div class="ps-ico">&#128229;</div><div><div class="ps-lbl">Exporter mes données</div><div class="ps-sub">Télécharger un fichier JSON — RGPD</div></div><div class="ps-arr">&#8250;</div></div>
     <div class="ps-row" onclick="deleteMyData()"><div class="ps-ico">&#128465;</div><div><div class="ps-lbl" style="color:#C4694A;">Réinitialiser mes données</div><div class="ps-sub">Efface tout de cet appareil — RGPD</div></div><div class="ps-arr">&#8250;</div></div>
     <div class="ps-row" onclick="openMentionsLegales()"><div class="ps-ico">&#9878;</div><div><div class="ps-lbl">Mentions légales</div><div class="ps-sub">Éditrice, hébergeur, données</div></div><div class="ps-arr">&#8250;</div></div>
@@ -1324,6 +1340,19 @@
       <button onclick="handleProgressionAnswer('dur')" style="background:var(--sable);color:var(--gris);border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">&#128170; Dur mais je tiens &mdash; je continue</button>
       <button onclick="handleProgressionAnswer('dur_trop')" style="background:none;border:1px solid var(--sable);border-radius:14px;padding:14px;font-size:13px;color:var(--gris);font-family:var(--sans);cursor:pointer;">&#128549; Trop difficile &mdash; descendre d&rsquo;un niveau</button>
     </div>
+  </div>
+</div>
+
+<!-- MODAL RECONNEXION -->
+<div class="modal-overlay" id="reconnect-modal">
+  <div class="modal-sheet" style="padding:32px 24px 28px;text-align:center;">
+    <div style="font-size:44px;margin-bottom:14px;">&#128274;</div>
+    <div style="font-family:var(--serif);font-size:20px;color:var(--noir);margin-bottom:8px;">Reconnecte-toi</div>
+    <div style="font-size:13px;color:var(--gris);line-height:1.7;margin-bottom:24px;">Entre ton adresse email pour recevoir un lien de connexion.<br>Tes données seront synchronisées automatiquement.</div>
+    <input id="reconnect-email" type="email" placeholder="ton@email.com" style="width:100%;box-sizing:border-box;padding:14px 16px;border:1.5px solid var(--sable);border-radius:14px;font-size:15px;font-family:var(--sans);outline:none;margin-bottom:14px;">
+    <button id="reconnect-send-btn" onclick="handleReconnect()" style="width:100%;padding:15px;background:var(--season-grad);color:white;border:none;border-radius:16px;font-size:15px;font-weight:600;font-family:var(--sans);cursor:pointer;letter-spacing:0.3px;">Recevoir le lien 🌸</button>
+    <div id="reconnect-msg" style="display:none;margin-top:16px;font-size:13px;color:#3DAE8A;line-height:1.6;padding:12px;background:#F0FAF6;border-radius:12px;"></div>
+    <button onclick="document.getElementById('reconnect-modal').classList.remove('open')" style="margin-top:18px;background:none;border:none;color:var(--gris);font-size:13px;cursor:pointer;font-family:var(--sans);">Fermer</button>
   </div>
 </div>
 

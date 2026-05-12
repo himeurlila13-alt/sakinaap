@@ -107,6 +107,40 @@ function showAuthScreen() {
   document.getElementById('app').style.display = 'none';
 }
 
+function _showReconnectNudge() {
+  const el = document.getElementById('reconnect-nudge');
+  if (!el || ST.supabaseUserId) return;
+  el.style.display = 'flex';
+}
+
+function dismissReconnectNudge() {
+  const el = document.getElementById('reconnect-nudge');
+  if (el) el.style.display = 'none';
+}
+
+function openReconnectFromNudge() {
+  dismissReconnectNudge();
+  document.getElementById('reconnect-modal')?.classList.add('open');
+}
+
+async function handleReconnect() {
+  const email = document.getElementById('reconnect-email')?.value.trim();
+  if (!email || !email.includes('@')) { alert('Entre une adresse email valide.'); return; }
+  const btn = document.getElementById('reconnect-send-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Envoi…'; }
+  try {
+    const sb = await initSupabase();
+    const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: 'https://sakinaap.com/' } });
+    if (error) throw error;
+    const msg = document.getElementById('reconnect-msg');
+    if (msg) { msg.style.display = 'block'; msg.textContent = '✉️ Lien envoyé ! Clique dessus — tes données cloud seront synchronisées. (Vérifie les spams)'; }
+    if (btn) btn.style.display = 'none';
+  } catch(e) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Recevoir le lien'; }
+    alert('Erreur : ' + (e.message || 'Réessaie.'));
+  }
+}
+
 async function handleMagicLink() {
   const email = document.getElementById('auth-email').value.trim();
   if (!email || !email.includes('@')) { showAuthMsg('Entre une adresse email valide.', 'error'); return; }
@@ -2455,6 +2489,21 @@ function renderMoi(s) {
   const _pnm = document.getElementById('profil-name'); if (_pnm) _pnm.textContent = ST.prenom || '';
   const _psb = document.getElementById('profil-sub'); if (_psb) _psb.textContent = s.nom + ' · Jour ' + ST.currentDay;
   const pav = document.getElementById('profilAv'); if (pav) pav.textContent = s.emoji;
+  // Auth row
+  const lbl = document.getElementById('ps-auth-lbl');
+  const sub = document.getElementById('ps-auth-sub');
+  const row = document.getElementById('ps-auth-row');
+  if (lbl && sub && row) {
+    if (ST.supabaseEmail) {
+      lbl.textContent = 'Connectée ✓';
+      sub.textContent = ST.supabaseEmail;
+      row.onclick = () => { if (confirm('Se déconnecter ?')) { initSupabase().then(sb => sb.auth.signOut()); ST.supabaseUserId = null; ST.supabaseEmail = null; saveState(); renderMoi(s); } };
+    } else {
+      lbl.textContent = 'Se connecter';
+      sub.textContent = 'Sauvegarde tes données sur tous tes appareils';
+      row.onclick = openReconnectFromNudge;
+    }
+  }
   renderHistoriqueSport();
 }
 
@@ -2762,15 +2811,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (sb) {
       const { data: { session } } = await sb.auth.getSession();
       if (!session) {
-        showAuthScreen();
+        if (ST.prenom && ST.cycleStart) {
+          // Données locales présentes — laisser entrer, proposer reconnexion en douceur
+          setupAuthListener(sb);
+          setTimeout(_showReconnectNudge, 1800);
+        } else {
+          // Vraiment nouvelle utilisatrice — auth obligatoire
+          showAuthScreen();
+          setupAuthListener(sb);
+          return;
+        }
+      } else {
+        ST.supabaseUserId = session.user.id;
+        ST.supabaseEmail = session.user.email;
+        await loadFromSupabase(sb, session.user.id);
+        await verifyPremiumFromDB(sb, session.user.id);
         setupAuthListener(sb);
-        return;
       }
-      ST.supabaseUserId = session.user.id;
-      ST.supabaseEmail = session.user.email;
-      await loadFromSupabase(sb, session.user.id);
-      await verifyPremiumFromDB(sb, session.user.id);
-      setupAuthListener(sb);
     }
   } catch(e) {}
 
