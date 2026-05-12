@@ -117,7 +117,7 @@ async function handleMagicLink() {
     const sb = await initSupabase();
     const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: 'https://sakinaap.com/' } });
     if (error) throw error;
-    showAuthMsg('✉️ Vérifie ta boîte mail ! Clique sur le lien pour te connecter.', 'success');
+    showAuthMsg('✉️ Lien envoyé ! Ouvre ta boîte mail, clique sur le lien — tes données se chargeront automatiquement. (Vérifie aussi les spams)', 'success');
   } catch(e) {
     showAuthMsg('Erreur : ' + (e.message || 'Réessaie dans quelques instants.'), 'error');
     btn.disabled = false;
