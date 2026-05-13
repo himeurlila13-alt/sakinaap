@@ -437,143 +437,224 @@ body{font-family:var(--sans);background:var(--creme);color:var(--noir);-webkit-f
 
     <div class="app-screens-row">
 
-      <!-- Écran 1 : Accueil Printemps -->
+      <!-- ① Accueil Printemps -->
       <div class="app-mini">
         <div class="app-mini-phone">
-          <div class="app-mini-screen">
-            <div style="background:#4A7C59;padding:16px 10px 10px;text-align:center;position:relative;overflow:hidden;flex-shrink:0">
-              <div style="position:absolute;top:5px;right:7px;font-size:16px;opacity:.3;transform:rotate(15deg)">🌸</div>
-              <div style="font-family:var(--script);font-size:12px;color:rgba(255,255,255,.7);margin-bottom:2px">SakinApp</div>
-              <div style="font-size:5px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.8px;margin-bottom:1px">As-salamu alaykum</div>
-              <div style="font-family:var(--serif);font-size:10px;color:white;font-style:italic;margin-bottom:4px">Lila</div>
-              <div style="display:inline-flex;align-items:center;gap:2px;background:rgba(255,255,255,.2);border-radius:8px;padding:2px 7px">
-                <span style="font-size:7px">🌸</span>
-                <span style="font-size:5.5px;color:white;font-weight:600">Printemps · Jour 10</span>
+          <div class="app-mini-screen" style="background:#FAF6F0">
+            <!-- Logo SakinApp en haut -->
+            <div style="padding:10px 11px 5px;flex-shrink:0">
+              <div style="font-family:var(--script);font-size:15px;color:#3E8B70;line-height:1">SakinApp</div>
+            </div>
+            <!-- Carte header verte -->
+            <div style="margin:0 8px;background:#4A8B72;border-radius:14px;padding:10px 12px 12px;position:relative;overflow:hidden;flex-shrink:0">
+              <div style="position:absolute;top:5px;right:8px;font-size:17px;opacity:.55">🌸</div>
+              <div style="position:absolute;top:0px;right:20px;font-size:11px;opacity:.35">🌸</div>
+              <div style="position:absolute;top:10px;right:28px;font-size:8px;opacity:.25">🌸</div>
+              <div style="font-size:5.5px;color:rgba(255,255,255,.7);margin-bottom:1px">As-salamu alaykum</div>
+              <div style="font-family:var(--serif);font-size:18px;color:white;font-style:italic;line-height:1.1;margin-bottom:6px">Lila</div>
+              <div style="display:inline-flex;align-items:center;gap:3px;background:rgba(255,255,255,.22);border-radius:10px;padding:3px 9px">
+                <span style="font-size:8px">🌸</span>
+                <span style="font-size:6px;color:white;font-weight:600">Printemps · Jour 10</span>
               </div>
             </div>
-            <div style="flex:1;padding:7px 8px;display:flex;flex-direction:column;gap:5px;overflow:hidden">
-              <div style="background:white;border-radius:8px;padding:6px 8px;border-left:2.5px solid #4A7C59">
-                <div style="font-size:5px;font-weight:700;color:#4A7C59;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px">MESSAGE DU JOUR</div>
-                <div style="font-size:6px;color:#2D2420;font-style:italic;line-height:1.5">"En toi il y a quelque chose que personne d'autre ne peut donner au monde."</div>
+            <!-- Contenu -->
+            <div style="flex:1;padding:5px 8px;display:flex;flex-direction:column;gap:5px;overflow:hidden">
+              <!-- Message du jour -->
+              <div style="background:white;border-radius:10px;padding:7px 9px;display:flex;align-items:flex-start;gap:6px;border:1px solid #EADFD5">
+                <span style="font-size:11px;flex-shrink:0;margin-top:1px">🌸</span>
+                <div style="font-family:var(--serif);font-size:6.5px;color:#2D2420;font-style:italic;line-height:1.5">Tu rayonnes — c'est un bon jour pour donner, aider, ou simplement être pleinement présente.</div>
               </div>
-              <div style="background:white;border-radius:8px;padding:6px 8px">
-                <div style="font-size:5px;font-weight:700;color:#6B5B53;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px">MA JOURNÉE</div>
-                <div style="display:flex;gap:6px;justify-content:center">
-                  <div style="text-align:center"><div style="width:18px;height:18px;border-radius:50%;background:#4A7C59;margin:0 auto 2px;display:flex;align-items:center;justify-content:center;font-size:7px;color:white">✓</div><div style="font-size:4.5px;color:#6B5B53">Sport</div></div>
-                  <div style="text-align:center"><div style="width:18px;height:18px;border-radius:50%;background:#4A7C59;margin:0 auto 2px;display:flex;align-items:center;justify-content:center;font-size:7px;color:white">✓</div><div style="font-size:4.5px;color:#6B5B53">Repas</div></div>
-                  <div style="text-align:center"><div style="width:18px;height:18px;border-radius:50%;background:#4A7C59;margin:0 auto 2px;display:flex;align-items:center;justify-content:center;font-size:7px;color:white">✓</div><div style="font-size:4.5px;color:#6B5B53">Prières</div></div>
-                  <div style="text-align:center"><div style="width:18px;height:18px;border-radius:50%;border:1.5px solid #E8DDD0;margin:0 auto 2px"></div><div style="font-size:4.5px;color:#6B5B53">Dhikr</div></div>
+              <!-- MA JOURNÉE -->
+              <div style="background:white;border-radius:10px;padding:6px 8px;border:1px solid #EADFD5">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                  <div style="font-size:5.5px;font-weight:700;color:#2D2420;letter-spacing:.3px">MA JOURNÉE ✦</div>
+                  <div style="display:flex;gap:2px">
+                    <div style="width:4px;height:4px;border-radius:50%;background:#DACED0"></div>
+                    <div style="width:4px;height:4px;border-radius:50%;background:#DACED0"></div>
+                    <div style="width:4px;height:4px;border-radius:50%;background:#DACED0"></div>
+                    <div style="width:4px;height:4px;border-radius:50%;background:#DACED0"></div>
+                  </div>
+                </div>
+                <div style="display:flex;justify-content:space-around">
+                  <div style="text-align:center">
+                    <div style="width:26px;height:26px;border-radius:50%;border:1.5px solid #DACED0;margin:0 auto 3px;display:flex;align-items:center;justify-content:center;font-size:13px;background:white">🕌</div>
+                    <div style="font-size:4.5px;color:#2D2420;font-weight:500">Prières</div>
+                    <div style="font-size:4px;color:#4A8B72;font-weight:600">0/5</div>
+                  </div>
+                  <div style="text-align:center">
+                    <div style="width:26px;height:26px;border-radius:50%;border:1.5px solid #DACED0;margin:0 auto 3px;display:flex;align-items:center;justify-content:center;font-size:13px;background:white">📿</div>
+                    <div style="font-size:4.5px;color:#2D2420;font-weight:500">Dhikr</div>
+                  </div>
+                  <div style="text-align:center">
+                    <div style="width:26px;height:26px;border-radius:50%;border:1.5px solid #DACED0;margin:0 auto 3px;display:flex;align-items:center;justify-content:center;font-size:13px;background:white">💪</div>
+                    <div style="font-size:4.5px;color:#2D2420;font-weight:500">Séance</div>
+                  </div>
+                  <div style="text-align:center">
+                    <div style="width:26px;height:26px;border-radius:50%;border:1.5px solid #DACED0;margin:0 auto 3px;display:flex;align-items:center;justify-content:center;font-size:13px;background:white">📖</div>
+                    <div style="font-size:4.5px;color:#2D2420;font-weight:500">Coran</div>
+                  </div>
                 </div>
               </div>
-              <div style="background:white;border-radius:8px;padding:6px 8px">
-                <div style="font-size:5px;font-weight:700;color:#6B5B53;text-transform:uppercase;margin-bottom:2px">SÉANCE DU JOUR</div>
-                <div style="font-size:6px;color:#2D2420">Gainage dynamique · 20 min</div>
-                <div style="display:flex;gap:3px;margin-top:3px">
-                  <span style="background:#EDFBF4;color:#3A8C65;font-size:5px;padding:1px 5px;border-radius:5px;font-weight:600">Niveau 2</span>
+              <!-- Routine du jour -->
+              <div style="background:white;border-radius:10px;padding:6px 8px;border:1px solid #EADFD5;flex-shrink:0">
+                <div style="font-size:5.5px;font-weight:700;color:#2D2420;margin-bottom:4px">✨ TA ROUTINE DU JOUR</div>
+                <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:2px">
+                  <div style="font-size:6px;color:#2D2420;font-weight:600">✨ Masque avocat mûr et miel</div>
+                  <div style="background:#F2EDE8;color:#6B5B53;font-size:5px;padding:1px 4px;border-radius:4px;white-space:nowrap">12 min</div>
                 </div>
+                <div style="font-size:5.5px;color:#6B5B53;line-height:1.4;margin-bottom:3px">¼ avocat écrasé + 1 c.à.c miel. Applique, laisse 10–12 min, rince.</div>
+                <div style="background:#FFFDE7;border-radius:5px;padding:3px 5px;font-size:5px;color:#7A6830;line-height:1.4">💡 Vitamines E et B5 — peau éclatante et bien nourrie.</div>
               </div>
             </div>
-            <div style="display:flex;border-top:1px solid #F0EBE0;background:white;flex-shrink:0">
-              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:#4A7C59"><div style="font-size:8px">🏠</div>Accueil</div>
-              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:#6B5B53"><div style="font-size:8px">🌙</div>Cycle</div>
-              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:#6B5B53"><div style="font-size:8px">🕌</div>Âme</div>
-              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:#6B5B53"><div style="font-size:8px">🎯</div>Obj.</div>
-              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:#6B5B53"><div style="font-size:8px">👤</div>Moi</div>
+            <!-- Nav -->
+            <div style="display:flex;border-top:1px solid #EAE0D8;background:white;flex-shrink:0">
+              <div style="flex:1;padding:4px 2px 5px;text-align:center;font-size:4px;color:#3E8B70"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:block;margin:0 auto 1px"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Accueil<div style="width:3px;height:3px;border-radius:50%;background:#3E8B70;margin:1px auto 0"></div></div>
+              <div style="flex:1;padding:4px 2px 5px;text-align:center;font-size:4px;color:#8A7A72"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:block;margin:0 auto 1px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Cycle</div>
+              <div style="flex:1;padding:4px 2px 5px;text-align:center;font-size:4px;color:#8A7A72"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:block;margin:0 auto 1px"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Ame</div>
+              <div style="flex:1;padding:4px 2px 5px;text-align:center;font-size:4px;color:#8A7A72"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:block;margin:0 auto 1px"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>Objectifs</div>
+              <div style="flex:1;padding:4px 2px 5px;text-align:center;font-size:4px;color:#8A7A72"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:block;margin:0 auto 1px"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Moi</div>
             </div>
           </div>
         </div>
         <div class="app-mini-label">Accueil Printemps</div>
       </div>
 
-      <!-- Écran 2 : Cycle -->
+      <!-- ② Mon Cycle -->
       <div class="app-mini">
         <div class="app-mini-phone">
-          <div class="app-mini-screen">
-            <div style="background:linear-gradient(145deg,#3D5A4F,#2A4A3F);padding:14px 10px 10px;text-align:center;flex-shrink:0">
-              <div style="font-family:var(--script);font-size:12px;color:rgba(255,255,255,.7);margin-bottom:2px">SakinApp</div>
-              <div style="font-size:5.5px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.8px">Mon Cycle</div>
+          <div class="app-mini-screen" style="background:#EEF8F3">
+            <!-- Titre page -->
+            <div style="padding:10px 11px 4px;flex-shrink:0;background:#EEF8F3">
+              <div style="font-family:var(--script);font-size:15px;color:#3E8B70;line-height:1">Mon Cycle</div>
+              <div style="font-size:5px;color:#6B5B53;margin-top:2px">Printemps · Jour 10 sur 28</div>
             </div>
-            <div style="flex:1;padding:10px 8px;display:flex;flex-direction:column;align-items:center;gap:8px;overflow:hidden;background:#F7FBF8">
-              <!-- Roue des 4 saisons -->
-              <div style="position:relative;width:110px;height:110px">
-                <div style="width:110px;height:110px;border-radius:50%;background:conic-gradient(#C8B0E8 0deg 90deg,#A8D8C0 90deg 180deg,#F9E4A8 180deg 270deg,#F0B8A0 270deg 360deg);box-shadow:0 4px 16px rgba(0,0,0,.15)"></div>
-                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60px;height:60px;background:white;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.08)">
-                  <div style="font-size:8px;font-weight:700;color:#4A7C59">Jour 10</div>
-                  <div style="font-size:6.5px;color:#3A8C65;font-style:italic">Printemps</div>
+            <!-- Contenu -->
+            <div style="flex:1;padding:6px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;overflow:hidden">
+              <!-- Donut SVG -->
+              <svg viewBox="0 0 110 110" width="110" height="110" style="overflow:visible;flex-shrink:0">
+                <circle cx="55" cy="55" r="38" stroke="#E0D8CE" stroke-width="11" fill="none"/>
+                <!-- Hiver (violet) -->
+                <circle cx="55" cy="55" r="38" stroke="#7B5EA7" stroke-width="11" fill="none" stroke-dasharray="39.6 199.2" transform="rotate(-90 55 55)" stroke-linecap="round"/>
+                <!-- Printemps (teal) -->
+                <circle cx="55" cy="55" r="38" stroke="#4DB89A" stroke-width="11" fill="none" stroke-dasharray="56.7 182.1" transform="rotate(-21.2 55 55)" stroke-linecap="round"/>
+                <!-- Été (orange) -->
+                <circle cx="55" cy="55" r="38" stroke="#E8934A" stroke-width="11" fill="none" stroke-dasharray="31.1 207.7" transform="rotate(73.3 55 55)" stroke-linecap="round"/>
+                <!-- Automne (rust) -->
+                <circle cx="55" cy="55" r="38" stroke="#C46B50" stroke-width="11" fill="none" stroke-dasharray="99.2 139.6" transform="rotate(129.2 55 55)" stroke-linecap="round"/>
+                <!-- Point blanc position actuelle -->
+                <circle cx="82.7" cy="81.0" r="5" fill="white" stroke="#D0C8BE" stroke-width="1.5"/>
+                <!-- Texte centre -->
+                <text x="55" y="49" text-anchor="middle" font-family="'Playfair Display',serif" font-size="18" font-style="italic" fill="#2D2420">10</text>
+                <text x="55" y="59" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="5.5" fill="#6B5B53">Jour du cycle</text>
+                <text x="55" y="69" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="6.5" font-weight="700" fill="#3E8B70">Printemps</text>
+              </svg>
+              <!-- Légende -->
+              <div style="display:flex;gap:7px;justify-content:center;flex-wrap:wrap;flex-shrink:0">
+                <span style="font-size:5px;color:#7B5EA7;display:flex;align-items:center;gap:2px"><span style="width:5px;height:5px;border-radius:50%;background:#7B5EA7;display:inline-block"></span>Hiver</span>
+                <span style="font-size:5px;color:#4DB89A;display:flex;align-items:center;gap:2px"><span style="width:5px;height:5px;border-radius:50%;background:#4DB89A;display:inline-block"></span>Printemps</span>
+                <span style="font-size:5px;color:#E8934A;display:flex;align-items:center;gap:2px"><span style="width:5px;height:5px;border-radius:50%;background:#E8934A;display:inline-block"></span>Ete</span>
+                <span style="font-size:5px;color:#C46B50;display:flex;align-items:center;gap:2px"><span style="width:5px;height:5px;border-radius:50%;background:#C46B50;display:inline-block"></span>Automne</span>
+              </div>
+              <!-- Cartes info côte à côte -->
+              <div style="display:flex;gap:5px;width:100%;flex-shrink:0">
+                <div style="flex:1;background:#3E8B70;border-radius:8px;padding:7px 8px">
+                  <div style="font-size:4.5px;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;font-weight:600">PROCHAINES RÈGLES</div>
+                  <div style="font-size:20px;font-weight:700;color:white;line-height:1">18</div>
+                  <div style="font-size:5px;color:rgba(255,255,255,.7)">jours</div>
                 </div>
-                <!-- Labels saisons -->
-                <div style="position:absolute;top:4px;left:50%;transform:translateX(-50%);font-size:5px;color:#6B4FA0;font-weight:600">🌙 Hiver</div>
-                <div style="position:absolute;top:50%;right:2px;transform:translateY(-50%);font-size:5px;color:#3A8C65;font-weight:600">🌿</div>
-                <div style="position:absolute;bottom:4px;left:50%;transform:translateX(-50%);font-size:5px;color:#B07030;font-weight:600">☀️ Été</div>
-                <div style="position:absolute;top:50%;left:2px;transform:translateY(-50%);font-size:5px;color:#C4694A;font-weight:600">🍂</div>
+                <div style="flex:1;background:white;border-radius:8px;padding:7px 8px;border:1px solid #E0D8CE">
+                  <div style="font-size:4.5px;color:#8A7A72;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;font-weight:600">PHASE ACTUELLE</div>
+                  <div style="font-family:var(--script);font-size:12px;color:#3E8B70;line-height:1;margin-bottom:2px">folliculaire</div>
+                  <div style="font-size:5px;color:#6B5B53">J6 → J11</div>
+                </div>
               </div>
-              <!-- Prochaines règles -->
-              <div style="background:white;border-radius:8px;padding:7px 10px;width:100%;text-align:center;border:1px solid #E8DDD0">
-                <div style="font-size:5.5px;color:#6B5B53;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">PROCHAINES RÈGLES</div>
-                <div style="font-size:14px;font-weight:700;color:#2D2420">dans 18 jours</div>
-              </div>
-              <!-- Phase actuelle -->
-              <div style="background:#EDFBF4;border-radius:8px;padding:6px 10px;width:100%;border:1px solid #A8DBC5">
-                <div style="font-size:5.5px;color:#3A8C65;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;font-weight:700">PHASE ACTUELLE</div>
-                <div style="font-size:7px;color:#2A6A4A">Folliculaire — énergie en hausse ✨</div>
+              <!-- Symptômes -->
+              <div style="background:white;border-radius:8px;padding:6px 8px;width:100%;flex-shrink:0;border:1px solid #E0D8CE">
+                <div style="font-size:5.5px;font-weight:600;color:#2D2420;margin-bottom:2px">MES SYMPTÔMES DU JOUR</div>
+                <div style="font-size:5px;color:#8A7A72;font-style:italic;margin-bottom:4px">Coche ce que tu ressens - adapte a ta phase.</div>
+                <div style="display:flex;gap:4px">
+                  <div style="border:1px solid #E0D8CE;border-radius:6px;padding:3px 6px;font-size:5.5px;color:#2D2420;display:flex;align-items:center;gap:2px"><span style="color:#F5A500">⚡</span>Énergie</div>
+                  <div style="border:1px solid #E0D8CE;border-radius:6px;padding:3px 6px;font-size:5.5px;color:#2D2420;display:flex;align-items:center;gap:2px"><span>🌸</span>Bonne humeur</div>
+                </div>
               </div>
             </div>
-            <div style="display:flex;border-top:1px solid #F0EBE0;background:white;flex-shrink:0">
-              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:#6B5B53"><div style="font-size:8px">🏠</div>Accueil</div>
-              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:#3A8C65"><div style="font-size:8px">🌙</div>Cycle</div>
-              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:#6B5B53"><div style="font-size:8px">🕌</div>Âme</div>
-              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:#6B5B53"><div style="font-size:8px">🎯</div>Obj.</div>
-              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:#6B5B53"><div style="font-size:8px">👤</div>Moi</div>
+            <!-- Nav -->
+            <div style="display:flex;border-top:1px solid #EAE0D8;background:white;flex-shrink:0">
+              <div style="flex:1;padding:4px 2px 5px;text-align:center;font-size:4px;color:#8A7A72"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:block;margin:0 auto 1px"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Accueil</div>
+              <div style="flex:1;padding:4px 2px 5px;text-align:center;font-size:4px;color:#3E8B70"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:block;margin:0 auto 1px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Cycle<div style="width:3px;height:3px;border-radius:50%;background:#3E8B70;margin:1px auto 0"></div></div>
+              <div style="flex:1;padding:4px 2px 5px;text-align:center;font-size:4px;color:#8A7A72"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:block;margin:0 auto 1px"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Ame</div>
+              <div style="flex:1;padding:4px 2px 5px;text-align:center;font-size:4px;color:#8A7A72"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:block;margin:0 auto 1px"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>Objectifs</div>
+              <div style="flex:1;padding:4px 2px 5px;text-align:center;font-size:4px;color:#8A7A72"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:block;margin:0 auto 1px"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Moi</div>
             </div>
           </div>
         </div>
         <div class="app-mini-label">Cycle · Roue des saisons</div>
       </div>
 
-      <!-- Écran 3 : Âme -->
+      <!-- ③ L'Âme -->
       <div class="app-mini">
         <div class="app-mini-phone">
-          <div class="app-mini-screen">
-            <div style="background:#2A4A3F;padding:14px 10px 10px;text-align:center;flex-shrink:0">
-              <div style="font-family:var(--script);font-size:12px;color:rgba(255,255,255,.7);margin-bottom:2px">SakinApp</div>
-              <div style="font-size:5.5px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.8px">Âme</div>
+          <div class="app-mini-screen" style="background:#FAF6F0">
+            <!-- Titre page -->
+            <div style="padding:10px 11px 4px;flex-shrink:0">
+              <div style="font-family:var(--script);font-size:15px;color:#3E8B70;line-height:1">L'Ame</div>
+              <div style="font-size:5px;color:#8A7A72;font-style:italic;margin-top:2px">Nourrir son intérieur</div>
             </div>
-            <div style="flex:1;background:#2A4A3F;padding:8px;display:flex;flex-direction:column;gap:6px;overflow:hidden">
-              <!-- Nom d'Allah -->
-              <div style="background:rgba(255,255,255,.08);border-radius:10px;padding:10px 8px;text-align:center">
-                <div style="font-size:5px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:5px">NOM D'ALLAH DU JOUR</div>
-                <div style="font-size:26px;color:white;font-weight:400;line-height:1.1;margin-bottom:3px;direction:rtl">الْمُؤَخِّر</div>
-                <div style="font-size:8px;color:rgba(255,255,255,.85);font-weight:600;margin-bottom:2px">Al-Mu'akhkhir</div>
-                <div style="font-size:6.5px;color:rgba(255,255,255,.55);font-style:italic">Celui qui retarde</div>
-              </div>
-              <!-- Progress -->
-              <div style="background:rgba(255,255,255,.08);border-radius:8px;padding:6px 8px">
-                <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-                  <div style="font-size:5px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.3px">Progression</div>
-                  <div style="font-size:5px;color:rgba(255,255,255,.5)">0 / 99</div>
+            <!-- Contenu -->
+            <div style="flex:1;padding:0 8px 6px;display:flex;flex-direction:column;gap:5px;overflow:hidden">
+              <!-- NOM D'ALLAH card verte foncée -->
+              <div style="background:#3A7A63;border-radius:12px;padding:10px 10px 8px;text-align:center;flex-shrink:0">
+                <div style="font-size:4.5px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:4px">✦ NOM D'ALLAH DU JOUR</div>
+                <div style="font-size:26px;color:white;font-weight:400;line-height:1.1;margin-bottom:3px;direction:rtl">الْمُؤَخِّرُ</div>
+                <div style="font-family:var(--serif);font-size:8px;color:rgba(255,255,255,.9);font-style:italic;margin-bottom:6px">Al-Mu'akhkhir · Celui qui retarde</div>
+                <div style="background:rgba(255,255,255,.18);border-radius:3px;height:3px;margin-bottom:3px;overflow:hidden">
+                  <div style="background:rgba(255,255,255,.4);width:1%;height:100%;border-radius:3px"></div>
                 </div>
-                <div style="background:rgba(255,255,255,.15);border-radius:3px;height:4px;overflow:hidden">
-                  <div style="background:#C9A96E;width:1%;height:100%;border-radius:3px"></div>
+                <div style="font-size:5px;color:rgba(255,255,255,.5)">0/99 · Touche pour voir les 99 noms</div>
+              </div>
+              <!-- Livret de méditation (violet) -->
+              <div style="background:#6B5EA7;border-radius:10px;padding:8px 10px;display:flex;align-items:center;gap:7px;flex-shrink:0">
+                <div style="width:26px;height:26px;border-radius:8px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">📖</div>
+                <div style="flex:1;min-width:0">
+                  <div style="font-size:7px;color:white;font-weight:700;margin-bottom:2px">Livret de méditation</div>
+                  <div style="font-size:5.5px;color:rgba(255,255,255,.7);line-height:1.3">Les 99 Noms d'Allah · Sens, méditation &amp; invocation</div>
+                </div>
+                <div style="flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+                  <div style="background:rgba(255,255,255,.22);border-radius:5px;padding:2px 5px;font-size:5px;color:white;font-weight:700;letter-spacing:.3px">GRATUIT</div>
+                  <div style="font-size:9px;color:rgba(255,255,255,.5)">›</div>
                 </div>
               </div>
-              <!-- Prières -->
-              <div style="background:rgba(255,255,255,.08);border-radius:8px;padding:6px 8px">
-                <div style="font-size:5px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.3px;margin-bottom:5px">MES 5 PRIÈRES</div>
-                <div style="display:flex;gap:4px;justify-content:center">
-                  <div style="text-align:center"><div style="width:14px;height:14px;border-radius:50%;background:#C9A96E;margin:0 auto 2px;display:flex;align-items:center;justify-content:center;font-size:6px;color:white">✓</div><div style="font-size:4px;color:rgba(255,255,255,.5)">Fajr</div></div>
-                  <div style="text-align:center"><div style="width:14px;height:14px;border-radius:50%;background:#C9A96E;margin:0 auto 2px;display:flex;align-items:center;justify-content:center;font-size:6px;color:white">✓</div><div style="font-size:4px;color:rgba(255,255,255,.5)">Dohr</div></div>
-                  <div style="text-align:center"><div style="width:14px;height:14px;border-radius:50%;border:1.5px solid rgba(255,255,255,.3);margin:0 auto 2px"></div><div style="font-size:4px;color:rgba(255,255,255,.5)">Asr</div></div>
-                  <div style="text-align:center"><div style="width:14px;height:14px;border-radius:50%;border:1.5px solid rgba(255,255,255,.3);margin:0 auto 2px"></div><div style="font-size:4px;color:rgba(255,255,255,.5)">Magh.</div></div>
-                  <div style="text-align:center"><div style="width:14px;height:14px;border-radius:50%;border:1.5px solid rgba(255,255,255,.3);margin:0 auto 2px"></div><div style="font-size:4px;color:rgba(255,255,255,.5)">Ichâ</div></div>
+              <!-- Mes 5 prières -->
+              <div style="background:white;border-radius:10px;padding:7px 9px;border:1px solid #EADFD5;flex:1">
+                <div style="font-size:6px;font-weight:600;color:#2D2420;margin-bottom:1px">🕌 Mes 5 prières</div>
+                <div style="font-size:5px;color:#8A7A72;font-style:italic;margin-bottom:4px">Coche au fur et a mesure de ta journée</div>
+                <div style="background:#F2EDE8;border-radius:3px;height:3px;margin-bottom:2px">
+                  <div style="background:#DACED0;width:0%;height:100%;border-radius:3px"></div>
+                </div>
+                <div style="font-size:5px;color:#8A7A72;text-align:right;margin-bottom:4px">0 / 5</div>
+                <div style="border-bottom:1px solid #F2EDE8;padding:4px 0;display:flex;justify-content:space-between;align-items:center">
+                  <div style="display:flex;align-items:center;gap:5px">
+                    <div style="width:13px;height:13px;border-radius:50%;border:1.5px solid #DACED0;flex-shrink:0"></div>
+                    <div style="font-size:6.5px;color:#2D2420;font-weight:500">Fajr</div>
+                  </div>
+                  <div style="font-size:5.5px;color:#8A7A72">Aube</div>
+                </div>
+                <div style="padding:4px 0;display:flex;justify-content:space-between;align-items:center">
+                  <div style="display:flex;align-items:center;gap:5px">
+                    <div style="width:13px;height:13px;border-radius:50%;border:1.5px solid #DACED0;flex-shrink:0"></div>
+                    <div style="font-size:6.5px;color:#2D2420;font-weight:500">Dhuhr</div>
+                  </div>
+                  <div style="font-size:5.5px;color:#8A7A72">Midi</div>
                 </div>
               </div>
             </div>
-            <div style="display:flex;border-top:1px solid rgba(255,255,255,.1);background:#1E3A30;flex-shrink:0">
-              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:rgba(255,255,255,.4)"><div style="font-size:8px">🏠</div>Accueil</div>
-              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:rgba(255,255,255,.4)"><div style="font-size:8px">🌙</div>Cycle</div>
-              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:#C9A96E"><div style="font-size:8px">🕌</div>Âme</div>
-              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:rgba(255,255,255,.4)"><div style="font-size:8px">🎯</div>Obj.</div>
-              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:rgba(255,255,255,.4)"><div style="font-size:8px">👤</div>Moi</div>
+            <!-- Nav -->
+            <div style="display:flex;border-top:1px solid #EAE0D8;background:white;flex-shrink:0">
+              <div style="flex:1;padding:4px 2px 5px;text-align:center;font-size:4px;color:#8A7A72"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:block;margin:0 auto 1px"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Accueil</div>
+              <div style="flex:1;padding:4px 2px 5px;text-align:center;font-size:4px;color:#8A7A72"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:block;margin:0 auto 1px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Cycle</div>
+              <div style="flex:1;padding:4px 2px 5px;text-align:center;font-size:4px;color:#3E8B70"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:block;margin:0 auto 1px"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Ame<div style="width:3px;height:3px;border-radius:50%;background:#3E8B70;margin:1px auto 0"></div></div>
+              <div style="flex:1;padding:4px 2px 5px;text-align:center;font-size:4px;color:#8A7A72"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:block;margin:0 auto 1px"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>Objectifs</div>
+              <div style="flex:1;padding:4px 2px 5px;text-align:center;font-size:4px;color:#8A7A72"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:block;margin:0 auto 1px"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Moi</div>
             </div>
           </div>
         </div>
