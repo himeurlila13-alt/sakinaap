@@ -1116,7 +1116,10 @@ function startStripeCheckout() {
     if (ST.supabaseEmail) params.set('email', ST.supabaseEmail);
     fetch('/api/create-checkout?' + params.toString())
       .then(r => r.ok ? r.json() : null)
-      .then(data => { if (data && data.url) window.location.href = data.url; })
+      .then(data => {
+        if (data && data.url) window.location.href = data.url;
+        else window.location.href = STRIPE_LINKS[plan] || STRIPE_LINKS.annual;
+      })
       .catch(() => { window.location.href = STRIPE_LINKS[plan] || STRIPE_LINKS.annual; });
   } else {
     window.location.href = STRIPE_LINKS[plan] || STRIPE_LINKS.annual;
