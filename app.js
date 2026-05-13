@@ -255,8 +255,11 @@ function setupAuthListener(sb) {
     if (event === 'SIGNED_IN' && session) {
       ST.supabaseUserId = session.user.id;
       ST.supabaseEmail = session.user.email;
+      ST.isAuthenticated = true;
+      ST.userEmail = ST.userEmail || session.user.email;
       document.getElementById('auth-screen').style.display = 'none';
       await loadFromSupabase(sb, session.user.id);
+      ST.isAuthenticated = true;
       await verifyPremiumFromDB(sb, session.user.id);
       checkPaymentSuccess();
       checkTrialEnd();
@@ -282,6 +285,9 @@ async function loadFromSupabase(sb, userId) {
       const parsed = data.data;
       delete parsed.currentSaison;
       delete parsed.currentDay;
+      delete parsed.isAuthenticated;
+      delete parsed.userEmail;
+      delete parsed.authDate;
       if (!ST.prenom || (parsed.installDate && ST.installDate && parsed.installDate > ST.installDate)) {
         ST = { ...ST, ...parsed };
       } else if (parsed.prenom && !ST.prenom) {
@@ -2957,7 +2963,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       } else {
         ST.supabaseUserId = session.user.id;
         ST.supabaseEmail = session.user.email;
+        ST.isAuthenticated = true;
+        ST.userEmail = ST.userEmail || session.user.email;
         await loadFromSupabase(sb, session.user.id);
+        ST.isAuthenticated = true;
         await verifyPremiumFromDB(sb, session.user.id);
         setupAuthListener(sb);
       }
