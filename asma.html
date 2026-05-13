@@ -611,7 +611,7 @@ margin-bottom: 4px;
     </div>
     <div style="display:flex;align-items:flex-start;gap:3mm;padding:3mm 4mm;border-left:2px solid var(--sable);">
       <span style="font-size:12px;flex-shrink:0;">🍂</span>
-      <div><div style="font-size:8px;font-weight:700;color:var(--noir);margin-bottom:1mm;">Automne — Phase de profondeur</div><div style="font-size:9px;color:var(--gris);line-height:1.6;">At-Tawwab (Le Grand Repentant) · Al-Wali (Le Proche) · Al-Halim (Le Clément) · Al-Wadud (Le Plein d'Amour)</div></div>
+      <div><div style="font-size:8px;font-weight:700;color:var(--noir);margin-bottom:1mm;">Automne — Phase de profondeur</div><div style="font-size:9px;color:var(--gris);line-height:1.6;">At-Tawwab (Celui qui agrée le repentir) · Al-Wali (Le Proche) · Al-Halim (Le Clément) · Al-Wadud (Le Plein d'Amour)</div></div>
     </div>
   </div>
 
@@ -679,7 +679,7 @@ const ASMA = [
   {num:1,  ar:'اللَّهُ',           tl:'Allah',          fr:'Le Nom qui englobe tous les autres',
    sens:"Le nom suprême qui contient en lui tous les autres attributs divins. Avant tout acte, avant toute pensée — dis Son nom.",
    med:"Ce matin, commence chaque action en disant simplement : Bismillah. Laisse ce nom poser une intention sur chaque geste.",
-   inv:"يَا اللَّهُ، أَنْتَ مَقْصُودِي", inv_fr:'"Ô Allah, Tu es mon but."'},
+   inv:"اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ", inv_fr:'"Ô Allah, Tu es mon Seigneur, pas de divinité hormis Toi." (Bukhari 6306)'},
 
   {num:2,  ar:'الرَّحْمَنُ',       tl:'Ar-Rahman',      fr:'Le Tout Miséricordieux',
    sens:"Sa miséricorde s'étend à toutes Ses créatures sans exception — croyants et non-croyants, humains et animaux. Elle précède Sa colère.",
@@ -894,7 +894,7 @@ const ASMA = [
   {num:44, ar:'الرَّقِيبُ',        tl:'Ar-Raqib',       fr:'Le Vigilant, Celui qui surveille',
    sens:"Il observe en permanence — les actions, les paroles, les pensées, les intentions cachées. Rien ne Lui échappe.",
    med:"\"Il sait la trahison des regards et ce que cachent les poitrines.\" (Coran 40:19) Vis avec cette conscience.",
-   inv:"يَا رَقِيبُ اجْعَلْنِي مُرَاقِبًا لَكَ", inv_fr:'"Ô Vigilant, fais que je sois consciente de Ta présence."'},
+   inv:"يَا رَقِيبُ اجْعَلْنِي مُرَاقِبَةً لَكَ", inv_fr:'"Ô Vigilant, fais que je sois consciente de Ta présence."'},
 
   {num:45, ar:'الْمُجِيبُ',        tl:'Al-Mujib',       fr:'Celui qui répond aux prières',
    sens:"Il répond à chaque supplication — pas toujours comme on le souhaite, pas toujours quand on le souhaite, mais toujours.",
@@ -985,7 +985,7 @@ const ASMA = [
   {num:62, ar:'الْمُمِيتُ',        tl:'Al-Mumit',       fr:'Le Donneur de mort',
    sens:"La mort n'est pas un accident. Elle est voulue, précise, parfaite. Al-Mumit prend les âmes au moment exact qu'Il a fixé.",
    med:"La conscience de la mort n'est pas déprimante. Elle est libératrice. Elle remet chaque chose à sa juste place.",
-   inv:"يَا مُمِيتُ أَمِتْنِي وَأَنَا رَاضٍ عَنْكَ", inv_fr:'"Ô Donneur de mort, fais que je meure en étant satisfaite de Toi."'},
+   inv:"يَا مُمِيتُ أَمِتْنِي وَأَنَا رَاضِيَةٌ عَنْكَ", inv_fr:'"Ô Donneur de mort, fais que je meure en étant satisfaite de Toi."'},
 
   {num:63, ar:'الْحَيُّ',          tl:'Al-Hayy',        fr:'Le Vivant, L\'Éternellement Vivant',
    sens:"Il ne dort pas, ne se fatigue pas, ne s'éteint jamais. Sa vie est absolue — elle n'a ni début ni fin.",
@@ -1003,7 +1003,7 @@ const ASMA = [
    inv:"يَا وَاجِدُ اجْعَلْنِي وَاجِدَةً مَا أَطْلُبُ مِنْكَ", inv_fr:'"Ô Celui qui trouve tout, fais que je trouve ce que je Te demande."'},
 
   {num:66, ar:'الْمَاجِدُ',        tl:'Al-Majid',       fr:'Le Glorieux en actes',
-   sens:"Al-Mujid est la gloire en attributs ; Al-Majid est la gloire en actes. Sa générosité glorieuse se manifeste dans chaque don.",
+   sens:"Al-Mājiد exprime la gloire dans les actes et la générosité. Sa générosité glorieuse se manifeste dans chaque don qu'Il accorde.",
    med:"Regarde autour de toi les marques de Sa générosité glorieuse. Elles sont partout.",
    inv:"يَا مَاجِدُ امْنَحْنِي مِنْ فَضْلِكَ", inv_fr:'"Ô Glorieux, accorde-moi de Ta faveur."'},
 
@@ -1072,10 +1072,10 @@ const ASMA = [
    med:"Toute bonté que tu as reçue dans ta vie — quelle qu'en soit la source apparente — vient de Al-Barr.",
    inv:"يَا بَرُّ أَحْسِنْ إِلَيَّ كَمَا أَحْسَنْتَ مِنْ قَبْلُ", inv_fr:'"Ô Bienfaisant, sois bon envers moi comme Tu l\'as été avant."'},
 
-  {num:80, ar:'التَّوَّابُ',       tl:'At-Tawwab',      fr:'Le Grand Repentant, Celui qui revient',
+  {num:80, ar:'التَّوَّابُ',       tl:'At-Tawwab',      fr:'Celui qui agrée le repentir, Celui qui revient',
    sens:"Il accueille le repentir encore et encore. Il n'y a pas de limite au nombre de fois qu'Il pardonne celui qui revient sincèrement.",
    med:"Tu n'es pas tombée trop bas. Tu n'as pas péché trop souvent. At-Tawwab attend ton retour.",
-   inv:"تُبْ عَلَيَّ يَا تَوَّابُ", inv_fr:'"Accepte mon repentir, ô Grand Repentant."'},
+   inv:"تُبْ عَلَيَّ يَا تَوَّابُ", inv_fr:'"Agrée mon repentir, ô Toi qui agrées le retour."'},
 
   {num:81, ar:'الْمُنْتَقِمُ',     tl:'Al-Muntaqim',    fr:'Celui qui punit, le Vengeur',
    sens:"Il punit les injustes — non par colère incontrôlée, mais par justice parfaite. Sa vengeance est toujours méritée.",
@@ -1093,7 +1093,7 @@ const ASMA = [
    inv:"يَا رَؤُوفُ ارْأَفْ بِي فِي ضَعْفِي", inv_fr:'"Ô Très Compatissant, sois compatissant envers moi dans ma faiblesse."'},
 
   {num:84, ar:'مَالِكُ الْمُلْكِ', tl:'Malik-ul-Mulk',  fr:'Maître du Royaume',
-   sens:"Il possède tout royaumes — ceux de la terre et ceux des cieux. Il donne la royauté à qui Il veut et la retire à qui Il veut.",
+   sens:"Il possède tous les royaumes — ceux de la terre et ceux des cieux. Il donne la royauté à qui Il veut et la retire à qui Il veut.",
    med:"\"Tu donnes la royauté à qui Tu veux et Tu l'enlèves à qui Tu veux.\" (Coran 3:26) Aucun trône n'est permanent.",
    inv:"يَا مَالِكَ الْمُلْكِ أَعْطِنِي مَا يَنْفَعُنِي", inv_fr:'"Ô Maître du Royaume, donne-moi ce qui me profite."'},
 
@@ -1169,7 +1169,7 @@ const ASMA = [
 
   {num:99, ar:'الصَّبُورُ',        tl:'As-Sabur',       fr:'Le Patient',
    sens:"Il est Patient — Il ne Se précipite pas pour punir. Et Sa patience est un modèle pour nous dans nos propres épreuves.",
-   med:"\"Sois patiente avec toi-même comme Il l'est avec toi.\" As-Sabur attend ton retour avec une patience infinie.",
+   med:"Sa patience infinie envers nous est un modèle — essayons de cultiver cette même douceur envers nous-mêmes. As-Sabur attend ton retour, toujours.",
    inv:"يَا صَبُورُ أَعِنِّي عَلَى الصَّبْرِ", inv_fr:'"Ô Patient, aide-moi à être patiente."'},
 ];
 
