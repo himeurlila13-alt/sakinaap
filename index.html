@@ -502,6 +502,13 @@
     </div>
   </div>
 
+  <!-- BILAN PERMANENT -->
+  <div id="moi-bilan-card" style="margin:0 14px 14px;background:white;border-radius:20px;border:1.5px solid var(--sable);padding:18px 20px;display:none;">
+    <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:14px;">&#10022; Mon bilan</div>
+    <div id="moi-bilan-body"></div>
+    <button onclick="showBilanModal()" style="width:100%;margin-top:12px;padding:11px;background:var(--season-grad);color:white;border:none;border-radius:14px;font-size:13px;font-weight:700;font-family:var(--sans);cursor:pointer;letter-spacing:.3px;">Voir le bilan complet</button>
+  </div>
+
   <!-- SÉPARATEUR HISTORIQUE -->
   <div style="margin:20px 14px 14px;display:flex;align-items:center;gap:10px;">
     <div style="flex:1;height:1px;background:var(--sable);"></div>
@@ -1289,7 +1296,7 @@
     <div class="bilan-header">
       <div class="bilan-header-emoji">🌙</div>
       <div class="bilan-header-label">Ton premier cycle</div>
-      <div class="bilan-header-title">Alhamdulillah ✦<br><span style="font-size:16px;font-family:var(--sans);font-weight:400;">tu as travers&#233; 20 jours</span></div>
+      <div class="bilan-header-title">Alhamdulillah ✦<br><span id="bilan-header-days" style="font-size:16px;font-family:var(--sans);font-weight:400;">tu as travers&#233; 20 jours</span></div>
     </div>
     <div class="bilan-body" id="bilan-body"></div>
     <div class="bilan-footer">

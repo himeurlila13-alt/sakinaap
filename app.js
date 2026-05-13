@@ -837,22 +837,22 @@ function computeCycle() {
   }
   ST.currentDay = Math.max(1, Math.min(day, dur));
 
-  // La phase lutéale est ~14j avant la fin — c'est elle qui est constante.
-  // C'est la phase folliculaire (Printemps) qui s'allonge ou raccourcit selon le cycle.
+  // La phase lutéale (~14j avant la fin) est constante — la folliculaire (Printemps) s'allonge/raccourcit.
+  // Pour les cycles courts (<27j) : Hiver = 4j au lieu de 5j, ovulation sans minimum artificiel à J10.
   const d = ST.currentDay;
-  const ovulationDay = Math.max(10, dur - 14); // ovulation ≈ 14j avant les prochaines règles
-  const eteStart = Math.max(8, ovulationDay - 2); // fenêtre fertile : 2j avant ovulation
-  const eteEnd = Math.min(dur - 2, ovulationDay + 2); // 2j après ovulation
-
-  // springStartD = premier jour (1-indexed) de Printemps — J6 par défaut, ou lendemain du hiverEnd déclaré
-  let springStartD = 6;
+  const hiverDays = Math.min(5, Math.max(3, Math.round(dur * 0.18))); // 4j si <27j, 5j sinon
+  let springStartD = hiverDays + 1;
   if (ST.hiverEnd) {
     const [hey, hem, hed] = ST.hiverEnd.split('-').map(Number);
     const hiverEndLocal = new Date(hey, hem - 1, hed);
     const hiverEndDiff = Math.floor((hiverEndLocal - startLocal) / (1000 * 60 * 60 * 24));
     springStartD = Math.max(2, hiverEndDiff + 1);
   }
-  const eteStartFinal = Math.max(springStartD, eteStart);
+  // Ovulation = dur - 14 (biologie réelle), avec min pour garantir 3j de Printemps
+  const ovulationDay = Math.max(springStartD + 3, dur - 14);
+  const eteStart = Math.max(springStartD + 2, ovulationDay - 2);
+  const eteEnd = Math.min(dur - 1, ovulationDay + 2);
+  const eteStartFinal = Math.max(springStartD + 2, eteStart);
   const eteEndFinal   = Math.max(eteStartFinal, eteEnd);
 
   if (d < springStartD) ST.currentSaison = 'hiver';
@@ -1044,6 +1044,10 @@ function showBilanModal() {
   if (!el) return;
   const { seanceCount, seanceLevel, symptomDays, prayerDays, allPrayersDays, dhikrDays, coranDays, objCheckCount, cycleDuration } = _bilanStats();
 
+  const joursSuivis = Math.min(ST.currentDay || getTrialDays() || 20, ST.cycleDuration || 28);
+  const headerDays = document.getElementById('bilan-header-days');
+  if (headerDays) headerDays.textContent = `tu as traversé ${joursSuivis} jour${joursSuivis > 1 ? 's' : ''}`;
+
   const spiritualScore = prayerDays + dhikrDays + coranDays;
   const corpsScore = seanceCount * 2;
   const mainStrength = spiritualScore >= corpsScore ? '🕌 Âme' : '💪 Corps';
@@ -1063,7 +1067,7 @@ function showBilanModal() {
       <span class="bilan-phase-arrow">→</span>
       <span class="bilan-phase-chip bilan-automne">🍂 Automne</span>
     </div>
-    <div class="bilan-strength-line">Ta force ce cycle&nbsp;: <strong>${mainStrength}</strong> · 20 jours traversés</div>
+    <div class="bilan-strength-line">Ta force ce cycle&nbsp;: <strong>${mainStrength}</strong> · ${joursSuivis} jour${joursSuivis > 1 ? 's' : ''} traversé${joursSuivis > 1 ? 's' : ''}</div>
 
     <div class="bilan-section-lbl">💪 Corps</div>
     <div class="bilan-grid-3">
@@ -2668,6 +2672,67 @@ function renderMoi(s) {
       row.onclick = openReconnectFromNudge;
     }
   }
+  renderMoiBilan();
+  renderCycleHistory();
+  renderPatterns();
+}
+
+function renderMoiBilan() {
+  const card = document.getElementById('moi-bilan-card');
+  const body = document.getElementById('moi-bilan-body');
+  if (!card || !body) return;
+  if (!ST.cycleStart) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+
+  const { seanceCount, seanceLevel, symptomDays, prayerDays, allPrayersDays, dhikrDays, coranDays, objCheckCount } = _bilanStats();
+  const joursSuivis = ST.currentDay || 1;
+  const dur = ST.cycleDuration || 28;
+
+  // Top symptôme
+  const sympCount = {};
+  const sympMeta = {};
+  Object.values(SYMPTOMES_PAR_PHASE || {}).flat().forEach(s => { if (s && s.id) sympMeta[s.id] = s; });
+  Object.values(ST.symptomes || {}).forEach(arr => (arr || []).forEach(id => {
+    if (id !== 'autre') sympCount[id] = (sympCount[id] || 0) + 1;
+  }));
+  const topEntry = Object.entries(sympCount).sort((a, b) => b[1] - a[1])[0];
+  const topMeta = topEntry ? sympMeta[topEntry[0]] : null;
+
+  // Progression du cycle actuel (barre)
+  const pct = Math.min(100, Math.round((joursSuivis / dur) * 100));
+  const s = SAISONS[ST.currentSaison] || {};
+
+  body.innerHTML = `
+    <div style="margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+        <span style="font-size:11px;color:var(--gris);">Cycle actuel · Jour ${joursSuivis} / ${dur}</span>
+        <span style="font-size:11px;font-weight:600;color:var(--season);">${s.nom || ''} ${s.emoji || ''}</span>
+      </div>
+      <div style="height:6px;background:var(--sable);border-radius:4px;overflow:hidden;">
+        <div style="height:100%;width:${pct}%;background:var(--season-grad);border-radius:4px;transition:width .4s;"></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:10px;">
+      <div style="background:var(--creme);border-radius:12px;padding:10px 6px;text-align:center;">
+        <div style="font-size:20px;font-weight:700;color:var(--noir);font-family:var(--serif);">${prayerDays}</div>
+        <div style="font-size:8px;color:var(--gris);margin-top:2px;line-height:1.3;">jours<br>3+ prières</div>
+      </div>
+      <div style="background:var(--creme);border-radius:12px;padding:10px 6px;text-align:center;">
+        <div style="font-size:20px;font-weight:700;color:var(--noir);font-family:var(--serif);">${seanceCount}</div>
+        <div style="font-size:8px;color:var(--gris);margin-top:2px;line-height:1.3;">séances<br>sport</div>
+      </div>
+      <div style="background:var(--creme);border-radius:12px;padding:10px 6px;text-align:center;">
+        <div style="font-size:20px;font-weight:700;color:var(--noir);font-family:var(--serif);">${dhikrDays + coranDays}</div>
+        <div style="font-size:8px;color:var(--gris);margin-top:2px;line-height:1.3;">jours<br>dhikr/Coran</div>
+      </div>
+      <div style="background:var(--creme);border-radius:12px;padding:10px 6px;text-align:center;">
+        <div style="font-size:20px;font-weight:700;color:var(--noir);font-family:var(--serif);">${objCheckCount}</div>
+        <div style="font-size:8px;color:var(--gris);margin-top:2px;line-height:1.3;">objectifs<br>cochés</div>
+      </div>
+    </div>
+    ${topMeta ? `<div style="font-size:11px;color:var(--gris);margin-bottom:6px;">Symptôme fréquent : <span style="background:var(--creme);border-radius:8px;padding:2px 8px;">${topMeta.emoji} ${topMeta.label} · ${topEntry[1]}×</span></div>` : ''}
+    ${symptomDays > 0 ? `<div style="font-size:11px;color:var(--gris);">${symptomDays} jour${symptomDays > 1 ? 's' : ''} d'écoute de ton corps 🌸</div>` : ''}
+  `;
 }
 
 // ═══════════════════════════════════════════════
