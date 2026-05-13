@@ -1238,12 +1238,23 @@ function populateAll() {
 // ═══════════════════════════════════════════════
 // DASHBOARD ENGAGEANT
 // ═══════════════════════════════════════════════
+const _HOME_DECOS = {
+  hiver: `<svg viewBox="0 0 110 80" fill="none"><circle cx="72" cy="28" r="20" fill="white" opacity="0.18"/><circle cx="22" cy="14" r="2.5" fill="white" opacity="0.16"/><circle cx="34" cy="7" r="1.8" fill="white" opacity="0.12"/><circle cx="12" cy="30" r="1.5" fill="white" opacity="0.1"/><circle cx="96" cy="60" r="1.5" fill="white" opacity="0.1"/><circle cx="104" cy="44" r="2" fill="white" opacity="0.13"/><circle cx="46" cy="5" r="1.2" fill="white" opacity="0.1"/></svg>`,
+  printemps: `<svg viewBox="0 0 110 80" fill="none"><g transform="rotate(0 68 26)"><ellipse cx="68" cy="15" rx="5" ry="9" fill="white" opacity="0.15"/></g><g transform="rotate(72 68 26)"><ellipse cx="68" cy="15" rx="5" ry="9" fill="white" opacity="0.15"/></g><g transform="rotate(144 68 26)"><ellipse cx="68" cy="15" rx="5" ry="9" fill="white" opacity="0.15"/></g><g transform="rotate(216 68 26)"><ellipse cx="68" cy="15" rx="5" ry="9" fill="white" opacity="0.15"/></g><g transform="rotate(288 68 26)"><ellipse cx="68" cy="15" rx="5" ry="9" fill="white" opacity="0.15"/></g><circle cx="68" cy="26" r="5" fill="white" opacity="0.2"/><g transform="rotate(0 92 56)"><ellipse cx="92" cy="49" rx="3.5" ry="6" fill="white" opacity="0.1"/></g><g transform="rotate(72 92 56)"><ellipse cx="92" cy="49" rx="3.5" ry="6" fill="white" opacity="0.1"/></g><g transform="rotate(144 92 56)"><ellipse cx="92" cy="49" rx="3.5" ry="6" fill="white" opacity="0.1"/></g><g transform="rotate(216 92 56)"><ellipse cx="92" cy="49" rx="3.5" ry="6" fill="white" opacity="0.1"/></g><g transform="rotate(288 92 56)"><ellipse cx="92" cy="49" rx="3.5" ry="6" fill="white" opacity="0.1"/></g><circle cx="92" cy="56" r="3.5" fill="white" opacity="0.13"/></svg>`,
+  ete: `<svg viewBox="0 0 110 80" fill="none"><circle cx="72" cy="30" r="14" fill="white" opacity="0.18"/><line x1="72" y1="6" x2="72" y2="12" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.15"/><line x1="72" y1="48" x2="72" y2="54" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.15"/><line x1="46" y1="30" x2="52" y2="30" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.15"/><line x1="92" y1="30" x2="98" y2="30" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.15"/><line x1="54" y1="12" x2="58" y2="16" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.12"/><line x1="86" y1="44" x2="90" y2="48" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.12"/><line x1="54" y1="48" x2="58" y2="44" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.12"/><line x1="86" y1="16" x2="90" y2="12" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.12"/></svg>`,
+  automne: `<svg viewBox="0 0 110 80" fill="none"><path d="M64 8 C76 4 84 16 80 28 C76 40 64 42 60 36 C54 44 52 56 56 64 C50 56 50 44 56 36 C50 30 50 16 58 10 C60 8 64 8 64 8Z" fill="white" opacity="0.15"/><path d="M84 26 C92 22 96 32 93 40 C90 47 84 47 82 43 C79 49 79 57 82 63 C77 57 77 47 81 41 C75 37 75 27 82 22 C83 21 84 26 84 26Z" fill="white" opacity="0.12"/><circle cx="30" cy="14" r="1.5" fill="white" opacity="0.1"/><circle cx="20" cy="8" r="1" fill="white" opacity="0.08"/></svg>`,
+};
+
 function renderDashboard(s) {
   // ─ Header compact ─
   const nameEl = document.getElementById('home-name');
   if (nameEl) nameEl.textContent = ST.prenom || 'Ma sœur';
   const phaseEl = document.getElementById('home-phase-line');
   if (phaseEl) phaseEl.textContent = s.emoji + ' ' + s.nom + ' · Jour ' + ST.currentDay;
+  const decoEl = document.getElementById('home-header-deco');
+  if (decoEl) decoEl.innerHTML = _HOME_DECOS[ST.currentSaison] || '';
+  const msgIcon = document.getElementById('home-msg-icon');
+  if (msgIcon) msgIcon.textContent = s.emoji;
 
   // Message
   updateMessage();
@@ -1294,9 +1305,9 @@ function renderDayScore() {
   const total = items.length;
   const pct = total > 0 ? Math.round(doneCount / total * 100) : 0;
 
-  const fracEl = document.getElementById('day-score-fraction');
+  const dotsEl = document.getElementById('day-score-dots');
   const barEl  = document.getElementById('day-score-bar-fill');
-  if (fracEl) fracEl.textContent = doneCount + '/' + total;
+  if (dotsEl) dotsEl.innerHTML = items.map((_, i) => `<div class="dsd-dot${i < doneCount ? ' filled' : ''}"></div>`).join('');
   if (barEl) barEl.style.width = pct + '%';
 
   container.innerHTML = items.map(it => `

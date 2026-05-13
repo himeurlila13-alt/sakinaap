@@ -133,14 +133,17 @@ body{font-family:var(--sans);background:var(--bg-phase,var(--creme));max-width:4
 .day-score-card{margin:12px 14px 0;background:white;border:1.5px solid var(--sable);border-radius:20px;padding:14px 16px 16px}
 .day-score-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .day-score-title{font-size:10px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--season);transition:color .8s ease}
-.day-score-fraction{font-size:13px;font-weight:700;color:var(--noir)}
+.day-score-dots{display:flex;align-items:center;gap:6px}
+.dsd-dot{width:8px;height:8px;border-radius:50%;background:var(--sable);transition:background .3s,transform .3s}
+.dsd-dot.filled{background:var(--season);transform:scale(1.15)}
 .day-score-bar-wrap{height:4px;background:var(--sable);border-radius:2px;margin-bottom:12px;overflow:hidden}
 .day-score-bar-fill{height:100%;border-radius:2px;background:var(--season-grad);transition:width .6s cubic-bezier(.22,1,.36,1)}
 .day-score-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .day-score-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
 .day-score-ring{width:44px;height:44px;border-radius:50%;border:2.5px solid var(--sable);display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .25s;background:white}
-.day-score-item.done .day-score-ring{border-color:var(--season);background:var(--season-soft)}
-.day-score-item.done .day-score-ring::after{content:'✓';font-size:10px;color:var(--season);font-weight:700;position:absolute;bottom:-2px;right:-2px;background:white;border-radius:50%;width:14px;height:14px;display:flex;align-items:center;justify-content:center;border:1px solid var(--season)}
+.day-score-item.done .day-score-ring{border-color:var(--season);background:var(--season);font-size:0}
+.day-score-item.done .day-score-ring::before{content:'✓';font-size:18px;color:white;font-weight:600}
+.day-score-item.done .day-score-ring::after{display:none}
 .day-score-ring-wrap{position:relative}
 .day-score-label{font-size:9px;color:var(--gris);text-align:center;font-weight:500}
 
@@ -796,34 +799,54 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
 .home-header {
   position: relative;
   margin: 6px 14px 0;
-  padding: 20px 20px 18px;
+  padding: 24px;
   background: var(--season-grad);
-  border-radius: 20px;
+  border-radius: 24px;
   border: 1.5px solid var(--season-light);
   overflow: hidden;
 }
+.home-header-deco {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 110px;
+  height: 80px;
+  pointer-events: none;
+  overflow: hidden;
+}
+.home-header-deco svg { width: 100%; height: 100%; }
 .home-header-greeting {
   font-family: var(--sans);
-  font-size: 11px;
-  color: rgba(255,255,255,.6);
-  letter-spacing: .5px;
+  font-size: 12px;
+  font-style: italic;
+  color: rgba(255,255,255,.8);
+  letter-spacing: 1px;
   margin-bottom: 6px;
 }
 .home-header-name {
-  font-family: var(--script);
+  font-family: var(--serif);
   font-size: 32px;
+  font-style: italic;
   color: white;
   line-height: 1.2;
-  margin-bottom: 4px;
+  margin-bottom: 10px;
 }
 .home-header-phase {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(255,255,255,.2);
   font-family: var(--sans);
-  font-size: 12px;
-  color: rgba(255,255,255,.75);
-  letter-spacing: .3px;
+  font-size: 13px;
+  color: white;
+  letter-spacing: .2px;
 }
 .home-message-band {
-  background: white;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: var(--season-soft);
   margin: 10px 14px 0;
   border-radius: 16px;
   padding: 14px 18px;
@@ -833,12 +856,14 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
   border-bottom: 1px solid var(--sable);
   box-shadow: 0 2px 10px rgba(45,36,32,.05);
 }
+.home-msg-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
 .home-message-text {
   font-family: var(--serif);
   font-size: 14px;
   font-style: italic;
   color: var(--noir);
   line-height: 1.7;
+  flex: 1;
 }
 
 /* ═══ DAY-CARDS ═══ */
@@ -1406,6 +1431,8 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
   .bottom-nav{background:#1A1714;border-top:1px solid #2E2924}
   .day-card,.day-score-card,.obj-card,.prof-sec,.day-card-inside,.sport-repos-block,.sport-emom-block,.sport-calme-detail{background:#252220;border-color:#2E2924}
   .home-message-band{background:#252220;border-right-color:#2E2924;border-top-color:#2E2924;border-bottom-color:#2E2924}
+  .dsd-dot{background:#3E3630}
+  .dsd-dot.filled{background:var(--season)}
   .modal-sheet,.checkin-sheet{background:#252220}
   .bilan-stat,.bilan-quote,.marche-item{background:#2E2924;border-color:#3E3630}
   .bilan-sheet,.bilan-body{background:#252220}
