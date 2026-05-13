@@ -500,6 +500,26 @@
     </div>
   </div>
 
+  <!-- SÉPARATEUR HISTORIQUE -->
+  <div style="margin:20px 14px 14px;display:flex;align-items:center;gap:10px;">
+    <div style="flex:1;height:1px;background:var(--sable);"></div>
+    <div style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--season);">&#128202; TON HISTORIQUE</div>
+    <div style="flex:1;height:1px;background:var(--sable);"></div>
+  </div>
+
+  <!-- HISTORIQUE DES CYCLES -->
+  <div id="cycle-history-card" style="margin:0 14px 14px;background:white;border-radius:20px;border:1.5px solid var(--sable);padding:18px 20px;display:none;">
+    <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:14px;">&#128197; Historique des cycles</div>
+    <div id="cycle-history-list"></div>
+  </div>
+
+  <!-- PATTERNS DE CYCLE -->
+  <div id="patterns-card" style="margin:0 14px 14px;background:white;border-radius:20px;border:1.5px solid var(--sable);padding:18px 20px;display:none;">
+    <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:14px;">&#128302; Patterns de cycle</div>
+    <div id="patterns-free"></div>
+    <div id="patterns-premium"></div>
+  </div>
+
   <div style="height:14px;"></div>
 </div>
 
@@ -703,9 +723,6 @@
     </div>
   </div>
 
-  <!-- PARCOURS SPORT -->
-  <div class="sport-histo-section" id="sport-historique-section"></div>
-
   <!-- CALENDRIER -->
   <div class="obj-card obj-cal-card">
     <div class="obj-card-hdr">
@@ -748,6 +765,9 @@
 
   <!-- STATUT ESSAI / ABONNEMENT -->
   <div id="trial-status-card" style="margin:0 14px 14px;"></div>
+
+  <!-- PARCOURS SPORT -->
+  <div class="sport-histo-section" id="sport-historique-section"></div>
 
   <!-- PREMIUM CARD -->
   <div style="margin:0 14px 14px;border-radius:22px;overflow:hidden;box-shadow:0 12px 48px rgba(90,60,20,.22);">
@@ -813,19 +833,6 @@
       <button onclick="applyPremiumCode()" style="background:var(--season-grad);color:white;border:none;border-radius:12px;padding:11px 18px;font-size:13px;font-weight:700;font-family:var(--sans);cursor:pointer;flex-shrink:0;">Valider</button>
     </div>
     <div id="premium-code-msg" style="font-size:12px;color:var(--gris);margin-top:8px;font-family:var(--serif);font-style:italic;min-height:16px;"></div>
-  </div>
-
-  <!-- HISTORIQUE DES CYCLES -->
-  <div id="cycle-history-card" style="margin:0 14px 14px;background:white;border-radius:20px;border:1.5px solid var(--sable);padding:18px 20px;display:none;">
-    <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:14px;">&#128197; Historique des cycles</div>
-    <div id="cycle-history-list"></div>
-  </div>
-
-  <!-- PATTERNS DE CYCLE -->
-  <div id="patterns-card" style="margin:0 14px 14px;background:white;border-radius:20px;border:1.5px solid var(--sable);padding:18px 20px;display:none;">
-    <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:14px;">&#128302; Patterns de cycle</div>
-    <div id="patterns-free"></div>
-    <div id="patterns-premium"></div>
   </div>
 
   <!-- FEEDBACK BETA -->
