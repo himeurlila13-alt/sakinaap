@@ -178,7 +178,7 @@ padding-bottom: 8mm; border-bottom: 1px solid var(--sable);
 }
 .intro-eyebrow {
 font-size: 7px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
-color: var(--violet); margin-bottom: 4mm;
+color: var(--gris); margin-bottom: 4mm;
 }
 .intro-title {
 font-family: var(--script); font-size: 48px; color: var(--noir);
@@ -193,7 +193,7 @@ color: var(--gris); margin-top: 2mm; letter-spacing: .5px;
 font-family: var(--serif); font-size: 10.5px; color: var(--noir);
 line-height: 1.9; margin-bottom: 6mm;
 }
-.intro-body strong { font-weight: 600; color: var(--violet-dark); }
+.intro-body strong { font-weight: 700; color: var(--noir); }
 
 .intro-callout {
 background: white; border-left: 2px solid var(--noir);
@@ -228,8 +228,8 @@ font-size: 8px; color: var(--gris); margin-top: 2mm; opacity: .6;
 }
 
 .intro-section-title {
-font-family: var(--serif); font-size: 14px; color: var(--violet-dark);
-margin: 7mm 0 3mm; border-bottom: 1px solid var(--violet-soft);
+font-family: var(--serif); font-size: 14px; color: var(--noir);
+margin: 7mm 0 3mm; border-bottom: 1px solid var(--sable);
 padding-bottom: 2mm;
 }
 
@@ -242,8 +242,8 @@ background: white; border: 1px solid var(--sable);
 border-radius: 8px; padding: 4mm 5mm;
 }
 .how-to-num {
-font-family: var(--script); font-size: 32px; color: var(--or);
-line-height: 1; margin-bottom: 2mm; font-weight: 400;
+font-family: var(--serif); font-size: 28px; color: var(--noir);
+line-height: 1; margin-bottom: 2mm; font-weight: 400; font-style: italic;
 }
 .how-to-title {
 font-size: 9px; font-weight: 700; color: var(--noir); margin-bottom: 2mm;
@@ -271,40 +271,13 @@ border: 1px solid var(--sable); border-radius: 20px; padding: 2px 10px;
 font-size: 8px; font-weight: 600; color: var(--gris); letter-spacing: 1px;
 }
 
-/* Nom card */
-.nom-card {
-background: var(--grad); border-radius: 16px;
-padding: 8mm 10mm; margin-bottom: 6mm;
-text-align: center; position: relative; overflow: hidden;
-}
-.nom-card::before {
-content: ‘’;
-position: absolute; inset: 0;
-background: url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ viewBox=‘0 0 200 200’%3E%3Ccircle cx=‘160’ cy=‘40’ r=‘80’ fill=‘rgba(255,255,255,0.05)’/%3E%3Ccircle cx=‘30’ cy=‘170’ r=‘60’ fill=‘rgba(255,255,255,0.03)’/%3E%3C/svg%3E”) center/cover;
-pointer-events: none;
-}
-.nom-number {
-font-size: 8px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
-color: rgba(255,255,255,.4); margin-bottom: 4mm; position: relative;
-}
-.nom-arabic {
-font-size: 38px; direction: rtl; color: white; line-height: 1.4;
-margin-bottom: 3mm; position: relative;
-}
-.nom-transliteration {
-font-family: var(--script); font-size: 28px; color: rgba(255,255,255,.85);
-margin-bottom: 2mm; position: relative; font-weight: 400;
-}
-.nom-french {
-font-family: var(--serif); font-size: 10px; font-style: italic;
-color: rgba(255,255,255,.55); position: relative;
-}
+/* Nom card — voir inline styles dans buildNomPages() */
 
 /* Sens profond */
 .sens-section { margin-bottom: 5mm; }
 .sens-label {
 font-size: 7px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
-color: var(--violet); margin-bottom: 2mm;
+color: var(--gris); margin-bottom: 2mm;
 }
 .sens-text {
 font-family: var(--serif); font-size: 10px; color: var(--noir);
@@ -521,7 +494,7 @@ margin-bottom: 4px;
     <div class="cover-dot"></div>
   </div>
 
-  <div style="font-family:var(--serif);font-size:9px;font-style:italic;color:rgba(255,255,255,.3);position:relative;">
+  <div style="font-family:var(--serif);font-size:9px;font-style:italic;color:var(--gris);position:relative;opacity:.6;">
     Apprendre · Méditer · Vivre
   </div>
 
