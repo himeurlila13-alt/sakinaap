@@ -180,7 +180,7 @@ body{font-family:var(--sans);background:var(--creme);color:var(--noir);-webkit-f
 .pricing-trial-sub{font-size:13px;color:var(--gris);line-height:1.6}
 .pricing-plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}
 .pricing-card{background:white;border:1.5px solid var(--sable);border-radius:20px;padding:28px 24px;position:relative;overflow:hidden}
-.pricing-card.featured{background:linear-gradient(145deg,#1C1008,#3A2010,#6A4018);border-color:transparent}
+.pricing-card.featured{background:#4A7C59;border-color:#3A6A4A}
 .pricing-badge{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#C9A96E,#A87A30);color:#1C1008;font-size:9px;font-weight:700;padding:3px 12px;border-radius:0 0 10px 10px;white-space:nowrap;letter-spacing:.5px}
 .pricing-plan-name{font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;font-weight:600}
 .pricing-card:not(.featured) .pricing-plan-name{color:var(--gris)}
@@ -235,6 +235,38 @@ body{font-family:var(--sans);background:var(--creme);color:var(--noir);-webkit-f
 .footer-links a:hover{color:rgba(250,246,240,.9)}
 .footer-copy{font-size:11px;color:rgba(250,246,240,.3)}
 
+/* ── APP EN IMAGES ── */
+.app-screens-sec{background:white;border-top:1px solid var(--sable);border-bottom:1px solid var(--sable);padding:72px 24px}
+.app-screens-inner{max-width:860px;margin:0 auto}
+.app-screens-row{display:flex;justify-content:center;gap:28px;margin-top:48px}
+.app-mini{width:190px;flex-shrink:0}
+.app-mini-phone{background:white;border-radius:30px;box-shadow:0 20px 50px rgba(61,32,96,.18),0 0 0 8px #E8DDD0;overflow:hidden}
+.app-mini-screen{display:flex;flex-direction:column;height:360px}
+.app-mini-label{text-align:center;font-size:12px;font-weight:600;color:var(--gris);margin-top:14px}
+/* ── PHASE BAND ── */
+.phase-band{padding:30px 24px;text-align:center;background:var(--creme);border-top:1px solid var(--sable)}
+.phase-band-lead{font-family:var(--serif);font-size:clamp(14px,2.5vw,17px);color:var(--gris);font-style:italic;margin-bottom:16px}
+.phase-pills{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.phase-pill{padding:7px 18px;border-radius:20px;font-size:13px;font-weight:600}
+.phase-pill.hiver{background:#F5EEFF;color:#6B4FA0}
+.phase-pill.printemps{background:#EDFBF4;color:#3A8C65}
+.phase-pill.ete{background:#FFFBF0;color:#B07030}
+.phase-pill.automne{background:#FDF5F0;color:#C4694A}
+/* ── STICKY CTA MOBILE ── */
+.sticky-cta{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:999;background:#4A7C59;color:white;border:none;border-radius:50px;padding:14px 32px;font-size:15px;font-weight:700;font-family:var(--sans);cursor:pointer;text-decoration:none;display:none;align-items:center;gap:8px;box-shadow:0 8px 24px rgba(74,124,89,.4);white-space:nowrap;transition:opacity .3s,transform .3s}
+.sticky-cta.visible{display:flex}
+.sticky-cta.fading{opacity:0;transform:translateX(-50%) translateY(16px)}
+@media(min-width:760px){.sticky-cta{display:none!important}}
+@media(max-width:700px){
+  .app-screens-row{gap:14px}
+  .app-mini{width:148px}
+  .app-mini-screen{height:280px}
+}
+@media(max-width:500px){
+  .app-screens-row{gap:9px}
+  .app-mini{width:108px}
+  .app-mini-screen{height:210px}
+}
 /* ── RESPONSIVE ── */
 @media(max-width:600px){
   .hero{padding:52px 20px 40px}
@@ -317,48 +349,69 @@ body{font-family:var(--sans);background:var(--creme);color:var(--noir);-webkit-f
   </div>
   <p class="hero-badge">Sans carte bancaire · Sans culpabilité · Sans jugement</p>
 
-  <!-- Mockup téléphone -->
+  <!-- Mockup téléphone — Accueil Printemps -->
   <div class="phone-wrap">
     <div class="phone">
       <div class="phone-notch"></div>
-      <div class="phone-screen">
-        <div class="phone-header">
-          <div class="phone-topbar-logo">SakinApp</div>
-          <div class="phone-greeting">As-salamu alaykum</div>
-          <div class="phone-name" style="font-family:'Playfair Display',serif">Lina</div>
-          <div class="phone-phase">🌱 Printemps · Jour 8</div>
-        </div>
-        <div class="phone-content">
-          <div class="phone-card">
-            <div class="phone-card-icon">💪</div>
-            <div class="phone-card-title">Séance du jour</div>
-            <div class="phone-card-text">Gainage dynamique · 20 min</div>
-            <div class="phone-card-chips">
-              <span class="phone-chip">Niveau 2</span>
-              <span class="phone-chip">Sol + debout</span>
-            </div>
-          </div>
-          <div class="phone-card">
-            <div class="phone-card-icon">🍽️</div>
-            <div class="phone-card-title">Repas du jour</div>
-            <div class="phone-card-text">Bowl de lentilles au citron · Riche en fer &amp; énergie</div>
-          </div>
-          <div class="phone-card">
-            <div class="phone-card-icon">🕌</div>
-            <div class="phone-card-title">Mes prières</div>
-            <div class="phone-card-chips">
-              <span class="phone-chip" style="background:#FFF3E0;color:#C9A96E;">Fajr ✓</span>
-              <span class="phone-chip" style="background:#FFF3E0;color:#C9A96E;">Dohr ✓</span>
-              <span class="phone-chip">Asr</span>
-            </div>
+      <div class="phone-screen" style="background:#F7FBF8;display:flex;flex-direction:column">
+        <!-- Header vert Printemps -->
+        <div style="background:#4A7C59;padding:28px 14px 12px;text-align:center;position:relative;overflow:hidden;flex-shrink:0">
+          <div style="position:absolute;top:8px;right:12px;font-size:22px;opacity:.3;transform:rotate(18deg)">🌸</div>
+          <div style="position:absolute;top:22px;right:5px;font-size:13px;opacity:.2;transform:rotate(-8deg)">🌿</div>
+          <div style="font-family:var(--script);font-size:16px;color:rgba(255,255,255,.75);margin-bottom:3px">SakinApp</div>
+          <div style="font-size:7px;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px">As-salamu alaykum</div>
+          <div style="font-family:var(--serif);font-size:14px;color:white;font-style:italic;margin-bottom:5px">Lila</div>
+          <div style="display:inline-flex;align-items:center;gap:3px;background:rgba(255,255,255,.22);border-radius:10px;padding:3px 10px">
+            <span style="font-size:9px">🌸</span>
+            <span style="font-size:7px;color:rgba(255,255,255,.95);font-weight:600">Printemps · Jour 10</span>
           </div>
         </div>
-        <div class="phone-nav">
-          <div class="phone-nav-item active"><div class="phone-nav-icon">🏠</div>Accueil</div>
-          <div class="phone-nav-item"><div class="phone-nav-icon">🌙</div>Cycle</div>
-          <div class="phone-nav-item"><div class="phone-nav-icon">🕌</div>Âme</div>
-          <div class="phone-nav-item"><div class="phone-nav-icon">🎯</div>Objectifs</div>
-          <div class="phone-nav-item"><div class="phone-nav-icon">👤</div>Moi</div>
+        <!-- Contenu -->
+        <div style="flex:1;padding:9px 10px;display:flex;flex-direction:column;gap:7px;overflow:hidden">
+          <!-- Message du jour -->
+          <div style="background:white;border-radius:10px;padding:8px 10px;border-left:3px solid #4A7C59">
+            <div style="font-size:6px;font-weight:700;color:#4A7C59;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">MESSAGE DU JOUR</div>
+            <div style="font-size:7.5px;color:#2D2420;font-style:italic;line-height:1.5">"En toi il y a quelque chose que personne d'autre ne peut donner au monde."</div>
+          </div>
+          <!-- Ma journée -->
+          <div style="background:white;border-radius:10px;padding:8px 10px">
+            <div style="font-size:6px;font-weight:700;color:#6B5B53;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px">MA JOURNÉE</div>
+            <div style="display:flex;gap:8px;justify-content:center">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+                <div style="width:22px;height:22px;border-radius:50%;background:#4A7C59;display:flex;align-items:center;justify-content:center;font-size:9px;color:white;font-weight:700">✓</div>
+                <div style="font-size:5.5px;color:#6B5B53">Sport</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+                <div style="width:22px;height:22px;border-radius:50%;background:#4A7C59;display:flex;align-items:center;justify-content:center;font-size:9px;color:white;font-weight:700">✓</div>
+                <div style="font-size:5.5px;color:#6B5B53">Repas</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+                <div style="width:22px;height:22px;border-radius:50%;background:#4A7C59;display:flex;align-items:center;justify-content:center;font-size:9px;color:white;font-weight:700">✓</div>
+                <div style="font-size:5.5px;color:#6B5B53">Prières</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+                <div style="width:22px;height:22px;border-radius:50%;border:2px solid #E8DDD0;background:white"></div>
+                <div style="font-size:5.5px;color:#6B5B53">Dhikr</div>
+              </div>
+            </div>
+          </div>
+          <!-- Séance -->
+          <div style="background:white;border-radius:10px;padding:7px 10px">
+            <div style="font-size:6px;font-weight:700;color:#6B5B53;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">SÉANCE DU JOUR</div>
+            <div style="font-size:7.5px;color:#2D2420">Gainage dynamique · 20 min</div>
+            <div style="display:flex;gap:4px;margin-top:4px">
+              <span style="background:#EDFBF4;color:#3A8C65;font-size:6px;padding:2px 6px;border-radius:6px;font-weight:600">Niveau 2</span>
+              <span style="background:#EDFBF4;color:#3A8C65;font-size:6px;padding:2px 6px;border-radius:6px;font-weight:600">Sol + debout</span>
+            </div>
+          </div>
+        </div>
+        <!-- Nav -->
+        <div style="display:flex;border-top:1px solid #F0EBE0;background:white;flex-shrink:0">
+          <div style="flex:1;padding:5px 3px;text-align:center;font-size:5px;color:#4A7C59"><div style="font-size:10px">🏠</div>Accueil</div>
+          <div style="flex:1;padding:5px 3px;text-align:center;font-size:5px;color:#6B5B53"><div style="font-size:10px">🌙</div>Cycle</div>
+          <div style="flex:1;padding:5px 3px;text-align:center;font-size:5px;color:#6B5B53"><div style="font-size:10px">🕌</div>Âme</div>
+          <div style="flex:1;padding:5px 3px;text-align:center;font-size:5px;color:#6B5B53"><div style="font-size:10px">🎯</div>Objectifs</div>
+          <div style="flex:1;padding:5px 3px;text-align:center;font-size:5px;color:#6B5B53"><div style="font-size:10px">👤</div>Moi</div>
         </div>
       </div>
     </div>
@@ -372,6 +425,173 @@ body{font-family:var(--sans);background:var(--creme);color:var(--noir);-webkit-f
     <div class="trust-item"><span>🔒</span><span>Données stockées sur ton téléphone uniquement</span></div>
     <div class="trust-item"><span>📱</span><span>S'installe comme une vraie app — sans App Store</span></div>
     <div class="trust-item"><span>✋</span><span>Sans compte requis pour commencer</span></div>
+  </div>
+</div>
+
+<!-- ── L'APP EN IMAGES ── -->
+<div class="app-screens-sec">
+  <div class="app-screens-inner">
+    <div class="section-eyebrow">L'app en images</div>
+    <h2 class="section-title">Trois onglets.<br>Tout ce dont tu as besoin.</h2>
+    <p class="section-sub" style="margin-bottom:0">Accueil · Cycle · Âme — conçus pour toi, selon ta phase du cycle.</p>
+
+    <div class="app-screens-row">
+
+      <!-- Écran 1 : Accueil Printemps -->
+      <div class="app-mini">
+        <div class="app-mini-phone">
+          <div class="app-mini-screen">
+            <div style="background:#4A7C59;padding:16px 10px 10px;text-align:center;position:relative;overflow:hidden;flex-shrink:0">
+              <div style="position:absolute;top:5px;right:7px;font-size:16px;opacity:.3;transform:rotate(15deg)">🌸</div>
+              <div style="font-family:var(--script);font-size:12px;color:rgba(255,255,255,.7);margin-bottom:2px">SakinApp</div>
+              <div style="font-size:5px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.8px;margin-bottom:1px">As-salamu alaykum</div>
+              <div style="font-family:var(--serif);font-size:10px;color:white;font-style:italic;margin-bottom:4px">Lila</div>
+              <div style="display:inline-flex;align-items:center;gap:2px;background:rgba(255,255,255,.2);border-radius:8px;padding:2px 7px">
+                <span style="font-size:7px">🌸</span>
+                <span style="font-size:5.5px;color:white;font-weight:600">Printemps · Jour 10</span>
+              </div>
+            </div>
+            <div style="flex:1;padding:7px 8px;display:flex;flex-direction:column;gap:5px;overflow:hidden">
+              <div style="background:white;border-radius:8px;padding:6px 8px;border-left:2.5px solid #4A7C59">
+                <div style="font-size:5px;font-weight:700;color:#4A7C59;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px">MESSAGE DU JOUR</div>
+                <div style="font-size:6px;color:#2D2420;font-style:italic;line-height:1.5">"En toi il y a quelque chose que personne d'autre ne peut donner au monde."</div>
+              </div>
+              <div style="background:white;border-radius:8px;padding:6px 8px">
+                <div style="font-size:5px;font-weight:700;color:#6B5B53;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px">MA JOURNÉE</div>
+                <div style="display:flex;gap:6px;justify-content:center">
+                  <div style="text-align:center"><div style="width:18px;height:18px;border-radius:50%;background:#4A7C59;margin:0 auto 2px;display:flex;align-items:center;justify-content:center;font-size:7px;color:white">✓</div><div style="font-size:4.5px;color:#6B5B53">Sport</div></div>
+                  <div style="text-align:center"><div style="width:18px;height:18px;border-radius:50%;background:#4A7C59;margin:0 auto 2px;display:flex;align-items:center;justify-content:center;font-size:7px;color:white">✓</div><div style="font-size:4.5px;color:#6B5B53">Repas</div></div>
+                  <div style="text-align:center"><div style="width:18px;height:18px;border-radius:50%;background:#4A7C59;margin:0 auto 2px;display:flex;align-items:center;justify-content:center;font-size:7px;color:white">✓</div><div style="font-size:4.5px;color:#6B5B53">Prières</div></div>
+                  <div style="text-align:center"><div style="width:18px;height:18px;border-radius:50%;border:1.5px solid #E8DDD0;margin:0 auto 2px"></div><div style="font-size:4.5px;color:#6B5B53">Dhikr</div></div>
+                </div>
+              </div>
+              <div style="background:white;border-radius:8px;padding:6px 8px">
+                <div style="font-size:5px;font-weight:700;color:#6B5B53;text-transform:uppercase;margin-bottom:2px">SÉANCE DU JOUR</div>
+                <div style="font-size:6px;color:#2D2420">Gainage dynamique · 20 min</div>
+                <div style="display:flex;gap:3px;margin-top:3px">
+                  <span style="background:#EDFBF4;color:#3A8C65;font-size:5px;padding:1px 5px;border-radius:5px;font-weight:600">Niveau 2</span>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;border-top:1px solid #F0EBE0;background:white;flex-shrink:0">
+              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:#4A7C59"><div style="font-size:8px">🏠</div>Accueil</div>
+              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:#6B5B53"><div style="font-size:8px">🌙</div>Cycle</div>
+              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:#6B5B53"><div style="font-size:8px">🕌</div>Âme</div>
+              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:#6B5B53"><div style="font-size:8px">🎯</div>Obj.</div>
+              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:#6B5B53"><div style="font-size:8px">👤</div>Moi</div>
+            </div>
+          </div>
+        </div>
+        <div class="app-mini-label">Accueil Printemps</div>
+      </div>
+
+      <!-- Écran 2 : Cycle -->
+      <div class="app-mini">
+        <div class="app-mini-phone">
+          <div class="app-mini-screen">
+            <div style="background:linear-gradient(145deg,#3D5A4F,#2A4A3F);padding:14px 10px 10px;text-align:center;flex-shrink:0">
+              <div style="font-family:var(--script);font-size:12px;color:rgba(255,255,255,.7);margin-bottom:2px">SakinApp</div>
+              <div style="font-size:5.5px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.8px">Mon Cycle</div>
+            </div>
+            <div style="flex:1;padding:10px 8px;display:flex;flex-direction:column;align-items:center;gap:8px;overflow:hidden;background:#F7FBF8">
+              <!-- Roue des 4 saisons -->
+              <div style="position:relative;width:110px;height:110px">
+                <div style="width:110px;height:110px;border-radius:50%;background:conic-gradient(#C8B0E8 0deg 90deg,#A8D8C0 90deg 180deg,#F9E4A8 180deg 270deg,#F0B8A0 270deg 360deg);box-shadow:0 4px 16px rgba(0,0,0,.15)"></div>
+                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60px;height:60px;background:white;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.08)">
+                  <div style="font-size:8px;font-weight:700;color:#4A7C59">Jour 10</div>
+                  <div style="font-size:6.5px;color:#3A8C65;font-style:italic">Printemps</div>
+                </div>
+                <!-- Labels saisons -->
+                <div style="position:absolute;top:4px;left:50%;transform:translateX(-50%);font-size:5px;color:#6B4FA0;font-weight:600">🌙 Hiver</div>
+                <div style="position:absolute;top:50%;right:2px;transform:translateY(-50%);font-size:5px;color:#3A8C65;font-weight:600">🌿</div>
+                <div style="position:absolute;bottom:4px;left:50%;transform:translateX(-50%);font-size:5px;color:#B07030;font-weight:600">☀️ Été</div>
+                <div style="position:absolute;top:50%;left:2px;transform:translateY(-50%);font-size:5px;color:#C4694A;font-weight:600">🍂</div>
+              </div>
+              <!-- Prochaines règles -->
+              <div style="background:white;border-radius:8px;padding:7px 10px;width:100%;text-align:center;border:1px solid #E8DDD0">
+                <div style="font-size:5.5px;color:#6B5B53;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">PROCHAINES RÈGLES</div>
+                <div style="font-size:14px;font-weight:700;color:#2D2420">dans 18 jours</div>
+              </div>
+              <!-- Phase actuelle -->
+              <div style="background:#EDFBF4;border-radius:8px;padding:6px 10px;width:100%;border:1px solid #A8DBC5">
+                <div style="font-size:5.5px;color:#3A8C65;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;font-weight:700">PHASE ACTUELLE</div>
+                <div style="font-size:7px;color:#2A6A4A">Folliculaire — énergie en hausse ✨</div>
+              </div>
+            </div>
+            <div style="display:flex;border-top:1px solid #F0EBE0;background:white;flex-shrink:0">
+              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:#6B5B53"><div style="font-size:8px">🏠</div>Accueil</div>
+              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:#3A8C65"><div style="font-size:8px">🌙</div>Cycle</div>
+              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:#6B5B53"><div style="font-size:8px">🕌</div>Âme</div>
+              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:#6B5B53"><div style="font-size:8px">🎯</div>Obj.</div>
+              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:#6B5B53"><div style="font-size:8px">👤</div>Moi</div>
+            </div>
+          </div>
+        </div>
+        <div class="app-mini-label">Cycle · Roue des saisons</div>
+      </div>
+
+      <!-- Écran 3 : Âme -->
+      <div class="app-mini">
+        <div class="app-mini-phone">
+          <div class="app-mini-screen">
+            <div style="background:#2A4A3F;padding:14px 10px 10px;text-align:center;flex-shrink:0">
+              <div style="font-family:var(--script);font-size:12px;color:rgba(255,255,255,.7);margin-bottom:2px">SakinApp</div>
+              <div style="font-size:5.5px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.8px">Âme</div>
+            </div>
+            <div style="flex:1;background:#2A4A3F;padding:8px;display:flex;flex-direction:column;gap:6px;overflow:hidden">
+              <!-- Nom d'Allah -->
+              <div style="background:rgba(255,255,255,.08);border-radius:10px;padding:10px 8px;text-align:center">
+                <div style="font-size:5px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:5px">NOM D'ALLAH DU JOUR</div>
+                <div style="font-size:26px;color:white;font-weight:400;line-height:1.1;margin-bottom:3px;direction:rtl">الْمُؤَخِّر</div>
+                <div style="font-size:8px;color:rgba(255,255,255,.85);font-weight:600;margin-bottom:2px">Al-Mu'akhkhir</div>
+                <div style="font-size:6.5px;color:rgba(255,255,255,.55);font-style:italic">Celui qui retarde</div>
+              </div>
+              <!-- Progress -->
+              <div style="background:rgba(255,255,255,.08);border-radius:8px;padding:6px 8px">
+                <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                  <div style="font-size:5px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.3px">Progression</div>
+                  <div style="font-size:5px;color:rgba(255,255,255,.5)">0 / 99</div>
+                </div>
+                <div style="background:rgba(255,255,255,.15);border-radius:3px;height:4px;overflow:hidden">
+                  <div style="background:#C9A96E;width:1%;height:100%;border-radius:3px"></div>
+                </div>
+              </div>
+              <!-- Prières -->
+              <div style="background:rgba(255,255,255,.08);border-radius:8px;padding:6px 8px">
+                <div style="font-size:5px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.3px;margin-bottom:5px">MES 5 PRIÈRES</div>
+                <div style="display:flex;gap:4px;justify-content:center">
+                  <div style="text-align:center"><div style="width:14px;height:14px;border-radius:50%;background:#C9A96E;margin:0 auto 2px;display:flex;align-items:center;justify-content:center;font-size:6px;color:white">✓</div><div style="font-size:4px;color:rgba(255,255,255,.5)">Fajr</div></div>
+                  <div style="text-align:center"><div style="width:14px;height:14px;border-radius:50%;background:#C9A96E;margin:0 auto 2px;display:flex;align-items:center;justify-content:center;font-size:6px;color:white">✓</div><div style="font-size:4px;color:rgba(255,255,255,.5)">Dohr</div></div>
+                  <div style="text-align:center"><div style="width:14px;height:14px;border-radius:50%;border:1.5px solid rgba(255,255,255,.3);margin:0 auto 2px"></div><div style="font-size:4px;color:rgba(255,255,255,.5)">Asr</div></div>
+                  <div style="text-align:center"><div style="width:14px;height:14px;border-radius:50%;border:1.5px solid rgba(255,255,255,.3);margin:0 auto 2px"></div><div style="font-size:4px;color:rgba(255,255,255,.5)">Magh.</div></div>
+                  <div style="text-align:center"><div style="width:14px;height:14px;border-radius:50%;border:1.5px solid rgba(255,255,255,.3);margin:0 auto 2px"></div><div style="font-size:4px;color:rgba(255,255,255,.5)">Ichâ</div></div>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;border-top:1px solid rgba(255,255,255,.1);background:#1E3A30;flex-shrink:0">
+              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:rgba(255,255,255,.4)"><div style="font-size:8px">🏠</div>Accueil</div>
+              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:rgba(255,255,255,.4)"><div style="font-size:8px">🌙</div>Cycle</div>
+              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:#C9A96E"><div style="font-size:8px">🕌</div>Âme</div>
+              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:rgba(255,255,255,.4)"><div style="font-size:8px">🎯</div>Obj.</div>
+              <div style="flex:1;padding:4px 2px;text-align:center;font-size:4px;color:rgba(255,255,255,.4)"><div style="font-size:8px">👤</div>Moi</div>
+            </div>
+          </div>
+        </div>
+        <div class="app-mini-label">Âme · Noms d'Allah</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── BANDE COULEURS ── -->
+<div class="phase-band">
+  <p class="phase-band-lead">Les couleurs changent selon ta phase du cycle.</p>
+  <div class="phase-pills">
+    <span class="phase-pill hiver">🌙 Hiver</span>
+    <span class="phase-pill printemps">🌿 Printemps</span>
+    <span class="phase-pill ete">☀️ Été</span>
+    <span class="phase-pill automne">🍂 Automne</span>
   </div>
 </div>
 
@@ -693,6 +913,9 @@ body{font-family:var(--sans);background:var(--creme);color:var(--noir);-webkit-f
   <div class="cta-note">20 jours · Sans CB · Données chiffrées &amp; sécurisées</div>
 </section>
 
+<!-- ── STICKY CTA MOBILE ── -->
+<a id="sticky-cta" href="#pricing" class="sticky-cta">✦ Essayer gratuitement</a>
+
 <!-- ── FOOTER ── -->
 <footer class="footer">
   <div class="footer-logo">SakinApp</div>
@@ -732,6 +955,31 @@ document.querySelectorAll('.morning-card').forEach(card => {
   });
 });
 
+// Sticky CTA — apparaît après le hero, disparaît quand pricing est visible
+(function() {
+  const cta = document.getElementById('sticky-cta');
+  const hero = document.querySelector('.hero');
+  const pricing = document.getElementById('pricing');
+  if (!cta || !hero || !pricing) return;
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.target === hero) {
+        if (!e.isIntersecting) cta.classList.add('visible');
+        else cta.classList.remove('visible');
+      }
+      if (e.target === pricing) {
+        if (e.isIntersecting) {
+          cta.classList.add('fading');
+          setTimeout(() => { cta.classList.remove('visible','fading'); }, 300);
+        }
+      }
+    });
+  }, { threshold: 0.1 });
+
+  obs.observe(hero);
+  obs.observe(pricing);
+})();
 </script>
 </body>
 </html>
