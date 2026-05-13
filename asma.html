@@ -1,0 +1,1286 @@
+﻿<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Les 99 Noms d'Allah — Livret de Méditation · Sakina</title>
+<link href="https://fonts.googleapis.com/css2?family=Corinthia:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+
+/* ═══════════════════════════════════════
+VARIABLES & RESET
+═══════════════════════════════════════ */
+:root {
+--creme: #FAF6F0;
+--or: #C9A96E;
+--or-light: #E8D4A8;
+--or-dark: #8A6030;
+--noir: #2D2420;
+--gris: #6B5B53;
+--sable: #E8DDD0;
+--violet: #7B5EA7;
+--violet-soft: #F0EBF8;
+--violet-dark: #3D2060;
+--grad: linear-gradient(145deg, #3D2060, #7B5EA7);
+--serif: ‘Playfair Display’, serif;
+--script: ‘Corinthia’, cursive;
+--sans: ‘DM Sans’, sans-serif;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+font-family: var(--sans);
+background: #E8E0D8;
+color: var(--noir);
+}
+
+/* ═══════════════════════════════════════
+PRINT BUTTON (screen only)
+═══════════════════════════════════════ */
+.print-bar {
+position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+background: var(--noir); padding: 12px 24px;
+display: flex; align-items: center; justify-content: space-between;
+}
+.print-bar-title {
+font-family: var(--script); font-size: 24px; color: var(--or);
+font-weight: 400;
+}
+.print-bar-actions { display: flex; gap: 10px; }
+.print-btn {
+background: var(--or); color: var(--noir);
+border: none; border-radius: 50px; padding: 8px 22px;
+font-family: var(--sans); font-size: 13px; font-weight: 700;
+cursor: pointer; transition: opacity .2s;
+}
+.print-btn:hover { opacity: .85; }
+.print-btn.secondary {
+background: transparent; color: rgba(255,255,255,.5);
+border: 1px solid rgba(255,255,255,.2);
+}
+
+/* ═══════════════════════════════════════
+PAGE LAYOUT
+═══════════════════════════════════════ */
+.pages-wrap {
+max-width: 210mm;
+margin: 60px auto 40px;
+display: flex; flex-direction: column; gap: 4px;
+}
+
+.page {
+width: 210mm;
+min-height: 297mm;
+background: var(--creme);
+position: relative;
+overflow: hidden;
+page-break-after: always;
+break-after: page;
+}
+
+/* ═══════════════════════════════════════
+PAGE ORNAMENTS
+═══════════════════════════════════════ */
+.page-corner {
+position: absolute;
+width: 60px; height: 60px;
+opacity: .12;
+}
+.page-corner.tl { top: 12px; left: 12px; }
+.page-corner.tr { top: 12px; right: 12px; transform: scaleX(-1); }
+.page-corner.bl { bottom: 12px; left: 12px; transform: scaleY(-1); }
+.page-corner.br { bottom: 12px; right: 12px; transform: scale(-1,-1); }
+
+.page-num {
+position: absolute; bottom: 14mm; left: 50%; transform: translateX(-50%);
+font-family: var(--serif); font-size: 9px; color: var(--gris);
+letter-spacing: 2px; opacity: .5;
+}
+
+/* ═══════════════════════════════════════
+COVER PAGE
+═══════════════════════════════════════ */
+.cover {
+background: linear-gradient(170deg, #1C0A30 0%, #3D2060 45%, #7B5EA7 100%);
+display: flex; flex-direction: column;
+align-items: center; justify-content: center;
+text-align: center; padding: 30mm 20mm;
+position: relative; overflow: hidden;
+}
+.cover::before {
+content: ‘’;
+position: absolute; inset: 0;
+background:
+radial-gradient(ellipse 70% 50% at 50% 30%, rgba(201,169,110,.12) 0%, transparent 60%),
+radial-gradient(ellipse 40% 40% at 20% 80%, rgba(255,255,255,.04) 0%, transparent 50%);
+pointer-events: none;
+}
+.cover-bismillah {
+font-size: 28px; direction: rtl; color: rgba(255,255,255,.45);
+letter-spacing: 2px; margin-bottom: 20mm; position: relative;
+}
+.cover-ornament {
+display: flex; align-items: center; gap: 12px;
+margin-bottom: 8mm; position: relative;
+}
+.cover-ornament-line {
+width: 30mm; height: 1px; background: var(--or); opacity: .4;
+}
+.cover-ornament-star { font-size: 14px; color: var(--or); opacity: .6; }
+.cover-sub-top {
+font-size: 8px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase;
+color: rgba(255,255,255,.4); margin-bottom: 6mm; position: relative;
+}
+.cover-title {
+font-family: var(--script); font-size: 72px; color: white;
+line-height: .9; font-weight: 400; margin-bottom: 4mm; position: relative;
+}
+.cover-arabic-title {
+font-size: 32px; direction: rtl; color: rgba(255,255,255,.8);
+line-height: 1.6; margin-bottom: 8mm; position: relative;
+letter-spacing: 2px;
+}
+.cover-divider {
+width: 40px; height: 2px; background: var(--or); opacity: .5;
+margin: 0 auto 8mm; position: relative;
+}
+.cover-tagline {
+font-family: var(--serif); font-size: 13px; font-style: italic;
+color: rgba(255,255,255,.55); line-height: 1.8; max-width: 120mm;
+position: relative; margin-bottom: 20mm;
+}
+.cover-dots {
+display: flex; gap: 8px; justify-content: center; margin-bottom: 10mm; position: relative;
+}
+.cover-dot {
+width: 8px; height: 8px; border-radius: 50%;
+background: rgba(255,255,255,.2);
+}
+.cover-dot.active { background: var(--or); }
+.cover-sakina {
+position: absolute; bottom: 14mm;
+font-family: var(--script); font-size: 18px; color: rgba(255,255,255,.25);
+font-weight: 400; letter-spacing: 1px;
+}
+
+/* ═══════════════════════════════════════
+INTRO PAGES
+═══════════════════════════════════════ */
+.intro-page { padding: 20mm 18mm 25mm; }
+
+.intro-header {
+text-align: center; margin-bottom: 10mm;
+padding-bottom: 8mm; border-bottom: 1px solid var(--sable);
+}
+.intro-eyebrow {
+font-size: 7px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+color: var(--violet); margin-bottom: 4mm;
+}
+.intro-title {
+font-family: var(--script); font-size: 48px; color: var(--noir);
+font-weight: 400; line-height: 1;
+}
+.intro-sub {
+font-family: var(--serif); font-size: 10px; font-style: italic;
+color: var(--gris); margin-top: 2mm; letter-spacing: .5px;
+}
+
+.intro-body {
+font-family: var(--serif); font-size: 10.5px; color: var(--noir);
+line-height: 1.9; margin-bottom: 6mm;
+}
+.intro-body strong { font-weight: 600; color: var(--violet-dark); }
+
+.intro-callout {
+background: var(--violet-soft); border-left: 3px solid var(--violet);
+border-radius: 0 10px 10px 0; padding: 5mm 6mm; margin: 6mm 0;
+}
+.intro-callout-label {
+font-size: 7px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+color: var(--violet); margin-bottom: 3mm;
+}
+.intro-callout-text {
+font-family: var(--serif); font-size: 10px; font-style: italic;
+color: var(--noir); line-height: 1.75;
+}
+.intro-callout-source {
+font-size: 8px; color: var(--gris); margin-top: 2mm;
+}
+
+.intro-arabic-quote {
+text-align: center; margin: 8mm 0;
+background: var(--grad); border-radius: 12px; padding: 6mm 8mm;
+}
+.intro-arabic-quote .ar {
+font-size: 22px; direction: rtl; color: white; line-height: 2;
+margin-bottom: 3mm;
+}
+.intro-arabic-quote .fr {
+font-family: var(--serif); font-size: 9px; font-style: italic;
+color: rgba(255,255,255,.65); line-height: 1.6;
+}
+.intro-arabic-quote .src {
+font-size: 8px; color: rgba(255,255,255,.35); margin-top: 2mm;
+}
+
+.intro-section-title {
+font-family: var(--serif); font-size: 14px; color: var(--violet-dark);
+margin: 7mm 0 3mm; border-bottom: 1px solid var(--violet-soft);
+padding-bottom: 2mm;
+}
+
+/* Comment utiliser ce livret */
+.how-to-grid {
+display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 5mm 0;
+}
+.how-to-card {
+background: white; border: 1px solid var(--sable);
+border-radius: 8px; padding: 4mm 5mm;
+}
+.how-to-num {
+font-family: var(--script); font-size: 32px; color: var(--or);
+line-height: 1; margin-bottom: 2mm; font-weight: 400;
+}
+.how-to-title {
+font-size: 9px; font-weight: 700; color: var(--noir); margin-bottom: 2mm;
+}
+.how-to-desc {
+font-size: 8.5px; color: var(--gris); line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════
+MEDITATION PAGE TEMPLATE
+═══════════════════════════════════════ */
+.med-page { padding: 16mm 16mm 22mm; }
+
+.med-page-header {
+display: flex; align-items: center; justify-content: space-between;
+margin-bottom: 8mm; padding-bottom: 4mm;
+border-bottom: 1px solid var(--sable);
+}
+.med-page-sakina {
+font-family: var(--script); font-size: 16px; color: var(--gris);
+opacity: .4; font-weight: 400;
+}
+.med-page-num-badge {
+background: var(--grad); border-radius: 20px; padding: 2px 10px;
+font-size: 8px; font-weight: 600; color: white; letter-spacing: 1px;
+}
+
+/* Nom card */
+.nom-card {
+background: var(--grad); border-radius: 16px;
+padding: 8mm 10mm; margin-bottom: 6mm;
+text-align: center; position: relative; overflow: hidden;
+}
+.nom-card::before {
+content: ‘’;
+position: absolute; inset: 0;
+background: url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ viewBox=‘0 0 200 200’%3E%3Ccircle cx=‘160’ cy=‘40’ r=‘80’ fill=‘rgba(255,255,255,0.05)’/%3E%3Ccircle cx=‘30’ cy=‘170’ r=‘60’ fill=‘rgba(255,255,255,0.03)’/%3E%3C/svg%3E”) center/cover;
+pointer-events: none;
+}
+.nom-number {
+font-size: 8px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+color: rgba(255,255,255,.4); margin-bottom: 4mm; position: relative;
+}
+.nom-arabic {
+font-size: 38px; direction: rtl; color: white; line-height: 1.4;
+margin-bottom: 3mm; position: relative;
+}
+.nom-transliteration {
+font-family: var(--script); font-size: 28px; color: rgba(255,255,255,.85);
+margin-bottom: 2mm; position: relative; font-weight: 400;
+}
+.nom-french {
+font-family: var(--serif); font-size: 10px; font-style: italic;
+color: rgba(255,255,255,.55); position: relative;
+}
+
+/* Sens profond */
+.sens-section { margin-bottom: 5mm; }
+.sens-label {
+font-size: 7px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+color: var(--violet); margin-bottom: 2mm;
+}
+.sens-text {
+font-family: var(--serif); font-size: 10px; color: var(--noir);
+line-height: 1.8;
+}
+
+/* Méditation */
+.med-section {
+background: var(--violet-soft); border-radius: 10px;
+padding: 4mm 5mm; margin-bottom: 5mm;
+}
+.med-label {
+font-size: 7px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+color: var(--violet); margin-bottom: 2mm;
+}
+.med-text {
+font-family: var(--serif); font-size: 10px; font-style: italic;
+color: var(--noir); line-height: 1.8;
+}
+
+/* Invocation */
+.inv-section {
+background: linear-gradient(135deg, #FAF6F0, #F0E8DC);
+border: 1px solid var(--or-light); border-radius: 10px;
+padding: 4mm 5mm; margin-bottom: 5mm;
+}
+.inv-label {
+font-size: 7px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+color: var(--or-dark); margin-bottom: 3mm;
+}
+.inv-arabic {
+font-size: 14px; direction: rtl; color: var(--noir); line-height: 2;
+text-align: right; margin-bottom: 2mm;
+}
+.inv-fr {
+font-family: var(--serif); font-size: 9px; font-style: italic;
+color: var(--gris); line-height: 1.6;
+}
+
+/* Espace journaling */
+.journal-section { margin-bottom: 0; }
+.journal-label {
+font-size: 7px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+color: var(--gris); margin-bottom: 3mm;
+}
+.journal-lines {
+display: flex; flex-direction: column; gap: 4mm;
+}
+.journal-line {
+height: 1px; background: var(--sable); width: 100%;
+}
+
+/* ═══════════════════════════════════════
+INDEX PAGE
+═══════════════════════════════════════ */
+.index-page { padding: 16mm 16mm 22mm; }
+.index-title {
+font-family: var(--script); font-size: 44px; color: var(--noir);
+font-weight: 400; text-align: center; margin-bottom: 2mm;
+}
+.index-sub {
+font-family: var(--serif); font-size: 9px; font-style: italic;
+color: var(--gris); text-align: center; margin-bottom: 8mm;
+}
+.index-grid {
+display: grid; grid-template-columns: repeat(3, 1fr); gap: 2mm;
+}
+.index-item {
+display: flex; align-items: center; gap: 2mm;
+padding: 2mm 3mm; border-radius: 6px;
+border: 1px solid transparent; transition: all .2s;
+}
+.index-item-num {
+font-size: 7px; color: var(--gris); min-width: 14px;
+font-weight: 600;
+}
+.index-item-ar {
+font-size: 11px; direction: rtl; color: var(--noir); flex: 1;
+text-align: right; line-height: 1.4;
+}
+.index-item-fr {
+font-size: 7px; color: var(--gris); line-height: 1.3;
+}
+
+/* ═══════════════════════════════════════
+CLOSING PAGE
+═══════════════════════════════════════ */
+.closing-page {
+background: linear-gradient(170deg, #1C0A30 0%, #3D2060 50%, #5A3A90 100%);
+display: flex; flex-direction: column;
+align-items: center; justify-content: center;
+text-align: center; padding: 25mm 20mm;
+position: relative; overflow: hidden;
+}
+.closing-arabic {
+font-size: 36px; direction: rtl; color: rgba(255,255,255,.7);
+line-height: 1.9; margin-bottom: 10mm;
+}
+.closing-title {
+font-family: var(--script); font-size: 52px; color: white;
+font-weight: 400; margin-bottom: 6mm; line-height: 1;
+}
+.closing-text {
+font-family: var(--serif); font-size: 11px; font-style: italic;
+color: rgba(255,255,255,.55); line-height: 1.9; max-width: 120mm;
+margin-bottom: 12mm;
+}
+.closing-divider {
+width: 40px; height: 1px; background: var(--or);
+opacity: .4; margin: 0 auto 12mm;
+}
+.closing-dua {
+background: rgba(255,255,255,.08); border-radius: 12px;
+padding: 6mm 8mm; margin-bottom: 12mm; max-width: 130mm;
+backdrop-filter: blur(8px);
+}
+.closing-dua-ar {
+font-size: 20px; direction: rtl; color: white;
+line-height: 1.9; margin-bottom: 4mm;
+}
+.closing-dua-fr {
+font-family: var(--serif); font-size: 9px; font-style: italic;
+color: rgba(255,255,255,.55); line-height: 1.6;
+}
+.closing-sakina {
+font-family: var(--script); font-size: 22px; color: var(--or);
+opacity: .6; font-weight: 400;
+}
+
+/* ═══════════════════════════════════════
+PRINT STYLES
+═══════════════════════════════════════ */
+@media print {
+body { background: white; }
+.print-bar { display: none; }
+.pages-wrap { margin: 0; gap: 0; }
+.page {
+width: 210mm; min-height: 297mm; height: 297mm;
+overflow: hidden; page-break-after: always; break-after: page;
+box-shadow: none;
+}
+@page {
+size: A4;
+margin: 0;
+}
+}
+
+@media screen {
+.page {
+box-shadow: 0 8px 40px rgba(0,0,0,.18);
+margin-bottom: 4px;
+}
+}
+
+</style>
+</head>
+<body>
+
+<!-- PRINT BAR -->
+
+<div class="print-bar">
+  <div class="print-bar-title">Les 99 Noms d'Allah · Livret de Méditation</div>
+  <div class="print-bar-actions">
+    <button class="print-btn secondary" onclick="window.close()">Fermer</button>
+    <button class="print-btn" onclick="window.print()">🖨️ Imprimer / Sauvegarder en PDF</button>
+  </div>
+</div>
+
+<div class="pages-wrap">
+
+<!-- ═══════════════════════════════════
+     PAGE 1 — COUVERTURE
+═══════════════════════════════════ -->
+
+<div class="page cover">
+  <div class="cover-bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+
+  <div class="cover-ornament">
+    <div class="cover-ornament-line"></div>
+    <div class="cover-ornament-star">✦</div>
+    <div class="cover-ornament-line"></div>
+  </div>
+
+  <div class="cover-sub-top">Livret de Méditation · Sakina</div>
+
+  <div class="cover-title">Les 99 Noms<br>d'Allah</div>
+
+  <div class="cover-arabic-title">الأسماء الحسنى</div>
+
+  <div class="cover-divider"></div>
+
+  <div class="cover-tagline">
+    "Allah possède les plus beaux noms.<br>
+    Invoquez-Le par ces noms."<br>
+    <span style="font-size:9px;opacity:.6;margin-top:4px;display:block;">Coran 7:180</span>
+  </div>
+
+  <div class="cover-dots">
+    <div class="cover-dot active"></div>
+    <div class="cover-dot"></div>
+    <div class="cover-dot"></div>
+    <div class="cover-dot active"></div>
+    <div class="cover-dot"></div>
+    <div class="cover-dot active"></div>
+    <div class="cover-dot"></div>
+    <div class="cover-dot active"></div>
+    <div class="cover-dot"></div>
+  </div>
+
+  <div style="font-family:var(--serif);font-size:9px;font-style:italic;color:rgba(255,255,255,.3);position:relative;">
+    Apprendre · Méditer · Vivre
+  </div>
+
+  <div class="cover-sakina">Sakina</div>
+</div>
+
+<!-- ═══════════════════════════════════
+     PAGE 2 — INTRODUCTION
+═══════════════════════════════════ -->
+
+<div class="page intro-page">
+  <svg class="page-corner tl" viewBox="0 0 60 60"><path d="M0 60 Q0 0 60 0" fill="none" stroke="#C9A96E" stroke-width="1.5"/><path d="M0 45 Q0 0 45 0" fill="none" stroke="#C9A96E" stroke-width=".8" opacity=".4"/></svg>
+  <svg class="page-corner tr" viewBox="0 0 60 60"><path d="M0 60 Q0 0 60 0" fill="none" stroke="#C9A96E" stroke-width="1.5"/><path d="M0 45 Q0 0 45 0" fill="none" stroke="#C9A96E" stroke-width=".8" opacity=".4"/></svg>
+
+  <div class="intro-header">
+    <div class="intro-eyebrow">✦ Introduction</div>
+    <div class="intro-title">Une lettre<br>avant de commencer</div>
+    <div class="intro-sub">Bismillah.</div>
+  </div>
+
+  <div class="intro-body">
+    Sœur, ce livret est né d'une conviction simple : <strong>les noms d'Allah ne sont pas faits pour être mémorisés comme une liste.</strong> Ils sont faits pour être vécus. Un à la fois. Avec le cœur.
+  </div>
+
+  <div class="intro-body">
+    Tu vas peut-être ouvrir cette page un matin d'Hiver, quand ton énergie est basse et que tu cherches un ancrage. Ou un soir d'Automne, quand tes émotions débordent et que tu as besoin de te rappeler qui veille sur toi. Ou en plein Été, débordante d'énergie, pour diriger ce rayonnement vers Lui.
+  </div>
+
+  <div class="intro-callout">
+    <div class="intro-callout-label">Coran 7:180</div>
+    <div class="intro-callout-text">"Allah possède les plus beaux noms. Invoquez-Le par ces noms et abandonnez ceux qui blasphèment Ses noms."</div>
+  </div>
+
+  <div class="intro-body">
+    Le Prophète ﷺ a dit : <strong>"Allah a quatre-vingt-dix-neuf noms — cent moins un. Celui qui les préserve entrera au Paradis."</strong> <span style="font-size:9px;color:var(--gris);">(Al-Bukhari)</span>
+  </div>
+
+  <div class="intro-body">
+    "Préserver" ne veut pas dire réciter une liste de mémoire. Cela signifie les connaître, les comprendre, les méditer, les invoquer — et laisser chacun d'eux transformer ta façon de voir Allah et de te voir toi-même.
+  </div>
+
+  <div class="intro-arabic-quote">
+    <div class="ar">هُوَ اللَّهُ الَّذِي لَا إِلَٰهَ إِلَّا هُوَ</div>
+    <div class="fr">"C'est Lui, Allah — pas de divinité hormis Lui."</div>
+    <div class="src">Coran 59:22</div>
+  </div>
+
+  <div class="page-num">— 2 —</div>
+  <svg class="page-corner bl" viewBox="0 0 60 60"><path d="M0 60 Q0 0 60 0" fill="none" stroke="#C9A96E" stroke-width="1.5"/></svg>
+  <svg class="page-corner br" viewBox="0 0 60 60"><path d="M0 60 Q0 0 60 0" fill="none" stroke="#C9A96E" stroke-width="1.5"/></svg>
+</div>
+
+<!-- ═══════════════════════════════════
+     PAGE 3 — COMMENT UTILISER CE LIVRET
+═══════════════════════════════════ -->
+
+<div class="page intro-page">
+  <svg class="page-corner tl" viewBox="0 0 60 60"><path d="M0 60 Q0 0 60 0" fill="none" stroke="#C9A96E" stroke-width="1.5"/></svg>
+  <svg class="page-corner tr" viewBox="0 0 60 60"><path d="M0 60 Q0 0 60 0" fill="none" stroke="#C9A96E" stroke-width="1.5"/></svg>
+
+  <div class="intro-header">
+    <div class="intro-eyebrow">✦ Mode d'emploi</div>
+    <div class="intro-title">Comment utiliser<br>ce livret</div>
+    <div class="intro-sub">Un nom par jour. Un cœur à la fois.</div>
+  </div>
+
+  <div class="how-to-grid">
+    <div class="how-to-card">
+      <div class="how-to-num">1</div>
+      <div class="how-to-title">Choisis un nom</div>
+      <div class="how-to-desc">Par ordre numérique, ou selon ce que tu traverses aujourd'hui. Laisse-toi guider. Il n'y a pas de mauvais choix.</div>
+    </div>
+    <div class="how-to-card">
+      <div class="how-to-num">2</div>
+      <div class="how-to-title">Lis lentement</div>
+      <div class="how-to-desc">L'arabe d'abord — laisse le son résonner. Puis la traduction. Puis la méditation. Sans se presser.</div>
+    </div>
+    <div class="how-to-card">
+      <div class="how-to-num">3</div>
+      <div class="how-to-title">Écris</div>
+      <div class="how-to-desc">Utilise les lignes prévues pour noter ce que ce nom éveille en toi. Une pensée, une image, une gratitude.</div>
+    </div>
+    <div class="how-to-card">
+      <div class="how-to-num">4</div>
+      <div class="how-to-title">Invoque</div>
+      <div class="how-to-desc">Répète le nom dans ton cœur tout au long de la journée. Laisse-le colorer ta façon de voir les choses.</div>
+    </div>
+  </div>
+
+  <div class="intro-section-title">Le lien avec ton cycle</div>
+
+  <div class="intro-body">
+    Certains noms résonnent différemment selon ta saison intérieure. En voici quelques repères :
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:3mm;margin:4mm 0;">
+    <div style="display:flex;align-items:flex-start;gap:3mm;padding:3mm 4mm;background:var(--violet-soft);border-radius:8px;">
+      <span style="font-size:14px;flex-shrink:0;">🌙</span>
+      <div><div style="font-size:8px;font-weight:700;color:var(--violet);margin-bottom:1mm;">Hiver — Phase de repos</div><div style="font-size:9px;color:var(--gris);line-height:1.6;">As-Sabur (Le Patient) · Ar-Rahman (Le Tout Miséricordieux) · Al-Latif (Le Subtil) · Al-Ghaffar (Le Grand Pardonneur)</div></div>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:3mm;padding:3mm 4mm;background:#E8F8F3;border-radius:8px;">
+      <span style="font-size:14px;flex-shrink:0;">🌸</span>
+      <div><div style="font-size:8px;font-weight:700;color:#1A6B52;margin-bottom:1mm;">Printemps — Phase d'élan</div><div style="font-size:9px;color:var(--gris);line-height:1.6;">Al-Mubdi (Le Principe) · Al-Fattah (Le Grand Ouvreur) · Al-Khaliq (Le Créateur) · Al-Basit (Celui qui étend)</div></div>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:3mm;padding:3mm 4mm;background:#FFFBF0;border-radius:8px;border:1px solid #F5C040;">
+      <span style="font-size:14px;flex-shrink:0;">☀️</span>
+      <div><div style="font-size:8px;font-weight:700;color:#8A6010;margin-bottom:1mm;">Été — Phase de puissance</div><div style="font-size:9px;color:var(--gris);line-height:1.6;">Al-Qawi (Le Très Fort) · Al-Mu'izz (Celui qui honore) · Al-Wahid (L'Unique) · Al-Hayy (Le Vivant)</div></div>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:3mm;padding:3mm 4mm;background:#FDF0EE;border-radius:8px;">
+      <span style="font-size:14px;flex-shrink:0;">🍂</span>
+      <div><div style="font-size:8px;font-weight:700;color:#5A2018;margin-bottom:1mm;">Automne — Phase de profondeur</div><div style="font-size:9px;color:var(--gris);line-height:1.6;">At-Tawwab (Le Grand Repentant) · Al-Wali (Le Proche) · Al-Halim (Le Clément) · Al-Wadud (Le Plein d'Amour)</div></div>
+    </div>
+  </div>
+
+  <div class="intro-callout" style="margin-top:5mm;">
+    <div class="intro-callout-label">À retenir</div>
+    <div class="intro-callout-text">Il n'y a pas de rythme imposé. Un nom par semaine, un par jour, ou plusieurs en une fois — c'est toi qui choisis. L'important n'est pas la vitesse. C'est la présence.</div>
+  </div>
+
+  <div class="page-num">— 3 —</div>
+  <svg class="page-corner bl" viewBox="0 0 60 60"><path d="M0 60 Q0 0 60 0" fill="none" stroke="#C9A96E" stroke-width="1.5"/></svg>
+  <svg class="page-corner br" viewBox="0 0 60 60"><path d="M0 60 Q0 0 60 0" fill="none" stroke="#C9A96E" stroke-width="1.5"/></svg>
+</div>
+
+<!-- ═══════════════════════════════════
+     PAGES 4--37 — LES 99 NOMS (3 par page)
+═══════════════════════════════════ -->
+
+<div id="noms-pages"></div>
+
+<!-- ═══════════════════════════════════
+     INDEX PAGE
+═══════════════════════════════════ -->
+
+<div class="page index-page" id="index-page">
+  <svg class="page-corner tl" viewBox="0 0 60 60"><path d="M0 60 Q0 0 60 0" fill="none" stroke="#C9A96E" stroke-width="1.5"/></svg>
+  <svg class="page-corner tr" viewBox="0 0 60 60"><path d="M0 60 Q0 0 60 0" fill="none" stroke="#C9A96E" stroke-width="1.5"/></svg>
+  <div class="index-title">Index des 99 Noms</div>
+  <div class="index-sub">الأسماء الحسنى · Pour retrouver facilement</div>
+  <div class="index-grid" id="index-grid"></div>
+  <div class="page-num">— Index —</div>
+  <svg class="page-corner bl" viewBox="0 0 60 60"><path d="M0 60 Q0 0 60 0" fill="none" stroke="#C9A96E" stroke-width="1.5"/></svg>
+  <svg class="page-corner br" viewBox="0 0 60 60"><path d="M0 60 Q0 0 60 0" fill="none" stroke="#C9A96E" stroke-width="1.5"/></svg>
+</div>
+
+<!-- ═══════════════════════════════════
+     CLOSING PAGE
+═══════════════════════════════════ -->
+
+<div class="page closing-page">
+  <div class="closing-arabic">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ<br>سُبْحَانَ اللَّهِ الْعَظِيمِ</div>
+
+  <div class="closing-divider"></div>
+
+  <div class="closing-title">Barak Allahou<br>fik, sœur.</div>
+
+  <div class="closing-text">
+    Tu as traversé les 99 noms d'Allah.<br>
+    Certains t'ont touchée plus que d'autres.<br>
+    Reviens-y. Toujours. Il n'y a pas de fin<br>
+    à la connaissance de Celui qui n'a pas de fin.
+  </div>
+
+  <div class="closing-dua">
+    <div class="closing-dua-ar">اللَّهُمَّ إِنِّي أَسْأَلُكَ بِأَسْمَائِكَ الْحُسْنَى</div>
+    <div class="closing-dua-fr">"Ô Allah, je T'implore par Tes plus beaux noms."</div>
+  </div>
+
+  <div class="closing-sakina">Sakina</div>
+</div>
+
+</div><!-- pages-wrap -->
+
+<script>
+const ASMA = [
+  {num:1,  ar:'اللَّهُ',           tl:'Allah',          fr:'Le Nom qui englobe tous les autres',
+   sens:"Le nom suprême qui contient en lui tous les autres attributs divins. Avant tout acte, avant toute pensée — dis Son nom.",
+   med:"Ce matin, commence chaque action en disant simplement : Bismillah. Laisse ce nom poser une intention sur chaque geste.",
+   inv:"يَا اللَّهُ، أَنْتَ مَقْصُودِي", inv_fr:'"Ô Allah, Tu es mon but."'},
+
+  {num:2,  ar:'الرَّحْمَنُ',       tl:'Ar-Rahman',      fr:'Le Tout Miséricordieux',
+   sens:"Sa miséricorde s'étend à toutes Ses créatures sans exception — croyants et non-croyants, humains et animaux. Elle précède Sa colère.",
+   med:"Pense à une personne difficile dans ta vie. Sa miséricorde la couvre aussi. Entièrement.",
+   inv:"يَا رَحْمَنُ ارْحَمْنِي", inv_fr:'"Ô Tout Miséricordieux, aie pitié de moi."'},
+
+  {num:3,  ar:'الرَّحِيمُ',        tl:'Ar-Rahim',       fr:'Le Très Miséricordieux',
+   sens:"Une miséricorde particulière, spéciale, réservée aux croyants dans l'au-delà. Ar-Rahman est la miséricorde large ; Ar-Rahim est la miséricorde profonde.",
+   med:"Tu as commis une erreur. Rappelle-toi : Sa miséricorde spéciale t'attend. Reviens sans honte.",
+   inv:"يَا رَحِيمُ تُبْ عَلَيَّ", inv_fr:'"Ô Très Miséricordieux, accepte mon repentir."'},
+
+  {num:4,  ar:'الْمَلِكُ',         tl:'Al-Malik',       fr:'Le Roi, le Souverain absolu',
+   sens:"Toute autorité sur terre est temporaire et déléguée. Lui seul règne réellement — sur les cœurs, sur le destin, sur l'univers entier.",
+   med:"Face à quelque chose qui t'échappe aujourd'hui — rappelle-toi qui est vraiment aux commandes.",
+   inv:"يَا مَلِكُ أَصْلِحْ أَمْرِي", inv_fr:'"Ô Roi, arrange mes affaires."'},
+
+  {num:5,  ar:'الْقُدُّوسُ',       tl:'Al-Quddous',     fr:'Le Très Saint, le Pur',
+   sens:"Exempt de toute imperfection, de tout défaut, de toute limitation. Sa pureté est absolue — elle dépasse tout ce qu'on peut imaginer.",
+   med:"Face à une imperfection en toi aujourd'hui — ce n'est pas Lui, c'est l'humanité. Et Il t'aime malgré ça.",
+   inv:"يَا قُدُّوسُ طَهِّرْ قَلْبِي", inv_fr:'"Ô Très Saint, purifie mon cœur."'},
+
+  {num:6,  ar:'السَّلَامُ',        tl:'As-Salam',       fr:'La Paix, Source de Paix',
+   sens:"Il est la paix en Lui-même, et toute paix véritable vient de Lui. Le Paradis s'appelle Dar As-Salam — la demeure de la paix.",
+   med:"Quand tu cherches la paix dans quelque chose d'extérieur — rappelle-toi que la paix véritable n'a qu'une source.",
+   inv:"يَا سَلَامُ سَلِّمْنِي", inv_fr:'"Ô Paix, préserve-moi."'},
+
+  {num:7,  ar:'الْمُؤْمِنُ',       tl:'Al-Mu\'min',     fr:'Celui qui donne la sécurité et la foi',
+   sens:"Il est le garant de la sécurité. Il témoigne de Sa propre unicité. Il accorde la foi à ceux qu'Il veut.",
+   med:"Dans quel domaine as-tu besoin de sécurité aujourd'hui ? Confie-le à Celui qui donne la sécurité réelle.",
+   inv:"يَا مُؤْمِنُ آمِنِّي", inv_fr:'"Ô Garant de sécurité, protège-moi."'},
+
+  {num:8,  ar:'الْمُهَيْمِنُ',     tl:'Al-Muhaimin',    fr:'Le Gardien Suprême, le Vigilant',
+   sens:"Il observe, protège et préserve tout ce qui existe. Rien ne Lui échappe — pas une feuille qui tombe, pas un battement de cœur.",
+   med:"Il voit chaque effort que tu fais, même ceux que personne d'autre ne voit. Chaque petit geste compte.",
+   inv:"يَا مُهَيْمِنُ احْفَظْنِي", inv_fr:'"Ô Vigilant, garde-moi."'},
+
+  {num:9,  ar:'الْعَزِيزُ',        tl:'Al-Aziz',        fr:'Le Puissant, l\'Inaccessible',
+   sens:"Une puissance qui n'a pas de faiblesse. Une dignité qui ne peut être atteinte. Il est fort d'une force qui ne se mesure pas.",
+   med:"Quand tu te sens faible ou humiliée — souviens-toi que tu appartiens à Al-Aziz. Sa force est sur toi.",
+   inv:"يَا عَزِيزُ أَعِزَّنِي", inv_fr:'"Ô Puissant, donne-moi de la dignité."'},
+
+  {num:10, ar:'الْجَبَّارُ',       tl:'Al-Jabbar',      fr:'Le Contraignant, Celui qui répare',
+   sens:"Il contraint par Sa puissance — et Il répare ce qui est brisé. Al-Jabr vient de la même racine que \"remettre en place un os fracturé\".",
+   med:"Qu'est-ce qui est fracturé en toi en ce moment ? Al-Jabbar peut le remettre en place.",
+   inv:"يَا جَبَّارُ اجْبُرْ كَسْرِي", inv_fr:'"Ô Réparateur, répare mes brisures."'},
+
+  {num:11, ar:'الْمُتَكَبِّرُ',    tl:'Al-Mutakabbir',  fr:'Le Très Grand, le Majestueux',
+   sens:"La grandeur appartient à Lui seul. Chez l'humain, l'orgueil est un défaut. Chez Allah, la grandeur est un attribut de perfection.",
+   med:"Devant quelque chose d'immense qui t'écrase — rappelle-toi qu'Il est plus grand que tout cela.",
+   inv:"يَا مُتَكَبِّرُ ذَلِّلْ كِبْرِي", inv_fr:'"Ô Très Grand, réduis mon orgueil."'},
+
+  {num:12, ar:'الْخَالِقُ',        tl:'Al-Khaliq',      fr:'Le Créateur absolu',
+   sens:"Il crée de rien. Pas à partir d'une matière existante — du néant absolu, Il fait jaillir l'existence. Aucun humain ne crée vraiment.",
+   med:"Regarde quelque chose de beau autour de toi aujourd'hui. Rends-lui grâce pour Sa création.",
+   inv:"يَا خَالِقُ أَحْسِنْ خَلْقِي", inv_fr:'"Ô Créateur, embellis ma création."'},
+
+  {num:13, ar:'الْبَارِئُ',        tl:'Al-Bari\'',      fr:'Le Formateur, Celui qui distingue',
+   sens:"Il forme chaque chose selon sa nature propre, distincte des autres. C'est Lui qui a fait que tu es toi — unique, irremplaçable.",
+   med:"Tu n'es pas censée être une autre. Tu es exactement la femme qu'Il a voulu former.",
+   inv:"يَا بَارِئُ كَمِّلْ نَقْصِي", inv_fr:'"Ô Formateur, complète mes manques."'},
+
+  {num:14, ar:'الْمُصَوِّرُ',      tl:'Al-Mussawwir',   fr:'Le Façonneur des formes',
+   sens:"Il donne à chaque chose sa forme particulière. Dans le ventre de sa mère, l'enfant reçoit son visage unique — façonné par Al-Mussawwir.",
+   med:"La façon dont tu es faite n'est pas un accident. Chaque trait a été façonné avec intention.",
+   inv:"يَا مُصَوِّرُ جَمِّلْ ظَاهِرِي وَبَاطِنِي", inv_fr:'"Ô Façonneur, embellis mon extérieur et mon intérieur."'},
+
+  {num:15, ar:'الْغَفَّارُ',       tl:'Al-Ghaffar',     fr:'Le Grand Pardonneur, Celui qui efface',
+   sens:"La racine غفر évoque l'idée de couvrir, voiler. Il ne pardonne pas seulement — Il couvre le péché pour qu'il ne soit plus visible.",
+   med:"Un péché qui te pèse ? Al-Ghaffar ne pardonne pas malgré lui — Il aime pardonner.",
+   inv:"يَا غَفَّارُ اغْفِرْ لِي", inv_fr:'"Ô Grand Pardonneur, pardonne-moi."'},
+
+  {num:16, ar:'الْقَهَّارُ',       tl:'Al-Qahhar',      fr:'Le Dominateur Absolu',
+   sens:"Tout est soumis à Sa volonté. Pharaon, Nimrod, toutes les puissances de l'histoire — toutes ont été dominées par Al-Qahhar.",
+   med:"Ce qui te semble insurmontable aujourd'hui est soumis à Al-Qahhar. Rien ne Lui résiste.",
+   inv:"يَا قَهَّارُ اقْهَرْ أَعْدَائِي", inv_fr:'"Ô Dominateur, soumet ce qui me nuit."'},
+
+  {num:17, ar:'الْوَهَّابُ',       tl:'Al-Wahhab',      fr:'Le Donateur, Celui qui offre sans compter',
+   sens:"Il donne sans contrepartie, sans calcul, sans attente de retour. Ses dons ne s'épuisent jamais — plus Il donne, plus Il donne.",
+   med:"Liste mentalement 5 choses que tu as reçues sans les mériter. Al-Wahhab les a données.",
+   inv:"يَا وَهَّابُ هَبْ لِي خَيْرًا", inv_fr:'"Ô Donateur, offre-moi ce qui est bon."'},
+
+  {num:18, ar:'الرَّزَّاقُ',       tl:'Ar-Razzaq',      fr:'Le Pourvoyeur, Source de toute subsistance',
+   sens:"La rizq — la subsistance — ne vient que de Lui. La nourriture, la santé, les opportunités, l'amour — tout est rizq. Et tout est garanti.",
+   med:"Ta rizq est écrite. L'inquiétude ne l'augmente pas. La confiance ne la diminue pas.",
+   inv:"يَا رَزَّاقُ ارْزُقْنِي حَلَالًا طَيِّبًا", inv_fr:'"Ô Pourvoyeur, donne-moi une subsistance licite et bonne."'},
+
+  {num:19, ar:'الْفَتَّاحُ',       tl:'Al-Fattah',      fr:'Le Grand Ouvreur, Celui qui tranche',
+   sens:"Il ouvre les portes fermées. Il tranche les litiges. Il fait jaillir les solutions là où il n'y en avait aucune.",
+   med:"Quelle porte semble fermée pour toi en ce moment ? Al-Fattah peut l'ouvrir — quand c'est le bon moment.",
+   inv:"يَا فَتَّاحُ افْتَحْ لِي أَبْوَابَ الْخَيْرِ", inv_fr:'"Ô Grand Ouvreur, ouvre-moi les portes du bien."'},
+
+  {num:20, ar:'الْعَلِيمُ',        tl:'Al-Alim',        fr:'L\'Omniscient, Celui qui sait tout',
+   sens:"Il sait ce que tu penses avant que tu le penses. Il connaît tes peurs secrètes, tes espoirs inavoués, tes blessures cachées.",
+   med:"Il sait tout ce que tu n'as dit à personne. Et Il t'aime quand même — entièrement.",
+   inv:"يَا عَلِيمُ عَلِّمْنِي مَا يَنْفَعُنِي", inv_fr:'"Ô Omniscient, enseigne-moi ce qui me profite."'},
+
+  {num:21, ar:'الْقَابِضُ',        tl:'Al-Qabid',       fr:'Celui qui resserre, qui retient',
+   sens:"Il resserre la rizq, les cœurs, les âmes — selon Sa sagesse. Ce qui est retiré est retiré pour une raison qu'on ne voit pas toujours.",
+   med:"Quelque chose t'a été retiré récemment. Est-ce que tu fais confiance à Sa sagesse dans ce resserrement ?",
+   inv:"يَا قَابِضُ اقْبِضْ عَنِّي مَا يَضُرُّنِي", inv_fr:'"Ô Celui qui retient, retiens ce qui me nuit."'},
+
+  {num:22, ar:'الْبَاسِطُ',        tl:'Al-Basit',       fr:'Celui qui étend, qui déploie',
+   sens:"Après le resserrement, l'expansion. Al-Qabid et Al-Basit sont toujours ensemble — car après l'hiver vient toujours le printemps.",
+   med:"Quel Hiver traverses-tu en ce moment ? Al-Basit prépare déjà ton Printemps.",
+   inv:"يَا بَاسِطُ ابْسُطْ عَلَيَّ رِزْقَكَ", inv_fr:'"Ô Celui qui étend, déploie Ta subsistance sur moi."'},
+
+  {num:23, ar:'الْخَافِضُ',        tl:'Al-Khafid',      fr:'Celui qui abaisse',
+   sens:"Il abaisse l'orgueil, l'injustice, la tyrannie. Ce qui s'élève faussement sera abaissé — c'est une loi divine.",
+   med:"Y a-t-il quelque chose en toi qui s'élève là où il ne le devrait pas ? L'orgueil, le jugement, la comparaison ?",
+   inv:"يَا خَافِضُ اخْفِضْ كُلَّ مُتَكَبِّرٍ", inv_fr:'"Ô Celui qui abaisse, abaisse tout orgueil injuste."'},
+
+  {num:24, ar:'الرَّافِعُ',        tl:'Ar-Rafi\'',      fr:'Celui qui élève',
+   sens:"Il élève en dignité, en rang, en connaissance — ceux qu'Il veut. La vraie élévation ne vient que de Lui.",
+   med:"L'élévation que tu cherches — si elle vient de Lui, elle durera. Si elle vient des hommes, elle est fragile.",
+   inv:"يَا رَافِعُ ارْفَعْ دَرَجَتِي", inv_fr:'"Ô Celui qui élève, élève mon rang."'},
+
+  {num:25, ar:'الْمُعِزُّ',        tl:'Al-Mu\'izz',     fr:'Celui qui honore, qui donne la gloire',
+   sens:"L'honneur réel ne vient que de Lui. Tout honneur humain est provisoire. Celui qu'Il honore est vraiment honoré.",
+   med:"Est-ce que tu cherches la reconnaissance des humains ou la sienne ? Quelle différence cela ferait-il dans tes choix ?",
+   inv:"يَا مُعِزُّ أَعِزَّنِي بِطَاعَتِكَ", inv_fr:'"Ô Celui qui honore, donne-moi la gloire par Ton obéissance."'},
+
+  {num:26, ar:'الْمُذِلُّ',        tl:'Al-Mudhill',     fr:'Celui qui humilie',
+   sens:"Il humilie la fausse grandeur, l'injustice, l'arrogance. Ce n'est pas une vengeance — c'est un rétablissement de la vérité.",
+   med:"Quelqu'un t'a humiliée injustement. Al-Mudhill voit. Et la justice divine ne dort jamais.",
+   inv:"يَا مُذِلُّ أَذِلَّ نَفْسِي لَكَ", inv_fr:'"Ô Celui qui humilie, fais que je m\'humilie devant Toi."'},
+
+  {num:27, ar:'السَّمِيعُ',        tl:'As-Sami\'',      fr:'Le Tout-Entendant',
+   sens:"Il entend chaque voix, chaque murmure, chaque pensée non formulée. Même ton du'a silencieux — Il l'entend.",
+   med:"La prochaine fois que tu fais du'a, souviens-toi : tu parles à Celui qui entend tout. Parle-lui vraiment.",
+   inv:"يَا سَمِيعُ اسْمَعْ دُعَائِي", inv_fr:'"Ô Tout-Entendant, entends ma supplication."'},
+
+  {num:28, ar:'الْبَصِيرُ',        tl:'Al-Basir',       fr:'Le Clairvoyant, Celui qui voit tout',
+   sens:"Il voit l'aiguille au fond de la mer dans la nuit noire. Il voit ton effort invisible. Il voit ta douleur cachée.",
+   med:"Il voit chaque effort que tu fais, même ceux dont personne ne sait. Rien n'est perdu devant Al-Basir.",
+   inv:"يَا بَصِيرُ انْظُرْ إِلَيَّ بِعَيْنِ الرَّحْمَةِ", inv_fr:'"Ô Clairvoyant, regarde-moi avec un regard de miséricorde."'},
+
+  {num:29, ar:'الْحَكَمُ',         tl:'Al-Hakam',       fr:'Le Juge, Celui qui tranche avec justice',
+   sens:"Son jugement est définitif, parfait et juste. Aucun tribunal humain ne peut défaire ce qu'Il a jugé.",
+   med:"Une injustice qui n'a pas été réparée dans ce monde — Al-Hakam existe. Le Jour du Jugement existe.",
+   inv:"يَا حَكَمُ احْكُمْ بَيْنِي وَبَيْنَ مَنْ ظَلَمَنِي", inv_fr:'"Ô Juge, tranche entre moi et celui qui m\'a lésée."'},
+
+  {num:30, ar:'الْعَدْلُ',         tl:'Al-Adl',         fr:'Le Juste, La Justice absolue',
+   sens:"Sa justice est parfaite. Pas une atome de bien n'est perdu. Pas une atome d'injustice ne subsistera éternellement.",
+   med:"\"Celui qui fait un atome de bien le verra, et celui qui fait un atome de mal le verra.\" (Coran 99:7-8)",
+   inv:"يَا عَدْلُ أَنْصِفْنِي", inv_fr:'"Ô Justice absolue, rends-moi justice."'},
+
+  {num:31, ar:'اللَّطِيفُ',        tl:'Al-Latif',       fr:'Le Subtil, Le Doux, L\'Attentionné',
+   sens:"Il connaît les détails les plus subtils. Il agit d'une façon si douce qu'on ne voit parfois Sa main qu'après coup.",
+   med:"Pense à quelque chose qui s'est arrangé dans ta vie sans que tu comprennes comment. C'était Al-Latif.",
+   inv:"يَا لَطِيفُ الْطُفْ بِي فِي أَمْرِي", inv_fr:'"Ô Doux, sois doux avec moi dans mes affaires."'},
+
+  {num:32, ar:'الْخَبِيرُ',        tl:'Al-Khabir',      fr:'Le Bien Informé, l\'Expert',
+   sens:"Il connaît les profondeurs cachées de toutes choses. Les intentions, les causes, les conséquences — rien ne Lui est opaque.",
+   med:"Il connaît ta vraie intention. Pas celle que tu affiches — celle du fond. Et Il juge à partir de là.",
+   inv:"يَا خَبِيرُ أَخْبِرْنِي بِمَا يَنْفَعُنِي", inv_fr:'"Ô Expert, guide-moi vers ce qui me profite."'},
+
+  {num:33, ar:'الْحَلِيمُ',        tl:'Al-Halim',       fr:'Le Clément, Le Doux dans Sa colère',
+   sens:"Il ne se précipite pas pour punir. Il laisse du temps, donne des chances, attend le retour. Sa patience avec l'humanité est infinie.",
+   med:"Il ne t'a pas punie immédiatement pour tes erreurs. Al-Halim t'a donné du temps. Qu'en feras-tu ?",
+   inv:"يَا حَلِيمُ لَا تُعَاجِلْنِي", inv_fr:'"Ô Clément, ne te hâte pas de me punir."'},
+
+  {num:34, ar:'الْعَظِيمُ',        tl:'Al-Azim',        fr:'Le Très Grand, l\'Immense',
+   sens:"Sa grandeur dépasse toute capacité de compréhension. L'univers entier est comme un grain de sable devant Sa grandeur.",
+   med:"Quand quelque chose te semble immense et insurmontable — compare-le à Al-Azim. Tout rétrécit.",
+   inv:"يَا عَظِيمُ أَنْتَ أَكْبَرُ مِنْ كُلِّ شَيْءٍ", inv_fr:'"Ô Très Grand, Tu es plus grand que toute chose."'},
+
+  {num:35, ar:'الْغَفُورُ',        tl:'Al-Ghafur',      fr:'Le Très Indulgent',
+   sens:"Al-Ghaffar pardonne souvent ; Al-Ghafur pardonne complètement. Il efface, couvre, oublie — comme si le péché n'avait jamais existé.",
+   med:"Le pardon d'Allah est complet. Pas partiel, pas conditionnel, pas avec un rappel futur. Complet.",
+   inv:"يَا غَفُورُ اغْفِرْ لِي مَا سَلَفَ", inv_fr:'"Ô Très Indulgent, pardonne ce qui est passé."'},
+
+  {num:36, ar:'الشَّكُورُ',        tl:'Ash-Shakur',     fr:'Le Très Reconnaissant',
+   sens:"Il récompense le moindre effort. Un sourire, un verre d'eau donné à un animal assoiffé — Il le reconnaît et le récompense.",
+   med:"Aucun effort n'est trop petit pour Ash-Shakur. Tes petits actes quotidiens sont tous enregistrés.",
+   inv:"يَا شَكُورُ تَقَبَّلْ أَعْمَالِي", inv_fr:'"Ô Très Reconnaissant, accepte mes actes."'},
+
+  {num:37, ar:'الْعَلِيُّ',        tl:'Al-Ali',         fr:'Le Très Haut, Le Sublime',
+   sens:"Il est au-dessus de tout — au-dessus des cieux, au-dessus de la compréhension humaine. Pourtant, Il est plus proche de toi que ta veine jugulaire.",
+   med:"Il est très haut. Et pourtant, Il entend ton murmure. Cette contradiction est un miracle.",
+   inv:"يَا عَلِيُّ ارْفَعْنِي إِلَيْكَ", inv_fr:'"Ô Très Haut, élève-moi vers Toi."'},
+
+  {num:38, ar:'الْكَبِيرُ',        tl:'Al-Kabir',       fr:'Le Très Grand dans Son essence',
+   sens:"Al-Azim désigne la grandeur de Ses attributs ; Al-Kabir désigne la grandeur de Son Être. Une grandeur qui n'a pas de comparaison.",
+   med:"Devant Al-Kabir, tout problème humain retrouve sa vraie dimension. Rétrécissante, et libératrice.",
+   inv:"يَا كَبِيرُ أَنْتَ الْأَكْبَرُ", inv_fr:'"Ô Très Grand, Tu es le Plus Grand."'},
+
+  {num:39, ar:'الْحَفِيظُ',        tl:'Al-Hafiz',       fr:'Le Gardien, Celui qui préserve',
+   sens:"Il préserve l'univers dans son équilibre. Il garde le registre de chaque acte. Il protège ceux qu'Il veut.",
+   med:"Confie à Al-Hafiz ce que tu veux préserver — ta famille, ta foi, ta santé, ton couple.",
+   inv:"يَا حَفِيظُ احْفَظْ أَهْلِي وَدِينِي", inv_fr:'"Ô Gardien, préserve ma famille et ma religion."'},
+
+  {num:40, ar:'الْمُقِيتُ',        tl:'Al-Muqit',       fr:'Le Mainteneur, Celui qui nourrit et soutient',
+   sens:"Il maintient toute chose dans l'existence. Sans Lui, l'univers s'effondrerait. Il nourrit les corps et les âmes.",
+   med:"Tu existes parce qu'Il te maintient en existence en ce moment même. C'est un don permanent.",
+   inv:"يَا مُقِيتُ أَقِتْنِي بِطَاعَتِكَ", inv_fr:'"Ô Mainteneur, nourris-moi par Ton obéissance."'},
+
+  {num:41, ar:'الْحَسِيبُ',        tl:'Al-Hasib',       fr:'Le Teneur de comptes, Le Suffisant',
+   sens:"Il tient compte de tout — chaque acte, chaque intention, chaque instant. Il est aussi Celui qui suffit — hasbunAllah.",
+   med:"\"Allah me suffit\" — dis cette phrase aujourd'hui face à quelque chose qui t'inquiète.",
+   inv:"حَسْبِيَ اللَّهُ وَنِعْمَ الْوَكِيلُ", inv_fr:'"Allah me suffit, Il est le meilleur garant." (Coran 3:173)'},
+
+  {num:42, ar:'الْجَلِيلُ',        tl:'Al-Jalil',       fr:'Le Majestueux, Le Majestueux en grandeur',
+   sens:"Une majesté qui impose le respect et l'humilité. Devant Al-Jalil, les prophètes eux-mêmes tremblaient.",
+   med:"La prochaine fois que tu pries, prends un instant avant de commencer pour réaliser devant Qui tu te trouves.",
+   inv:"يَا جَلِيلُ أَجِلَّ قَدْرَكَ فِي قَلْبِي", inv_fr:'"Ô Majestueux, agrandis Ta valeur dans mon cœur."'},
+
+  {num:43, ar:'الْكَرِيمُ',        tl:'Al-Karim',       fr:'Le Généreux, Le Noble',
+   sens:"Sa générosité ne s'épuise pas. Il donne avant qu'on demande, plus qu'on demande, et continue après qu'on a oublié de remercier.",
+   med:"Pense à quelque chose que tu as reçu sans l'avoir demandé. Al-Karim t'a précédée.",
+   inv:"يَا كَرِيمُ تَكَرَّمْ عَلَيَّ", inv_fr:'"Ô Généreux, sois généreux envers moi."'},
+
+  {num:44, ar:'الرَّقِيبُ',        tl:'Ar-Raqib',       fr:'Le Vigilant, Celui qui surveille',
+   sens:"Il observe en permanence — les actions, les paroles, les pensées, les intentions cachées. Rien ne Lui échappe.",
+   med:"\"Il sait la trahison des regards et ce que cachent les poitrines.\" (Coran 40:19) Vis avec cette conscience.",
+   inv:"يَا رَقِيبُ اجْعَلْنِي مُرَاقِبًا لَكَ", inv_fr:'"Ô Vigilant, fais que je sois consciente de Ta présence."'},
+
+  {num:45, ar:'الْمُجِيبُ',        tl:'Al-Mujib',       fr:'Celui qui répond aux prières',
+   sens:"Il répond à chaque supplication — pas toujours comme on le souhaite, pas toujours quand on le souhaite, mais toujours.",
+   med:"\"Appelez-Moi, Je vous répondrai.\" (Coran 40:60) Il n'a pas dit peut-être. Il a dit : Je répondrai.",
+   inv:"يَا مُجِيبُ أَجِبْ دُعَائِي", inv_fr:'"Ô Celui qui répond, réponds à ma supplication."'},
+
+  {num:46, ar:'الْوَاسِعُ',        tl:'Al-Wasi\'',      fr:'Le Vaste, L\'Immense',
+   sens:"Sa miséricorde est vaste, Sa science est vaste, Sa générosité est vaste. Il n'y a pas de limite à ce qu'Il peut donner.",
+   med:"Aucune demande n'est trop grande pour Al-Wasi. Aucun espoir n'est trop ambitieux. Demande grand.",
+   inv:"يَا وَاسِعُ وَسِّعْ عَلَيَّ", inv_fr:'"Ô Le Vaste, élargis ma vie."'},
+
+  {num:47, ar:'الْحَكِيمُ',        tl:'Al-Hakim',       fr:'Le Sage',
+   sens:"Tout ce qu'Il fait est fait avec une sagesse parfaite — même ce qu'on ne comprend pas, même ce qui fait mal.",
+   med:"\"Peut-être que vous aimez quelque chose qui vous est mauvais.\" (Coran 2:216) Fais confiance à Sa sagesse.",
+   inv:"يَا حَكِيمُ أَلْهِمْنِي الْحِكْمَةَ", inv_fr:'"Ô Sage, inspire-moi la sagesse."'},
+
+  {num:48, ar:'الْوَدُودُ',        tl:'Al-Wadud',       fr:'Le Plein d\'Amour, Le Bien-Aimant',
+   sens:"Il aime Ses créatures d'un amour qui dépasse toute compréhension. Un amour non conditionnel, permanent, total.",
+   med:"Tu n'as pas à mériter cet amour. Il est là, maintenant, entier — même dans tes jours les plus sombres.",
+   inv:"يَا وَدُودُ أَحِبَّنِي وَحَبِّبْنِي إِلَى خَلْقِكَ", inv_fr:'"Ô Aimant, aime-moi et fais-moi aimer par Tes créatures."'},
+
+  {num:49, ar:'الْمَجِيدُ',        tl:'Al-Majid',       fr:'Le Très Glorieux, Le Magnifique',
+   sens:"Une gloire qui combine perfection et générosité. Al-Majid est Al-Karim dans sa plus haute expression.",
+   med:"Dans la salat, quand tu dis \"Allahu Akbar\" — souviens-toi de la majesté de Celui devant qui tu te prosternes.",
+   inv:"يَا مَجِيدُ مَجِّدْنِي بِطَاعَتِكَ", inv_fr:'"Ô Très Glorieux, glorifie-moi par Ton obéissance."'},
+
+  {num:50, ar:'الْبَاعِثُ',        tl:'Al-Ba\'ith',     fr:'Le Ressuscitateur',
+   sens:"Il ressuscitera les morts au Jour du Jugement. La mort n'est pas une fin — c'est un passage entre deux formes d'existence.",
+   med:"Si Al-Ba\'ith peut ressusciter les corps, Il peut aussi ressusciter une foi morte, un cœur endormi.",
+   inv:"يَا بَاعِثُ ابْعَثْ فِي قَلْبِي الْإِيمَانَ", inv_fr:'"Ô Ressuscitateur, ressuscite la foi dans mon cœur."'},
+
+  {num:51, ar:'الشَّهِيدُ',        tl:'Ash-Shahid',     fr:'Le Témoin',
+   sens:"Il est présent à tout, témoin de tout. Aucun acte caché ne Lui échappe — ni le bien fait en secret, ni le mal dissimulé.",
+   med:"Agis comme si tu étais toujours vue — parce que tu l'es. Et cela devrait être libérateur, pas angoissant.",
+   inv:"يَا شَهِيدُ اشْهَدْ أَنِّي أُحِبُّكَ", inv_fr:'"Ô Témoin, témoigne que je T\'aime."'},
+
+  {num:52, ar:'الْحَقُّ',          tl:'Al-Haqq',        fr:'La Vérité absolue',
+   sens:"Il est la seule réalité absolue. Tout le reste est relatif, temporaire, soumis à la fin. Lui seul est éternellement vrai.",
+   med:"Dans un monde de relatif et de mensonge — accrocher son cœur à Al-Haqq est le seul ancrage stable.",
+   inv:"يَا حَقُّ ثَبِّتْنِي عَلَى الْحَقِّ", inv_fr:'"Ô Vérité, affermis-moi sur la vérité."'},
+
+  {num:53, ar:'الْوَكِيلُ',        tl:'Al-Wakil',       fr:'Le Garant, Le Mandataire',
+   sens:"Confier ses affaires à Al-Wakil, c'est le tawakkul — remettre les résultats après avoir fait sa part.",
+   med:"\"Attache ton chameau, puis mets ta confiance.\" Agis. Puis remets. C'est le tawakkul.",
+   inv:"حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ", inv_fr:'"Allah nous suffit, Il est le meilleur garant." (Coran 3:173)'},
+
+  {num:54, ar:'الْقَوِيُّ',        tl:'Al-Qawi',        fr:'Le Très Fort',
+   sens:"Une force absolue qui ne se fatigue jamais. Il n'a pas besoin d'aide, de repos, de renforcement.",
+   med:"Quand tu te sens sans force — tu peux emprunter Sa force. C'est à cela que sert la prière.",
+   inv:"يَا قَوِيُّ قَوِّنِي", inv_fr:'"Ô Très Fort, renforce-moi."'},
+
+  {num:55, ar:'الْمَتِينُ',        tl:'Al-Matin',       fr:'Le Ferme, L\'Inébranlable',
+   sens:"Sa puissance ne s'affaiblit jamais. Ce qu'Il décide ne peut être dévié. Ses promesses ne fléchissent pas.",
+   med:"Les promesses d'Allah dans le Coran sont garanties par Al-Matin. Elles n'ont pas de date de péremption.",
+   inv:"يَا مَتِينُ ثَبِّتْ قَدَمِي", inv_fr:'"Ô Inébranlable, affermis mes pas."'},
+
+  {num:56, ar:'الْوَلِيُّ',        tl:'Al-Wali',        fr:'Le Proche, l\'Allié, le Protecteur',
+   sens:"Il est l'allié du croyant. Il le protège, le soutient, le guide. Le walayah d'Allah est le lien le plus précieux qui soit.",
+   med:"\"Allah est l'allié de ceux qui croient.\" (Coran 2:257) Tu n'es jamais seule.",
+   inv:"يَا وَلِيُّ أَنْتَ وَلِيِّي", inv_fr:'"Ô Proche, Tu es mon allié."'},
+
+  {num:57, ar:'الْحَمِيدُ',        tl:'Al-Hamid',       fr:'Le Digne de toutes les louanges',
+   sens:"Toutes les louanges Lui reviennent — celles qu'on Lui adresse et celles qu'on adresse à Ses créatures, car toute perfection vient de Lui.",
+   med:"Alhamdulillah — \"toute louange à Allah\". Cette phrase contient l'univers entier.",
+   inv:"اَلْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ", inv_fr:'"Toute louange à Allah, Seigneur des mondes." (Coran 1:2)'},
+
+  {num:58, ar:'الْمُحْصِي',        tl:'Al-Muhsi',       fr:'Le Dénombrateur, Celui qui compte tout',
+   sens:"Il dénombre chaque chose avec une précision absolue. Chaque feuille, chaque grain de sable, chaque battement de cœur.",
+   med:"\"Aucune feuille ne tombe sans qu'Il le sache.\" (Coran 6:59) Chaque larme est comptée.",
+   inv:"يَا مُحْصِي احْصِ لِي حَسَنَاتِي", inv_fr:'"Ô Dénombrateur, multiplie mes bonnes actions."'},
+
+  {num:59, ar:'الْمُبْدِئُ',       tl:'Al-Mubdi\'',     fr:'Le Principe, Celui qui commence',
+   sens:"Il a commencé la création de rien. Il commence chaque nouvelle vie, chaque nouveau chapitre — quand Il le veut.",
+   med:"Tout nouveau départ dans ta vie — c'est Al-Mubdi qui l'initie. Accueille-le avec foi.",
+   inv:"يَا مُبْدِئُ ابْدَأْ لِي بِالْخَيْرِ", inv_fr:'"Ô Initiateur, commence pour moi avec le bien."'},
+
+  
+{num:60, ar:'الْمُعِيدُ',        tl:'Al-Mu\'id',      fr:'Celui qui restaure, qui recommence',
+   sens:"Après la mort, Il restaure. Après la chute, Il reprend. Après l'éloignement, Il ramène. La restauration est Sa spécialité.",
+   med:"Ce que tu as perdu — une relation, une santé, une foi — Al-Mu\'id peut le restaurer.",
+   inv:"يَا مُعِيدُ أَعِدْ لِي مَا فَقَدْتُ", inv_fr:'"Ô Celui qui restaure, restitue ce que j\'ai perdu."'},
+
+  {num:61, ar:'الْمُحْيِي',        tl:'Al-Muhyi',       fr:'Le Vivificateur, Celui qui donne la vie',
+   sens:"Il donne la vie aux corps, aux cœurs, aux projets, aux communautés. La vie véritable ne vient que de Lui.",
+   med:"Un cœur qui s'est endormi spirituellement peut être ravivé. C'est Al-Muhyi qui en a le pouvoir.",
+   inv:"يَا مُحْيِي أَحْيِ قَلْبِي", inv_fr:'"Ô Vivificateur, vivifie mon cœur."'},
+
+  {num:62, ar:'الْمُمِيتُ',        tl:'Al-Mumit',       fr:'Le Donneur de mort',
+   sens:"La mort n'est pas un accident. Elle est voulue, précise, parfaite. Al-Mumit prend les âmes au moment exact qu'Il a fixé.",
+   med:"La conscience de la mort n'est pas déprimante. Elle est libératrice. Elle remet chaque chose à sa juste place.",
+   inv:"يَا مُمِيتُ أَمِتْنِي وَأَنَا رَاضٍ عَنْكَ", inv_fr:'"Ô Donneur de mort, fais que je meure en étant satisfaite de Toi."'},
+
+  {num:63, ar:'الْحَيُّ',          tl:'Al-Hayy',        fr:'Le Vivant, L\'Éternellement Vivant',
+   sens:"Il ne dort pas, ne se fatigue pas, ne s'éteint jamais. Sa vie est absolue — elle n'a ni début ni fin.",
+   med:"\"Allah — pas de divinité hormis Lui, le Vivant, le Subsistant.\" Ayat al-Kursi commence par là.",
+   inv:"يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ", inv_fr:'"Ô Vivant, ô Subsistant, je cherche secours en Ta miséricorde."'},
+
+  {num:64, ar:'الْقَيُّومُ',       tl:'Al-Qayyum',      fr:'Le Subsistant, Celui qui se suffit à Lui-même',
+   sens:"Il subsiste par Lui-même et fait subsister tout le reste. Tout dépend de Lui ; Lui ne dépend de rien.",
+   med:"Ayat al-Kursi — le plus grand verset du Coran — tourne autour d'Al-Hayy et Al-Qayyum. Récite-le ce soir.",
+   inv:"يَا قَيُّومُ أَقِمْنِي", inv_fr:'"Ô Subsistant, maintiens-moi debout."'},
+
+  {num:65, ar:'الْوَاجِدُ',        tl:'Al-Wajid',       fr:'Celui qui trouve tout ce qu\'Il veut',
+   sens:"Il ne manque de rien. Tout ce qu'Il cherche, Il le trouve immédiatement. Aucune limite, aucune rareté.",
+   med:"Ce que tu cherches — un conjoint, un travail, une solution — Al-Wajid peut te l'amener.",
+   inv:"يَا وَاجِدُ اجْعَلْنِي وَاجِدَةً مَا أَطْلُبُ مِنْكَ", inv_fr:'"Ô Celui qui trouve tout, fais que je trouve ce que je Te demande."'},
+
+  {num:66, ar:'الْمَاجِدُ',        tl:'Al-Majid',       fr:'Le Glorieux en actes',
+   sens:"Al-Mujid est la gloire en attributs ; Al-Majid est la gloire en actes. Sa générosité glorieuse se manifeste dans chaque don.",
+   med:"Regarde autour de toi les marques de Sa générosité glorieuse. Elles sont partout.",
+   inv:"يَا مَاجِدُ امْنَحْنِي مِنْ فَضْلِكَ", inv_fr:'"Ô Glorieux, accorde-moi de Ta faveur."'},
+
+  {num:67, ar:'الْوَاحِدُ',        tl:'Al-Wahid',       fr:'L\'Unique, Le Un',
+   sens:"Il est Un dans Son essence, Ses attributs et Ses actes. L'unicité d'Allah est le cœur de l'Islam.",
+   med:"قُلْ هُوَ اللَّهُ أَحَدٌ — \"Dis : Il est Allah, Unique.\" Cette sourate vaut un tiers du Coran.",
+   inv:"قُلْ هُوَ اللَّهُ أَحَدٌ", inv_fr:'"Dis : Il est Allah, Unique." (Coran 112:1)'},
+
+  {num:68, ar:'الصَّمَدُ',         tl:'As-Samad',       fr:'L\'Indépendant, Le Refuge absolu',
+   sens:"Tout le monde a besoin de Lui ; Lui n'a besoin de personne. Il est le refuge vers lequel on se tourne dans tout besoin.",
+   med:"اللَّهُ الصَّمَدُ — \"Allah, le Refuge.\" Vers qui te tournes-tu en premier dans la difficulté ?",
+   inv:"اللَّهُ الصَّمَدُ — يَا صَمَدُ إِلَيْكَ أَلْجَأُ", inv_fr:'"Ô Refuge, c\'est vers Toi que je me réfugie."'},
+
+  {num:69, ar:'الْقَادِرُ',        tl:'Al-Qadir',       fr:'Le Puissant, Celui qui peut tout',
+   sens:"Rien n'est hors de Sa portée. \"Il dit simplement : Sois — et cela est.\" (Coran 2:117) Aucune limite, aucune impossibilité.",
+   med:"Ce que tu considères impossible — est-ce vraiment impossible pour Al-Qadir ?",
+   inv:"يَا قَادِرُ اقْدِرْ لِي الْخَيْرَ", inv_fr:'"Ô Puissant, décrète pour moi le bien."'},
+
+  {num:70, ar:'الْمُقْتَدِرُ',     tl:'Al-Muqtadir',    fr:'Le Très Puissant, L\'Omnipotent',
+   sens:"Plus fort encore qu'Al-Qadir — une puissance absolue, totale, sans réserve ni condition.",
+   med:"Les nations puissantes de l'histoire ont disparu. \"Leur Seigneur les a saisis pour leur péché.\" (Coran 91:14)",
+   inv:"يَا مُقْتَدِرُ أَعِنِّي عَلَى كُلِّ شَيْءٍ", inv_fr:'"Ô Omnipotent, aide-moi en toute chose."'},
+
+  {num:71, ar:'الْمُقَدِّمُ',      tl:'Al-Muqaddim',    fr:'Celui qui avance, qui fait précéder',
+   sens:"Il fait avancer ce qu'Il veut — les personnes, les événements, les opportunités. C'est Lui qui ouvre les portes avant qu'on frappe.",
+   med:"Cette opportunité qui est arrivée sans que tu la cherches — Al-Muqaddim l'a mise devant toi.",
+   inv:"يَا مُقَدِّمُ قَدِّمْنِي فِي الْخَيْرِ", inv_fr:'"Ô Celui qui fait avancer, fais-moi avancer dans le bien."'},
+
+  {num:72, ar:'الْمُؤَخِّرُ',      tl:'Al-Mu\'akhkhir', fr:'Celui qui retarde',
+   sens:"Il retarde ce qu'Il veut — selon une sagesse parfaite. Ce qui tarde n'est pas refusé. C'est en préparation.",
+   med:"Ce qui n'est pas encore arrivé dans ta vie — mariage, enfant, projet — n'est peut-être pas refusé, juste retardé.",
+   inv:"يَا مُؤَخِّرُ أَخِّرْ عَنِّي كُلَّ سُوءٍ", inv_fr:'"Ô Celui qui retarde, éloigne de moi tout mal."'},
+
+  {num:73, ar:'الأَوَّلُ',         tl:'Al-Awwal',       fr:'Le Premier',
+   sens:"Avant toute chose, Il était. Il n'y avait rien — et Il était. Cette notion dépasse notre compréhension linéaire du temps.",
+   med:"\"Il est le Premier et le Dernier, l'Apparent et le Caché.\" (Coran 57:3) Médite ces quatre ensemble.",
+   inv:"يَا أَوَّلُ بِكَ ابْتَدَأْتُ يَوْمِي", inv_fr:'"Ô Le Premier, je commence ma journée par Toi."'},
+
+  {num:74, ar:'الآخِرُ',           tl:'Al-Akhir',       fr:'Le Dernier',
+   sens:"Après que tout aura disparu, Il sera encore. L'univers finira — Lui n'aura pas de fin. Al-Akhir est la certitude après le chaos.",
+   med:"Tout ce qui compte vraiment doit se terminer en Lui. Vérifie la direction de tes attachements.",
+   inv:"يَا آخِرُ بِكَ يَخْتِمُ كُلُّ شَيْءٍ", inv_fr:'"Ô Le Dernier, par Toi se termine toute chose."'},
+
+  {num:75, ar:'الظَّاهِرُ',        tl:'Az-Zahir',       fr:'L\'Apparent, Le Manifeste',
+   sens:"Il se manifeste à travers Sa création. Chaque coucher de soleil, chaque naissance, chaque guérison est un signe de Sa présence.",
+   med:"Regarde autour de toi. Az-Zahir se manifeste partout. La question est : est-ce qu'on regarde ?",
+   inv:"يَا ظَاهِرُ أَظْهِرْ لِي دَلَائِلَ رَحْمَتِكَ", inv_fr:'"Ô Manifeste, montre-moi les signes de Ta miséricorde."'},
+
+  {num:76, ar:'الْبَاطِنُ',        tl:'Al-Batin',       fr:'Le Caché, L\'Intérieur',
+   sens:"Il est présent dans tout, au-dedans de tout — invisible mais réel. Sa présence intérieure est plus proche que tout.",
+   med:"\"Nous sommes plus près de lui que sa veine jugulaire.\" (Coran 50:16) Il est là, maintenant.",
+   inv:"يَا بَاطِنُ اطَّلِعْ عَلَى قَلْبِي وَأَصْلِحْهُ", inv_fr:'"Ô Caché, vois mon cœur et répare-le."'},
+
+  {num:77, ar:'الْوَالِي',         tl:'Al-Wali',        fr:'Le Gouverneur, Le Gestionnaire',
+   sens:"Il administre l'univers entier dans ses moindres détails — chaque atome, chaque événement, chaque vie.",
+   med:"L'univers ne fonctionne pas au hasard. Al-Wali gère chaque détail. Ton détail est inclus.",
+   inv:"يَا وَالِي تَوَلَّ أَمْرِي", inv_fr:'"Ô Gouverneur, prends en charge mes affaires."'},
+
+  {num:78, ar:'الْمُتَعَالِي',     tl:'Al-Muta\'ali',   fr:'Le Très Élevé, Transcendant',
+   sens:"Il transcende toute comparaison, toute limitation, toute conception humaine. Quoi que tu imagines de Lui — Il est au-delà.",
+   med:"\"Gloire à Lui — qu'Il soit exalté au-dessus de ce qu'ils associent.\" (Coran 23:91)",
+   inv:"سُبْحَانَ اللَّهِ وَبِحَمْدِهِ سُبْحَانَ اللَّهِ الْعَظِيمِ", inv_fr:'"Gloire à Allah et à Sa louange. Gloire au Très Grand."'},
+
+  {num:79, ar:'الْبَرُّ',          tl:'Al-Barr',        fr:'Le Bienfaisant, la Bonté absolue',
+   sens:"Sa bonté est généreuse, bienveillante, tournée vers le bien-être de Ses créatures. Il est bon envers tous.",
+   med:"Toute bonté que tu as reçue dans ta vie — quelle qu'en soit la source apparente — vient de Al-Barr.",
+   inv:"يَا بَرُّ أَحْسِنْ إِلَيَّ كَمَا أَحْسَنْتَ مِنْ قَبْلُ", inv_fr:'"Ô Bienfaisant, sois bon envers moi comme Tu l\'as été avant."'},
+
+  {num:80, ar:'التَّوَّابُ',       tl:'At-Tawwab',      fr:'Le Grand Repentant, Celui qui revient',
+   sens:"Il accueille le repentir encore et encore. Il n'y a pas de limite au nombre de fois qu'Il pardonne celui qui revient sincèrement.",
+   med:"Tu n'es pas tombée trop bas. Tu n'as pas péché trop souvent. At-Tawwab attend ton retour.",
+   inv:"تُبْ عَلَيَّ يَا تَوَّابُ", inv_fr:'"Accepte mon repentir, ô Grand Repentant."'},
+
+  {num:81, ar:'الْمُنْتَقِمُ',     tl:'Al-Muntaqim',    fr:'Celui qui punit, le Vengeur',
+   sens:"Il punit les injustes — non par colère incontrôlée, mais par justice parfaite. Sa vengeance est toujours méritée.",
+   med:"Ne te fais pas justice toi-même dans ce qui dépasse tes capacités. Remets-le à Al-Muntaqim.",
+   inv:"يَا مُنْتَقِمُ انْتَقِمْ لِي مِمَّنْ ظَلَمَنِي", inv_fr:'"Ô Vengeur, venge-moi de celui qui m\'a opprimée."'},
+
+  {num:82, ar:'الْعَفُوُّ',        tl:'Al-Afuww',       fr:'Celui qui efface les péchés',
+   sens:"Al-Ghafur pardonne ; Al-Afuww efface totalement — comme si le péché n'avait jamais existé. Aucune trace, aucun souvenir.",
+   med:"La nuit du Qadr : \"Dis : Ô Allah, Tu es Al-Afuww, Tu aimes l'effacement — efface-moi.\"",
+   inv:"اَللَّهُمَّ إِنَّكَ عَفُوٌّ تُحِبُّ الْعَفْوَ فَاعْفُ عَنِّي", inv_fr:'"Ô Allah, Tu es Al-Afuww, Tu aimes pardonner — pardonne-moi." (Du\'a de Layla-tul-Qadr)'},
+
+  {num:83, ar:'الرَّؤُوفُ',        tl:'Ar-Ra\'uf',      fr:'Le Très Compatissant',
+   sens:"Une compassion qui dépasse la miséricorde ordinaire. Ar-Ra\'uf est la tendresse extrême envers les créatures dans la faiblesse.",
+   med:"Dans tes moments de plus grande faiblesse — c'est là qu'Ar-Ra\'uf est le plus présent.",
+   inv:"يَا رَؤُوفُ ارْأَفْ بِي فِي ضَعْفِي", inv_fr:'"Ô Très Compatissant, sois compatissant envers moi dans ma faiblesse."'},
+
+  {num:84, ar:'مَالِكُ الْمُلْكِ', tl:'Malik-ul-Mulk',  fr:'Maître du Royaume',
+   sens:"Il possède tout royaumes — ceux de la terre et ceux des cieux. Il donne la royauté à qui Il veut et la retire à qui Il veut.",
+   med:"\"Tu donnes la royauté à qui Tu veux et Tu l'enlèves à qui Tu veux.\" (Coran 3:26) Aucun trône n'est permanent.",
+   inv:"يَا مَالِكَ الْمُلْكِ أَعْطِنِي مَا يَنْفَعُنِي", inv_fr:'"Ô Maître du Royaume, donne-moi ce qui me profite."'},
+
+  {num:85, ar:'ذُو الْجَلَالِ',    tl:'Dhu-l-Jalal',    fr:'Maître de la Majesté et de la Générosité',
+   sens:"Ce nom combine deux opposés que seul Allah réunit : la majesté qui impose le respect et la générosité qui invite à l'amour.",
+   med:"Le Prophète ﷺ aimait répéter ce nom. Il dit : \"Accrochez-vous à 'Ô Maître de la Majesté et de la Générosité'.\"",
+   inv:"يَا ذَا الْجَلَالِ وَالْإِكْرَامِ", inv_fr:'"Ô Maître de la Majesté et de la Générosité." (Coran 55:27)'},
+
+  {num:86, ar:'الْمُقْسِطُ',       tl:'Al-Muqsit',      fr:'L\'Équitable, Celui qui établit la justice',
+   sens:"Il établit la justice parfaite — sans favoritisme, sans corruption, sans oubli. L'équité divine est absolue.",
+   med:"Ce qui est injuste dans ta vie sera équilibré — ici ou là-bas. Al-Muqsit ne laisse rien de côté.",
+   inv:"يَا مُقْسِطُ اجْعَلْنِي عَادِلَةً", inv_fr:'"Ô Équitable, fais que je sois juste."'},
+
+  {num:87, ar:'الْجَامِعُ',        tl:'Al-Jami\'',      fr:'Le Rassembleur',
+   sens:"Il rassemblera toute l'humanité au Jour du Jugement. Il réunit les opposés dans Sa création avec harmonie.",
+   med:"\"Notre Seigneur, Tu rassembleras les humains en un Jour qui ne fait aucun doute.\" (Coran 3:9)",
+   inv:"يَا جَامِعُ اجْمَعْ شَمْلِي وَشَمْلَ أَهْلِي", inv_fr:'"Ô Rassembleur, réunis ma famille."'},
+
+  {num:88, ar:'الْغَنِيُّ',        tl:'Al-Ghani',       fr:'Le Riche, L\'Indépendant',
+   sens:"Il n'a besoin de rien. Nos prières ne L'enrichissent pas ; nos péchés ne L'appauvrissent pas. Il est absolument indépendant.",
+   med:"\"Ô humains, c'est vous qui avez besoin d'Allah. Et Allah, Lui, est le Riche, le Digne de louanges.\" (Coran 35:15)",
+   inv:"يَا غَنِيُّ أَغْنِنِي بِرِزْقِكَ", inv_fr:'"Ô Le Riche, enrichis-moi par Ta subsistance."'},
+
+  {num:89, ar:'الْمُغْنِي',        tl:'Al-Mughni',      fr:'Celui qui enrichit',
+   sens:"Il enrichit qui Il veut — en argent, en sagesse, en foi, en amour. L'enrichissement véritable ne vient que de Lui.",
+   med:"La vraie richesse n'est pas dans le compte en banque. \"La vraie richesse est la richesse de l'âme.\" (Hadith)",
+   inv:"يَا مُغْنِي أَغْنِنِي عَنْ سِوَاكَ", inv_fr:'"Ô Celui qui enrichit, rends-moi indépendante de tout sauf de Toi."'},
+
+  {num:90, ar:'الْمَانِعُ',        tl:'Al-Mani\'',      fr:'Celui qui empêche, qui protège',
+   sens:"Il empêche ce qu'Il veut d'arriver — le mal, le danger, la catastrophe. Ce qu'Il protège ne peut être atteint.",
+   med:"Combien de fois as-tu été protégée d'un danger sans le savoir ? Al-Mani\'u agit en silence.",
+   inv:"يَا مَانِعُ امْنَعْ عَنِّي كُلَّ سُوءٍ", inv_fr:'"Ô Protecteur, éloigne de moi tout mal."'},
+
+  {num:91, ar:'الضَّارُّ',         tl:'Ad-Darr',        fr:'Celui qui affecte, qui éprouve',
+   sens:"Il éprouve Ses créatures — non par cruauté, mais pour élever, purifier et enseigner. L'épreuve vient de Lui.",
+   med:"\"Nous vous éprouverons par un peu de peur, de faim... et annonce la bonne nouvelle aux patients.\" (Coran 2:155)",
+   inv:"يَا ضَارُّ اجْعَلْ ضُرَّكَ لِي رَحْمَةً", inv_fr:'"Ô Celui qui éprouve, fais que Ton épreuve soit miséricorde pour moi."'},
+
+  {num:92, ar:'النَّافِعُ',        tl:'An-Nafi\'',      fr:'Le Bienfaiteur, Celui qui profite',
+   sens:"Tout bénéfice vient de Lui — une rencontre utile, une idée juste, une guérison, une opportunité.",
+   med:"Ce qui t'a profité aujourd'hui — qui l'a envoyé ? Reconnecte chaque bien à sa vraie source.",
+   inv:"يَا نَافِعُ انْفَعْنِي بِمَا عَلَّمْتَنِي", inv_fr:'"Ô Bienfaiteur, fais-moi profiter de ce que Tu m\'as enseigné."'},
+
+  {num:93, ar:'النُّورُ',          tl:'An-Nur',         fr:'La Lumière',
+   sens:"\"Allah est la lumière des cieux et de la terre.\" (Coran 24:35) Sa lumière éclaire les cœurs, guide les âmes.",
+   med:"Récite le verset de la Lumière (An-Nur, 24:35) aujourd'hui. Laisse chaque mot résonner.",
+   inv:"يَا نُورُ نَوِّرْ قَلْبِي وَبَصَرِي", inv_fr:'"Ô Lumière, illumine mon cœur et ma vue."'},
+
+  {num:94, ar:'الْهَادِي',         tl:'Al-Hadi',        fr:'Le Guide',
+   sens:"La guidance véritable vient de Lui seul. \"Tu ne guides pas qui tu aimes, mais Allah guide qui Il veut.\" (Coran 28:56)",
+   med:"La guidance que tu demandes pour quelqu'un que tu aimes — seul Al-Hadi peut la donner. Fais du'a.",
+   inv:"يَا هَادِي اهْدِنِي وَاهْدِ أَهْلِي", inv_fr:'"Ô Guide, guide-moi et guide ma famille."'},
+
+  {num:95, ar:'الْبَدِيعُ',        tl:'Al-Badi\'',      fr:'L\'Innovateur Absolu, l\'Incomparable',
+   sens:"Il crée des choses sans précédent, sans modèle, sans inspiration extérieure. Chaque fleur, chaque flocon de neige est unique.",
+   med:"Regarde quelque chose de beau dans la nature. Al-Badi\'u a créé quelque chose qui n'existait pas.",
+   inv:"يَا بَدِيعَ السَّمَاوَاتِ وَالْأَرْضِ", inv_fr:'"Ô Innovateur des cieux et de la terre." (Coran 2:117)'},
+
+  {num:96, ar:'الْبَاقِي',         tl:'Al-Baqi\'',      fr:'L\'Éternel, Celui qui subsiste',
+   sens:"Tout finira sauf Lui. Les montagnes, les étoiles, l'univers — tout passera. Lui est Al-Baqi\'.",
+   med:"Ne mets pas ton cœur en quelque chose qui finira. Attache-le à Al-Baqi.",
+   inv:"يَا بَاقِي أَبْقِنِي عَلَى دِينِكَ", inv_fr:'"Ô L\'Éternel, maintiens-moi sur Ta religion."'},
+
+  {num:97, ar:'الْوَارِثُ',        tl:'Al-Warith',      fr:'L\'Héritier de tout',
+   sens:"\"Nous sommes l'héritier de tout.\" (Coran 15:23) Après que tout sera parti, Il héritera de l'univers entier.",
+   med:"Tu n'apportes rien et tu ne prendras rien. Ce qui est entre tes mains t'est prêté. Comment gères-tu ce prêt ?",
+   inv:"يَا وَارِثُ أَوْرِثْنِي جَنَّةَ الْفِرْدَوْسِ", inv_fr:'"Ô Héritier, fais-moi hériter du Paradis al-Firdaws."'},
+
+  {num:98, ar:'الرَّشِيدُ',        tl:'Ar-Rashid',      fr:'Le Guide Juste, Le Bien Dirigé',
+   sens:"Il dirige toutes choses vers leur fin parfaite — selon une sagesse que les humains ne peuvent pas toujours saisir.",
+   med:"Ce chemin qui te semble détourné, difficile, incompréhensible — Ar-Rashid le dirige vers quelque chose de juste.",
+   inv:"يَا رَشِيدُ أَرْشِدْنِي إِلَى مَا تُحِبُّ", inv_fr:'"Ô Guide Juste, dirige-moi vers ce que Tu aimes."'},
+
+  {num:99, ar:'الصَّبُورُ',        tl:'As-Sabur',       fr:'Le Patient',
+   sens:"Il est Patient — Il ne Se précipite pas pour punir. Et Sa patience est un modèle pour nous dans nos propres épreuves.",
+   med:"\"Sois patiente avec toi-même comme Il l'est avec toi.\" As-Sabur attend ton retour avec une patience infinie.",
+   inv:"يَا صَبُورُ أَعِنِّي عَلَى الصَّبْرِ", inv_fr:'"Ô Patient, aide-moi à être patiente."'},
+];
+
+// Build nom pages (3 per page)
+function buildNomPages() {
+  const container = document.getElementById('noms-pages');
+  let pageHtml = '';
+  let pageNum = 4;
+
+  for (let i = 0; i < ASMA.length; i += 3) {
+    const group = ASMA.slice(i, i + 3);
+    pageHtml += `<div class="page med-page">
+      <svg class="page-corner tl" viewBox="0 0 60 60"><path d="M0 60 Q0 0 60 0" fill="none" stroke="#C9A96E" stroke-width="1.5"/></svg>
+      <svg class="page-corner tr" viewBox="0 0 60 60"><path d="M0 60 Q0 0 60 0" fill="none" stroke="#C9A96E" stroke-width="1.5"/></svg>
+      <div class="med-page-header">
+        <div class="med-page-sakina">Sakina</div>
+        <div style="font-size:8px;color:var(--gris);font-family:var(--serif);font-style:italic;">Les 99 Noms d'Allah</div>
+        <div class="med-page-num-badge">Noms ${group[0].num}–${group[group.length-1].num}</div>
+      </div>`;
+
+    group.forEach((nom, idx) => {
+      pageHtml += `
+      <div style="margin-bottom:${idx < group.length-1 ? '5mm' : '0'};${idx < group.length-1 ? 'padding-bottom:5mm;border-bottom:1px solid var(--sable);' : ''}">
+        <!-- Nom card compact -->
+        <div style="background:var(--grad);border-radius:12px;padding:4mm 5mm;margin-bottom:3mm;display:flex;align-items:center;gap:4mm;position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2285%22 cy=%2220%22 r=%2240%22 fill=%22rgba(255,255,255,0.04)%22/%3E%3C/svg%3E') center/cover;pointer-events:none;"></div>
+          <div style="position:relative;min-width:32px;">
+            <div style="font-size:7px;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.35);margin-bottom:2px;">${String(nom.num).padStart(2,'0')}</div>
+            <div style="font-family:var(--script);font-size:20px;color:var(--or);font-weight:400;line-height:1;">${nom.tl}</div>
+          </div>
+          <div style="width:1px;height:30px;background:rgba(255,255,255,.15);flex-shrink:0;position:relative;"></div>
+          <div style="position:relative;flex:1;text-align:right;">
+            <div style="font-size:22px;direction:rtl;color:white;line-height:1.4;">${nom.ar}</div>
+            <div style="font-family:var(--serif);font-size:8px;font-style:italic;color:rgba(255,255,255,.5);margin-top:2px;">${nom.fr}</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:3mm;margin-bottom:3mm;">
+          <!-- Sens -->
+          <div>
+            <div style="font-size:6.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--violet);margin-bottom:2mm;">✦ Sens profond</div>
+            <div style="font-family:var(--serif);font-size:8.5px;color:var(--noir);line-height:1.7;">${nom.sens}</div>
+          </div>
+          <!-- Méditation -->
+          <div style="background:var(--violet-soft);border-radius:7px;padding:2.5mm 3mm;">
+            <div style="font-size:6.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--violet);margin-bottom:2mm;">🌙 Méditation</div>
+            <div style="font-family:var(--serif);font-size:8.5px;font-style:italic;color:var(--noir);line-height:1.7;">${nom.med}</div>
+          </div>
+        </div>
+
+        <!-- Invocation + lignes journaling -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:3mm;">
+          <div style="background:linear-gradient(135deg,#FAF6F0,#F0E8DC);border:1px solid var(--or-light);border-radius:7px;padding:2.5mm 3mm;">
+            <div style="font-size:6.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--or-dark);margin-bottom:2mm;">🤲 Invocation</div>
+            <div style="font-size:10px;direction:rtl;color:var(--noir);line-height:1.8;text-align:right;margin-bottom:1mm;">${nom.inv}</div>
+            <div style="font-family:var(--serif);font-size:7.5px;font-style:italic;color:var(--gris);">${nom.inv_fr}</div>
+          </div>
+          <div>
+            <div style="font-size:6.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:3mm;">✍️ Ce que ce nom éveille en moi</div>
+            <div style="height:1px;background:var(--sable);margin-bottom:4mm;"></div>
+            <div style="height:1px;background:var(--sable);margin-bottom:4mm;"></div>
+            <div style="height:1px;background:var(--sable);"></div>
+          </div>
+        </div>
+      </div>`;
+    });
+
+    pageHtml += `
+      <div class="page-num">— ${pageNum} —</div>
+      <svg class="page-corner bl" viewBox="0 0 60 60"><path d="M0 60 Q0 0 60 0" fill="none" stroke="#C9A96E" stroke-width="1.5"/></svg>
+      <svg class="page-corner br" viewBox="0 0 60 60"><path d="M0 60 Q0 0 60 0" fill="none" stroke="#C9A96E" stroke-width="1.5"/></svg>
+    </div>`;
+
+    pageNum++;
+  }
+
+  container.innerHTML = pageHtml;
+}
+
+// Build index
+function buildIndex() {
+  const grid = document.getElementById('index-grid');
+  if (!grid) return;
+  grid.innerHTML = ASMA.map(a => `
+    <div class="index-item">
+      <div class="index-item-num">${a.num}</div>
+      <div style="flex:1;">
+        <div class="index-item-ar">${a.ar}</div>
+        <div class="index-item-fr">${a.tl.split('·')[0].trim()}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  buildNomPages();
+  buildIndex();
+});
+</script>
+
+</body>
+</html>
