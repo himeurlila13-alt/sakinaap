@@ -104,6 +104,21 @@ async function initSupabase() {
   return _supabase;
 }
 
+// Cookies partagés Safari ↔ PWA iOS (localStorage est isolé sur iOS PWA)
+const _COOKIE_MAX = 365 * 24 * 3600;
+function setAuthCookie(email) {
+  document.cookie = `sakina_auth=1; path=/; max-age=${_COOKIE_MAX}; SameSite=Strict`;
+  if (email) document.cookie = `sakina_email=${encodeURIComponent(email)}; path=/; max-age=${_COOKIE_MAX}; SameSite=Strict`;
+}
+function clearAuthCookie() {
+  document.cookie = 'sakina_auth=; path=/; max-age=0; SameSite=Strict';
+  document.cookie = 'sakina_email=; path=/; max-age=0; SameSite=Strict';
+}
+function _getCookie(name) {
+  const m = document.cookie.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]*)'));
+  return m ? m[1] : null;
+}
+
 function showAuthScreen() {
   document.getElementById('auth-screen').style.display = 'flex';
   document.getElementById('onboarding').style.display = 'none';
@@ -222,6 +237,7 @@ async function verifyAuthCode() {
     ST.isAuthenticated = true;
     ST.userEmail = email;
     ST.authDate = Date.now();
+    setAuthCookie(email);
     saveState();
     showAuthMsg('✅ Connectée !', 'success');
   } catch(e) {
@@ -257,6 +273,7 @@ function setupAuthListener(sb) {
       ST.supabaseEmail = session.user.email;
       ST.isAuthenticated = true;
       ST.userEmail = ST.userEmail || session.user.email;
+      setAuthCookie(ST.userEmail);
       document.getElementById('auth-screen').style.display = 'none';
       await loadFromSupabase(sb, session.user.id);
       ST.isAuthenticated = true;
@@ -2633,7 +2650,7 @@ function renderMoi(s) {
     if (ST.supabaseEmail) {
       lbl.textContent = 'Connectée ✓';
       sub.textContent = ST.supabaseEmail;
-      row.onclick = () => { if (confirm('Se déconnecter ?')) { ST.isAuthenticated = false; ST.userEmail = null; ST.supabaseUserId = null; ST.supabaseEmail = null; saveState(); initSupabase().then(sb => sb.auth.signOut()); showAuthScreen(); } };
+      row.onclick = () => { if (confirm('Se déconnecter ?')) { ST.isAuthenticated = false; ST.userEmail = null; ST.supabaseUserId = null; ST.supabaseEmail = null; clearAuthCookie(); saveState(); initSupabase().then(sb => sb.auth.signOut()); showAuthScreen(); } };
     } else {
       lbl.textContent = 'Se connecter';
       sub.textContent = 'Sauvegarde tes données sur tous tes appareils';
@@ -2935,6 +2952,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (inp) inp.addEventListener('blur', () => { setTimeout(() => { window.scrollTo(0, 0); }, 100); });
 
   loadState();
+  // iOS PWA : localStorage isolé de Safari → lire le cookie pour retrouver l'auth
+  if (!ST.isAuthenticated && _getCookie('sakina_auth') === '1') {
+    ST.isAuthenticated = true;
+    ST.userEmail = ST.userEmail || decodeURIComponent(_getCookie('sakina_email') || '');
+    ST.authDate = ST.authDate || Date.now();
+    saveState();
+  }
   if (!ST.installDate) { ST.installDate = Date.now(); saveState(); }
 
   document.getElementById('revelation').style.display = 'none';
