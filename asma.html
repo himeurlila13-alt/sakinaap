@@ -426,6 +426,12 @@ width: 210mm; min-height: 297mm; height: 297mm;
 overflow: hidden; page-break-after: always; break-after: page;
 box-shadow: none;
 }
+/* Supprime le break sur le dernier de chaque groupe pour éviter les pages blanches */
+.pages-wrap > .page:last-child,
+#noms-pages .page:last-child {
+page-break-after: avoid;
+break-after: avoid;
+}
 @page {
 size: A4;
 margin: 0;
