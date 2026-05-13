@@ -2612,7 +2612,6 @@ function renderMoi(s) {
   const _nm   = document.getElementById('moi-hero-name');  if (_nm)    _nm.textContent    = ST.prenom || '';
   const _bdg  = document.getElementById('moi-hero-badge'); if (_bdg)   _bdg.textContent   = s.nom + ' · Jour ' + ST.currentDay;
   const _msg  = document.getElementById('moi-hero-msg');   if (_msg)   _msg.textContent   = _heroMsgs[ST.currentSaison] || '';
-  renderHistoriqueSport();
   // Auth row
   const lbl = document.getElementById('ps-auth-lbl');
   const sub = document.getElementById('ps-auth-sub');
@@ -2683,6 +2682,7 @@ function _getWeekKey() {
 
 function renderObjectifs() {
   renderWeeklyObjs();
+  renderHistoriqueSport();
   renderCalendar();
 }
 
