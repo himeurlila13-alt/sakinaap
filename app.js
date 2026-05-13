@@ -1148,8 +1148,6 @@ function applySaisonTheme() {
 
   const _sh = document.getElementById('sport-header');
   if (_sh) _sh.style.background = s.grad;
-  const pav = document.getElementById('profilAv');
-  if (pav) pav.style.background = s.grad;
   const psCycle = document.getElementById('psCycle');
   if (psCycle) psCycle.textContent = s.nom + ' ' + s.emoji + ' · Jour ' + ST.currentDay;
 }
@@ -2249,9 +2247,48 @@ function closeTimerModal() {
   document.getElementById('timer-modal')?.classList.remove('open');
 }
 
+function setSportInitLevel(level) {
+  ST.seanceLevel = level;
+  ST.sportLevelInit = true;
+  saveState();
+  renderHistoriqueSport();
+}
+
 function renderHistoriqueSport() {
   const el = document.getElementById('sport-historique-section');
   if (!el) return;
+
+  if (!ST.sportLevelInit) {
+    el.innerHTML = `
+      <div class="sport-histo-title">💪 Parcours sport</div>
+      <div class="sport-init-card">
+        <div class="sport-init-q">Quel est ton niveau sportif actuel ?</div>
+        <div class="sport-init-opts">
+          <button class="sport-init-btn" onclick="setSportInitLevel(1)">
+            <span class="sport-init-icon">🌱</span>
+            <span class="sport-init-lbl">Débutante</span>
+            <span class="sport-init-sub">Je commence ou reprends</span>
+          </button>
+          <button class="sport-init-btn" onclick="setSportInitLevel(2)">
+            <span class="sport-init-icon">🌿</span>
+            <span class="sport-init-lbl">Intermédiaire</span>
+            <span class="sport-init-sub">Je m'entraîne régulièrement</span>
+          </button>
+          <button class="sport-init-btn" onclick="setSportInitLevel(3)">
+            <span class="sport-init-icon">🔥</span>
+            <span class="sport-init-lbl">Avancée</span>
+            <span class="sport-init-sub">À l'aise avec l'effort intense</span>
+          </button>
+          <button class="sport-init-btn" onclick="setSportInitLevel(4)">
+            <span class="sport-init-icon">⚡</span>
+            <span class="sport-init-lbl">Athlète</span>
+            <span class="sport-init-sub">Performance & dépassement</span>
+          </button>
+        </div>
+      </div>`;
+    return;
+  }
+
   const done = ST.seanceDone || {};
   const totalFull = Object.keys(done).filter(d => done[d] === true).length;
   const totalExpress = Object.keys(done).filter(d => done[d] === 'express').length;
@@ -2561,9 +2598,17 @@ function restoreCoranCheck() {
 // MOI RENDER
 // ═══════════════════════════════════════════════
 function renderMoi(s) {
-  const _pnm = document.getElementById('profil-name'); if (_pnm) _pnm.textContent = ST.prenom || '';
-  const _psb = document.getElementById('profil-sub'); if (_psb) _psb.textContent = s.nom + ' · Jour ' + ST.currentDay;
-  const pav = document.getElementById('profilAv'); if (pav) pav.textContent = s.emoji;
+  const _heroIcons = { hiver:'🌙', printemps:'🌿', ete:'☀️', automne:'🍂' };
+  const _heroMsgs  = {
+    hiver:    'Prends soin de toi aujourd\'hui 🤍',
+    printemps:'L\'énergie revient, profites-en ✨',
+    ete:      'Tu rayonnes aujourd\'hui ☀️',
+    automne:  'Douceur et bienveillance 🍂'
+  };
+  const _icon = document.getElementById('moi-hero-icon');  if (_icon)  _icon.textContent  = _heroIcons[ST.currentSaison] || s.emoji;
+  const _nm   = document.getElementById('moi-hero-name');  if (_nm)    _nm.textContent    = ST.prenom || '';
+  const _bdg  = document.getElementById('moi-hero-badge'); if (_bdg)   _bdg.textContent   = s.nom + ' · Jour ' + ST.currentDay;
+  const _msg  = document.getElementById('moi-hero-msg');   if (_msg)   _msg.textContent   = _heroMsgs[ST.currentSaison] || '';
   // Auth row
   const lbl = document.getElementById('ps-auth-lbl');
   const sub = document.getElementById('ps-auth-sub');
@@ -2579,7 +2624,6 @@ function renderMoi(s) {
       row.onclick = openReconnectFromNudge;
     }
   }
-  renderHistoriqueSport();
 }
 
 // ═══════════════════════════════════════════════
@@ -2635,6 +2679,7 @@ function _getWeekKey() {
 
 function renderObjectifs() {
   renderWeeklyObjs();
+  renderHistoriqueSport();
   renderCalendar();
 }
 
@@ -3806,7 +3851,7 @@ function confirmDeleteMyData() {
     waitlistEmail: null, feedbackSent: false, installBannerDismissed: false,
     lastDailyReset: null, lastWeeklyReset: null, eveningCheckinDate: null,
     eveningCheckinMood: null, cycleHistory: [],
-    isPremium: false, seanceValidatedCount: 0, seanceLevel: 1,
+    isPremium: false, seanceValidatedCount: 0, seanceLevel: 1, sportLevelInit: false,
     amrapRecord: null, printempsUpgradeDone: false, levelMaxShown: false, printempsBasCount: 0, _lastCycleNum: null,
     weeklyObjChecks: {}, customObjectifs: [], customObjChecks: {},
     marche: { phase: null, checks: {}, custom: [] },
