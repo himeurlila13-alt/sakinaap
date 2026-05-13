@@ -64,6 +64,9 @@ let ST = {
   checkpointProgress: 0,
   _proposeNewEx5: false,
   _proposeFatigue3: false,
+  isAuthenticated: false,
+  userEmail: null,
+  authDate: null,
 };
 
 function saveState() {
@@ -216,6 +219,10 @@ async function verifyAuthCode() {
     const sb = await initSupabase();
     const { error } = await sb.auth.verifyOtp({ email, token: code, type: 'email' });
     if (error) throw error;
+    ST.isAuthenticated = true;
+    ST.userEmail = email;
+    ST.authDate = Date.now();
+    saveState();
     showAuthMsg('✅ Connectée !', 'success');
   } catch(e) {
     btn.disabled = false;
@@ -263,7 +270,7 @@ function setupAuthListener(sb) {
         document.getElementById('onboarding').style.display = 'block';
       }
     } else if (event === 'SIGNED_OUT') {
-      showAuthScreen();
+      if (!ST.isAuthenticated) showAuthScreen();
     }
   });
 }
@@ -2620,7 +2627,7 @@ function renderMoi(s) {
     if (ST.supabaseEmail) {
       lbl.textContent = 'Connectée ✓';
       sub.textContent = ST.supabaseEmail;
-      row.onclick = () => { if (confirm('Se déconnecter ?')) { initSupabase().then(sb => sb.auth.signOut()); ST.supabaseUserId = null; ST.supabaseEmail = null; saveState(); renderMoi(s); } };
+      row.onclick = () => { if (confirm('Se déconnecter ?')) { ST.isAuthenticated = false; ST.userEmail = null; ST.supabaseUserId = null; ST.supabaseEmail = null; saveState(); initSupabase().then(sb => sb.auth.signOut()); showAuthScreen(); } };
     } else {
       lbl.textContent = 'Se connecter';
       sub.textContent = 'Sauvegarde tes données sur tous tes appareils';
@@ -2934,7 +2941,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (sb) {
       const { data: { session } } = await sb.auth.getSession();
       if (!session) {
-        if (ST.prenom && ST.cycleStart) {
+        if (ST.isAuthenticated) {
+          // Déjà authentifiée via notre flag local — jamais redemander l'auth
+          setupAuthListener(sb);
+        } else if (ST.prenom && ST.cycleStart) {
           // Données locales présentes — laisser entrer, proposer reconnexion en douceur
           setupAuthListener(sb);
           setTimeout(_showReconnectNudge, 1800);
