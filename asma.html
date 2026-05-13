@@ -103,66 +103,68 @@ letter-spacing: 2px; opacity: .5;
 COVER PAGE
 ═══════════════════════════════════════ */
 .cover {
-background: linear-gradient(170deg, #1C0A30 0%, #3D2060 45%, #7B5EA7 100%);
+background: white;
 display: flex; flex-direction: column;
 align-items: center; justify-content: center;
 text-align: center; padding: 30mm 20mm;
 position: relative; overflow: hidden;
 }
-.cover::before {
+.cover::before { display: none; }
+/* Double border frame */
+.cover::after {
 content: ‘’;
-position: absolute; inset: 0;
-background:
-radial-gradient(ellipse 70% 50% at 50% 30%, rgba(201,169,110,.12) 0%, transparent 60%),
-radial-gradient(ellipse 40% 40% at 20% 80%, rgba(255,255,255,.04) 0%, transparent 50%);
+position: absolute;
+inset: 8mm;
+border: 1px solid #C9A96E;
 pointer-events: none;
 }
 .cover-bismillah {
-font-size: 28px; direction: rtl; color: rgba(255,255,255,.45);
-letter-spacing: 2px; margin-bottom: 20mm; position: relative;
+font-size: 26px; direction: rtl; color: var(--noir);
+letter-spacing: 2px; margin-bottom: 18mm; position: relative;
+opacity: .7;
 }
 .cover-ornament {
 display: flex; align-items: center; gap: 12px;
 margin-bottom: 8mm; position: relative;
 }
 .cover-ornament-line {
-width: 30mm; height: 1px; background: var(--or); opacity: .4;
+width: 30mm; height: 1px; background: var(--noir); opacity: .25;
 }
-.cover-ornament-star { font-size: 14px; color: var(--or); opacity: .6; }
+.cover-ornament-star { font-size: 12px; color: var(--noir); opacity: .4; }
 .cover-sub-top {
 font-size: 8px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase;
-color: rgba(255,255,255,.4); margin-bottom: 6mm; position: relative;
+color: var(--gris); margin-bottom: 6mm; position: relative;
 }
 .cover-title {
-font-family: var(--script); font-size: 72px; color: white;
+font-family: var(--script); font-size: 72px; color: var(--noir);
 line-height: .9; font-weight: 400; margin-bottom: 4mm; position: relative;
 }
 .cover-arabic-title {
-font-size: 32px; direction: rtl; color: rgba(255,255,255,.8);
+font-size: 30px; direction: rtl; color: var(--noir);
 line-height: 1.6; margin-bottom: 8mm; position: relative;
-letter-spacing: 2px;
+letter-spacing: 2px; opacity: .8;
 }
 .cover-divider {
-width: 40px; height: 2px; background: var(--or); opacity: .5;
-margin: 0 auto 8mm; position: relative;
+width: 40px; height: 1px; background: var(--noir);
+opacity: .2; margin: 0 auto 8mm; position: relative;
 }
 .cover-tagline {
-font-family: var(--serif); font-size: 13px; font-style: italic;
-color: rgba(255,255,255,.55); line-height: 1.8; max-width: 120mm;
+font-family: var(--serif); font-size: 12px; font-style: italic;
+color: var(--gris); line-height: 1.8; max-width: 120mm;
 position: relative; margin-bottom: 20mm;
 }
 .cover-dots {
 display: flex; gap: 8px; justify-content: center; margin-bottom: 10mm; position: relative;
 }
 .cover-dot {
-width: 8px; height: 8px; border-radius: 50%;
-background: rgba(255,255,255,.2);
+width: 6px; height: 6px; border-radius: 50%;
+border: 1px solid #C9A96E;
 }
-.cover-dot.active { background: var(--or); }
+.cover-dot.active { background: var(--noir); border-color: var(--noir); }
 .cover-sakina {
-position: absolute; bottom: 14mm;
-font-family: var(--script); font-size: 18px; color: rgba(255,255,255,.25);
-font-weight: 400; letter-spacing: 1px;
+position: absolute; bottom: 18mm;
+font-family: var(--script); font-size: 18px; color: var(--gris);
+font-weight: 400; letter-spacing: 1px; opacity: .5;
 }
 
 /* ═══════════════════════════════════════
@@ -194,12 +196,12 @@ line-height: 1.9; margin-bottom: 6mm;
 .intro-body strong { font-weight: 600; color: var(--violet-dark); }
 
 .intro-callout {
-background: var(--violet-soft); border-left: 3px solid var(--violet);
-border-radius: 0 10px 10px 0; padding: 5mm 6mm; margin: 6mm 0;
+background: white; border-left: 2px solid var(--noir);
+padding: 4mm 6mm; margin: 6mm 0;
 }
 .intro-callout-label {
 font-size: 7px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
-color: var(--violet); margin-bottom: 3mm;
+color: var(--noir); margin-bottom: 3mm;
 }
 .intro-callout-text {
 font-family: var(--serif); font-size: 10px; font-style: italic;
@@ -211,18 +213,18 @@ font-size: 8px; color: var(--gris); margin-top: 2mm;
 
 .intro-arabic-quote {
 text-align: center; margin: 8mm 0;
-background: var(--grad); border-radius: 12px; padding: 6mm 8mm;
+background: white; border: 1px solid var(--sable); border-radius: 8px; padding: 6mm 8mm;
 }
 .intro-arabic-quote .ar {
-font-size: 22px; direction: rtl; color: white; line-height: 2;
+font-size: 22px; direction: rtl; color: var(--noir); line-height: 2;
 margin-bottom: 3mm;
 }
 .intro-arabic-quote .fr {
 font-family: var(--serif); font-size: 9px; font-style: italic;
-color: rgba(255,255,255,.65); line-height: 1.6;
+color: var(--gris); line-height: 1.6;
 }
 .intro-arabic-quote .src {
-font-size: 8px; color: rgba(255,255,255,.35); margin-top: 2mm;
+font-size: 8px; color: var(--gris); margin-top: 2mm; opacity: .6;
 }
 
 .intro-section-title {
@@ -265,8 +267,8 @@ font-family: var(--script); font-size: 16px; color: var(--gris);
 opacity: .4; font-weight: 400;
 }
 .med-page-num-badge {
-background: var(--grad); border-radius: 20px; padding: 2px 10px;
-font-size: 8px; font-weight: 600; color: white; letter-spacing: 1px;
+border: 1px solid var(--sable); border-radius: 20px; padding: 2px 10px;
+font-size: 8px; font-weight: 600; color: var(--gris); letter-spacing: 1px;
 }
 
 /* Nom card */
@@ -311,12 +313,12 @@ line-height: 1.8;
 
 /* Méditation */
 .med-section {
-background: var(--violet-soft); border-radius: 10px;
-padding: 4mm 5mm; margin-bottom: 5mm;
+background: white; border-left: 1.5px solid var(--sable);
+padding: 3mm 5mm; margin-bottom: 5mm;
 }
 .med-label {
 font-size: 7px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
-color: var(--violet); margin-bottom: 2mm;
+color: var(--gris); margin-bottom: 2mm;
 }
 .med-text {
 font-family: var(--serif); font-size: 10px; font-style: italic;
@@ -325,13 +327,13 @@ color: var(--noir); line-height: 1.8;
 
 /* Invocation */
 .inv-section {
-background: linear-gradient(135deg, #FAF6F0, #F0E8DC);
-border: 1px solid var(--or-light); border-radius: 10px;
+background: white;
+border: 1px solid var(--sable); border-radius: 6px;
 padding: 4mm 5mm; margin-bottom: 5mm;
 }
 .inv-label {
 font-size: 7px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
-color: var(--or-dark); margin-bottom: 3mm;
+color: var(--gris); margin-bottom: 3mm;
 }
 .inv-arabic {
 font-size: 14px; direction: rtl; color: var(--noir); line-height: 2;
@@ -391,45 +393,52 @@ font-size: 7px; color: var(--gris); line-height: 1.3;
 CLOSING PAGE
 ═══════════════════════════════════════ */
 .closing-page {
-background: linear-gradient(170deg, #1C0A30 0%, #3D2060 50%, #5A3A90 100%);
+background: white;
 display: flex; flex-direction: column;
 align-items: center; justify-content: center;
 text-align: center; padding: 25mm 20mm;
 position: relative; overflow: hidden;
 }
+.closing-page::after {
+content: '';
+position: absolute;
+inset: 8mm;
+border: 1px solid #C9A96E;
+pointer-events: none;
+}
 .closing-arabic {
-font-size: 36px; direction: rtl; color: rgba(255,255,255,.7);
-line-height: 1.9; margin-bottom: 10mm;
+font-size: 32px; direction: rtl; color: var(--noir);
+line-height: 1.9; margin-bottom: 10mm; opacity: .8; position: relative;
 }
 .closing-title {
-font-family: var(--script); font-size: 52px; color: white;
-font-weight: 400; margin-bottom: 6mm; line-height: 1;
+font-family: var(--script); font-size: 52px; color: var(--noir);
+font-weight: 400; margin-bottom: 6mm; line-height: 1; position: relative;
 }
 .closing-text {
 font-family: var(--serif); font-size: 11px; font-style: italic;
-color: rgba(255,255,255,.55); line-height: 1.9; max-width: 120mm;
-margin-bottom: 12mm;
+color: var(--gris); line-height: 1.9; max-width: 120mm;
+margin-bottom: 12mm; position: relative;
 }
 .closing-divider {
-width: 40px; height: 1px; background: var(--or);
-opacity: .4; margin: 0 auto 12mm;
+width: 40px; height: 1px; background: var(--noir);
+opacity: .2; margin: 0 auto 12mm; position: relative;
 }
 .closing-dua {
-background: rgba(255,255,255,.08); border-radius: 12px;
+border: 1px solid var(--sable); border-radius: 8px;
 padding: 6mm 8mm; margin-bottom: 12mm; max-width: 130mm;
-backdrop-filter: blur(8px);
+position: relative;
 }
 .closing-dua-ar {
-font-size: 20px; direction: rtl; color: white;
+font-size: 20px; direction: rtl; color: var(--noir);
 line-height: 1.9; margin-bottom: 4mm;
 }
 .closing-dua-fr {
 font-family: var(--serif); font-size: 9px; font-style: italic;
-color: rgba(255,255,255,.55); line-height: 1.6;
+color: var(--gris); line-height: 1.6;
 }
 .closing-sakina {
-font-family: var(--script); font-size: 22px; color: var(--or);
-opacity: .6; font-weight: 400;
+font-family: var(--script); font-size: 22px; color: var(--gris);
+opacity: .5; font-weight: 400; position: relative;
 }
 
 /* ═══════════════════════════════════════
@@ -608,22 +617,22 @@ margin-bottom: 4px;
     Certains noms résonnent différemment selon ta saison intérieure. En voici quelques repères :
   </div>
 
-  <div style="display:flex;flex-direction:column;gap:3mm;margin:4mm 0;">
-    <div style="display:flex;align-items:flex-start;gap:3mm;padding:3mm 4mm;background:var(--violet-soft);border-radius:8px;">
-      <span style="font-size:14px;flex-shrink:0;">🌙</span>
-      <div><div style="font-size:8px;font-weight:700;color:var(--violet);margin-bottom:1mm;">Hiver — Phase de repos</div><div style="font-size:9px;color:var(--gris);line-height:1.6;">As-Sabur (Le Patient) · Ar-Rahman (Le Tout Miséricordieux) · Al-Latif (Le Subtil) · Al-Ghaffar (Le Grand Pardonneur)</div></div>
+  <div style="display:flex;flex-direction:column;gap:2mm;margin:4mm 0;">
+    <div style="display:flex;align-items:flex-start;gap:3mm;padding:3mm 4mm;border-left:2px solid var(--sable);">
+      <span style="font-size:12px;flex-shrink:0;">🌙</span>
+      <div><div style="font-size:8px;font-weight:700;color:var(--noir);margin-bottom:1mm;">Hiver — Phase de repos</div><div style="font-size:9px;color:var(--gris);line-height:1.6;">As-Sabur (Le Patient) · Ar-Rahman (Le Tout Miséricordieux) · Al-Latif (Le Subtil) · Al-Ghaffar (Le Grand Pardonneur)</div></div>
     </div>
-    <div style="display:flex;align-items:flex-start;gap:3mm;padding:3mm 4mm;background:#E8F8F3;border-radius:8px;">
-      <span style="font-size:14px;flex-shrink:0;">🌸</span>
-      <div><div style="font-size:8px;font-weight:700;color:#1A6B52;margin-bottom:1mm;">Printemps — Phase d'élan</div><div style="font-size:9px;color:var(--gris);line-height:1.6;">Al-Mubdi (Le Principe) · Al-Fattah (Le Grand Ouvreur) · Al-Khaliq (Le Créateur) · Al-Basit (Celui qui étend)</div></div>
+    <div style="display:flex;align-items:flex-start;gap:3mm;padding:3mm 4mm;border-left:2px solid var(--sable);">
+      <span style="font-size:12px;flex-shrink:0;">🌸</span>
+      <div><div style="font-size:8px;font-weight:700;color:var(--noir);margin-bottom:1mm;">Printemps — Phase d'élan</div><div style="font-size:9px;color:var(--gris);line-height:1.6;">Al-Mubdi (Le Principe) · Al-Fattah (Le Grand Ouvreur) · Al-Khaliq (Le Créateur) · Al-Basit (Celui qui étend)</div></div>
     </div>
-    <div style="display:flex;align-items:flex-start;gap:3mm;padding:3mm 4mm;background:#FFFBF0;border-radius:8px;border:1px solid #F5C040;">
-      <span style="font-size:14px;flex-shrink:0;">☀️</span>
-      <div><div style="font-size:8px;font-weight:700;color:#8A6010;margin-bottom:1mm;">Été — Phase de puissance</div><div style="font-size:9px;color:var(--gris);line-height:1.6;">Al-Qawi (Le Très Fort) · Al-Mu'izz (Celui qui honore) · Al-Wahid (L'Unique) · Al-Hayy (Le Vivant)</div></div>
+    <div style="display:flex;align-items:flex-start;gap:3mm;padding:3mm 4mm;border-left:2px solid var(--sable);">
+      <span style="font-size:12px;flex-shrink:0;">☀️</span>
+      <div><div style="font-size:8px;font-weight:700;color:var(--noir);margin-bottom:1mm;">Été — Phase de puissance</div><div style="font-size:9px;color:var(--gris);line-height:1.6;">Al-Qawi (Le Très Fort) · Al-Mu'izz (Celui qui honore) · Al-Wahid (L'Unique) · Al-Hayy (Le Vivant)</div></div>
     </div>
-    <div style="display:flex;align-items:flex-start;gap:3mm;padding:3mm 4mm;background:#FDF0EE;border-radius:8px;">
-      <span style="font-size:14px;flex-shrink:0;">🍂</span>
-      <div><div style="font-size:8px;font-weight:700;color:#5A2018;margin-bottom:1mm;">Automne — Phase de profondeur</div><div style="font-size:9px;color:var(--gris);line-height:1.6;">At-Tawwab (Le Grand Repentant) · Al-Wali (Le Proche) · Al-Halim (Le Clément) · Al-Wadud (Le Plein d'Amour)</div></div>
+    <div style="display:flex;align-items:flex-start;gap:3mm;padding:3mm 4mm;border-left:2px solid var(--sable);">
+      <span style="font-size:12px;flex-shrink:0;">🍂</span>
+      <div><div style="font-size:8px;font-weight:700;color:var(--noir);margin-bottom:1mm;">Automne — Phase de profondeur</div><div style="font-size:9px;color:var(--gris);line-height:1.6;">At-Tawwab (Le Grand Repentant) · Al-Wali (Le Proche) · Al-Halim (Le Clément) · Al-Wadud (Le Plein d'Amour)</div></div>
     </div>
   </div>
 
@@ -1206,41 +1215,40 @@ function buildNomPages() {
       pageHtml += `
       <div style="margin-bottom:${idx < group.length-1 ? '5mm' : '0'};${idx < group.length-1 ? 'padding-bottom:5mm;border-bottom:1px solid var(--sable);' : ''}">
         <!-- Nom card compact -->
-        <div style="background:var(--grad);border-radius:12px;padding:4mm 5mm;margin-bottom:3mm;display:flex;align-items:center;gap:4mm;position:relative;overflow:hidden;">
-          <div style="position:absolute;inset:0;background:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2285%22 cy=%2220%22 r=%2240%22 fill=%22rgba(255,255,255,0.04)%22/%3E%3C/svg%3E') center/cover;pointer-events:none;"></div>
-          <div style="position:relative;min-width:32px;">
-            <div style="font-size:7px;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.35);margin-bottom:2px;">${String(nom.num).padStart(2,'0')}</div>
-            <div style="font-family:var(--script);font-size:20px;color:var(--or);font-weight:400;line-height:1;">${nom.tl}</div>
+        <div style="border:1.5px solid var(--noir);border-radius:8px;padding:3mm 5mm;margin-bottom:3mm;display:flex;align-items:center;gap:4mm;">
+          <div style="min-width:28px;">
+            <div style="font-size:7px;font-weight:700;letter-spacing:1.5px;color:var(--gris);margin-bottom:2px;">${String(nom.num).padStart(2,'0')}</div>
+            <div style="font-family:var(--serif);font-size:11px;font-style:italic;color:var(--gris);font-weight:400;line-height:1.2;">${nom.tl}</div>
           </div>
-          <div style="width:1px;height:30px;background:rgba(255,255,255,.15);flex-shrink:0;position:relative;"></div>
-          <div style="position:relative;flex:1;text-align:right;">
-            <div style="font-size:22px;direction:rtl;color:white;line-height:1.4;">${nom.ar}</div>
-            <div style="font-family:var(--serif);font-size:8px;font-style:italic;color:rgba(255,255,255,.5);margin-top:2px;">${nom.fr}</div>
+          <div style="width:1px;height:28px;background:var(--sable);flex-shrink:0;"></div>
+          <div style="flex:1;text-align:right;">
+            <div style="font-size:22px;direction:rtl;color:var(--noir);line-height:1.4;">${nom.ar}</div>
+            <div style="font-family:var(--serif);font-size:8px;font-style:italic;color:var(--gris);margin-top:2px;">${nom.fr}</div>
           </div>
         </div>
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:3mm;margin-bottom:3mm;">
           <!-- Sens -->
           <div>
-            <div style="font-size:6.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--violet);margin-bottom:2mm;">✦ Sens profond</div>
+            <div style="font-size:6.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:2mm;">Sens profond</div>
             <div style="font-family:var(--serif);font-size:8.5px;color:var(--noir);line-height:1.7;">${nom.sens}</div>
           </div>
           <!-- Méditation -->
-          <div style="background:var(--violet-soft);border-radius:7px;padding:2.5mm 3mm;">
-            <div style="font-size:6.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--violet);margin-bottom:2mm;">🌙 Méditation</div>
+          <div style="border-left:1.5px solid var(--sable);padding:2mm 3mm;">
+            <div style="font-size:6.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:2mm;">Méditation</div>
             <div style="font-family:var(--serif);font-size:8.5px;font-style:italic;color:var(--noir);line-height:1.7;">${nom.med}</div>
           </div>
         </div>
 
         <!-- Invocation + lignes journaling -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:3mm;">
-          <div style="background:linear-gradient(135deg,#FAF6F0,#F0E8DC);border:1px solid var(--or-light);border-radius:7px;padding:2.5mm 3mm;">
-            <div style="font-size:6.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--or-dark);margin-bottom:2mm;">🤲 Invocation</div>
+          <div style="border:1px solid var(--sable);border-radius:6px;padding:2.5mm 3mm;">
+            <div style="font-size:6.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gris);margin-bottom:2mm;">Invocation</div>
             <div style="font-size:10px;direction:rtl;color:var(--noir);line-height:1.8;text-align:right;margin-bottom:1mm;">${nom.inv}</div>
             <div style="font-family:var(--serif);font-size:7.5px;font-style:italic;color:var(--gris);">${nom.inv_fr}</div>
           </div>
           <div>
-            <div style="font-size:6.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:3mm;">✍️ Ce que ce nom éveille en moi</div>
+            <div style="font-size:6.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:3mm;">Ce que ce nom éveille en moi</div>
             <div style="height:1px;background:var(--sable);margin-bottom:4mm;"></div>
             <div style="height:1px;background:var(--sable);margin-bottom:4mm;"></div>
             <div style="height:1px;background:var(--sable);"></div>
