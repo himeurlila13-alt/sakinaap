@@ -2723,7 +2723,56 @@ function openCompteModal() {
 }
 function openChangeEmail() {
   document.getElementById('compte-modal').classList.remove('open');
-  openReconnectFromNudge();
+  // Reset état du modal
+  document.getElementById('change-email-step1').style.display = '';
+  document.getElementById('change-email-step2').style.display = 'none';
+  document.getElementById('change-email-input').value = '';
+  document.getElementById('change-email-msg').textContent = '';
+  const btn = document.getElementById('change-email-btn');
+  if (btn) { btn.disabled = false; btn.textContent = 'Envoyer le lien de confirmation'; }
+  document.getElementById('change-email-modal').classList.add('open');
+}
+
+async function submitChangeEmail() {
+  const input = document.getElementById('change-email-input');
+  const msg = document.getElementById('change-email-msg');
+  const btn = document.getElementById('change-email-btn');
+  const newEmail = (input?.value || '').trim().toLowerCase();
+
+  if (!newEmail || !newEmail.includes('@')) {
+    msg.style.color = '#C46B50';
+    msg.textContent = 'Entre une adresse email valide.';
+    return;
+  }
+  if (newEmail === (ST.supabaseEmail || '').toLowerCase()) {
+    msg.style.color = '#C46B50';
+    msg.textContent = 'C\'est déjà ton adresse actuelle.';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '…';
+  msg.textContent = '';
+
+  try {
+    const sb = await initSupabase();
+    if (!sb) throw new Error('no_supabase');
+    const { error } = await sb.auth.updateUser({ email: newEmail });
+    if (error) throw error;
+
+    // Succès — afficher step 2
+    document.getElementById('change-email-step1').style.display = 'none';
+    const txt = document.getElementById('change-email-confirm-txt');
+    if (txt) txt.innerHTML = `Un lien de confirmation a été envoyé à <strong>${newEmail}</strong>.<br><br>Clique dessus depuis ta boîte mail — ton adresse sera mise à jour automatiquement, sans perdre aucune donnée.`;
+    document.getElementById('change-email-step2').style.display = '';
+  } catch (e) {
+    msg.style.color = '#C46B50';
+    msg.textContent = e.message?.includes('no_supabase')
+      ? 'Connexion Supabase indisponible.'
+      : 'Une erreur est survenue. Réessaie.';
+    btn.disabled = false;
+    btn.textContent = 'Envoyer le lien de confirmation';
+  }
 }
 function confirmSignOut() {
   document.getElementById('compte-modal').classList.remove('open');
