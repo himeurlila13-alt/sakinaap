@@ -1137,9 +1137,9 @@ function showBilanModal() {
     ${(() => {
       const histCycles = ST.historiqueCycles || [];
       if (!histCycles.length) return '';
-      const allDurations = [ST.cycleDuration || 28, ...histCycles.map(c => c.dureeCycle)];
+      const allDurations = [ST.cycleDuration || 28, ...histCycles.map(c => Number(c.dureeCycle) || 28)];
       const avgDur = Math.round(allDurations.reduce((a, b) => a + b, 0) / allDurations.length);
-      const avgRegles = Math.round(histCycles.map(c => c.dureeRegles).reduce((a, b) => a + b, 0) / histCycles.length);
+      const avgRegles = Math.round(histCycles.map(c => Number(c.dureeRegles) || 5).reduce((a, b) => a + b, 0) / histCycles.length);
       const minD = Math.min(...allDurations);
       const maxD = Math.max(...allDurations);
       const isReg = (maxD - minD) <= 3;
@@ -1569,35 +1569,54 @@ function renderCarteRepas(s) {
   const alim = s.alimentation;
   if (!alim) return;
 
-  // Source unique : RECETTES — même plat pour toutes, détail recette pour premium
   const recettes = RECETTES[ST.currentSaison] || [];
   const idx = (ST.currentDay - 1) % Math.max(recettes.length, 1);
   const r = recettes[idx];
+  const saisonLabel = { hiver: 'Hiver', printemps: 'Printemps', ete: 'Été', automne: 'Automne' }[ST.currentSaison] || '';
 
   const starsEl = document.getElementById('dc-repas-stars');
   if (starsEl) {
     starsEl.innerHTML = r
-      ? `<span class="day-card-chip day-card-chip-repas">${r.emoji} ${r.nom}</span>`
+      ? `<div class="repas-hero">
+           <span class="repas-hero-emoji">${r.emoji}</span>
+           <div class="repas-hero-text">
+             <div class="repas-hero-phase">${saisonLabel}</div>
+             <div class="repas-hero-nom">${r.nom}</div>
+           </div>
+         </div>`
       : (alim.star || []).map(f => `<span class="day-card-chip">⭐ ${f}</span>`).join('');
   }
 
   const nutrimEl = document.getElementById('dc-repas-nutriments');
   if (nutrimEl) {
-    const pourquoiHtml = r
-      ? `<div class="day-card-nutriment-row"><span class="day-card-nutriment-why dc-repas-benefice">${r.pourquoi}</span></div>`
-      : '';
-    const nutriHtml = (alim.nutriments || []).slice(0, 2).map(n => `
-      <div class="day-card-nutriment-row">
-        <span class="day-card-nutriment-nom">${n.nom}</span>
-        <span class="day-card-nutriment-why">${n.why}</span>
-      </div>`).join('');
-    nutrimEl.innerHTML = pourquoiHtml + nutriHtml;
+    if (r) {
+      const ingrs = r.ingredients || [];
+      const shown = ingrs.slice(0, 3);
+      const more = ingrs.length - 3;
+      const ingrChips = shown.map(ing => {
+        const short = ing.length > 26 ? ing.slice(0, 24) + '…' : ing;
+        return `<span class="repas-ingr-chip">${short}</span>`;
+      }).join('') + (more > 0 ? `<span class="repas-ingr-more">+${more} →</span>` : '');
+      nutrimEl.innerHTML = `
+        <div class="repas-pourquoi-block">
+          <div class="repas-pourquoi-text">${r.pourquoi}</div>
+        </div>
+        <div class="repas-ingr-preview">${ingrChips}</div>`;
+    } else {
+      nutrimEl.innerHTML = (alim.nutriments || []).slice(0, 2).map(n => `
+        <div class="day-card-nutriment-row">
+          <span class="day-card-nutriment-nom">${n.nom}</span>
+          <span class="day-card-nutriment-why">${n.why}</span>
+        </div>`).join('');
+    }
   }
 
   const eviterEl = document.getElementById('dc-repas-eviter');
-  if (eviterEl && (alim.eviter || []).length) {
-    eviterEl.innerHTML = `<span class="day-card-eviter-label">À éviter :</span> ` +
-      alim.eviter.map(e => `<span class="day-card-chip-eviter">${e}</span>`).join('');
+  if (eviterEl) {
+    eviterEl.innerHTML = (alim.eviter || []).length
+      ? `<span class="day-card-eviter-label">À éviter :</span> ` +
+        alim.eviter.map(e => `<span class="day-card-chip-eviter">${e}</span>`).join('')
+      : '';
   }
 
   const premEl = document.getElementById('action-manger-premium');
@@ -1609,7 +1628,7 @@ function renderCarteRepas(s) {
         <span class="action-prem-unlocked-emoji">${r.emoji}</span>
         <div class="action-prem-unlocked-text">
           <div class="action-prem-unlocked-name">Voir la recette complète</div>
-          <div class="action-prem-unlocked-sub">Ingrédients + étapes →</div>
+          <div class="action-prem-unlocked-sub">Ingrédients · étapes détaillées →</div>
         </div>
         <span class="action-prem-unlocked-arrow">›</span>
       </div>`;
@@ -1623,7 +1642,7 @@ function renderCarteRepas(s) {
         </div>
         <div class="action-prem-cta">
           <div class="action-prem-label">✦ Recette complète</div>
-          <button class="action-prem-btn" onclick="startStripeCheckout()">D&eacute;bloquer Premium</button>
+          <button class="action-prem-btn" onclick="startStripeCheckout()">Débloquer Premium</button>
         </div>
       </div>`;
   }
@@ -4014,7 +4033,7 @@ function renderCycleHistory() {
   (history || []).slice(0, 11).forEach(c => all.push(c));
   (ST.historiqueCycles || []).forEach(c => {
     if (c.dateDebut && c.dateDebut !== ST.cycleStart) {
-      all.push({ start: c.dateDebut, duration: c.dureeCycle, histManuel: true });
+      all.push({ start: c.dateDebut, duration: Number(c.dureeCycle) || 28, histManuel: true });
     }
   });
   const currItem = all.find(c => c.current);
@@ -4028,7 +4047,7 @@ function renderCycleHistory() {
     return;
   }
 
-  const durs = all.map(c => c.duration || 28);
+  const durs = all.map(c => Number(c.duration) || 28);
   const minD = Math.min(...durs);
   const maxD = Math.max(...durs);
   const avg = Math.round(durs.reduce((a, b) => a + b, 0) / durs.length);
@@ -4094,8 +4113,11 @@ function renderPatterns() {
   card.style.display = 'block';
 
   const history = ST.cycleHistory || [];
-  const allCycles = [{ start: ST.cycleStart, duration: ST.cycleDuration || 28 }, ...history];
-  const durations = allCycles.map(c => c.duration || 28);
+  const manualCycles = (ST.historiqueCycles || [])
+    .filter(c => c.dateDebut && c.dateDebut !== ST.cycleStart)
+    .map(c => ({ start: c.dateDebut, duration: Number(c.dureeCycle) || 28 }));
+  const allCycles = [{ start: ST.cycleStart, duration: ST.cycleDuration || 28 }, ...history, ...manualCycles];
+  const durations = allCycles.map(c => Number(c.duration) || 28);
   const avg = Math.round(durations.reduce((a, b) => a + b, 0) / durations.length);
   const minD = Math.min(...durations);
   const maxD = Math.max(...durations);
