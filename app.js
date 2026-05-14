@@ -959,9 +959,11 @@ function checkTrialEnd() {
 
 function renderTrialCard() {
   const el = document.getElementById('trial-status-card');
+  const upsell = document.getElementById('premium-upsell-card');
   if (!el) return;
   const days = getTrialDays();
   const remaining = Math.max(0, 20 - days);
+  if (upsell) upsell.style.display = ST.isPremium ? 'none' : '';
   if (ST.isPremium) {
     const planLabel = ST.premiumPlan === 'monthly' ? 'mensuel' : ST.premiumPlan === 'annual' ? 'annuel' : '';
     el.innerHTML = `
