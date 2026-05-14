@@ -1899,7 +1899,7 @@ function applyPremiumCode() {
   const msg = document.getElementById('premium-code-msg');
   if (!inp || !msg) return;
   const code = inp.value.trim().toUpperCase();
-  const VALID_CODES = ['SAKINA2026', 'BETA2026', 'FONDATRICE'];
+  const VALID_CODES = ['SAK26PREM', 'BETA2026', 'FONDATRICE'];
   if (VALID_CODES.includes(code)) {
     ST.isPremium = true;
     saveState();
