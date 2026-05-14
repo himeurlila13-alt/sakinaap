@@ -846,7 +846,9 @@ function computeCycle() {
     const [hey, hem, hed] = ST.hiverEnd.split('-').map(Number);
     const hiverEndLocal = new Date(hey, hem - 1, hed);
     const hiverEndDiff = Math.floor((hiverEndLocal - startLocal) / (1000 * 60 * 60 * 24));
-    springStartD = Math.max(2, hiverEndDiff + 1);
+    if (hiverEndDiff > 0 && hiverEndDiff < dur) {
+      springStartD = Math.max(2, hiverEndDiff + 1);
+    }
   }
   // Ovulation = dur - 14 (biologie réelle), avec min pour garantir 3j de Printemps
   const ovulationDay = Math.max(springStartD + 3, dur - 14);
@@ -2105,7 +2107,12 @@ function handleFeedbackSport(mood) {
   if (!ST.feedbackSport) ST.feedbackSport = {};
   ST.feedbackSport[today] = mood;
   saveState();
-  const dates = Object.keys(ST.feedbackSport).sort().slice(-3);
+  const dates = Object.keys(ST.feedbackSport)
+    .map(d => ({ d, t: new Date(d).getTime() }))
+    .filter(o => !isNaN(o.t))
+    .sort((a, b) => a.t - b.t)
+    .slice(-3)
+    .map(o => o.d);
   const last3 = dates.map(d => ST.feedbackSport[d]);
   if (last3.length >= 3) {
     if (last3.every(f => f === 'fatiguee')) setTimeout(() => _showPropositionType('fatigue3'), 600);
@@ -2115,7 +2122,12 @@ function handleFeedbackSport(mood) {
 
 function checkPropositionsAmelioration() {
   const done = Object.keys(ST.seanceDone || {});
-  const last5 = done.sort().slice(-5);
+  const last5 = done
+    .map(d => ({ d, t: new Date(d).getTime() }))
+    .filter(o => !isNaN(o.t))
+    .sort((a, b) => a.t - b.t)
+    .slice(-5)
+    .map(o => o.d);
   const last5AllDone = last5.length >= 5 && last5.every(d => ST.seanceDone[d] === true);
   if (last5AllDone && !ST._proposeNewEx5) {
     ST._proposeNewEx5 = true; saveState();
@@ -3764,7 +3776,8 @@ async function sendFeedback() {
 function restoreFeedback() {
   const section=document.getElementById('feedback-section'); if(!section) return;
   if (!ST.cycleStart) { section.style.display='none'; return; }
-  const daysSince=Math.floor((Date.now()-new Date(ST.cycleStart))/86400000);
+  const [_fy,_fm,_fd]=ST.cycleStart.split('-').map(Number);
+  const daysSince=Math.floor((Date.now()-new Date(_fy,_fm-1,_fd))/86400000);
   if (daysSince<3&&!ST.feedbackSent) { section.style.display='none'; return; }
   section.style.display='block';
   if (ST.feedbackSent) { const form=document.getElementById('feedback-form-wrap'); const sent=document.getElementById('feedback-sent-wrap'); if(form) form.style.display='none'; if(sent) sent.style.display='block'; }
