@@ -2760,19 +2760,26 @@ async function submitChangeEmail() {
   try {
     const sb = await initSupabase();
     if (!sb) throw new Error('no_supabase');
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) throw new Error('session_missing');
     const { error } = await sb.auth.updateUser({ email: newEmail });
     if (error) throw error;
 
-    // Succès — afficher step 2
+    // Succès
     document.getElementById('change-email-step1').style.display = 'none';
     const txt = document.getElementById('change-email-confirm-txt');
-    if (txt) txt.innerHTML = `Un lien de confirmation a été envoyé à <strong>${newEmail}</strong>.<br><br>Clique dessus depuis ta boîte mail — ton adresse sera mise à jour automatiquement, sans perdre aucune donnée.`;
+    if (txt) txt.innerHTML = `Un email de confirmation a été envoyé à <strong>${newEmail}</strong>.<br><br>Vérifie ta boîte mail et tes spams.`;
     document.getElementById('change-email-step2').style.display = '';
   } catch (e) {
+    const raw = (e.message || '').toLowerCase();
+    let errFr = 'Une erreur est survenue. Réessaie dans quelques instants.';
+    if (raw.includes('no_supabase'))       errFr = 'Connexion indisponible. Réessaie dans quelques instants.';
+    else if (raw.includes('session_missing') || raw.includes('auth session missing')) errFr = 'Ta session a expiré. Reconnecte-toi puis réessaie.';
+    else if (raw.includes('already') || raw.includes('registered'))  errFr = 'Cette adresse est déjà utilisée par un autre compte.';
+    else if (raw.includes('invalid') || raw.includes('valid email')) errFr = 'Adresse email invalide.';
+    else if (raw.includes('rate limit') || raw.includes('too many')) errFr = 'Trop de tentatives. Attends quelques minutes et réessaie.';
     msg.style.color = '#C46B50';
-    msg.textContent = e.message?.includes('no_supabase')
-      ? 'Connexion Supabase indisponible.'
-      : 'Une erreur est survenue. Réessaie.';
+    msg.textContent = errFr;
     btn.disabled = false;
     btn.textContent = 'Envoyer le lien de confirmation';
   }
