@@ -3796,31 +3796,74 @@ function renderCycleHistory() {
   const history = ST.cycleHistory || [];
   if (!ST.cycleStart && history.length === 0) { card.style.display = 'none'; return; }
   card.style.display = 'block';
-  const s = SAISONS[ST.currentSaison];
-  let html = '';
-  if (ST.cycleStart) {
-    const hasPast = history.length > 0;
-    html += `<div style="display:flex;align-items:center;gap:12px;padding:10px 0;${hasPast ? 'border-bottom:1px solid var(--sable);' : ''}">
-      <div style="width:36px;height:36px;border-radius:50%;background:${s.grad};display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">${s.emoji}</div>
-      <div style="flex:1;">
-        <div style="font-size:13px;font-weight:600;color:var(--noir);">Du ${formatDateFr(ST.cycleStart)}</div>
-        <div style="font-size:11px;color:var(--gris);margin-top:2px;">Jour ${ST.currentDay} · ${s.nom} · ${ST.cycleDuration || 28} jours</div>
-      </div>
-      <div style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:white;background:${s.color};padding:3px 8px;border-radius:8px;">En cours</div>
-    </div>`;
+
+  const all = [];
+  if (ST.cycleStart) all.push({ start: ST.cycleStart, duration: ST.cycleDuration || 28, current: true });
+  (history || []).slice(0, 11).forEach(c => all.push(c));
+
+  if (all.length < 2) {
+    list.innerHTML = `<div style="font-size:12px;color:var(--gris);text-align:center;padding:18px 0;line-height:1.7;">Ton graphique apparaîtra<br>dès ton 2ème cycle ✨</div>`;
+    return;
   }
-  const shown = history.slice(0, 6);
-  shown.forEach((c, i) => {
-    const sep = i < shown.length - 1 ? 'border-bottom:1px solid var(--sable);' : '';
-    html += `<div style="display:flex;align-items:center;gap:12px;padding:10px 0;${sep}">
-      <div style="width:36px;height:36px;border-radius:50%;background:#F5EDE0;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">&#127769;</div>
-      <div style="flex:1;">
-        <div style="font-size:13px;font-weight:600;color:var(--noir);">Du ${formatDateFr(c.start)}</div>
-        <div style="font-size:11px;color:var(--gris);margin-top:2px;">${c.duration} jours</div>
+
+  const durs = all.map(c => c.duration || 28);
+  const minD = Math.min(...durs);
+  const maxD = Math.max(...durs);
+  const avg = Math.round(durs.reduce((a, b) => a + b, 0) / durs.length);
+  const isRegular = (maxD - minD) <= 3;
+
+  const rMin = Math.max(17, minD - 4);
+  const rMax = Math.min(45, maxD + 4);
+  const span = rMax - rMin;
+  const pct = d => ((d - rMin) / span * 100).toFixed(1);
+
+  const MOIS = ['jan','fév','mars','avr','mai','juin','juil','août','sept','oct','nov','déc'];
+  const monthLabel = str => { const [y, m] = str.split('-').map(Number); return MOIS[m - 1] + ' ' + String(y).slice(2); };
+
+  const s = SAISONS[ST.currentSaison];
+
+  const gridLines = [];
+  for (let d = Math.ceil(rMin / 7) * 7; d <= rMax; d += 7) gridLines.push(d);
+  const gridHtml = gridLines.map(g =>
+    `<div style="position:absolute;top:0;left:${pct(g)}%;width:1px;height:100%;background:white;opacity:.7;"></div>`
+  ).join('');
+
+  const barsHtml = all.map(c => {
+    const dur = c.duration || 28;
+    return `<div style="display:flex;align-items:center;margin-bottom:5px;">
+      <div style="width:44px;font-size:10px;color:${c.current ? 'var(--noir)' : 'var(--gris)'};font-weight:${c.current ? '600' : '400'};text-align:right;padding-right:8px;flex-shrink:0;">${monthLabel(c.start)}</div>
+      <div style="flex:1;height:18px;position:relative;background:var(--sable);border-radius:6px;overflow:hidden;">
+        ${gridHtml}
+        <div style="position:absolute;top:0;left:0;bottom:0;right:${(100 - pct(dur)).toFixed(1)}%;background:${c.current ? s.grad : '#C4AE95'};border-radius:6px;"></div>
       </div>
+      <div style="width:26px;font-size:10px;font-weight:600;color:var(--noir);padding-left:6px;flex-shrink:0;">${dur}j</div>
     </div>`;
-  });
-  list.innerHTML = html;
+  }).join('');
+
+  const axisHtml = `<div style="display:flex;margin-top:2px;">
+    <div style="width:44px;flex-shrink:0;"></div>
+    <div style="flex:1;position:relative;height:14px;">
+      ${gridLines.map(g => `<div style="position:absolute;left:${pct(g)}%;transform:translateX(-50%);font-size:9px;color:var(--gris);">${g}</div>`).join('')}
+    </div>
+    <div style="width:26px;flex-shrink:0;"></div>
+  </div>`;
+
+  const summaryHtml = `<div style="display:flex;gap:8px;margin-bottom:14px;">
+    <div style="background:var(--creme);border-radius:10px;padding:8px 10px;text-align:center;flex:1;">
+      <div style="font-size:18px;font-weight:700;font-family:var(--serif);color:var(--noir);">${avg}j</div>
+      <div style="font-size:9px;color:var(--gris);margin-top:2px;">durée moy.</div>
+    </div>
+    <div style="background:var(--creme);border-radius:10px;padding:8px 10px;text-align:center;flex:1;">
+      <div style="font-size:18px;font-weight:700;font-family:var(--serif);color:var(--noir);">${all.length}</div>
+      <div style="font-size:9px;color:var(--gris);margin-top:2px;">cycles</div>
+    </div>
+    <div style="background:var(--creme);border-radius:10px;padding:8px 10px;text-align:center;flex:1;">
+      <div style="font-size:18px;">${isRegular ? '🌿' : '〰️'}</div>
+      <div style="font-size:9px;color:var(--gris);margin-top:2px;">${isRegular ? 'régulier' : 'variable'}</div>
+    </div>
+  </div>`;
+
+  list.innerHTML = summaryHtml + barsHtml + axisHtml;
 }
 function renderPatterns() {
   const card = document.getElementById('patterns-card');
