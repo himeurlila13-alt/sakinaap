@@ -4050,8 +4050,12 @@ function renderCycleHistory() {
   const durs = all.map(c => Number(c.duration) || 28);
   const minD = Math.min(...durs);
   const maxD = Math.max(...durs);
-  const avg = Math.round(durs.reduce((a, b) => a + b, 0) / durs.length);
-  const isRegular = (maxD - minD) <= 3;
+  // Moyenne uniquement sur les cycles PASSÉS (pas le cycle actuel en cours)
+  const pastDurs = all.filter(c => !c.current).map(c => Number(c.duration) || 28);
+  const avg = pastDurs.length > 0
+    ? Math.round(pastDurs.reduce((a, b) => a + b, 0) / pastDurs.length)
+    : durs[0] || 28;
+  const isRegular = pastDurs.length > 1 ? (Math.max(...pastDurs) - Math.min(...pastDurs)) <= 3 : true;
 
   const rMin = Math.max(17, minD - 4);
   const rMax = Math.min(45, maxD + 4);
@@ -4116,12 +4120,17 @@ function renderPatterns() {
   const manualCycles = (ST.historiqueCycles || [])
     .filter(c => c.dateDebut && c.dateDebut !== ST.cycleStart)
     .map(c => ({ start: c.dateDebut, duration: Number(c.dureeCycle) || 28 }));
-  const allCycles = [{ start: ST.cycleStart, duration: ST.cycleDuration || 28 }, ...history, ...manualCycles];
+  const pastCycles = [...history, ...manualCycles];
+  const allCycles = [{ start: ST.cycleStart, duration: ST.cycleDuration || 28 }, ...pastCycles];
   const durations = allCycles.map(c => Number(c.duration) || 28);
-  const avg = Math.round(durations.reduce((a, b) => a + b, 0) / durations.length);
-  const minD = Math.min(...durations);
-  const maxD = Math.max(...durations);
-  const isRegular = (maxD - minD) <= 3;
+  const pastDurations = pastCycles.map(c => Number(c.duration) || 28);
+  // Moyenne sur les cycles passés uniquement (pas le cycle actuel en cours)
+  const avg = pastDurations.length > 0
+    ? Math.round(pastDurations.reduce((a, b) => a + b, 0) / pastDurations.length)
+    : ST.cycleDuration || 28;
+  const minD = pastDurations.length > 0 ? Math.min(...pastDurations) : (ST.cycleDuration || 28);
+  const maxD = pastDurations.length > 0 ? Math.max(...pastDurations) : (ST.cycleDuration || 28);
+  const isRegular = pastDurations.length > 1 ? (maxD - minD) <= 3 : true;
 
   // Compter les symptômes sur toutes les dates
   const sympCount = {};
