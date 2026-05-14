@@ -3800,9 +3800,9 @@ function restoreFeedback() {
   if (!ST.cycleStart) { section.style.display='none'; return; }
   const [_fy,_fm,_fd]=ST.cycleStart.split('-').map(Number);
   const daysSince=Math.floor((Date.now()-new Date(_fy,_fm-1,_fd))/86400000);
-  if (daysSince<3&&!ST.feedbackSent) { section.style.display='none'; return; }
+  if (ST.feedbackSent) { section.style.display='none'; return; }
+  if (daysSince<3) { section.style.display='none'; return; }
   section.style.display='block';
-  if (ST.feedbackSent) { const form=document.getElementById('feedback-form-wrap'); const sent=document.getElementById('feedback-sent-wrap'); if(form) form.style.display='none'; if(sent) sent.style.display='block'; }
 }
 
 // ═══════════════════════════════════════════════
