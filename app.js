@@ -1115,6 +1115,8 @@ function showBilanModal() {
     </div>
     <div class="bilan-ame-note">L&apos;onglet &#194;me reste toujours accessible gratuitement.<br>Tes pri&#232;res, ton dhikr et le Coran t&apos;appartiennent.</div>
   `;
+  const footer = document.getElementById('bilan-footer');
+  if (footer) footer.style.display = (ST.isPremium || getTrialDays() < 20) ? 'none' : '';
   el.classList.add('open');
 }
 function closeBilanModal() {
