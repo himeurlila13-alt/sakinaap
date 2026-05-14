@@ -2270,6 +2270,17 @@ let _timerInterval = null;
 let _currentExIdx = 0;
 let _timerExercices = [];
 let _repCount = 0;
+let _currentSetNum = 0;
+
+function _parseSetsFromEx(ex) {
+  if (ex.sets && Number.isFinite(ex.sets) && ex.sets > 1) return ex.sets;
+  const text = (ex.detail || '') + ' ' + (ex.name || ex.nom || '');
+  const m = text.match(/\b([2-8])[×x]\b/i)
+           || text.match(/\b([2-8])\s*s[ée]ries?\b/i)
+           || text.match(/\b([2-8])\s*fois\b/i);
+  if (m) { const n = parseInt(m[1]); if (n >= 2 && n <= 8) return n; }
+  return 1;
+}
 
 function openTimer() {
   const spec = getTodaySeanceSpec();
@@ -2279,6 +2290,7 @@ function openTimer() {
   _timerExercices = (spec.data.exercices || spec.data.circuit || []);
   if (!_timerExercices.length) return;
   _currentExIdx = 0;
+  _currentSetNum = 0;
   el.classList.add('open');
   _renderCurrentEx();
 }
@@ -2294,25 +2306,31 @@ function _renderCurrentEx() {
   const reps = ex.reps || null;
   const dureeNum = ex.duree ? parseInt(ex.duree) : null;
   const isSeconds = dureeNum && (String(ex.duree).includes('sec') || String(ex.duree).includes('s') || dureeNum <= 120);
+  const totalSets = _parseSetsFromEx(ex);
+  const setLabel = totalSets > 1
+    ? `<div class="timer-set-label">Série ${_currentSetNum + 1} / ${totalSets}</div>`
+    : '';
   let content = '';
   if (isSeconds && dureeNum) {
-    content = `<div class="timer-ex-name">${nom}</div><div class="timer-ex-detail">${detail}</div>
+    content = `${setLabel}<div class="timer-ex-name">${nom}</div><div class="timer-ex-detail">${detail}</div>
       <div class="timer-circle"><svg viewBox="0 0 100 100" class="timer-svg"><circle cx="50" cy="50" r="44" fill="none" stroke="var(--sable)" stroke-width="8"/><circle cx="50" cy="50" r="44" fill="none" stroke="var(--season)" stroke-width="8" stroke-dasharray="276.5" stroke-dashoffset="0" id="timer-arc" stroke-linecap="round" transform="rotate(-90 50 50)"/></svg><div class="timer-count" id="timer-count">${dureeNum}</div></div>
       <button class="timer-start-btn" id="timer-start-btn" onclick="_startCountdown(${dureeNum})">▶ Démarrer</button>`;
   } else if (reps) {
     _repCount = 0;
-    content = `<div class="timer-ex-name">${nom}</div><div class="timer-ex-detail">${detail}</div>
+    content = `${setLabel}<div class="timer-ex-name">${nom}</div><div class="timer-ex-detail">${detail}</div>
       <div class="timer-reps-target">Objectif : <strong>${reps} reps</strong></div>
       <div class="timer-rep-counter" id="timer-rep-counter">0</div>
       <div class="timer-tap-zone" onclick="tapRep()">Taper</div>
       <div class="timer-tap-hint">Tape à chaque répétition</div>`;
   } else {
-    content = `<div class="timer-ex-name">${nom}</div><div class="timer-ex-detail">${detail || 'Fais de ton mieux 💪'}</div>`;
+    content = `${setLabel}<div class="timer-ex-name">${nom}</div><div class="timer-ex-detail">${detail || 'Fais de ton mieux 💪'}</div>`;
   }
+  const hasMoreSets = totalSets > 1 && _currentSetNum < totalSets - 1;
+  const nextLabel = hasMoreSets ? `Série suivante →` : `Exercice suivant →`;
   body.innerHTML = `<div class="timer-progress">${_currentExIdx + 1} / ${total}</div>${content}
     <div style="display:flex;gap:10px;margin-top:20px;">
-      <button class="timer-next-btn" onclick="timerNextEx()">Suivant →</button>
-      <button class="timer-skip-btn" onclick="timerNextEx()">Passer</button>
+      <button class="timer-next-btn" onclick="timerNextEx()">${nextLabel}</button>
+      <button class="timer-skip-btn" onclick="timerSkipAll()">Passer</button>
     </div>`;
 }
 
@@ -2341,16 +2359,32 @@ function _startCountdown(secs) {
 function timerNextEx() {
   if (_timerInterval) { clearInterval(_timerInterval); _timerInterval = null; }
   if (navigator.vibrate) navigator.vibrate(50);
-  _currentExIdx++;
-  if (_currentExIdx >= _timerExercices.length) { _finishTimer(); return; }
-  _showRestTimer(30);
+  const ex = _timerExercices[_currentExIdx];
+  const totalSets = ex ? _parseSetsFromEx(ex) : 1;
+  if (_currentSetNum < totalSets - 1) {
+    _currentSetNum++;
+    _showRestTimer(20, `Repos — série ${_currentSetNum + 1} / ${totalSets}`);
+  } else {
+    _currentSetNum = 0;
+    _currentExIdx++;
+    if (_currentExIdx >= _timerExercices.length) { _finishTimer(); return; }
+    _showRestTimer(30, 'Repos');
+  }
 }
 
-function _showRestTimer(restSecs) {
+function timerSkipAll() {
+  if (_timerInterval) { clearInterval(_timerInterval); _timerInterval = null; }
+  _currentSetNum = 0;
+  _currentExIdx++;
+  if (_currentExIdx >= _timerExercices.length) { _finishTimer(); return; }
+  _renderCurrentEx();
+}
+
+function _showRestTimer(restSecs, label = 'Repos') {
   const body = document.getElementById('timer-body');
   if (!body) return;
   let r = restSecs;
-  body.innerHTML = `<div class="timer-rest-label">Repos</div><div class="timer-rest-count" id="timer-rest-count">${r}s</div><button class="timer-skip-btn" style="display:block;margin:0 auto;" onclick="timerSkipRest()">Passer le repos →</button>`;
+  body.innerHTML = `<div class="timer-rest-label">${label}</div><div class="timer-rest-count" id="timer-rest-count">${r}s</div><button class="timer-skip-btn" style="display:block;margin:0 auto;" onclick="timerSkipRest()">Passer le repos →</button>`;
   if (_timerInterval) clearInterval(_timerInterval);
   _timerInterval = setInterval(() => {
     r--;
