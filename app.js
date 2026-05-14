@@ -819,14 +819,14 @@ const ASMA_MEDITATIONS = {
 // CYCLE LOGIC
 // ═══════════════════════════════════════════════
 function computeCycle() {
-  if (!ST.cycleStart) return;
+  if (!ST.cycleStart) { ST.currentDay = 1; ST.currentSaison = 'hiver'; return; }
   const now = new Date();
   const todayLocal = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const [sy, sm, sd] = ST.cycleStart.split('-').map(Number);
   const startLocal = new Date(sy, sm - 1, sd);
   const diff = Math.floor((todayLocal - startLocal) / (1000 * 60 * 60 * 24));
   if (diff < 0) { ST.currentDay = 1; ST.currentSaison = 'hiver'; return; }
-  const dur = ST.cycleDuration || 28;
+  const dur = Math.max(20, Math.min(60, ST.cycleDuration || 28));
   const cycleNum = Math.floor(diff / dur);
   const day = (diff % dur) + 1;
   // Detect new cycle — reset per-cycle flags
@@ -834,6 +834,8 @@ function computeCycle() {
     ST._lastCycleNum = cycleNum;
     ST.printempsUpgradeDone = false;
     ST.printempsBasCount = 0;
+    ST._proposeNewEx5 = false;
+    ST.seanceSurpriseShownCycle = false;
   }
   ST.currentDay = Math.max(1, Math.min(day, dur));
 
@@ -1014,21 +1016,34 @@ function dismissTrialBanner() {
 }
 
 function _bilanStats() {
-  const seanceCount = Object.keys(ST.seanceDone || {}).length;
+  // Filtre sur le cycle courant uniquement
+  let cycleStartMs = 0;
+  if (ST.cycleStart) {
+    const [sy, sm, sd] = ST.cycleStart.split('-').map(Number);
+    cycleStartMs = new Date(sy, sm - 1, sd).getTime();
+  }
+  const inCycle = key => {
+    const t = new Date(key).getTime();
+    return !isNaN(t) && t >= cycleStartMs;
+  };
+
+  const seanceCount = Object.keys(ST.seanceDone || {}).filter(inCycle).length;
   const seanceLevel = ST.seanceLevel || 1;
-  const symptomDays = Object.keys(ST.symptomes || {}).filter(d => (ST.symptomes[d]||[]).length > 0).length;
+  const symptomDays = Object.keys(ST.symptomes || {}).filter(d => inCycle(d) && (ST.symptomes[d]||[]).length > 0).length;
   const prayerDays = Object.keys(ST.prayers || {}).filter(d => {
+    if (!inCycle(d)) return false;
     const p = ST.prayers[d] || {};
     return ['fajr','dohr','asr','maghrib','isha'].filter(n => p[n]).length >= 3;
   }).length;
   const allPrayersDays = Object.keys(ST.prayers || {}).filter(d => {
+    if (!inCycle(d)) return false;
     const p = ST.prayers[d] || {};
     return ['fajr','dohr','asr','maghrib','isha'].filter(n => p[n]).length === 5;
   }).length;
   const dhikrDays = Object.keys(ST.dhikrChecks || {}).filter(d =>
-    Object.values(ST.dhikrChecks[d] || {}).filter(Boolean).length >= 3
+    inCycle(d) && Object.values(ST.dhikrChecks[d] || {}).filter(Boolean).length >= 3
   ).length;
-  const coranDays = Object.keys(ST.coranDone || {}).filter(d => ST.coranDone[d]).length;
+  const coranDays = Object.keys(ST.coranDone || {}).filter(d => inCycle(d) && ST.coranDone[d]).length;
   let objCheckCount = 0;
   Object.values(ST.weeklyObjChecks || {}).forEach(week => {
     Object.values(week).forEach(arr => { objCheckCount += (arr||[]).length; });
@@ -2356,7 +2371,7 @@ function renderHistoriqueSport() {
   const levelNames = ['Découverte','Aventurière','Guerrière','Élite'];
   const streak = _getStreakLabel();
   const prog = (ST.checkpointProgress || 0) % 5;
-  const nextCp = prog === 0 ? 5 : Math.ceil(5 - prog);
+  const nextCp = prog < 0.01 ? 5 : Math.ceil((5 - prog) * 2) / 2;
   el.innerHTML = `
     <div class="sport-histo-title">💪 Ton parcours sport</div>
     <div class="sport-histo-grid">
@@ -2463,7 +2478,14 @@ function startNewCycleToday() {
   if (ST.cycleStart === todayStr) return;
   if (!ST.cycleHistory) ST.cycleHistory = [];
   if (ST.cycleStart) {
-    ST.cycleHistory.unshift({ start: ST.cycleStart, duration: ST.cycleDuration || 28 });
+    const snap = _bilanStats();
+    ST.cycleHistory.unshift({
+      start: ST.cycleStart,
+      duration: ST.cycleDuration || 28,
+      seanceCount: snap.seanceCount,
+      prayerDays: snap.prayerDays,
+      symptomDays: snap.symptomDays,
+    });
     if (ST.cycleHistory.length > 6) ST.cycleHistory = ST.cycleHistory.slice(0, 6);
   }
   ST.cycleStart = todayStr;
@@ -3523,8 +3545,8 @@ function drawCycleRing() {
 // 99 NOMS D'ALLAH
 // ═══════════════════════════════════════════════
 function showNomDuJour() {
-  const dayOfYear = Math.floor((new Date() - new Date(2024, 0, 1)) / 86400000);
-  const nom = ASMA[dayOfYear % 99];
+  const dayOfYear = Math.abs(Math.floor((new Date() - new Date(2024, 0, 1)) / 86400000));
+  const nom = ASMA[dayOfYear % 99] || ASMA[0];
   const ar = document.getElementById('asma-day-arabic');
   const fr = document.getElementById('asma-day-fr');
   const meaning = document.getElementById('asma-day-meaning');
