@@ -31,6 +31,7 @@ let ST = {
   eveningCheckinDate: null,
   eveningCheckinMood: null,
   cycleHistory: [],
+  historiqueCycles: [],
   isPremium: false,
   seanceValidatedCount: 0,
   seanceLevel: 1,
@@ -1114,6 +1115,30 @@ function showBilanModal() {
     <div class="bilan-obj-line"><span class="bilan-obj-num">${objCheckCount}</span>objectifs cochés au fil du cycle</div>
     ` : ''}
 
+    ${(() => {
+      const histCycles = ST.historiqueCycles || [];
+      if (!histCycles.length) return '';
+      const allDurations = [ST.cycleDuration || 28, ...histCycles.map(c => c.dureeCycle)];
+      const avgDur = Math.round(allDurations.reduce((a, b) => a + b, 0) / allDurations.length);
+      const avgRegles = Math.round(histCycles.map(c => c.dureeRegles).reduce((a, b) => a + b, 0) / histCycles.length);
+      const minD = Math.min(...allDurations);
+      const maxD = Math.max(...allDurations);
+      const isReg = (maxD - minD) <= 3;
+      const intCounts = { legere: 0, normale: 0, abondante: 0 };
+      histCycles.forEach(c => { if (c.intensite && intCounts[c.intensite] !== undefined) intCounts[c.intensite]++; });
+      const topInt = Object.entries(intCounts).sort((a, b) => b[1] - a[1])[0];
+      const intLabel = { legere: '🟢 Légères', normale: '🟡 Normales', abondante: '🔴 Abondantes' };
+      return `
+        <div class="bilan-section-lbl">📅 Sur tes ${1 + histCycles.length} derniers cycles</div>
+        <div class="bilan-grid-3">
+          <div class="bilan-stat"><span class="bilan-stat-num">${avgDur}j</span><span class="bilan-stat-lbl">durée moy.</span></div>
+          <div class="bilan-stat"><span class="bilan-stat-num">${avgRegles}j</span><span class="bilan-stat-lbl">règles moy.</span></div>
+          <div class="bilan-stat"><span class="bilan-stat-num">${isReg ? '🌿' : '〰️'}</span><span class="bilan-stat-lbl">${isReg ? 'Régulier' : 'Variable'}</span></div>
+        </div>
+        ${topInt && topInt[1] > 0 ? `<div class="bilan-note">Intensité habituelle&nbsp;: ${intLabel[topInt[0]] || topInt[0]}</div>` : ''}
+      `;
+    })()}
+
     <div class="bilan-quote">
       <div class="bilan-quote-text">&laquo;&nbsp;Et quiconque fait le bien, f&#251;t-ce du poids d&apos;un atome, le verra.&nbsp;&raquo;</div>
       <div class="bilan-quote-ref">— Coran 99:7</div>
@@ -1238,6 +1263,7 @@ function populateAll() {
   renderMoi(s);
   renderTrialCard();
   renderCycleHistory();
+  renderHistoriqueCycles();
   restoreFeedback();
   checkJ17Banner();
 
@@ -3918,6 +3944,16 @@ function renderCycleHistory() {
   const all = [];
   if (ST.cycleStart) all.push({ start: ST.cycleStart, duration: ST.cycleDuration || 28, current: true });
   (history || []).slice(0, 11).forEach(c => all.push(c));
+  (ST.historiqueCycles || []).forEach(c => {
+    if (c.dateDebut && c.dateDebut !== ST.cycleStart) {
+      all.push({ start: c.dateDebut, duration: c.dureeCycle, histManuel: true });
+    }
+  });
+  const currItem = all.find(c => c.current);
+  const others = all.filter(c => !c.current).sort((a, b) => b.start.localeCompare(a.start));
+  all.length = 0;
+  if (currItem) all.push(currItem);
+  others.forEach(c => all.push(c));
 
   if (all.length < 2) {
     list.innerHTML = `<div style="font-size:12px;color:var(--gris);text-align:center;padding:18px 0;line-height:1.7;">Ton graphique apparaîtra<br>dès ton 2ème cycle ✨</div>`;
@@ -4131,7 +4167,7 @@ function confirmDeleteMyData() {
     selectedSugg: [], mouvDone: {}, seanceDone: {}, notifFreq: 2,
     waitlistEmail: null, feedbackSent: false, installBannerDismissed: false,
     lastDailyReset: null, lastWeeklyReset: null, eveningCheckinDate: null,
-    eveningCheckinMood: null, cycleHistory: [],
+    eveningCheckinMood: null, cycleHistory: [], historiqueCycles: [],
     isPremium: false, seanceValidatedCount: 0, seanceLevel: 1, sportLevelInit: false,
     amrapRecord: null, printempsUpgradeDone: false, levelMaxShown: false, printempsBasCount: 0, _lastCycleNum: null,
     weeklyObjChecks: {}, customObjectifs: [], customObjChecks: {},
@@ -4143,6 +4179,178 @@ function confirmDeleteMyData() {
   closeDeleteModal();
   document.getElementById('app').style.display = 'none';
   document.getElementById('onboarding').style.display = 'block';
+}
+
+// ═══════════════════════════════════════════════
+// CYCLES PRÉCÉDENTS (saisie manuelle)
+// ═══════════════════════════════════════════════
+const HIST_SYMPTOMES = [
+  { id: 'crampes',       emoji: '🌀', label: 'Crampes' },
+  { id: 'fatigue',       emoji: '😴', label: 'Fatigue' },
+  { id: 'dos',           emoji: '🦴', label: 'Mal de dos' },
+  { id: 'tete',          emoji: '🤕', label: 'Maux de tête' },
+  { id: 'humeur',        emoji: '🌊', label: 'Humeur' },
+  { id: 'nausee',        emoji: '🤢', label: 'Nausées' },
+  { id: 'ballonnements', emoji: '🎈', label: 'Ballonnements' },
+  { id: 'insomnie',      emoji: '🌙', label: 'Insomnie' },
+  { id: 'seins',         emoji: '🌷', label: 'Seins sensibles' },
+  { id: 'acne',          emoji: '🔴', label: 'Acné' },
+];
+
+function renderHistoriqueCycles() {
+  const section = document.getElementById('historique-cycles-section');
+  const list = document.getElementById('historique-cycles-list');
+  const btn = document.getElementById('btn-add-cycle-hist');
+  const limitMsg = document.getElementById('historique-cycles-limit');
+  if (!section || !list) return;
+  const cycles = ST.historiqueCycles || [];
+  const MOIS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  const intLabel = { legere: '🟢 Légères', normale: '🟡 Normales', abondante: '🔴 Abondantes' };
+  list.innerHTML = cycles.map(c => {
+    const [y, m] = c.dateDebut.split('-').map(Number);
+    const moisAn = MOIS[m - 1] + ' ' + y;
+    const symp = (c.symptomes || []).map(id => { const s = HIST_SYMPTOMES.find(x => x.id === id); return s ? s.emoji : ''; }).filter(Boolean).join(' ');
+    return `<div style="background:var(--creme);border-radius:14px;padding:12px 14px;margin-bottom:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+        <div style="font-size:13px;font-weight:700;color:var(--noir);font-family:var(--serif);">${moisAn}</div>
+        <div style="display:flex;gap:4px;">
+          <button onclick="openAddCycleModal('${c.id}')" style="background:none;border:none;font-size:15px;cursor:pointer;padding:2px 4px;line-height:1;">✏️</button>
+          <button onclick="deleteHistoriqueCycle('${c.id}')" style="background:none;border:none;font-size:15px;cursor:pointer;padding:2px 4px;line-height:1;">🗑️</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <span style="font-size:11px;background:white;border-radius:8px;padding:3px 8px;color:var(--gris);">📅 ${c.dureeCycle} jours</span>
+        <span style="font-size:11px;background:white;border-radius:8px;padding:3px 8px;color:var(--gris);">🩸 ${c.dureeRegles}j de règles</span>
+        ${c.intensite ? `<span style="font-size:11px;background:white;border-radius:8px;padding:3px 8px;color:var(--gris);">${intLabel[c.intensite] || c.intensite}</span>` : ''}
+      </div>
+      ${symp ? `<div style="font-size:14px;margin-top:7px;letter-spacing:2px;">${symp}</div>` : ''}
+      ${c.note ? `<div style="font-size:11px;color:var(--gris);margin-top:5px;font-style:italic;">"${c.note}"</div>` : ''}
+    </div>`;
+  }).join('');
+  const atLimit = cycles.length >= 4;
+  if (btn) btn.style.display = atLimit ? 'none' : '';
+  if (limitMsg) limitMsg.style.display = atLimit ? '' : 'none';
+}
+
+function openAddCycleModal(id) {
+  const modal = document.getElementById('add-cycle-modal');
+  if (!modal) return;
+  const sympGrid = document.getElementById('cycle-hist-symptomes');
+  if (sympGrid) {
+    sympGrid.innerHTML = HIST_SYMPTOMES.map(s =>
+      `<div class="hist-symp-chip" data-id="${s.id}" data-selected="0" onclick="toggleHistSymptome(this)" style="padding:5px 10px;border:1.5px solid var(--sable);border-radius:20px;font-size:12px;cursor:pointer;background:white;transition:background .15s,border-color .15s;">${s.emoji} ${s.label}</div>`
+    ).join('');
+  }
+  document.querySelectorAll('.intensite-opt').forEach(el => {
+    el.style.borderColor = 'var(--sable)';
+    el.style.background = 'transparent';
+    delete el.dataset.selected;
+  });
+  const titleEl = document.getElementById('add-cycle-modal-title');
+  const editIdEl = document.getElementById('cycle-hist-edit-id');
+  const dateEl = document.getElementById('cycle-hist-date');
+  const dureeEl = document.getElementById('cycle-hist-duree');
+  const reglesEl = document.getElementById('cycle-hist-regles');
+  const noteEl = document.getElementById('cycle-hist-note');
+  const noteCount = document.getElementById('cycle-hist-note-count');
+  if (id) {
+    const cycle = (ST.historiqueCycles || []).find(c => String(c.id) === String(id));
+    if (!cycle) return;
+    if (titleEl) titleEl.textContent = '✏️ Modifier ce cycle';
+    if (editIdEl) editIdEl.value = id;
+    if (dateEl) dateEl.value = cycle.dateDebut;
+    if (dureeEl) dureeEl.value = cycle.dureeCycle;
+    if (reglesEl) reglesEl.value = cycle.dureeRegles;
+    if (noteEl) { noteEl.value = cycle.note || ''; if (noteCount) noteCount.textContent = (cycle.note || '').length; }
+    if (cycle.intensite) {
+      const opt = document.querySelector(`.intensite-opt[data-val="${cycle.intensite}"]`);
+      if (opt) { opt.style.borderColor = 'var(--season)'; opt.style.background = 'var(--creme)'; opt.dataset.selected = '1'; }
+    }
+    (cycle.symptomes || []).forEach(sid => {
+      const chip = sympGrid ? sympGrid.querySelector(`[data-id="${sid}"]`) : null;
+      if (chip) { chip.style.borderColor = 'var(--season)'; chip.style.background = 'var(--creme)'; chip.dataset.selected = '1'; }
+    });
+  } else {
+    if (titleEl) titleEl.textContent = '+ Ajouter un cycle passé';
+    if (editIdEl) editIdEl.value = '';
+    const today = new Date();
+    const firstOfMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-01`;
+    if (dateEl) dateEl.value = firstOfMonth;
+    if (dureeEl) dureeEl.value = ST.cycleDuration || 28;
+    if (reglesEl) reglesEl.value = 5;
+    if (noteEl) { noteEl.value = ''; if (noteCount) noteCount.textContent = 0; }
+  }
+  modal.classList.add('open');
+}
+
+function closeAddCycleModal() {
+  const modal = document.getElementById('add-cycle-modal');
+  if (modal) modal.classList.remove('open');
+}
+
+function selectIntensiteHist(el) {
+  document.querySelectorAll('.intensite-opt').forEach(o => {
+    o.style.borderColor = 'var(--sable)';
+    o.style.background = 'transparent';
+    delete o.dataset.selected;
+  });
+  el.style.borderColor = 'var(--season)';
+  el.style.background = 'var(--creme)';
+  el.dataset.selected = '1';
+}
+
+function toggleHistSymptome(el) {
+  if (el.dataset.selected === '1') {
+    el.style.borderColor = 'var(--sable)';
+    el.style.background = 'white';
+    el.dataset.selected = '0';
+  } else {
+    el.style.borderColor = 'var(--season)';
+    el.style.background = 'var(--creme)';
+    el.dataset.selected = '1';
+  }
+}
+
+function saveHistoriqueCycle() {
+  const dateEl = document.getElementById('cycle-hist-date');
+  const dureeEl = document.getElementById('cycle-hist-duree');
+  const reglesEl = document.getElementById('cycle-hist-regles');
+  const noteEl = document.getElementById('cycle-hist-note');
+  const editIdEl = document.getElementById('cycle-hist-edit-id');
+  const dateVal = dateEl ? dateEl.value : '';
+  if (!dateVal) { showToast('Choisis une date de début.'); return; }
+  const dureeCycle = parseInt(dureeEl ? dureeEl.value : 28);
+  if (isNaN(dureeCycle) || dureeCycle < 21 || dureeCycle > 45) { showToast('Durée du cycle : entre 21 et 45 jours.'); return; }
+  const dureeRegles = parseInt(reglesEl ? reglesEl.value : 5);
+  if (isNaN(dureeRegles) || dureeRegles < 2 || dureeRegles > 10) { showToast('Durée des règles : entre 2 et 10 jours.'); return; }
+  const selectedIntEl = document.querySelector('.intensite-opt[data-selected="1"]');
+  const intensite = selectedIntEl ? selectedIntEl.dataset.val : 'normale';
+  const symptomes = Array.from(document.querySelectorAll('.hist-symp-chip[data-selected="1"]')).map(el => el.dataset.id);
+  const note = noteEl ? noteEl.value.trim().slice(0, 100) : '';
+  if (!ST.historiqueCycles) ST.historiqueCycles = [];
+  const editId = editIdEl ? editIdEl.value : '';
+  if (editId) {
+    const idx = ST.historiqueCycles.findIndex(c => String(c.id) === String(editId));
+    if (idx >= 0) ST.historiqueCycles[idx] = { ...ST.historiqueCycles[idx], dateDebut: dateVal, dureeCycle, dureeRegles, intensite, symptomes, note };
+  } else {
+    if (ST.historiqueCycles.length >= 4) { showToast('Maximum 4 cycles passés.'); return; }
+    ST.historiqueCycles.push({ id: Date.now(), dateDebut: dateVal, dureeCycle, dureeRegles, intensite, symptomes, note });
+    ST.historiqueCycles.sort((a, b) => b.dateDebut.localeCompare(a.dateDebut));
+  }
+  saveState();
+  closeAddCycleModal();
+  renderHistoriqueCycles();
+  renderCycleHistory();
+  showToast(editId ? 'Cycle mis à jour ✓' : 'Cycle ajouté ✓');
+}
+
+function deleteHistoriqueCycle(id) {
+  if (!ST.historiqueCycles) return;
+  ST.historiqueCycles = ST.historiqueCycles.filter(c => String(c.id) !== String(id));
+  saveState();
+  renderHistoriqueCycles();
+  renderCycleHistory();
+  showToast('Cycle supprimé');
 }
 
 function openMentionsLegales() {
