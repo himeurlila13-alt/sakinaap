@@ -1212,7 +1212,6 @@ function populateAll() {
   renderMoi(s);
   renderTrialCard();
   renderCycleHistory();
-  renderPatterns();
   restoreFeedback();
   checkJ17Banner();
 
@@ -2674,7 +2673,6 @@ function renderMoi(s) {
   }
   renderMoiBilan();
   renderCycleHistory();
-  renderPatterns();
 }
 
 function renderMoiBilan() {
