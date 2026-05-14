@@ -1417,6 +1417,20 @@
   </div>
 </div>
 
+<!-- MODAL COMPTE -->
+<div class="modal-overlay" id="compte-modal" onclick="if(event.target===this)document.getElementById('compte-modal').classList.remove('open')">
+  <div class="modal-sheet" style="padding:28px 24px 24px;">
+    <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:18px;">&#10022; Mon compte</div>
+    <div style="background:var(--creme);border-radius:14px;padding:14px 16px;margin-bottom:20px;">
+      <div style="font-size:11px;color:var(--gris);margin-bottom:4px;">Adresse email</div>
+      <div id="compte-email-display" style="font-size:14px;font-weight:600;color:var(--noir);word-break:break-all;"></div>
+    </div>
+    <button onclick="openChangeEmail()" style="width:100%;padding:14px;background:var(--season-grad);color:white;border:none;border-radius:14px;font-size:14px;font-weight:700;font-family:var(--sans);cursor:pointer;margin-bottom:10px;">Changer d'adresse mail</button>
+    <button onclick="confirmSignOut()" style="width:100%;padding:14px;background:var(--creme);color:#C46B50;border:1.5px solid #F0C4B0;border-radius:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;margin-bottom:10px;">Se déconnecter</button>
+    <button onclick="document.getElementById('compte-modal').classList.remove('open')" style="width:100%;padding:12px;background:none;border:none;color:var(--gris);font-size:13px;cursor:pointer;font-family:var(--sans);">Fermer</button>
+  </div>
+</div>
+
 <!-- MODAL RECONNEXION -->
 <div class="modal-overlay" id="reconnect-modal">
   <div class="modal-sheet" style="padding:32px 24px 28px;text-align:center;">

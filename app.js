@@ -2704,7 +2704,7 @@ function renderMoi(s) {
     if (ST.supabaseEmail) {
       lbl.textContent = 'Connectée ✓';
       sub.textContent = ST.supabaseEmail;
-      row.onclick = () => { if (confirm('Se déconnecter ?')) { ST.isAuthenticated = false; ST.userEmail = null; ST.supabaseUserId = null; ST.supabaseEmail = null; clearAuthCookie(); saveState(); initSupabase().then(sb => sb.auth.signOut()); showAuthScreen(); } };
+      row.onclick = openCompteModal;
     } else {
       lbl.textContent = 'Se connecter';
       sub.textContent = 'Sauvegarde tes données sur tous tes appareils';
@@ -2713,6 +2713,24 @@ function renderMoi(s) {
   }
   renderMoiBilan();
   renderCycleHistory();
+}
+
+function openCompteModal() {
+  const el = document.getElementById('compte-modal');
+  const disp = document.getElementById('compte-email-display');
+  if (disp) disp.textContent = ST.supabaseEmail || ST.userEmail || '—';
+  if (el) el.classList.add('open');
+}
+function openChangeEmail() {
+  document.getElementById('compte-modal').classList.remove('open');
+  openReconnectFromNudge();
+}
+function confirmSignOut() {
+  document.getElementById('compte-modal').classList.remove('open');
+  ST.isAuthenticated = false; ST.userEmail = null; ST.supabaseUserId = null; ST.supabaseEmail = null;
+  clearAuthCookie(); saveState();
+  initSupabase().then(sb => { if (sb) sb.auth.signOut(); });
+  showAuthScreen();
 }
 
 function renderMoiBilan() {
