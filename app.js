@@ -3182,21 +3182,39 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('app').style.display = 'none';
   document.getElementById('auth-screen').style.display = 'none';
 
-  // Check Supabase session
+  // ── Décision d'écran SYNCHRONE (localStorage) — élimine le flash onboarding ──
+  const _hasAccount = !!(ST.prenom && ST.cycleStart);
+  if (_hasAccount) {
+    document.getElementById('app').style.display = 'flex';
+    initApp();
+    scheduleLocalNotifications();
+    const _now = new Date();
+    if (ST.checkinDate !== _now.toDateString() && _now.getHours() < 14) {
+      setTimeout(() => {
+        const ov = document.getElementById('checkin-overlay');
+        if (ov) { ov.style.display = 'flex'; ov.style.alignItems = 'flex-end'; }
+      }, 800);
+    }
+  } else if (!ST.isAuthenticated && !ST.prenom) {
+    showAuthScreen();
+  } else {
+    document.getElementById('onboarding').style.display = 'block';
+  }
+  // Rendre le body visible avec le bon écran déjà en place
+  document.body.style.opacity = '1';
+
+  // ── Vérification Supabase (async — ne bloque plus l'affichage) ──
   try {
     const sb = await initSupabase();
     if (sb) {
       const { data: { session } } = await sb.auth.getSession();
       if (!session) {
         if (ST.isAuthenticated) {
-          // Déjà authentifiée via notre flag local — jamais redemander l'auth
           setupAuthListener(sb);
         } else if (ST.prenom && ST.cycleStart) {
-          // Données locales présentes — laisser entrer, proposer reconnexion en douceur
           setupAuthListener(sb);
           setTimeout(_showReconnectNudge, 1800);
         } else {
-          // Vraiment nouvelle utilisatrice — auth obligatoire
           showAuthScreen();
           setupAuthListener(sb);
           return;
@@ -3210,6 +3228,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         ST.isAuthenticated = true;
         await verifyPremiumFromDB(sb, session.user.id);
         setupAuthListener(sb);
+        // Rafraîchir si l'app est déjà affichée (données Supabase peuvent enrichir l'état)
+        if (_hasAccount) initApp();
       }
     }
   } catch(e) {}
@@ -3219,22 +3239,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   checkDailyReset();
   checkWeeklyReset();
 
-  if (ST.prenom && ST.cycleStart) {
+  // Cas où Supabase a chargé des données qui complètent l'onboarding
+  if (!_hasAccount && ST.prenom && ST.cycleStart) {
     document.getElementById('onboarding').style.display = 'none';
     document.getElementById('app').style.display = 'flex';
     initApp();
     scheduleLocalNotifications();
-    const now = new Date();
-    const today = now.toDateString();
-    const hour = now.getHours();
-    if (ST.checkinDate !== today && hour < 14) {
-      setTimeout(() => {
-        const ov = document.getElementById('checkin-overlay');
-        if (ov) { ov.style.display = 'flex'; ov.style.alignItems = 'flex-end'; }
-      }, 800);
-    }
-  } else {
-    document.getElementById('onboarding').style.display = 'block';
   }
 
   document.addEventListener('visibilitychange', () => {
