@@ -302,39 +302,58 @@ function setupAuthListener(sb) {
 async function loadFromSupabase(sb, userId) {
   try {
     const { data } = await sb.from('user_data').select('data').eq('user_id', userId).single();
-    if (data && data.data) {
-      const parsed = data.data;
-      delete parsed.currentSaison;
-      delete parsed.currentDay;
-      delete parsed.isAuthenticated;
-      delete parsed.userEmail;
-      delete parsed.authDate;
-      if (!ST.prenom || (parsed.installDate && ST.installDate && parsed.installDate > ST.installDate)) {
-        ST = { ...ST, ...parsed };
-      } else if (parsed.prenom && !ST.prenom) {
-        ST = { ...ST, ...parsed };
-      }
-      saveState();
+    if (!data || !data.data) return;
+    const remote = data.data;
+    delete remote.currentSaison;
+    delete remote.currentDay;
+    delete remote.isAuthenticated;
+    delete remote.userEmail;
+    delete remote.authDate;
+
+    if (!ST.prenom || !ST.cycleStart) {
+      // Réinstallation ou premier appareil : Supabase fait foi
+      ST = { ...ST, ...remote };
+    } else {
+      // Les deux ont des données → fusionner en gardant l'historique le plus riche
+      ST = {
+        ...remote,
+        ...ST,
+        // Historiques : garder le plus long
+        cycleHistory: ((remote.cycleHistory?.length || 0) > (ST.cycleHistory?.length || 0)
+          ? remote.cycleHistory : ST.cycleHistory) || [],
+        historiqueCycles: ((remote.historiqueCycles?.length || 0) > (ST.historiqueCycles?.length || 0)
+          ? remote.historiqueCycles : ST.historiqueCycles) || [],
+        // Niveaux : garder le plus élevé
+        seanceLevel: Math.max(ST.seanceLevel || 1, remote.seanceLevel || 1),
+        seanceValidatedCount: Math.max(ST.seanceValidatedCount || 0, remote.seanceValidatedCount || 0),
+        // Données vitales du cycle : Supabase si local absent
+        cycleStart: ST.cycleStart || remote.cycleStart,
+        cycleDuration: ST.cycleDuration || remote.cycleDuration || 28,
+        prenom: ST.prenom || remote.prenom,
+      };
     }
+    saveState();
   } catch(e) {}
 }
 
 let _syncTimer = null;
+async function _doSyncToSupabase() {
+  if (!ST.supabaseUserId || !_supabase) return;
+  try {
+    const toSave = { ...ST };
+    delete toSave.currentSaison;
+    delete toSave.currentDay;
+    await _supabase.from('user_data').upsert({
+      user_id: ST.supabaseUserId,
+      data: toSave,
+      updated_at: new Date().toISOString(),
+    });
+  } catch(e) {}
+}
 function syncToSupabase() {
   if (!ST.supabaseUserId || !_supabase) return;
   clearTimeout(_syncTimer);
-  _syncTimer = setTimeout(async () => {
-    try {
-      const toSave = { ...ST };
-      delete toSave.currentSaison;
-      delete toSave.currentDay;
-      await _supabase.from('user_data').upsert({
-        user_id: ST.supabaseUserId,
-        data: toSave,
-        updated_at: new Date().toISOString(),
-      });
-    } catch(e) {}
-  }, 2000);
+  _syncTimer = setTimeout(_doSyncToSupabase, 800);
 }
 
 async function verifyPremiumFromDB(sb, userId) {
@@ -3247,11 +3266,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     scheduleLocalNotifications();
   }
 
+  // Sync immédiat quand l'app passe en arrière-plan (évite la perte de données à la fermeture)
+  const _onAppHide = () => {
+    try { saveState(); } catch(e) {}
+    clearTimeout(_syncTimer);
+    _doSyncToSupabase();
+  };
   document.addEventListener('visibilitychange', () => {
-    try {
-      if (document.visibilityState === 'hidden') saveState();
-    } catch(e) {}
+    if (document.visibilityState === 'hidden') _onAppHide();
   });
+  window.addEventListener('pagehide', _onAppHide);
 });
 
 function nextStep(step) {
