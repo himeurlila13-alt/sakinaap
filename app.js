@@ -1468,7 +1468,7 @@ function renderCarteBouger(s) {
       titleText = d.nom;
       metaText = spec.type === 'printemps-bas' ? '🦵 Bas du corps' : '💪 Haut du corps';
       durText = d.duree || '~25 min';
-      levelLabel = `Niveau ${level}/4 · ${['Découverte','Aventurière','Guerrière','Élite'][level-1] || ''}`;
+      levelLabel = `Niveau ${level}/4 · ${['Essentielle','À ton rythme','Vitalité','Pleine puissance'][level-1] || ''}`;
       exContent = _sportExHtml(d.exercices, reposSec);
       msgHtml = 'Bismillah — chaque mouvement est une ibada.';
       spirituelHtml = 'Ton corps est une amânah. Prends-en soin avec intention.';
@@ -2428,22 +2428,22 @@ function renderHistoriqueSport() {
         <div class="sport-init-opts">
           <button class="sport-init-btn" onclick="setSportInitLevel(1)">
             <span class="sport-init-icon">🌱</span>
-            <span class="sport-init-lbl">Débutante</span>
+            <span class="sport-init-lbl">Essentielle</span>
             <span class="sport-init-sub">Je commence ou reprends</span>
           </button>
           <button class="sport-init-btn" onclick="setSportInitLevel(2)">
             <span class="sport-init-icon">🌿</span>
-            <span class="sport-init-lbl">Intermédiaire</span>
+            <span class="sport-init-lbl">À ton rythme</span>
             <span class="sport-init-sub">Je m'entraîne régulièrement</span>
           </button>
           <button class="sport-init-btn" onclick="setSportInitLevel(3)">
             <span class="sport-init-icon">🔥</span>
-            <span class="sport-init-lbl">Avancée</span>
+            <span class="sport-init-lbl">Vitalité</span>
             <span class="sport-init-sub">À l'aise avec l'effort intense</span>
           </button>
           <button class="sport-init-btn" onclick="setSportInitLevel(4)">
             <span class="sport-init-icon">⚡</span>
-            <span class="sport-init-lbl">Athlète</span>
+            <span class="sport-init-lbl">Pleine puissance</span>
             <span class="sport-init-sub">Performance & dépassement</span>
           </button>
         </div>
@@ -2456,7 +2456,7 @@ function renderHistoriqueSport() {
   const totalExpress = Object.keys(done).filter(d => done[d] === 'express').length;
   const totalReported = Object.keys(done).filter(d => done[d] === 'reportee').length;
   const level = ST.seanceLevel || 1;
-  const levelNames = ['Découverte','Aventurière','Guerrière','Élite'];
+  const levelNames = ['Essentielle','À ton rythme','Vitalité','Pleine puissance'];
   const streak = _getStreakLabel();
   const prog = (ST.checkpointProgress || 0) % 5;
   const nextCp = prog < 0.01 ? 5 : Math.ceil((5 - prog) * 2) / 2;
@@ -2481,7 +2481,7 @@ function closeLevelMaxModal() {
   if (el) el.classList.remove('open');
 }
 function contactLevelMax() {
-  window.location.href = 'mailto:sakina.evolution.contact@gmail.com?subject=Niveau%20Élite%20débloqué&body=Alhamdulillah%20j\'ai%20atteint%20le%20niveau%20élite%20!';
+  window.location.href = 'mailto:sakina.evolution.contact@gmail.com?subject=Niveau%20Pleine%20puissance%20d%C3%A9bloqu%C3%A9&body=Alhamdulillah%20j\'ai%20atteint%20le%20niveau%20Pleine%20puissance%20!';
 }
 
 function renderSuggestionsEngage(s) {
