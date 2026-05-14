@@ -4197,6 +4197,15 @@ const HIST_SYMPTOMES = [
   { id: 'acne',          emoji: '🔴', label: 'Acné' },
 ];
 
+function toggleHistoriqueCycles() {
+  const body = document.getElementById('historique-cycles-body');
+  const arrow = document.getElementById('historique-cycles-arrow');
+  if (!body) return;
+  const isOpen = body.style.display !== 'none';
+  body.style.display = isOpen ? 'none' : 'block';
+  if (arrow) arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+}
+
 function renderHistoriqueCycles() {
   const section = document.getElementById('historique-cycles-section');
   const list = document.getElementById('historique-cycles-list');

@@ -523,20 +523,21 @@
   </div>
 
 
-  <!-- SÉPARATEUR CYCLES PRÉCÉDENTS -->
-  <div style="margin:20px 14px 14px;display:flex;align-items:center;gap:10px;">
-    <div style="flex:1;height:1px;background:var(--sable);"></div>
-    <div style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--season);">&#128197; MES CYCLES PR&#201;C&#201;DENTS</div>
-    <div style="flex:1;height:1px;background:var(--sable);"></div>
-  </div>
-
-  <!-- SECTION CYCLES PRÉCÉDENTS -->
-  <div id="historique-cycles-section" style="margin:0 14px 14px;background:white;border-radius:20px;border:1.5px solid var(--sable);padding:18px 20px;">
-    <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:4px;">&#128197; Mes cycles pr&#233;c&#233;dents</div>
-    <div style="font-size:12px;color:var(--gris);line-height:1.6;margin-bottom:14px;">Tu te souviens de tes cycles pass&#233;s&nbsp;? Ajoute-les pour un meilleur suivi.</div>
-    <div id="historique-cycles-list"></div>
-    <button id="btn-add-cycle-hist" onclick="openAddCycleModal(null)" style="width:100%;padding:11px;background:transparent;color:var(--season);border:1.5px dashed var(--season);border-radius:14px;font-size:13px;font-weight:600;font-family:var(--sans);cursor:pointer;letter-spacing:.3px;margin-top:4px;">+ Ajouter un cycle pass&#233;</button>
-    <div id="historique-cycles-limit" style="display:none;font-size:11px;color:var(--gris);text-align:center;margin-top:10px;line-height:1.5;">4 cycles enregistr&#233;s — modifie ou supprime pour en ajouter</div>
+  <!-- SECTION CYCLES PRÉCÉDENTS (accordéon) -->
+  <div id="historique-cycles-section" style="margin:14px 14px 14px;background:white;border-radius:20px;border:1.5px solid var(--sable);overflow:hidden;">
+    <button onclick="toggleHistoriqueCycles()" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:none;border:none;cursor:pointer;font-family:var(--sans);">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:15px;">&#128197;</span>
+        <span style="font-size:12px;font-weight:600;color:var(--noir);letter-spacing:.2px;">Mes cycles pr&#233;c&#233;dents</span>
+      </div>
+      <span id="historique-cycles-arrow" style="font-size:11px;color:var(--gris);transition:transform .25s;">&#9660;</span>
+    </button>
+    <div id="historique-cycles-body" style="display:none;padding:0 20px 18px;">
+      <div style="font-size:12px;color:var(--gris);line-height:1.6;margin-bottom:14px;">Tu te souviens de tes cycles pass&#233;s&nbsp;? Ajoute-les pour un meilleur suivi.</div>
+      <div id="historique-cycles-list"></div>
+      <button id="btn-add-cycle-hist" onclick="openAddCycleModal(null)" style="width:100%;padding:11px;background:transparent;color:var(--season);border:1.5px dashed var(--season);border-radius:14px;font-size:13px;font-weight:600;font-family:var(--sans);cursor:pointer;letter-spacing:.3px;margin-top:4px;">+ Ajouter un cycle pass&#233;</button>
+      <div id="historique-cycles-limit" style="display:none;font-size:11px;color:var(--gris);text-align:center;margin-top:10px;line-height:1.5;">4 cycles enregistr&#233;s — modifie ou supprime pour en ajouter</div>
+    </div>
   </div>
 
   <div style="height:14px;"></div>
