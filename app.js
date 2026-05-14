@@ -157,7 +157,7 @@ async function handleReconnect() {
   if (btn) { btn.disabled = true; btn.textContent = 'Envoi…'; }
   try {
     const sb = await initSupabase();
-    const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
+    const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
     if (error) throw error;
     document.getElementById('reconnect-step1').style.display = 'none';
     document.getElementById('reconnect-step2').style.display = 'block';
@@ -166,7 +166,10 @@ async function handleReconnect() {
   } catch(e) {
     if (btn) { btn.disabled = false; btn.textContent = 'Recevoir mon code 🌸'; }
     const msg = document.getElementById('reconnect-msg');
-    if (msg) { msg.style.display = 'block'; msg.textContent = 'Erreur : ' + (e.message || 'Réessaie.'); msg.style.color = '#C4694A'; msg.style.background = 'rgba(196,105,74,0.08)'; }
+    const errMsg = (e.message || '').toLowerCase().includes('signup')
+      ? 'Une erreur est survenue. Réessaie dans quelques instants.'
+      : 'Erreur : ' + (e.message || 'Réessaie.');
+    if (msg) { msg.style.display = 'block'; msg.textContent = errMsg; msg.style.color = '#C4694A'; msg.style.background = 'rgba(196,105,74,0.08)'; }
   }
 }
 
