@@ -872,16 +872,21 @@ function computeCycle() {
   let effectiveCycleNum = cycleNum;
   if (cycleNum > 0 && ST.cycleStart) {
     if (!ST.cycleHistory) ST.cycleHistory = [];
-    if (!ST.cycleHistory.find(c => c.start === ST.cycleStart)) {
-      const snap = _bilanStats();
-      ST.cycleHistory.unshift({ start: ST.cycleStart, duration: dur,
-        seanceCount: snap.seanceCount, prayerDays: snap.prayerDays, symptomDays: snap.symptomDays });
-      if (ST.cycleHistory.length > 6) ST.cycleHistory = ST.cycleHistory.slice(0, 6);
+    // Archiver tous les cycles écoulés (stats réelles pour le 1er, vides pour les intermédiaires)
+    for (let i = 0; i < cycleNum; i++) {
+      const cStart = new Date(sy, sm - 1, sd + i * dur);
+      const cStr = cStart.getFullYear() + '-' + String(cStart.getMonth()+1).padStart(2,'0') + '-' + String(cStart.getDate()).padStart(2,'0');
+      if (!ST.cycleHistory.find(c => c.start === cStr)) {
+        const snap = (i === 0) ? _bilanStats() : { seanceCount: 0, prayerDays: 0, symptomDays: 0 };
+        ST.cycleHistory.unshift({ start: cStr, duration: dur,
+          seanceCount: snap.seanceCount, prayerDays: snap.prayerDays, symptomDays: snap.symptomDays });
+        if (ST.cycleHistory.length > 6) ST.cycleHistory = ST.cycleHistory.slice(0, 6);
+      }
     }
     const ns = new Date(sy, sm - 1, sd + cycleNum * dur);
     ST.cycleStart = ns.getFullYear() + '-' + String(ns.getMonth()+1).padStart(2,'0') + '-' + String(ns.getDate()).padStart(2,'0');
     ST.hiverEnd = null;
-    ST._lastCycleNum = -1; // force le reset des flags ci-dessous
+    ST._lastCycleNum = -1;
     effectiveCycleNum = 0;
     saveState();
   }
