@@ -1264,15 +1264,16 @@ function startStripeCheckout() {
   }
 }
 
+const STRIPE_PORTAL_URL = 'https://billing.stripe.com/p/login/8x2aEW8hZ4Q1cUbdmg8Ra00';
+
 async function openCustomerPortal() {
-  if (!ST.supabaseUserId) { showToast('Connecte-toi pour gérer ton abonnement'); return; }
+  if (!ST.supabaseUserId) { window.location.href = STRIPE_PORTAL_URL; return; }
   showToast('Redirection vers Stripe…');
   try {
     const r = await fetch('/api/customer-portal?user_id=' + encodeURIComponent(ST.supabaseUserId));
     const data = await r.json();
-    if (data && data.url) { window.location.href = data.url; }
-    else showToast('Une erreur est survenue — écris-nous à sakina.evolution.contact@gmail.com');
-  } catch { showToast('Une erreur est survenue — écris-nous à sakina.evolution.contact@gmail.com'); }
+    window.location.href = (data && data.url) ? data.url : STRIPE_PORTAL_URL;
+  } catch { window.location.href = STRIPE_PORTAL_URL; }
 }
 
 function applyTrialLocks() {
