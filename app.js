@@ -1019,6 +1019,8 @@ function renderTrialCard() {
   if (upsell) upsell.style.display = ST.isPremium ? 'none' : '';
   const codeCard = document.getElementById('premium-code-card');
   if (codeCard) codeCard.style.display = ST.isPremium ? 'none' : '';
+  const manageRow = document.getElementById('manage-sub-row');
+  if (manageRow) manageRow.style.display = (ST.isPremium && ST.supabaseUserId) ? '' : 'none';
   if (ST.isPremium) {
     const planLabel = ST.premiumPlan === 'monthly' ? 'mensuel' : ST.premiumPlan === 'annual' ? 'annuel' : '';
     el.innerHTML = `
@@ -1260,6 +1262,17 @@ function startStripeCheckout() {
   } else {
     window.location.href = STRIPE_LINKS[plan] || STRIPE_LINKS.annual;
   }
+}
+
+async function openCustomerPortal() {
+  if (!ST.supabaseUserId) { showToast('Connecte-toi pour gérer ton abonnement'); return; }
+  showToast('Redirection vers Stripe…');
+  try {
+    const r = await fetch('/api/customer-portal?user_id=' + encodeURIComponent(ST.supabaseUserId));
+    const data = await r.json();
+    if (data && data.url) { window.location.href = data.url; }
+    else showToast('Une erreur est survenue — écris-nous à sakina.evolution.contact@gmail.com');
+  } catch { showToast('Une erreur est survenue — écris-nous à sakina.evolution.contact@gmail.com'); }
 }
 
 function applyTrialLocks() {
