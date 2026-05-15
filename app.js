@@ -841,6 +841,15 @@ const ASMA_MEDITATIONS = {
 // ═══════════════════════════════════════════════
 // CYCLE LOGIC
 // ═══════════════════════════════════════════════
+function effectiveCycleDur() {
+  const past = [
+    ...(ST.cycleHistory || []).map(c => Number(c.duration) || 0),
+    ...(ST.historiqueCycles || []).map(c => Number(c.dureeCycle) || 0),
+  ].filter(d => d >= 20 && d <= 60);
+  if (past.length < 3) return Math.max(20, Math.min(60, ST.cycleDuration || 28));
+  return Math.max(20, Math.min(60, Math.round(past.reduce((a, b) => a + b, 0) / past.length)));
+}
+
 function phaseThresholds(dur) {
   const hiverDays  = Math.round(dur * 0.20);
   const springDays = Math.floor(dur * 0.30);
@@ -865,7 +874,7 @@ function computeCycle() {
   const startLocal = new Date(sy, sm - 1, sd);
   const diff = Math.floor((todayLocal - startLocal) / (1000 * 60 * 60 * 24));
   if (diff < 0) { ST.currentDay = 1; ST.currentSaison = 'hiver'; return; }
-  const dur = Math.max(20, Math.min(60, ST.cycleDuration || 28));
+  const dur = effectiveCycleDur();
   const cycleNum = Math.floor(diff / dur);
   const day = (diff % dur) + 1;
   // Cycle écoulé sans clic "Premier jour" : archiver et avancer cycleStart
@@ -1319,7 +1328,7 @@ function populateAll() {
   setTimeout(showInstallBanner, 1500);
   // Rattrapage : si l'upgrade Printemps n'a pas été montré et qu'on est en début d'Été
   if (ST.currentSaison === 'ete' && !ST.printempsUpgradeDone) {
-    const dur2 = Math.max(20, Math.min(60, ST.cycleDuration || 28));
+    const dur2 = effectiveCycleDur();
     const { eteStartD: eteStart2 } = phaseThresholds(dur2);
     if (ST.currentDay <= eteStart2 + 1) {
       ST.printempsUpgradeDone = true;
@@ -1818,7 +1827,7 @@ function renderCarteSkincare(s) {
   if (!skin) return;
 
   // Soin du jour (données statiques)
-  const dur = ST.cycleDuration || 28;
+  const dur = effectiveCycleDur();
   const dayIdx = dayWithinPhase(ST.currentDay, dur);
   const soinPhase = (typeof SOINS_QUOTIDIENS !== 'undefined' && SOINS_QUOTIDIENS[ST.currentSaison]) || [];
   const soinJour = soinPhase.length ? soinPhase[dayIdx % soinPhase.length] : null;
@@ -2061,7 +2070,7 @@ function burstCelebration() {
 
 function checkEndOfPrintemps() {
   if (ST.currentSaison !== 'printemps') return;
-  const dur = Math.max(20, Math.min(60, ST.cycleDuration || 28));
+  const dur = effectiveCycleDur();
   const { eteStartD } = phaseThresholds(dur);
   if (ST.currentDay < eteStartD - 1) return;
   if (ST.printempsUpgradeDone) return;
@@ -2551,31 +2560,16 @@ function renderSuggestionsEngage(s) {
 // CYCLE RENDER
 // ═══════════════════════════════════════════════
 function renderCycle(s) {
+  const dur = effectiveCycleDur();
+  const { springStartD: _spD, eteStartD: _etSF, eteEndD: _etEF } = phaseThresholds(dur);
   const _chs = document.getElementById('cycle-header-sub');
-  if (_chs) _chs.textContent = s.nom + ' · Jour ' + ST.currentDay + ' sur ' + ST.cycleDuration;
+  if (_chs) _chs.textContent = s.nom + ' · Jour ' + ST.currentDay + ' sur ' + dur;
   const _cdn = document.getElementById('cycle-day-num'); if (_cdn) _cdn.textContent = ST.currentDay;
   const _csl = document.getElementById('cycle-season-label'); if (_csl) _csl.textContent = s.emoji + ' ' + s.nom;
-  const remaining = ST.cycleDuration - ST.currentDay;
+  const remaining = Math.max(0, dur - ST.currentDay);
   const _cnu = document.getElementById('countdown-num'); if (_cnu) _cnu.textContent = remaining <= 0 ? '0' : remaining;
   const _clb = document.getElementById('countdown-label'); if (_clb) _clb.textContent = remaining <= 1 ? 'demain' : 'jours';
   const _cpn = document.getElementById('cycle-phase-name'); if (_cpn) _cpn.textContent = (s.phase||'').replace('Phase ','');
-  const dur = ST.cycleDuration || 28;
-  const _ovD = Math.max(10, dur - 14);
-  const _etS = Math.max(8, _ovD - 2);
-  const _etE = Math.min(dur - 2, _ovD + 2);
-
-  // Compute dynamic spring start from hiverEnd (mirrors computeCycle logic)
-  let _spD = 6;
-  if (ST.hiverEnd && ST.cycleStart) {
-    const [hey, hem, hed] = ST.hiverEnd.split('-').map(Number);
-    const [sy2, sm2, sd2] = ST.cycleStart.split('-').map(Number);
-    const hiverEndLocal2 = new Date(hey, hem - 1, hed);
-    const startLocal2    = new Date(sy2, sm2 - 1, sd2);
-    const hiverEndDiff2  = Math.floor((hiverEndLocal2 - startLocal2) / (1000 * 60 * 60 * 24));
-    _spD = Math.max(2, hiverEndDiff2 + 1);
-  }
-  const _etSF = Math.max(_spD, _etS);
-  const _etEF = Math.max(_etSF, _etE);
   const phaseMap = {
     hiver:     'J1 → J' + (_spD - 1),
     printemps: 'J' + _spD + ' → J' + (_etSF - 1),
@@ -3168,7 +3162,7 @@ function renderCalendar() {
   let startDow = firstDay.getDay();
   startDow = startDow === 0 ? 6 : startDow - 1;
 
-  const dur = ST.cycleDuration || 28;
+  const dur = effectiveCycleDur();
   let cells = '';
   for (let i = 0; i < startDow; i++) cells += '<div class="cal-day cal-day-empty"></div>';
 
@@ -3633,7 +3627,7 @@ function getTodaySeanceSpec() {
   if (typeof SEANCES_SPORT === 'undefined') return null;
   const phase = ST.currentSaison;
   const day = ST.currentDay;
-  const dur = ST.cycleDuration || 28;
+  const dur = effectiveCycleDur();
   const level = ST.seanceLevel || 1;
   const checkin = ST.checkin;
   const sport = SEANCES_SPORT;
@@ -3712,7 +3706,7 @@ function phaseForDay(i, dur) {
 
 function drawCycleRing() {
   const cx=100, cy=100, r=82;
-  const dur = Math.max(20, Math.min(60, ST.cycleDuration || 28));
+  const dur = effectiveCycleDur();
   const day = ST.currentDay || 1;
   const { springStartD, eteStartD, eteEndD } = phaseThresholds(dur);
   const phases = [
