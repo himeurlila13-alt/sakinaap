@@ -815,6 +815,13 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
   overflow: hidden;
 }
 .home-header-deco svg { width: 100%; height: 100%; }
+.home-header-arabic {
+  font-size: 26px;
+  direction: rtl;
+  color: white;
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
 .home-header-greeting {
   font-family: var(--sans);
   font-size: 12px;
