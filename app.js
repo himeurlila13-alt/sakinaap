@@ -841,6 +841,22 @@ const ASMA_MEDITATIONS = {
 // ═══════════════════════════════════════════════
 // CYCLE LOGIC
 // ═══════════════════════════════════════════════
+function phaseThresholds(dur) {
+  const hiverDays  = Math.round(dur * 0.20);
+  const springDays = Math.floor(dur * 0.30);
+  const eteDays    = Math.round(dur * 0.15);
+  let springStartD = hiverDays + 1;
+  if (ST.hiverEnd && ST.cycleStart) {
+    const [hey, hem, hed] = ST.hiverEnd.split('-').map(Number);
+    const [sy, sm, sd]    = ST.cycleStart.split('-').map(Number);
+    const hiverEndDiff = Math.floor((new Date(hey, hem-1, hed) - new Date(sy, sm-1, sd)) / 86400000);
+    if (hiverEndDiff > 0 && hiverEndDiff < dur) springStartD = Math.max(2, hiverEndDiff + 1);
+  }
+  const eteStartD = hiverDays + springDays + 1;
+  const eteEndD   = hiverDays + springDays + eteDays;
+  return { springStartD, eteStartD, eteEndD };
+}
+
 function computeCycle() {
   if (!ST.cycleStart) { ST.currentDay = 1; ST.currentSaison = 'hiver'; return; }
   const now = new Date();
@@ -862,29 +878,12 @@ function computeCycle() {
   }
   ST.currentDay = Math.max(1, Math.min(day, dur));
 
-  // La phase lutéale (~14j avant la fin) est constante — la folliculaire (Printemps) s'allonge/raccourcit.
-  // Pour les cycles courts (<27j) : Hiver = 4j au lieu de 5j, ovulation sans minimum artificiel à J10.
   const d = ST.currentDay;
-  const hiverDays = Math.min(5, Math.max(3, Math.round(dur * 0.18))); // 4j si <27j, 5j sinon
-  let springStartD = hiverDays + 1;
-  if (ST.hiverEnd) {
-    const [hey, hem, hed] = ST.hiverEnd.split('-').map(Number);
-    const hiverEndLocal = new Date(hey, hem - 1, hed);
-    const hiverEndDiff = Math.floor((hiverEndLocal - startLocal) / (1000 * 60 * 60 * 24));
-    if (hiverEndDiff > 0 && hiverEndDiff < dur) {
-      springStartD = Math.max(2, hiverEndDiff + 1);
-    }
-  }
-  // Ovulation = dur - 14 (biologie réelle), avec min pour garantir 3j de Printemps
-  const ovulationDay = Math.max(springStartD + 3, dur - 14);
-  const eteStart = Math.max(springStartD + 2, ovulationDay - 2);
-  const eteEnd = Math.min(dur - 1, ovulationDay + 2);
-  const eteStartFinal = Math.max(springStartD + 2, eteStart);
-  const eteEndFinal   = Math.max(eteStartFinal, eteEnd);
+  const { springStartD, eteStartD, eteEndD } = phaseThresholds(dur);
 
   if (d < springStartD) ST.currentSaison = 'hiver';
-  else if (d < eteStartFinal) ST.currentSaison = 'printemps';
-  else if (d <= eteEndFinal) ST.currentSaison = 'ete';
+  else if (d < eteStartD) ST.currentSaison = 'printemps';
+  else if (d <= eteEndD) ST.currentSaison = 'ete';
   else ST.currentSaison = 'automne';
 
   if (ST._lastSaison && ST._lastSaison !== ST.currentSaison) {
@@ -1296,9 +1295,8 @@ function populateAll() {
   setTimeout(showInstallBanner, 1500);
   // Rattrapage : si l'upgrade Printemps n'a pas été montré et qu'on est en début d'Été
   if (ST.currentSaison === 'ete' && !ST.printempsUpgradeDone) {
-    const dur2 = ST.cycleDuration || 28;
-    const ovDay2 = Math.max(10, dur2 - 14);
-    const eteStart2 = Math.max(8, ovDay2 - 2);
+    const dur2 = Math.max(20, Math.min(60, ST.cycleDuration || 28));
+    const { eteStartD: eteStart2 } = phaseThresholds(dur2);
     if (ST.currentDay <= eteStart2 + 1) {
       ST.printempsUpgradeDone = true;
       saveState();
@@ -2039,10 +2037,9 @@ function burstCelebration() {
 
 function checkEndOfPrintemps() {
   if (ST.currentSaison !== 'printemps') return;
-  const dur = ST.cycleDuration || 28;
-  const ovDay = Math.max(10, dur - 14);
-  const eteStart = Math.max(8, ovDay - 2);
-  if (ST.currentDay < eteStart - 1) return;
+  const dur = Math.max(20, Math.min(60, ST.cycleDuration || 28));
+  const { eteStartD } = phaseThresholds(dur);
+  if (ST.currentDay < eteStartD - 1) return;
   if (ST.printempsUpgradeDone) return;
   ST.printempsUpgradeDone = true;
   saveState();
@@ -3587,20 +3584,19 @@ function restoreGlaire() {
 // ═══════════════════════════════════════════════
 // Retourne l'index 0-basé dans la phase courante (pour pick dans REPAS/SOINS_QUOTIDIENS)
 function dayWithinPhase(cycleDay, cycleDur) {
-  const ovDay = Math.max(10, cycleDur - 14);
-  const eteStart = Math.max(8, ovDay - 2);
-  const eteEnd = Math.min(cycleDur - 2, ovDay + 2);
-  if (cycleDay <= 5) return cycleDay - 1;
-  if (cycleDay < eteStart) return cycleDay - 6;
-  if (cycleDay <= eteEnd) return cycleDay - eteStart;
-  return cycleDay - (eteEnd + 1);
+  const dur = Math.max(20, Math.min(60, cycleDur));
+  const { springStartD, eteStartD, eteEndD } = phaseThresholds(dur);
+  if (cycleDay < springStartD) return cycleDay - 1;
+  if (cycleDay < eteStartD) return cycleDay - springStartD;
+  if (cycleDay <= eteEndD) return cycleDay - eteStartD;
+  return cycleDay - (eteEndD + 1);
 }
 
 function getAutomneMicroPhase(cycleDay, cycleDur) {
-  const ovDay = Math.max(10, cycleDur - 14);
-  const eteEnd = Math.min(cycleDur - 2, ovDay + 2);
-  const autLen = cycleDur - eteEnd;
-  const autDay = cycleDay - eteEnd;
+  const dur = Math.max(20, Math.min(60, cycleDur));
+  const { eteEndD } = phaseThresholds(dur);
+  const autLen = dur - eteEndD;
+  const autDay = cycleDay - eteEndD;
   if (autDay <= Math.floor(autLen * 0.35)) return 'actif';
   if (autDay <= Math.floor(autLen * 0.70)) return 'doux';
   return 'fin';
@@ -3680,46 +3676,23 @@ function getTodaySeanceSpec() {
 }
 
 function phaseForDay(i, dur) {
-  const ovulationDay = Math.max(10, dur - 14);
-  const eteStart = Math.max(8, ovulationDay - 2);
-  const eteEnd = Math.min(dur - 2, ovulationDay + 2);
-  let springStartD = 6;
-  if (ST.hiverEnd && ST.cycleStart) {
-    const [hey, hem, hed] = ST.hiverEnd.split('-').map(Number);
-    const [sy, sm, sd] = ST.cycleStart.split('-').map(Number);
-    const diff = Math.floor((new Date(hey, hem-1, hed) - new Date(sy, sm-1, sd)) / 86400000);
-    springStartD = Math.max(2, diff + 1);
-  }
-  const eteStartF = Math.max(springStartD, eteStart);
-  const eteEndF   = Math.max(eteStartF, eteEnd);
+  const { springStartD, eteStartD, eteEndD } = phaseThresholds(dur);
   if (i < springStartD) return 'hiver';
-  if (i < eteStartF) return 'printemps';
-  if (i <= eteEndF) return 'ete';
+  if (i < eteStartD) return 'printemps';
+  if (i <= eteEndD) return 'ete';
   return 'automne';
 }
 
 function drawCycleRing() {
   const cx=100, cy=100, r=82;
-  const dur = ST.cycleDuration || 28;
+  const dur = Math.max(20, Math.min(60, ST.cycleDuration || 28));
   const day = ST.currentDay || 1;
-  const ovDay = Math.max(10, dur - 14);
-  const eteS = Math.max(8, ovDay - 2);
-  const eteE = Math.min(dur - 2, ovDay + 2);
-  // Même logique que computeCycle : Printemps commence au lendemain du hiverEnd déclaré
-  let springStartD = 6;
-  if (ST.hiverEnd && ST.cycleStart) {
-    const [hey,hem,hed] = ST.hiverEnd.split('-').map(Number);
-    const [sy,sm,sd]   = ST.cycleStart.split('-').map(Number);
-    const diff = Math.floor((new Date(hey,hem-1,hed) - new Date(sy,sm-1,sd)) / 86400000);
-    springStartD = Math.max(2, diff + 1);
-  }
-  const eteSF = Math.max(springStartD, eteS);
-  const eteEF = Math.max(eteSF, eteE);
+  const { springStartD, eteStartD, eteEndD } = phaseThresholds(dur);
   const phases = [
-    {id:'seg-hiver',     start:1,           end:springStartD-1, color:'#7B5EA7'},
-    {id:'seg-printemps', start:springStartD, end:eteSF-1,        color:'#3DAE8A'},
-    {id:'seg-ete',       start:eteSF,        end:eteEF,          color:'#E8834A'},
-    {id:'seg-automne',   start:eteEF+1,      end:dur,            color:'#C4694A'},
+    {id:'seg-hiver',     start:1,            end:springStartD-1, color:'#7B5EA7'},
+    {id:'seg-printemps', start:springStartD,  end:eteStartD-1,    color:'#3DAE8A'},
+    {id:'seg-ete',       start:eteStartD,     end:eteEndD,        color:'#E8834A'},
+    {id:'seg-automne',   start:eteEndD+1,     end:dur,            color:'#C4694A'},
   ];
   function polarToCart(angle) { const rad=(angle-90)*Math.PI/180; return {x:cx+r*Math.cos(rad),y:cy+r*Math.sin(rad)}; }
   function dayToAngle(d) { return ((d-1)/dur)*360; }

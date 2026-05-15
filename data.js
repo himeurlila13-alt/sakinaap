@@ -128,7 +128,7 @@ const REPAS_QUOTIDIENS = {
     },
   ],
 
-  // ── AUTOMNE (Phase lutéale · 12 entrées pour cycle long) ──────────
+  // ── AUTOMNE (Phase lutéale · 14 entrées pour cycle long) ──────────
   // Besoins : magnésium, tryptophane, glucides complexes, B6, réconfort
   automne: [
     {
@@ -178,6 +178,14 @@ const REPAS_QUOTIDIENS = {
     {
       nom: 'Galette de sarrasin aux champignons et fromage de chèvre',
       benefice: 'Magnésium du sarrasin + confort émotionnel d\'un plat chaud et réconfortant en fin de cycle.'
+    },
+    {
+      nom: 'Soupe de haricots blancs, romarin et huile d\'olive',
+      benefice: 'Fibres solubles pour l\'intestin, magnésium pour les crampes. Chaud et réconfortant.'
+    },
+    {
+      nom: 'Riz complet au lait de coco, banane et cannelle',
+      benefice: 'Tryptophane de la banane pour soutenir la sérotonine. Douceur naturelle sans pic glycémique.'
     },
   ],
 };
@@ -339,7 +347,7 @@ const SOINS_QUOTIDIENS = {
     },
   ],
 
-  // ── AUTOMNE (12 entrées) — Peau réactive, besoins en apaisement ──
+  // ── AUTOMNE (14 entrées) — Peau réactive, besoins en apaisement ──
   automne: [
     {
       nom: 'Masque miel brut et curcuma',
@@ -412,6 +420,18 @@ const SOINS_QUOTIDIENS = {
       duree: '10 min',
       geste: 'Argile kaolin (la plus douce) + eau florale de lavande. Laisse 10 min. Rince à l\'eau tiède.',
       benefice: 'La lavande apaise et assainit, le kaolin purifie ultra-doucement — parfait pour finir le cycle sereinement.'
+    },
+    {
+      nom: 'Bain de pieds chaud aux huiles essentielles de lavande',
+      duree: '15 min',
+      geste: 'Eau chaude, 3 gouttes lavande + 2 gouttes camomille dans une cuillère d\'huile végétale. Trempe 12-15 min.',
+      benefice: 'Réflexologie naturelle + aromathérapie — réduit les tensions et favorise la détente en fin de cycle.'
+    },
+    {
+      nom: 'Masque sucre et huile de sésame',
+      duree: '8 min',
+      geste: '1 c.à.c sucre roux + 1 c.à.c huile de sésame. Massage circulaire 2 min. Laisse 5 min, rince.',
+      benefice: 'Exfoliation douce + acides gras nourrissants pour regénérer la peau avant le prochain cycle.'
     },
   ],
 };
