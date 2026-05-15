@@ -1418,6 +1418,21 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
   padding: 14px;
   margin: 4px 0;
 }
+.sport-calme-override-btn {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 11px;
+  background: transparent;
+  border: 1.5px solid var(--season);
+  border-radius: 12px;
+  color: var(--season);
+  font-size: 13px;
+  font-family: var(--sans);
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+}
 .sport-spiritual {
   font-size: 11px;
   color: var(--season);

@@ -44,6 +44,7 @@ let ST = {
   customObjectifs: [],
   customObjChecks: {},
   marche: { phase: null, checks: {}, custom: [] },
+  calmeOverride: null,
   trialEnded: false,
   bilanShown: false,
   _lastSaison: null,
@@ -1584,7 +1585,8 @@ function renderCarteBouger(s) {
     case 'calme': {
       const d = spec.data;
       titleText = d.nom; metaText = 'Ton cœur a besoin de calme'; durText = d.duree;
-      exContent = `<div class="sport-calme-detail">${d.detail}</div>`;
+      exContent = `<div class="sport-calme-detail">${d.detail}</div>
+        <button class="sport-calme-override-btn" onclick="choisirSeanceMalgreCalme()">Faire quand même ma séance →</button>`;
       msgHtml = d.message; spirituelHtml = d.messageSpirituel;
       break;
     }
@@ -2166,6 +2168,12 @@ function handleReportQuestion(ans) {
     showToast('🌸 C\'est noté, à demain 🌸');
   }
   saveState();
+}
+
+function choisirSeanceMalgreCalme() {
+  ST.calmeOverride = new Date().toDateString();
+  saveState();
+  renderCarteBouger(SAISONS[ST.currentSaison]);
 }
 
 function openSeanceExpress() {
@@ -3001,6 +3009,7 @@ function checkDailyReset() {
   ST.glaireDate = null;
   ST.checkin = null;
   ST.checkinDate = null;
+  ST.calmeOverride = null;
   ST.eveningCheckinDate = null;
   ST.eveningCheckinMood = null;
   // Élaguer les entrées vieilles de plus de 30 jours pour limiter le localStorage
@@ -3648,7 +3657,7 @@ function getTodaySeanceSpec() {
   const checkin = ST.checkin;
   const sport = SEANCES_SPORT;
 
-  if (checkin === 'calme') return { type: 'calme', data: sport.calme };
+  if (checkin === 'calme' && ST.calmeOverride !== new Date().toDateString()) return { type: 'calme', data: sport.calme };
 
   switch (phase) {
     case 'hiver':
