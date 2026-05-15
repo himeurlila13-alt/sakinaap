@@ -48,7 +48,8 @@ body{font-family:var(--sans);background:var(--creme);color:var(--noir);-webkit-f
 .mc-text{flex:1}
 .mc-title{font-weight:600;font-size:.9rem;color:var(--noir)}
 .mc-hint{font-size:.76rem;color:var(--gris);margin-top:2px;display:none}
-.morning-card:hover .mc-hint{display:block}
+.morning-card:hover .mc-hint,.morning-card.active .mc-hint{display:block}
+.morning-card.active{border-color:var(--violet-light);background:var(--violet-soft);box-shadow:0 8px 20px rgba(61,32,96,.12)}
 .mc-arrow{color:var(--violet-light);font-size:1rem;flex-shrink:0;transition:transform .2s}
 .morning-card:hover .mc-arrow{transform:translateX(3px);color:var(--violet)}
 
@@ -997,19 +998,12 @@ function toggleFaq(btn) {
   if (!wasOpen) item.classList.add('open');
 }
 
-// Morning cards — scroll vers pricing au clic
+// Morning cards — toggle hint au clic
 document.querySelectorAll('.morning-card').forEach(card => {
   card.addEventListener('click', () => {
-    document.querySelectorAll('.morning-card').forEach(c => c.style.opacity = '.5');
-    card.style.opacity = '1';
-    card.style.transform = 'translateY(-2px) scale(1.01)';
-    setTimeout(() => {
-      document.querySelectorAll('.morning-card').forEach(c => {
-        c.style.opacity = '1';
-        c.style.transform = '';
-      });
-      document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' });
-    }, 700);
+    const isActive = card.classList.contains('active');
+    document.querySelectorAll('.morning-card').forEach(c => c.classList.remove('active'));
+    if (!isActive) card.classList.add('active');
   });
 });
 
