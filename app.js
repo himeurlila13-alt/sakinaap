@@ -881,6 +881,7 @@ function computeCycle() {
     const ns = new Date(sy, sm - 1, sd + cycleNum * dur);
     ST.cycleStart = ns.getFullYear() + '-' + String(ns.getMonth()+1).padStart(2,'0') + '-' + String(ns.getDate()).padStart(2,'0');
     ST.hiverEnd = null;
+    ST._lastCycleNum = -1; // force le reset des flags ci-dessous
     effectiveCycleNum = 0;
     saveState();
   }
