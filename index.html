@@ -926,7 +926,7 @@
       <span class="ps-acc-arrow" id="arr-reglages">&#8250;</span>
     </div>
     <div class="ps-acc-body" id="acc-reglages">
-      <div class="ps-row" style="cursor:default;padding-left:20px;">
+      <div class="ps-row" style="cursor:default;padding-left:20px;display:none;">
         <div class="ps-ico">&#10022;</div>
         <div style="flex:1;"><div class="ps-lbl">Mode Premium <span style="font-size:10px;background:#EAD9C0;color:#8A6A30;padding:2px 7px;border-radius:8px;margin-left:6px;font-weight:600;">TEST</span></div><div class="ps-sub">Active pour prévisualiser les fonctions</div></div>
         <button id="premium-toggle-btn" onclick="event.stopPropagation();togglePremium()" style="background:var(--sable);color:var(--gris);border:none;border-radius:10px;padding:7px 14px;font-size:12px;font-weight:700;font-family:var(--sans);cursor:pointer;flex-shrink:0;">Inactif</button>
@@ -1086,6 +1086,7 @@
       <div class="ml-ligne"><span class="ml-lbl">Supabase Inc.</span> Auth + base de donn&eacute;es &mdash; San Francisco, USA</div>
       <div class="ml-ligne"><span class="ml-lbl">Stripe Inc.</span> Paiements &mdash; San Francisco, USA</div>
       <div class="ml-ligne"><span class="ml-lbl">Vercel Inc.</span> H&eacute;bergement app &mdash; Walnut, CA, USA</div>
+      <div class="ml-ligne"><span class="ml-lbl">Formspree Inc.</span> Formulaire de contact &mdash; San Francisco, USA</div>
       <p class="ml-txt" style="margin-top:10px;">Les transferts hors UE sont encadr&eacute;s par les <strong>clauses contractuelles types</strong> de la Commission europ&eacute;enne (d&eacute;cision 2021/914).</p>
     </div>
 
@@ -1222,7 +1223,7 @@
   <div class="modal-sheet" style="text-align:center;">
     <div style="font-size:40px;margin-bottom:12px;">&#128465;</div>
     <div style="font-family:'Playfair Display',serif;font-size:18px;color:#C4694A;margin-bottom:10px;">Supprimer mes données</div>
-    <div style="font-size:13px;color:var(--gris);line-height:1.6;margin-bottom:20px;">Ton prénom, ton cycle, tes prières, ton historique — tout sera effacé de cet appareil définitivement.<br><br>Aucune donnée n'a jamais été envoyée à un serveur.</div>
+    <div style="font-size:13px;color:var(--gris);line-height:1.6;margin-bottom:20px;">Ton prénom, ton cycle, tes prières, ton historique — tout sera effacé de cet appareil définitivement.<br><br>Si tu as un compte, tes données restent sur nos serveurs. Pour les supprimer complètement, écris-nous à <strong>sakina.evolution.contact@gmail.com</strong>.</div>
     <button onclick="confirmDeleteMyData()" style="width:100%;padding:14px;background:#C4694A;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;margin-bottom:10px;">Oui, supprimer tout</button>
     <button onclick="closeDeleteModal()" style="width:100%;padding:14px;background:var(--sable);color:var(--noir);border:none;border-radius:14px;font-size:15px;cursor:pointer;">Annuler</button>
   </div>
