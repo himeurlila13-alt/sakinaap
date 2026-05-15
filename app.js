@@ -868,9 +868,25 @@ function computeCycle() {
   const dur = Math.max(20, Math.min(60, ST.cycleDuration || 28));
   const cycleNum = Math.floor(diff / dur);
   const day = (diff % dur) + 1;
+  // Cycle écoulé sans clic "Premier jour" : archiver et avancer cycleStart
+  let effectiveCycleNum = cycleNum;
+  if (cycleNum > 0 && ST.cycleStart) {
+    if (!ST.cycleHistory) ST.cycleHistory = [];
+    if (!ST.cycleHistory.find(c => c.start === ST.cycleStart)) {
+      const snap = _bilanStats();
+      ST.cycleHistory.unshift({ start: ST.cycleStart, duration: dur,
+        seanceCount: snap.seanceCount, prayerDays: snap.prayerDays, symptomDays: snap.symptomDays });
+      if (ST.cycleHistory.length > 6) ST.cycleHistory = ST.cycleHistory.slice(0, 6);
+    }
+    const ns = new Date(sy, sm - 1, sd + cycleNum * dur);
+    ST.cycleStart = ns.getFullYear() + '-' + String(ns.getMonth()+1).padStart(2,'0') + '-' + String(ns.getDate()).padStart(2,'0');
+    ST.hiverEnd = null;
+    effectiveCycleNum = 0;
+    saveState();
+  }
   // Detect new cycle — reset per-cycle flags
-  if (ST._lastCycleNum !== cycleNum) {
-    ST._lastCycleNum = cycleNum;
+  if (ST._lastCycleNum !== effectiveCycleNum) {
+    ST._lastCycleNum = effectiveCycleNum;
     ST.printempsUpgradeDone = false;
     ST.printempsBasCount = 0;
     ST._proposeNewEx5 = false;
@@ -1043,14 +1059,16 @@ function dismissTrialBanner() {
 
 function _bilanStats() {
   // Filtre sur le cycle courant uniquement
-  let cycleStartMs = 0;
+  let cycleStartDay = 0;
   if (ST.cycleStart) {
-    const [sy, sm, sd] = ST.cycleStart.split('-').map(Number);
-    cycleStartMs = new Date(sy, sm - 1, sd).getTime();
+    const [csy, csm, csd] = ST.cycleStart.split('-').map(Number);
+    cycleStartDay = csy * 10000 + csm * 100 + csd;
   }
   const inCycle = key => {
-    const t = new Date(key).getTime();
-    return !isNaN(t) && t >= cycleStartMs;
+    const d = new Date(key);
+    if (isNaN(d)) return false;
+    const keyDay = d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
+    return keyDay >= cycleStartDay;
   };
 
   const seanceCount = Object.keys(ST.seanceDone || {}).filter(inCycle).length;
@@ -2602,9 +2620,12 @@ function startNewCycleToday() {
 }
 
 function declarerPrintemps() {
+  if (ST.currentSaison !== 'hiver') return;
+  if (!ST.cycleStart) return;
   const today = new Date();
   const todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
-  if (ST.hiverEnd === todayStr) return;
+  if (ST.hiverEnd === todayStr) { showToast('Printemps déjà déclaré aujourd\'hui ✓'); return; }
+  if (todayStr === ST.cycleStart) { showToast('Les règles ne peuvent pas durer 0 jour.'); return; }
   ST.hiverEnd = todayStr;
   saveState();
   computeCycle();
@@ -3333,7 +3354,7 @@ function nextStep(step) {
     const prenom = document.getElementById('input-prenom').value.trim();
     if (!prenom) { alert('Dis-moi ton prénom 🌸'); return; }
     ST.prenom = prenom;
-    const today = new Date().toISOString().split('T')[0];
+    const _n = new Date(); const today = _n.getFullYear() + '-' + String(_n.getMonth()+1).padStart(2,'0') + '-' + String(_n.getDate()).padStart(2,'0');
     const dateInput = document.getElementById('input-date');
     if (dateInput) { dateInput.value = today; dateInput.max = today; }
     document.getElementById('step-0').classList.remove('active');
@@ -3795,7 +3816,7 @@ function checkNotificationReturn() {
 // ═══════════════════════════════════════════════
 let editDuration = 28;
 function openEditCycle() {
-  const today=new Date().toISOString().split('T')[0];
+  const _n=new Date(); const today=_n.getFullYear()+'-'+String(_n.getMonth()+1).padStart(2,'0')+'-'+String(_n.getDate()).padStart(2,'0');
   document.getElementById('edit-cycle-date').value=ST.cycleStart||today;
   document.getElementById('edit-cycle-date').max=today;
   editDuration=ST.cycleDuration||28;
@@ -4401,7 +4422,7 @@ function saveHistoriqueCycle() {
   const dateVal = dateEl ? dateEl.value : '';
   if (!dateVal) { showToast('Choisis une date de début.'); return; }
   const dureeCycle = parseInt(dureeEl ? dureeEl.value : 28);
-  if (isNaN(dureeCycle) || dureeCycle < 21 || dureeCycle > 45) { showToast('Durée du cycle : entre 21 et 45 jours.'); return; }
+  if (isNaN(dureeCycle) || dureeCycle < 20 || dureeCycle > 60) { showToast('Durée du cycle : entre 20 et 60 jours.'); return; }
   const dureeRegles = parseInt(reglesEl ? reglesEl.value : 5);
   if (isNaN(dureeRegles) || dureeRegles < 2 || dureeRegles > 10) { showToast('Durée des règles : entre 2 et 10 jours.'); return; }
   const selectedIntEl = document.querySelector('.intensite-opt[data-selected="1"]');
