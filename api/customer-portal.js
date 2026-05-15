@@ -19,8 +19,9 @@ module.exports = async (req, res) => {
     if (!customerId) return res.status(404).json({ error: 'Abonnement introuvable' });
 
     const body = new URLSearchParams({
-      customer:   customerId,
-      return_url: 'https://sakinaap.com/',
+      customer:      customerId,
+      configuration: 'bpc_1TXPyyBXUGkW7IH3SZwY4unx',
+      return_url:    'https://sakinaap.com/',
     });
     const r = await fetch('https://api.stripe.com/v1/billing_portal/sessions', {
       method:  'POST',
