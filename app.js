@@ -961,7 +961,7 @@ function checkPaymentSuccess() {
 // ═══════════════════════════════════════════════
 function getTrialDays() {
   if (!ST.installDate) return 0;
-  return Math.floor((Date.now() - ST.installDate) / 86400000);
+  return Math.max(0, Math.floor((Date.now() - ST.installDate) / 86400000));
 }
 function isFullAccess() { return ST.isPremium || getTrialDays() < 20; }
 function isTrialActive() { return isFullAccess(); }
