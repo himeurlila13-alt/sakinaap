@@ -1372,6 +1372,8 @@ function renderDashboard(s) {
   if (phaseEl) phaseEl.textContent = s.emoji + ' ' + s.nom + ' · Jour ' + ST.currentDay;
   const decoEl = document.getElementById('home-header-deco');
   if (decoEl) decoEl.innerHTML = _HOME_DECOS[ST.currentSaison] || '';
+  const decoEl2 = document.getElementById('home-header-deco2');
+  if (decoEl2) decoEl2.innerHTML = _HOME_DECOS[ST.currentSaison] || '';
   const msgIcon = document.getElementById('home-msg-icon');
   if (msgIcon) msgIcon.textContent = s.emoji;
 
