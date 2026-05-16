@@ -632,24 +632,80 @@ const MESSAGES_JOUR = {
 // ───────────────────────────────────────────────────────────────────────
 const SEANCES_SPORT = {
 
-  // ── HIVER — Séance unique douceur, pas de niveaux ─────────────────
+  // ── HIVER — 4 niveaux adaptés à l'intensité des règles ───────────
   hiver: {
-    nom: 'Douceur profonde',
-    duree: '~10 min',
-    message: 'Ton corps est en phase de régénération. La vraie force, c\'est aussi savoir se reposer.',
-    messageSpirituel: 'La douceur envers soi est aussi une ibada.',
-    exercices: [
-      { nom: 'Respiration abdominale', duree: '2 min',
-        detail: 'Mains sur le ventre. Inspire profondément par le nez, expire lentement par la bouche.' },
-      { nom: 'Posture enfant',         duree: '2 min',
-        detail: 'Genoux écartés, front au sol, bras étirés devant toi. Respire et laisse le sol te porter.' },
-      { nom: 'Rotation de bassin',     duree: '2 min',
-        detail: 'À quatre pattes, dessine des cercles lents avec les hanches dans les deux sens.' },
-      { nom: 'Étirement hanches',      duree: '1 min / côté',
-        detail: 'Genou avant plié à 90°, hanches vers l\'avant. Reste, respire, change de côté.' },
-      { nom: 'Automassage ventre',     duree: '2 min',
-        detail: 'Paumes sur le ventre, cercles dans le sens des aiguilles d\'une montre, pression douce.' },
-    ],
+    niveaux: {
+      1: {
+        nom: 'Soulagement doux',
+        duree: '~7 min',
+        message: 'Certains jours, juste respirer et se détendre est la meilleure séance qui soit.',
+        messageSpirituel: 'La douceur envers soi est aussi une ibada.',
+        exercices: [
+          { nom: 'Position anti-douleur', duree: '3 min',
+            detail: 'Allongée en boule sur le côté gauche, genoux remontés contre la poitrine. Respire profondément. Cette position réduit la pression utérine et soulage les crampes.' },
+          { nom: 'Respiration 4-4-6', duree: '2 min',
+            detail: 'Inspire par le nez 4 temps, retiens 4 temps, souffle par la bouche 6 temps. 6 cycles. Active le système parasympathique et réduit la perception de la douleur.' },
+          { nom: 'Détente abdominale', duree: '2 min',
+            detail: 'Mains chaudes sur le ventre. Relâche complètement les abdominaux à chaque expiration. Cercles bienveillants, très douce pression.' },
+        ],
+      },
+      2: {
+        nom: 'Douceur profonde',
+        duree: '~10 min',
+        message: 'Ton corps est en phase de régénération. La vraie force, c\'est aussi savoir se reposer.',
+        messageSpirituel: 'La douceur envers soi est aussi une ibada.',
+        exercices: [
+          { nom: 'Respiration abdominale', duree: '2 min',
+            detail: 'Mains sur le ventre. Inspire profondément par le nez, expire lentement par la bouche.' },
+          { nom: 'Posture enfant',         duree: '2 min',
+            detail: 'Genoux écartés, front au sol, bras étirés devant toi. Respire et laisse le sol te porter.' },
+          { nom: 'Rotation de bassin',     duree: '2 min',
+            detail: 'À quatre pattes, dessine des cercles lents avec les hanches dans les deux sens.' },
+          { nom: 'Étirement hanches',      duree: '1 min / côté',
+            detail: 'Genou avant plié à 90°, hanches vers l\'avant. Reste, respire, change de côté.' },
+          { nom: 'Automassage ventre',     duree: '2 min',
+            detail: 'Paumes sur le ventre, cercles dans le sens des aiguilles d\'une montre, pression douce.' },
+        ],
+      },
+      3: {
+        nom: 'Mobilité libératrice',
+        duree: '~15 min',
+        message: 'Le mouvement doux libère des endorphines — ton meilleur anti-douleur naturel.',
+        messageSpirituel: 'Ton corps est une amânah. Prends-en soin avec bienveillance, même en période difficile.',
+        exercices: [
+          { nom: 'Respiration abdominale', duree: '2 min',
+            detail: 'Mains sur le ventre. Inspire profondément, expire en relâchant tout. 10 cycles lents.' },
+          { nom: 'Chat-vache lent',        duree: '3 min',
+            detail: 'À quatre pattes. Inspire : dos creux, ventre vers le sol (vache). Expire : dos arrondi, nombril vers le plafond (chat). 3 sec par position. Libère les tensions lombaires.' },
+          { nom: 'Posture enfant',         duree: '2 min',
+            detail: 'Genoux écartés, front au sol. Bras étirés ou le long du corps. Respire dans le bas du dos.' },
+          { nom: 'Pigeon modifié',         duree: '2 min / côté',
+            detail: 'Genou devant à 90°, jambe arrière tendue. Reste là, laisse la gravité ouvrir la hanche. Respire lentement. Change de côté.' },
+          { nom: 'Torsion douce au sol',   duree: '1 min / côté',
+            detail: 'Allongée sur le dos, genoux pliés, laisse-les tomber doucement d\'un côté, bras en croix. Épaules restent au sol.' },
+          { nom: 'Savasana conscient',     duree: '2 min',
+            detail: 'Allongée, yeux fermés. Scanne ton corps de la tête aux pieds. Relâche chaque muscle à chaque expiration.' },
+        ],
+      },
+      4: {
+        nom: 'Yin libérateur complet',
+        duree: '~20 min',
+        message: 'Le Yin yoga pendant les règles réduit les prostaglandines inflammatoires et libère des endorphines. Ton corps mérite cette attention.',
+        messageSpirituel: 'اللهم ارزقني القوة في الضعف — la vraie force se cultive aussi dans la douceur.',
+        exercices: [
+          { nom: 'Papillon allongé',        duree: '5 min',
+            detail: 'Allongée sur le dos, plantes de pieds jointes, genoux ouverts vers le sol. Mains sur le ventre. Respiration abdominale lente. Ouvre les hanches passivement.' },
+          { nom: 'Dragon (fente Yin)',       duree: '3 min / côté',
+            detail: 'Genou avant plié, jambe arrière allongée au sol. Descends progressivement sur les avant-bras. Laisse le poids du corps étirer le psoas. Respire, sans forcer. Change de côté.' },
+          { nom: 'Demi-tortue',             duree: '4 min',
+            detail: 'À genoux, penche le buste en avant, front au sol, bras tendus devant. Relâche les épaules et la nuque complètement. Idéale pour les douleurs du bas du dos.' },
+          { nom: 'Torsion Yin au sol',      duree: '2 min / côté',
+            detail: 'Allongée, ramène une jambe pliée de l\'autre côté. Épaule opposée reste au sol. Respiration 4-7-8 : inspire 4, retiens 7, souffle 8.' },
+          { nom: 'Jambes au mur',           duree: '4 min',
+            detail: 'Fesses proches du mur, jambes tendues vers le plafond appuyées sur le mur. Favorise le retour veineux, soulage les lombaires et réduit les gonflements.' },
+        ],
+      },
+    },
   },
 
   // ── PRINTEMPS — Alternance Bas/Haut/Repos, 4 niveaux ─────────────
