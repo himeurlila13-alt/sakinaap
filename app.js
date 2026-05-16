@@ -830,14 +830,7 @@ const ASMA = [
   {num:96,ar:'الْبَاقِي',fr:"Al-Baqi · L'Éternel"},{num:97,ar:'الْوَارِثُ',fr:"Al-Warith · L'Héritier"},{num:98,ar:'الرَّشِيدُ',fr:'Ar-Rashid · Le Guide Juste'},{num:99,ar:'الصَّبُورُ',fr:'As-Sabur · Le Patient'},
 ];
 
-const ASMA_MEDITATIONS = {
-  1:{m:"Allah — Le Nom qui englobe tous les autres.",r:"Commence chaque action en Le nommant : Bismillah."},
-  2:{m:"Ar-Rahman — Sa miséricorde s'étend à toutes Ses créatures.",r:"Pense à une personne difficile. Sa miséricorde la couvre aussi."},
-  3:{m:"Ar-Rahim — Une miséricorde particulière pour les croyants.",r:"Tu as commis une erreur ? Reviens à Lui sans honte."},
-  31:{m:"Al-Latif — Le Subtil. Il connaît les peines que tu ne dis pas.",r:"Parle-Lui de ce que tu ne peux dire à personne."},
-  48:{m:"Al-Wadud — Le Plein d'Amour. Il t'aime même quand tu ne te sens pas aimée.",r:"Reçois cet amour sans le mériter — c'est Son cadeau."},
-  99:{m:"As-Sabur — Le Patient. Il ne se précipite pas pour punir.",r:"Sois patiente avec toi-même — comme Il l'est avec toi."},
-};
+const ASMA_MEDITATIONS = {};
 
 // ═══════════════════════════════════════════════
 // CYCLE LOGIC
