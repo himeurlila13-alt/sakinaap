@@ -1238,7 +1238,8 @@ async function startStripeCheckout() {
     const params = new URLSearchParams({ plan, user_id: ST.supabaseUserId });
     if (ST.supabaseEmail) params.set('email', ST.supabaseEmail);
     try {
-      const { data: { session } } = await sb.auth.getSession();
+      const sb = await initSupabase();
+      const { data: { session } } = await sb?.auth.getSession() || { data: { session: null } };
       const jwt = session?.access_token;
       const r = await fetch('/api/create-checkout?' + params.toString(), {
         headers: jwt ? { Authorization: 'Bearer ' + jwt } : {}
@@ -1258,7 +1259,8 @@ async function openCustomerPortal() {
   if (!ST.supabaseUserId) { window.location.href = STRIPE_PORTAL_URL; return; }
   showToast('Redirection vers Stripe…');
   try {
-    const { data: { session } } = await sb.auth.getSession();
+    const sb = await initSupabase();
+    const { data: { session } } = await sb?.auth.getSession() || { data: { session: null } };
     const jwt = session?.access_token;
     const r = await fetch('/api/customer-portal?user_id=' + encodeURIComponent(ST.supabaseUserId), {
       headers: jwt ? { Authorization: 'Bearer ' + jwt } : {}
@@ -1992,6 +1994,8 @@ async function applyPremiumCode() {
   msg.style.color = 'var(--gris)';
   msg.textContent = 'Vérification…';
   try {
+    const sb = await initSupabase();
+    if (!sb) { msg.style.color = '#C4694A'; msg.textContent = 'Connecte-toi pour utiliser un code.'; return; }
     const { data: { session } } = await sb.auth.getSession();
     const jwt = session?.access_token;
     if (!jwt) { msg.style.color = '#C4694A'; msg.textContent = 'Connecte-toi pour utiliser un code.'; return; }
