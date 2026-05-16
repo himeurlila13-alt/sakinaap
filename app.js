@@ -344,6 +344,9 @@ async function _doSyncToSupabase() {
     const toSave = { ...ST };
     delete toSave.currentSaison;
     delete toSave.currentDay;
+    delete toSave.isPremium;      // toujours recalculé depuis subscriptions
+    delete toSave.premiumPlan;
+    delete toSave.premiumSince;
     await _supabase.from('user_data').upsert({
       user_id: ST.supabaseUserId,
       data: toSave,
@@ -360,12 +363,10 @@ function syncToSupabase() {
 async function verifyPremiumFromDB(sb, userId) {
   try {
     const { data } = await sb.from('subscriptions').select('status,plan').eq('user_id', userId).single();
-    if (data && data.status === 'active') {
-      ST.isPremium = true;
-      ST.trialEnded = false;
-      ST.premiumPlan = data.plan;
-      saveState();
-    }
+    ST.isPremium = !!(data && data.status === 'active');
+    ST.premiumPlan = ST.isPremium ? data.plan : null;
+    if (!ST.isPremium) ST.trialEnded = false;
+    saveState();
   } catch(e) {}
 }
 
@@ -1977,22 +1978,7 @@ function handleProgressionAnswer(ans) {
   renderCarteBouger(SAISONS[ST.currentSaison]);
 }
 
-function togglePremium() {
-  ST.isPremium = !ST.isPremium;
-  saveState();
-  const btn = document.getElementById('premium-toggle-btn');
-  if (btn) {
-    btn.textContent = ST.isPremium ? '✦ Actif' : 'Inactif';
-    btn.style.background = ST.isPremium ? 'var(--season-grad)' : 'var(--sable)';
-    btn.style.color = ST.isPremium ? 'white' : 'var(--gris)';
-  }
-  const s = SAISONS[ST.currentSaison];
-  renderCarteBouger(s);
-  renderCarteRepas(s);
-  renderCarteSkincare(s);
-  applyTrialLocks();
-  showToast(ST.isPremium ? '✦ Mode Premium activé' : 'Mode Premium désactivé');
-}
+function togglePremium() { /* désactivé */ }
 
 async function applyPremiumCode() {
   const inp = document.getElementById('premium-code-input');
@@ -2003,9 +1989,12 @@ async function applyPremiumCode() {
   msg.style.color = 'var(--gris)';
   msg.textContent = 'Vérification…';
   try {
+    const { data: { session } } = await sb.auth.getSession();
+    const jwt = session?.access_token;
+    if (!jwt) { msg.style.color = '#C4694A'; msg.textContent = 'Connecte-toi pour utiliser un code.'; return; }
     const r = await fetch('/api/redeem-code', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + jwt },
       body: JSON.stringify({ code })
     });
     const data = await r.json();
