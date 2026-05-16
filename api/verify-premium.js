@@ -1,13 +1,21 @@
 module.exports = async (req, res) => {
-  const { user_id } = req.query;
-  if (!user_id) return res.status(400).json({ isPremium: false });
-
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_KEY;
 
+  // Vérifie le JWT — seule l'utilisatrice peut consulter son propre statut
+  const authHeader = req.headers['authorization'] || '';
+  const jwt = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+  if (!jwt) return res.status(401).json({ isPremium: false, error: 'Non authentifiée' });
+
   try {
+    const userRes = await fetch(`${url}/auth/v1/user`, {
+      headers: { apikey: key, Authorization: `Bearer ${jwt}` }
+    });
+    if (!userRes.ok) return res.status(401).json({ isPremium: false, error: 'Token invalide' });
+    const user = await userRes.json();
+
     const r = await fetch(
-      `${url}/rest/v1/subscriptions?user_id=eq.${user_id}&select=status,plan`,
+      `${url}/rest/v1/subscriptions?user_id=eq.${user.id}&select=status,plan`,
       { headers: { apikey: key, Authorization: `Bearer ${key}` } }
     );
     const rows = await r.json();

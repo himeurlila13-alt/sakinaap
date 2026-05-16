@@ -109,8 +109,8 @@ async function initSupabase() {
 // Cookies partagés Safari ↔ PWA iOS (localStorage est isolé sur iOS PWA)
 const _COOKIE_MAX = 365 * 24 * 3600;
 function setAuthCookie(email) {
-  document.cookie = `sakina_auth=1; path=/; max-age=${_COOKIE_MAX}; SameSite=Strict`;
-  if (email) document.cookie = `sakina_email=${encodeURIComponent(email)}; path=/; max-age=${_COOKIE_MAX}; SameSite=Strict`;
+  document.cookie = `sakina_auth=1; path=/; max-age=${_COOKIE_MAX}; SameSite=Strict; Secure`;
+  if (email) document.cookie = `sakina_email=${encodeURIComponent(email)}; path=/; max-age=${_COOKIE_MAX}; SameSite=Strict; Secure`;
 }
 function clearAuthCookie() {
   document.cookie = 'sakina_auth=; path=/; max-age=0; SameSite=Strict';
@@ -2890,7 +2890,7 @@ async function submitChangeEmail() {
     // Succès
     document.getElementById('change-email-step1').style.display = 'none';
     const txt = document.getElementById('change-email-confirm-txt');
-    if (txt) txt.innerHTML = `Un email de confirmation a été envoyé à <strong>${newEmail}</strong>.<br><br>Vérifie ta boîte mail et tes spams.`;
+    if (txt) { const safe = newEmail.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); txt.innerHTML = `Un email de confirmation a été envoyé à <strong>${safe}</strong>.<br><br>Vérifie ta boîte mail et tes spams.`; }
     document.getElementById('change-email-step2').style.display = '';
   } catch (e) {
     const raw = (e.message || '').toLowerCase();
