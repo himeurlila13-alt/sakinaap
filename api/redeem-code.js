@@ -27,22 +27,29 @@ module.exports = async (req, res) => {
       return res.json({ valid: false });
     }
 
-    // Écrit l'abonnement dans Supabase — verifyPremiumFromDB le lira au prochain chargement
-    await fetch(`${sbUrl}/rest/v1/subscriptions`, {
+    // Écrit l'abonnement dans Supabase
+    const sbWrite = await fetch(`${sbUrl}/rest/v1/subscriptions`, {
       method: 'POST',
       headers: {
         apikey: sbKey,
         Authorization: `Bearer ${sbKey}`,
         'Content-Type': 'application/json',
-        Prefer: 'resolution=merge-duplicates',
+        Prefer: 'resolution=merge-duplicates,return=minimal',
       },
       body: JSON.stringify({
         user_id: user.id,
         plan: 'code',
         status: 'active',
+        stripe_customer_id: null,
+        stripe_subscription_id: null,
         updated_at: new Date().toISOString(),
       }),
     });
+
+    if (!sbWrite.ok) {
+      const errText = await sbWrite.text();
+      return res.status(500).json({ valid: false, error: 'Erreur base de données : ' + errText });
+    }
 
     res.json({ valid: true });
   } catch (e) {

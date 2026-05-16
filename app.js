@@ -2004,18 +2004,18 @@ async function applyPremiumCode() {
       headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + jwt },
       body: JSON.stringify({ code })
     });
+    if (!r.ok) { const errData = await r.json().catch(() => ({})); throw new Error(errData.error || r.status); }
     const data = await r.json();
     if (data && data.valid) {
-      ST.isPremium = true;
-      saveState();
+      await verifyPremiumFromDB(sb, ST.supabaseUserId);
       renderDashboard(SAISONS[ST.currentSaison]);
       applyTrialLocks();
       msg.style.color = '#3DAE8A';
-      msg.textContent = '✓ Premium activé — bienvenue !';
+      msg.textContent = ST.isPremium ? '✓ Premium activé — bienvenue !' : 'Code accepté — rechargement nécessaire.';
       inp.value = '';
     } else {
       msg.style.color = '#C4694A';
-      msg.textContent = 'Code incorrect.';
+      msg.textContent = data?.error || 'Code incorrect.';
     }
   } catch {
     msg.style.color = '#C4694A';
