@@ -660,21 +660,21 @@ const SEANCES_SPORT = {
 
     // ─ Séances Bas du corps ─
     bas: {
-      1: { nom: 'Découverte', duree: '~20 min', exercices: [
+      1: { nom: 'Essentielle', duree: '~20 min', exercices: [
         { nom: 'Squat',        sets: 3, reps: 5,  detail: 'Pieds largeur d\'épaules, descends lentement, remonte en expirant.' },
         { nom: 'Chien pipi',   sets: 3, reps: 10, detail: 'À quatre pattes, lève le genou sur le côté à 90°, redescends.' },
         { nom: 'Kick back',    sets: 3, reps: 10, detail: 'À quatre pattes, pousse le pied vers l\'arrière-haut, contracte les fessiers.' },
         { nom: 'Demi-pont',    sets: 3, reps: 10, detail: 'Allongée, pieds à plat, soulève le bassin en serrant les fessiers.' },
         { nom: 'Chaise',       sets: 3, duree: '5 sec', detail: 'Dos au mur, cuisses parallèles au sol, tiens la position.' },
       ]},
-      2: { nom: 'Aventurière', duree: '~25 min', exercices: [
+      2: { nom: 'À ton rythme', duree: '~25 min', exercices: [
         { nom: 'Squat',         sets: 3, reps: 10, detail: 'Pieds largeur d\'épaules, descends lentement, remonte en expirant.' },
         { nom: 'Fente arrière', sets: 3, reps: 10, detail: 'Un pied en arrière, genou à 90°, alternance gauche/droite.' },
         { nom: 'Squat sumo',    sets: 3, reps: 10, detail: 'Pieds très écartés, orteils ouverts, descends et remonte.' },
         { nom: 'Demi-pont',     sets: 3, reps: 20, detail: 'Allongée, pieds à plat, monte et descends lentement.' },
         { nom: 'Chaise',        sets: 3, duree: '25 sec', detail: 'Dos au mur, cuisses parallèles au sol, tiens la position.' },
       ]},
-      3: { nom: 'Guerrière', duree: '~30 min', exercices: [
+      3: { nom: 'Vitalité', duree: '~30 min', exercices: [
         { nom: 'Demi-pont jambe levée', sets: 3, reps: 15, detail: 'Demi-pont avec une jambe tendue levée. Change à mi-série.' },
         { nom: 'Burpees',               sets: 3, reps: 10, detail: 'Position planche, ramène les pieds, saute vers le haut, recommence.' },
         { nom: 'Squat sauté',           sets: 3, reps: 10, detail: 'Squat puis saut explosif, atterrissage doux fléchi.' },
@@ -682,7 +682,7 @@ const SEANCES_SPORT = {
         { nom: 'Levée de jambe',        sets: 3, reps: 20, detail: 'Allongée, jambes tendues, monte-les à 90° et redescends lentement.' },
       ]},
       // Niveau 4 : 3 séances en rotation sur J6/J9/J12
-      4: { nom: 'Élite', duree: '~40 min',
+      4: { nom: 'Pleine puissance', duree: '~40 min',
         rotation: [
           { nom: 'S1 — Force pure', exercices: [
             { nom: 'Squats',          sets: 3, reps: 10, detail: 'Contrôlé, lent à la descente, explosif à la montée.' },
@@ -708,22 +708,22 @@ const SEANCES_SPORT = {
 
     // ─ Séances Haut du corps (jamais ajoutées en fin de séance bas) ─
     haut: {
-      1: { nom: 'Haut N1', duree: '~15 min', exercices: [
+      1: { nom: 'Essentielle', duree: '~15 min', exercices: [
         { nom: 'Pompes sur les genoux', sets: 2, reps: 5,      detail: 'Mains largeur d\'épaules, corps droit des genoux à la tête. Descends lentement.' },
         { nom: 'Gainage',               sets: 2, duree: '15 sec', detail: 'Planche sur les coudes, dos plat, ventre rentré.' },
         { nom: 'Étirement épaules',     sets: 1, duree: '1 min',  detail: 'Bras croisé devant toi, pression douce avec l\'autre bras. Change.' },
       ]},
-      2: { nom: 'Haut N2', duree: '~20 min', exercices: [
+      2: { nom: 'À ton rythme', duree: '~20 min', exercices: [
         { nom: 'Pompes classiques', sets: 2, reps: 8,      detail: 'Corps droit, descente lente, pousse fort à la remontée.' },
         { nom: 'Dips chaise',       sets: 2, reps: 8,      detail: 'Mains sur une chaise derrière toi, descends les coudes à 90°.' },
         { nom: 'Gainage',           sets: 2, duree: '20 sec', detail: 'Planche complète, engage les abdos et les fessiers.' },
       ]},
-      3: { nom: 'Haut N3', duree: '~25 min', exercices: [
+      3: { nom: 'Vitalité', duree: '~25 min', exercices: [
         { nom: 'Pompes',         sets: 3, reps: 12,    detail: 'Corps parfaitement droit, descente en 3 secondes.' },
         { nom: 'Dips chaise',    sets: 3, reps: 10,    detail: 'Coudes proches du corps, descente complète.' },
         { nom: 'Isométrie bras', sets: 3, duree: '20 sec', detail: 'Bras tendus à 90°, immobile, comme si tu portais un plateau.' },
       ]},
-      4: { nom: 'Haut N4', duree: '~30 min', exercices: [
+      4: { nom: 'Pleine puissance', duree: '~30 min', exercices: [
         { nom: 'Pompes',              sets: 3, reps: 15,    detail: 'Pleine amplitude, rythme soutenu, engagement total.' },
         { nom: 'Dips déclinées',      sets: 3, reps: 10,    detail: 'Pieds surélevés sur la chaise, corps incliné, dips complets.' },
         { nom: 'Superman dos',        sets: 3, reps: 12,    detail: 'Allongée sur le ventre, lève bras et jambes ensemble, tiens 2 sec en haut. Renforce la chaîne postérieure.' },
