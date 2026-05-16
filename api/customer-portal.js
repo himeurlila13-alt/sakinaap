@@ -30,11 +30,9 @@ module.exports = async (req, res) => {
     const customerId = rows?.[0]?.stripe_customer_id;
     if (!customerId) return res.status(404).json({ error: 'Abonnement introuvable' });
 
-    const body = new URLSearchParams({
-      customer:      customerId,
-      configuration: 'bpc_1TXPyyBXUGkW7IH3SZwY4unx',
-      return_url:    'https://sakinaap.com/',
-    });
+    const portalConfig = process.env.STRIPE_PORTAL_CONFIG;
+    const body = new URLSearchParams({ customer: customerId, return_url: 'https://sakinaap.com/' });
+    if (portalConfig) body.append('configuration', portalConfig);
     const r = await fetch('https://api.stripe.com/v1/billing_portal/sessions', {
       method:  'POST',
       headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/x-www-form-urlencoded' },

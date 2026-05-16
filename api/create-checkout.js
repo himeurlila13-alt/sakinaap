@@ -1,18 +1,37 @@
-const PRICES = {
-  monthly: process.env.STRIPE_PRICE_MENSUEL || 'price_1TURF9BpdWP3jbdz75bLYC0w',
-  annual:  process.env.STRIPE_PRICE_ANNUEL  || 'price_1TURH6BpdWP3jbdzH1HKUEtz',
-};
-
 module.exports = async (req, res) => {
   const { plan, user_id, email } = req.query;
+
+  const PRICES = {
+    monthly: process.env.STRIPE_PRICE_MENSUEL,
+    annual:  process.env.STRIPE_PRICE_ANNUEL,
+  };
 
   if (!PRICES[plan]) {
     return res.status(400).json({ error: 'Plan invalide' });
   }
 
-  const key = process.env.STRIPE_SECRET_KEY;
-  if (!key) {
-    return res.status(500).json({ error: 'Clé Stripe manquante' });
+  const key   = process.env.STRIPE_SECRET_KEY;
+  const sbUrl = process.env.SUPABASE_URL;
+  const sbKey = process.env.SUPABASE_SERVICE_KEY;
+  if (!key || !sbUrl || !sbKey) {
+    return res.status(500).json({ error: 'Config manquante' });
+  }
+
+  // Vérifie JWT et cohérence avec user_id
+  const authHeader = req.headers['authorization'] || '';
+  const jwt = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+  if (jwt) {
+    try {
+      const userRes = await fetch(`${sbUrl}/auth/v1/user`, {
+        headers: { apikey: sbKey, Authorization: `Bearer ${jwt}` }
+      });
+      if (userRes.ok) {
+        const userData = await userRes.json();
+        if (user_id && userData.id !== user_id) {
+          return res.status(403).json({ error: 'Non autorisée' });
+        }
+      }
+    } catch (_) {}
   }
 
   try {

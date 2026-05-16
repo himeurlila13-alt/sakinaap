@@ -1232,18 +1232,21 @@ const STRIPE_LINKS = {
   annual:  'https://buy.stripe.com/8x26oG55NfuF5rJbe88Ra02',
 };
 
-function startStripeCheckout() {
+async function startStripeCheckout() {
   const plan = _selectedBilanPlan || 'annual';
   if (ST.supabaseUserId) {
     const params = new URLSearchParams({ plan, user_id: ST.supabaseUserId });
     if (ST.supabaseEmail) params.set('email', ST.supabaseEmail);
-    fetch('/api/create-checkout?' + params.toString())
-      .then(r => r.ok ? r.json() : null)
-      .then(data => {
-        if (data && data.url) window.location.href = data.url;
-        else window.location.href = STRIPE_LINKS[plan] || STRIPE_LINKS.annual;
-      })
-      .catch(() => { window.location.href = STRIPE_LINKS[plan] || STRIPE_LINKS.annual; });
+    try {
+      const { data: { session } } = await sb.auth.getSession();
+      const jwt = session?.access_token;
+      const r = await fetch('/api/create-checkout?' + params.toString(), {
+        headers: jwt ? { Authorization: 'Bearer ' + jwt } : {}
+      });
+      const data = r.ok ? await r.json() : null;
+      if (data && data.url) { window.location.href = data.url; return; }
+    } catch (_) {}
+    window.location.href = STRIPE_LINKS[plan] || STRIPE_LINKS.annual;
   } else {
     window.location.href = STRIPE_LINKS[plan] || STRIPE_LINKS.annual;
   }
