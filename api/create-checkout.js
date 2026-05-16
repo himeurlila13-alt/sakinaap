@@ -44,7 +44,7 @@ module.exports = async (req, res) => {
       'payment_method_types[]': 'card',
       'line_items[0][price]': PRICES[plan],
       'line_items[0][quantity]': '1',
-      success_url: `https://sakinaap.com/?success=true&plan=${plan}`,
+      success_url: `https://sakinaap.com/?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: 'https://sakinaap.com/',
       'metadata[plan]': plan,
       'metadata[user_id]': user_id || '',

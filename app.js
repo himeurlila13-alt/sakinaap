@@ -956,20 +956,7 @@ function _activatePremium(plan) {
 
 function checkPaymentSuccess() {
   const params = new URLSearchParams(window.location.search);
-
-  // Cas 1 : Payment Link Stripe avec ?payment=success&plan=xxx
-  if (params.get('payment') === 'success') {
-    _activatePremium(params.get('plan') || 'monthly');
-    return;
-  }
-
-  // Cas 2 : API checkout avec ?success=true&plan=xxx
-  if (params.get('success') === 'true') {
-    _activatePremium(params.get('plan') || 'monthly');
-    return;
-  }
-
-  // Cas 3 : API checkout Stripe avec ?session_id=cs_xxx — vérifie côté serveur
+  // Seul chemin valide : session_id Stripe vérifié côté serveur
   const sessionId = params.get('session_id');
   if (sessionId && sessionId.startsWith('cs_')) {
     window.history.replaceState({}, '', '/');
@@ -977,6 +964,9 @@ function checkPaymentSuccess() {
       .then(r => r.ok ? r.json() : null)
       .then(data => { if (data && data.valid) _activatePremium(data.plan || 'monthly'); })
       .catch(() => {});
+  } else if (params.has('success') || params.has('payment')) {
+    // Nettoie l'URL sans activer le premium
+    window.history.replaceState({}, '', '/');
   }
 }
 
@@ -1264,7 +1254,11 @@ async function openCustomerPortal() {
   if (!ST.supabaseUserId) { window.location.href = STRIPE_PORTAL_URL; return; }
   showToast('Redirection vers Stripe…');
   try {
-    const r = await fetch('/api/customer-portal?user_id=' + encodeURIComponent(ST.supabaseUserId));
+    const { data: { session } } = await sb.auth.getSession();
+    const jwt = session?.access_token;
+    const r = await fetch('/api/customer-portal?user_id=' + encodeURIComponent(ST.supabaseUserId), {
+      headers: jwt ? { Authorization: 'Bearer ' + jwt } : {}
+    });
     const data = await r.json();
     window.location.href = (data && data.url) ? data.url : STRIPE_PORTAL_URL;
   } catch { window.location.href = STRIPE_PORTAL_URL; }
@@ -2000,30 +1994,36 @@ function togglePremium() {
   showToast(ST.isPremium ? '✦ Mode Premium activé' : 'Mode Premium désactivé');
 }
 
-function applyPremiumCode() {
+async function applyPremiumCode() {
   const inp = document.getElementById('premium-code-input');
   const msg = document.getElementById('premium-code-msg');
   if (!inp || !msg) return;
   const code = inp.value.trim().toUpperCase();
-  const VALID_CODES = ['SAK26PREM', 'BETA2026', 'FONDATRICE'];
-  if (VALID_CODES.includes(code)) {
-    ST.isPremium = true;
-    saveState();
-    const s = SAISONS[ST.currentSaison];
-    renderDashboard(s);
-    const btn = document.getElementById('premium-toggle-btn');
-    if (btn) {
-      btn.textContent = '✦ Actif';
-      btn.style.background = 'var(--season-grad)';
-      btn.style.color = 'white';
+  if (!code) return;
+  msg.style.color = 'var(--gris)';
+  msg.textContent = 'Vérification…';
+  try {
+    const r = await fetch('/api/redeem-code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code })
+    });
+    const data = await r.json();
+    if (data && data.valid) {
+      ST.isPremium = true;
+      saveState();
+      renderDashboard(SAISONS[ST.currentSaison]);
+      applyTrialLocks();
+      msg.style.color = '#3DAE8A';
+      msg.textContent = '✓ Premium activé — bienvenue !';
+      inp.value = '';
+    } else {
+      msg.style.color = '#C4694A';
+      msg.textContent = 'Code incorrect.';
     }
-    applyTrialLocks();
-    msg.style.color = '#3DAE8A';
-    msg.textContent = '✓ Premium activé — bienvenue !';
-    inp.value = '';
-  } else if (code) {
+  } catch {
     msg.style.color = '#C4694A';
-    msg.textContent = 'Code incorrect.';
+    msg.textContent = 'Erreur réseau — réessaie.';
   }
 }
 
