@@ -1,9 +1,9 @@
-const CACHE = 'sakinapp-v119';
+const CACHE = 'sakinapp-v120';
 const ASSETS = ['/', '/index.html', '/style.css', '/data.js', '/sport-additions.js', '/app.js', '/manifest.json', '/icons/icon.svg', '/icons/icon-192.png', '/icons/icon-512.png', '/icons/apple-touch-icon.png', '/asma.html'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
-  // Ne pas appeler skipWaiting() ici — on laisse l'utilisatrice choisir quand mettre à jour
+  self.skipWaiting(); // Activation immédiate sans attendre la fermeture des onglets
 });
 
 self.addEventListener('activate', e => {

@@ -4624,60 +4624,48 @@ function closeDeleteModal() {
   const btn = document.getElementById('delete-confirm-btn');
   if (btn) { btn.disabled = false; btn.textContent = '✓ Supprimer tout définitivement'; }
 }
-async function confirmDeleteMyData() {
+function confirmDeleteMyData() {
   const btn = document.getElementById('delete-confirm-btn');
   if (btn) { btn.disabled = true; btn.textContent = 'Suppression en cours…'; }
 
-  const userId = ST.supabaseUserId;
+  // ── SYNCHRONE EN PREMIER — ne peut pas bloquer ──
+  _notifTimers.forEach(t => clearTimeout(t)); _notifTimers.length = 0;
+  clearAuthCookie();
+  try { localStorage.clear(); } catch(e) {}
+  try { sessionStorage.setItem('sakina_deleted', '1'); } catch(e) {}
 
-  // Supabase uniquement si l'utilisatrice est connectée — jamais bloquant
+  // ── SUPABASE — fire-and-forget, ne bloque pas le reload ──
+  const userId = ST.supabaseUserId;
   if (userId) {
+    initSupabase().then(function(sb) {
+      if (!sb) return;
+      sb.from('user_data').delete().eq('user_id', userId).catch(function(){});
+      sb.auth.signOut({ scope: 'global' }).catch(function(){});
+      sb.functions.invoke('delete-account', { body: { userId } }).catch(function(){});
+    }).catch(function(){});
+  }
+
+  // ── IndexedDB — fire-and-forget ──
+  if ('indexedDB' in window) {
     try {
-      const sb = await Promise.race([
-        initSupabase(),
-        new Promise(r => setTimeout(() => r(null), 3000))
-      ]).catch(() => null);
-      if (sb) {
-        await sb.from('user_data').delete().eq('user_id', userId).catch(() => {});
-        await sb.auth.signOut({ scope: 'global' }).catch(() => {});
-        try {
-          await sb.functions.invoke('delete-account', { body: { userId } });
-        } catch(e) {}
+      if (typeof indexedDB.databases === 'function') {
+        indexedDB.databases().then(function(dbs) {
+          dbs.forEach(function(db) { try { indexedDB.deleteDatabase(db.name); } catch(e){} });
+        }).catch(function(){});
       }
     } catch(e) {}
   }
 
-  // Cookies
-  clearAuthCookie();
-
-  // IndexedDB
-  if ('indexedDB' in window) {
-    try {
-      const dbs = await indexedDB.databases();
-      await Promise.all(dbs.map(db => new Promise(res => {
-        const req = indexedDB.deleteDatabase(db.name);
-        req.onsuccess = req.onerror = res;
-      })));
-    } catch(e) {}
-  }
-
-  // Cache Service Worker
+  // ── SW cache — fire-and-forget ──
   if ('caches' in window) {
-    try {
-      const keys = await caches.keys();
-      await Promise.all(keys.map(k => caches.delete(k)));
-    } catch(e) {}
+    caches.keys().then(function(keys) {
+      keys.forEach(function(k) { caches.delete(k); });
+    }).catch(function(){});
   }
 
-  // Timers
-  _notifTimers.forEach(t => clearTimeout(t)); _notifTimers.length = 0;
-
-  // localStorage — toujours exécuté, connectée ou non
-  try { localStorage.clear(); } catch(e) {}
-  try { sessionStorage.setItem('sakina_deleted', '1'); } catch(e) {}
-
+  // ── RELOAD après 400ms — laisse les appels réseau partir ──
   closeDeleteModal();
-  location.reload();
+  setTimeout(function() { location.reload(); }, 400);
 }
 
 // ═══════════════════════════════════════════════
