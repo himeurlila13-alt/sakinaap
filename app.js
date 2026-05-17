@@ -4656,3 +4656,618 @@ function toggleHygiene() {
   content.style.display = isOpen ? 'none' : 'block';
   if (arrow) arrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
 }
+
+// ═══════════════════════════════════════════════════════════════
+// SEANCE TIMER COMPLET — machine à états guidée
+// RAF-based, Web Audio, WakeLock, Page Visibility API
+// ═══════════════════════════════════════════════════════════════
+const _ST_C = 534.07; // Circonférence SVG : 2*PI*85
+
+const _stx = {
+  steps: [],
+  idx: 0,
+  total: 0,
+  elapsed: 0,
+  duration: 0,
+  remaining: 0,
+  running: false,
+  paused: false,
+  soundOn: true,
+  rafId: null,
+  lastTs: null,
+  wakeLock: null,
+  audioCtx: null,
+  breathRaf: null,
+  breathStart: null,
+  _hiddenAt: null,
+};
+
+const _stSciSeries = [
+  'Chaque répétition forge ta force intérieure.',
+  'Le muscle se construit dans l\'effort et le repos.',
+  'Respire — l\'oxygène est ton carburant.',
+  'Focus sur la sensation, pas sur le chiffre.',
+];
+const _stSciExercise = [
+  'Le mouvement est médecine pour le corps.',
+  'Chaque séance est un acte d\'amour envers toi.',
+  'Le progrès est silencieux mais réel.',
+  'La régularité bat l\'intensité à long terme.',
+];
+
+const _stPhaseMsg = {
+  hiver:     'Écoute ton corps — chaque geste compte.',
+  printemps: 'Ton énergie renaît — accueille-la.',
+  ete:       'Tu es au pic — exprime ta puissance.',
+  automne:   'La douceur est une force en Automne.',
+};
+
+function _stParseDur(str) {
+  if (!str) return 30;
+  if (typeof str === 'number') return str;
+  const s = String(str).trim();
+  const m = s.match(/^(\d+)\s*min/i);
+  if (m) return parseInt(m[1]) * 60;
+  const s2 = s.match(/^(\d+)\s*s/i);
+  if (s2) return parseInt(s2[1]);
+  const n = parseInt(s);
+  return isNaN(n) ? 30 : n;
+}
+
+function _stGetRest(phase) {
+  const map = { hiver: 60, printemps: 45, ete: 30, automne: 60 };
+  return map[phase] || 45;
+}
+
+function _stFormatTime(secs) {
+  const s = Math.max(0, Math.round(secs));
+  const m = Math.floor(s / 60);
+  const ss = s % 60;
+  return m > 0 ? m + ':' + String(ss).padStart(2, '0') : ss + 's';
+}
+
+function _stNormalizeEx(ex, idx) {
+  if (!ex) return null;
+  return {
+    nom: ex.nom || ex.exercice || ex.name || ('Exercice ' + (idx + 1)),
+    series: ex.series || ex.sets || 1,
+    reps: ex.repetitions || ex.reps || null,
+    duree: ex.duree || ex.duration || null,
+    repos: ex.repos || ex.rest || null,
+    desc: ex.description || ex.desc || '',
+    conseil: ex.conseil_cycle || ex.conseil || '',
+    mod_easy: ex.modification_facile || '',
+    mod_hard: ex.modification_difficile || '',
+  };
+}
+
+// ── Web Audio ────────────────────────────────────────────────
+function _stAudioCtx() {
+  if (!_stx.audioCtx) {
+    try { _stx.audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
+  }
+  return _stx.audioCtx;
+}
+
+function _stBeep(freq, dur, vol, type) {
+  if (!_stx.soundOn) return;
+  const ctx = _stAudioCtx();
+  if (!ctx) return;
+  try {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = type || 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(vol || 0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + dur);
+  } catch(e) {}
+}
+
+function _stSoundStart()  { _stBeep(660, 0.15, 0.4, 'sine'); }
+function _stSoundTick()   { _stBeep(880, 0.08, 0.2, 'square'); }
+function _stSoundNext()   { _stBeep(523, 0.2, 0.35, 'sine'); setTimeout(function() { _stBeep(659, 0.2, 0.35, 'sine'); }, 120); }
+function _stSoundDone()   {
+  [523, 659, 784, 1047].forEach(function(f, i) { setTimeout(function() { _stBeep(f, 0.3, 0.4, 'sine'); }, i * 130); });
+}
+function _stSoundRest()   { _stBeep(392, 0.25, 0.3, 'triangle'); }
+
+// ── WakeLock ─────────────────────────────────────────────────
+async function _stAcquireWL() {
+  try {
+    if ('wakeLock' in navigator) {
+      _stx.wakeLock = await navigator.wakeLock.request('screen');
+    }
+  } catch(e) {}
+}
+function _stReleaseWL() {
+  if (_stx.wakeLock) { try { _stx.wakeLock.release(); } catch(e) {} _stx.wakeLock = null; }
+}
+
+// ── Page Visibility ──────────────────────────────────────────
+document.addEventListener('visibilitychange', function() {
+  if (!_stx.running || _stx.paused) return;
+  if (document.visibilityState === 'hidden') {
+    _stx._hiddenAt = performance.now();
+    if (_stx.rafId) { cancelAnimationFrame(_stx.rafId); _stx.rafId = null; }
+  } else {
+    if (_stx._hiddenAt) {
+      const elapsed = (performance.now() - _stx._hiddenAt) / 1000;
+      _stx.remaining = Math.max(0, _stx.remaining - elapsed);
+      _stx.elapsed = Math.min(_stx.total, _stx.elapsed + elapsed);
+      _stx._hiddenAt = null;
+    }
+    _stx.lastTs = performance.now();
+    _stx.rafId = requestAnimationFrame(_stxTick);
+    _stAcquireWL();
+  }
+});
+
+// ── Construire les étapes ─────────────────────────────────────
+function _stxBuildSteps(spec) {
+  const steps = [];
+  const phase = (typeof ST !== 'undefined' && ST.currentSaison) || 'printemps';
+  const restDur = _stGetRest(phase);
+
+  const warmup = (spec && spec.echauffement) ? spec.echauffement : null;
+  if (warmup && warmup.length) {
+    warmup.forEach(function(item, i) {
+      steps.push({
+        type: 'warmup',
+        label: 'Échauffement',
+        title: item.exercice || item.nom || ('Échauffement ' + (i + 1)),
+        duration: _stParseDur(item.duree),
+        desc: item.description || '',
+        isLast: i === warmup.length - 1,
+      });
+    });
+  } else {
+    steps.push({ type: 'warmup', label: 'Échauffement', title: 'Mobilisation articulaire', duration: 120, desc: 'Cercles épaules, hanches, chevilles. Respire profondément.', isLast: true });
+  }
+
+  const exList = (spec && spec.exercices) ? spec.exercices : [];
+  if (!exList.length) {
+    steps.push({ type: 'exercise', label: 'Exercice', title: 'Séance libre', duration: 300, desc: 'Suis ton programme habituel.', series: 1, serieIdx: 0, exIdx: 0, exTotal: 1 });
+  } else {
+    exList.forEach(function(rawEx, exIdx) {
+      const ex = _stNormalizeEx(rawEx, exIdx);
+      if (!ex) return;
+      const seriesCount = ex.series || 1;
+      const exDur = ex.duree ? _stParseDur(ex.duree) : (ex.reps ? ex.reps * 3 : 40);
+      const repoDur = ex.repos ? _stParseDur(ex.repos) : restDur;
+      for (let s = 0; s < seriesCount; s++) {
+        steps.push({
+          type: 'exercise',
+          label: 'Exercice',
+          title: ex.nom,
+          duration: exDur,
+          desc: ex.desc,
+          conseil: ex.conseil,
+          mod_easy: ex.mod_easy,
+          mod_hard: ex.mod_hard,
+          reps: ex.reps,
+          serieIdx: s,
+          seriesTotal: seriesCount,
+          exIdx: exIdx,
+          exTotal: exList.length,
+        });
+        if (s < seriesCount - 1) {
+          steps.push({ type: 'rest_series', label: 'Repos série', title: 'Repos — ' + ex.nom, duration: repoDur, serieIdx: s, seriesTotal: seriesCount });
+        }
+      }
+      if (exIdx < exList.length - 1) {
+        steps.push({ type: 'rest_exercise', label: 'Repos', title: 'Repos entre exercices', duration: restDur, exIdx: exIdx, exTotal: exList.length });
+      }
+    });
+  }
+
+  const cooldown = (spec && spec.retour_au_calme) ? spec.retour_au_calme : null;
+  if (cooldown && cooldown.length) {
+    cooldown.forEach(function(item, i) {
+      steps.push({
+        type: 'cooldown',
+        label: 'Retour au calme',
+        title: item.exercice || item.nom || ('Étirement ' + (i + 1)),
+        duration: _stParseDur(item.duree),
+        desc: item.description || '',
+      });
+    });
+  } else {
+    steps.push({ type: 'cooldown', label: 'Retour au calme', title: 'Étirements doux', duration: 180, desc: 'Étire les groupes musculaires sollicités. Respire, relâche.', isLast: true });
+  }
+
+  return steps;
+}
+
+// ── Ouvrir le timer ──────────────────────────────────────────
+function openSeanceTimer() {
+  const spec = (typeof getTodaySeanceSpec === 'function') ? getTodaySeanceSpec() : null;
+  const enriched = (spec && typeof getSeanceEnrichie === 'function')
+    ? getSeanceEnrichie(spec.type, spec.level || 1)
+    : null;
+  const data = enriched || (spec && spec.data) || null;
+
+  _stx.steps = _stxBuildSteps(data);
+  _stx.idx = 0;
+  _stx.elapsed = 0;
+  _stx.total = _stx.steps.reduce(function(sum, s) { return sum + s.duration; }, 0);
+  _stx.running = false;
+  _stx.paused = false;
+
+  const overlay = document.getElementById('st-overlay');
+  if (!overlay) return;
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  _stxUpdateHeader();
+  _stxRender();
+  _stxOverlay('st-pause-ov', false);
+  _stxOverlay('st-stop-ov', false);
+  _stxOverlay('st-mod-ov', false);
+}
+
+function _stxClose() {
+  _stx.running = false;
+  _stx.paused = false;
+  if (_stx.rafId) { cancelAnimationFrame(_stx.rafId); _stx.rafId = null; }
+  if (_stx.breathRaf) { cancelAnimationFrame(_stx.breathRaf); _stx.breathRaf = null; }
+  _stReleaseWL();
+  const overlay = document.getElementById('st-overlay');
+  if (overlay) overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── Render étape courante ────────────────────────────────────
+function _stxRender() {
+  const step = _stx.steps[_stx.idx];
+  if (!step) { _stxDone(); return; }
+  _stx.duration = step.duration;
+  _stx.remaining = step.duration;
+
+  const label = document.getElementById('st-state-label');
+  const title = document.getElementById('st-ex-title');
+  const desc = document.getElementById('st-desc');
+  const sci = document.getElementById('st-science');
+  const count = document.getElementById('st-count');
+  const countUnit = document.getElementById('st-count-unit');
+  const breathWrap = document.getElementById('st-breath-wrap');
+  const nextEl = document.getElementById('st-next');
+  const modsEl = document.getElementById('st-mods');
+  const doneWrap = document.getElementById('st-done-wrap');
+  const body = document.getElementById('st-body');
+  const actionBtn = document.getElementById('st-action-btn');
+  const skipBtn = document.getElementById('st-skip-btn');
+
+  if (doneWrap) doneWrap.classList.remove('visible');
+  if (body) body.style.display = '';
+
+  if (label) label.textContent = step.label;
+  if (title) title.textContent = step.title;
+
+  switch (step.type) {
+    case 'warmup':         _stRenderWarmup(step, desc, sci, count, countUnit, breathWrap, modsEl); break;
+    case 'exercise':       _stRenderExercise(step, desc, sci, count, countUnit, breathWrap, modsEl); break;
+    case 'rest_series':    _stRenderRestSeries(step, desc, sci, count, countUnit, breathWrap, modsEl); break;
+    case 'rest_exercise':  _stRenderRestExercise(step, desc, sci, count, countUnit, breathWrap, modsEl); break;
+    case 'cooldown':       _stRenderCooldown(step, desc, sci, count, countUnit, breathWrap, modsEl); break;
+  }
+
+  const nextStep = _stx.steps[_stx.idx + 1];
+  if (nextEl) {
+    nextEl.textContent = nextStep ? ('Suivant : ' + nextStep.title) : 'Dernière étape';
+    nextEl.style.display = '';
+  }
+
+  if (actionBtn) {
+    if (_stx.running) {
+      actionBtn.textContent = 'Pause';
+      actionBtn.onclick = stTogglePause;
+    } else {
+      actionBtn.textContent = 'Démarrer';
+      actionBtn.onclick = stAction;
+    }
+  }
+  if (skipBtn) skipBtn.style.display = _stx.steps.length > 1 ? '' : 'none';
+
+  _stxSetArc(1);
+  const timeEl = document.getElementById('st-time-left');
+  if (timeEl) timeEl.textContent = _stFormatTime(step.duration);
+}
+
+function _stRenderWarmup(step, desc, sci, count, countUnit, breathWrap, modsEl) {
+  if (desc) desc.textContent = step.desc || 'Mobilise tes articulations doucement.';
+  if (sci) { sci.textContent = 'L\'échauffement réduit les blessures de 50 %.'; sci.style.display = ''; }
+  if (count) count.textContent = '';
+  if (countUnit) countUnit.textContent = '';
+  if (breathWrap) breathWrap.style.display = 'none';
+  if (modsEl) modsEl.innerHTML = '';
+}
+
+function _stRenderExercise(step, desc, sci, count, countUnit, breathWrap, modsEl) {
+  const serieLabel = step.seriesTotal > 1 ? (' — Série ' + (step.serieIdx + 1) + '/' + step.seriesTotal) : '';
+  if (desc) desc.textContent = (step.desc || '') + (step.conseil ? (' ' + step.conseil) : '');
+  const sciMsg = _stSciExercise[step.exIdx % _stSciExercise.length];
+  if (sci) { sci.textContent = sciMsg; sci.style.display = ''; }
+  if (count) {
+    if (step.reps) { count.textContent = step.reps; countUnit.textContent = 'rép.' + serieLabel; }
+    else { count.textContent = ''; countUnit.textContent = serieLabel.trim(); }
+  }
+  if (breathWrap) breathWrap.style.display = 'none';
+  if (modsEl) {
+    modsEl.innerHTML = '';
+    if (step.mod_easy) {
+      const b = document.createElement('button');
+      b.className = 'st-mod-btn st-mod-easy';
+      b.textContent = 'Plus facile';
+      b.onclick = function() { stShowMod('easy', step.mod_easy); };
+      modsEl.appendChild(b);
+    }
+    if (step.mod_hard) {
+      const b = document.createElement('button');
+      b.className = 'st-mod-btn st-mod-hard';
+      b.textContent = 'Plus difficile';
+      b.onclick = function() { stShowMod('hard', step.mod_hard); };
+      modsEl.appendChild(b);
+    }
+  }
+}
+
+function _stRenderRestSeries(step, desc, sci, count, countUnit, breathWrap, modsEl) {
+  if (desc) desc.textContent = 'Récupère avant la prochaine série. Respire profondément.';
+  const sciMsg = _stSciSeries[step.serieIdx % _stSciSeries.length];
+  if (sci) { sci.textContent = sciMsg; sci.style.display = ''; }
+  if (count) { count.textContent = (step.seriesTotal - step.serieIdx - 1); countUnit.textContent = 'séries restantes'; }
+  if (breathWrap) breathWrap.style.display = '';
+  if (modsEl) modsEl.innerHTML = '';
+  _stxStartBreath(4, 4, 6);
+}
+
+function _stRenderRestExercise(step, desc, sci, count, countUnit, breathWrap, modsEl) {
+  if (desc) desc.textContent = 'Profite de cette pause. Hydrate-toi si besoin.';
+  if (sci) { sci.textContent = 'Le repos est aussi important que l\'effort.'; sci.style.display = ''; }
+  if (count) { count.textContent = (step.exTotal - step.exIdx - 1); countUnit.textContent = 'exercices restants'; }
+  if (breathWrap) breathWrap.style.display = '';
+  if (modsEl) modsEl.innerHTML = '';
+  _stxStartBreath(4, 7, 8);
+}
+
+function _stRenderCooldown(step, desc, sci, count, countUnit, breathWrap, modsEl) {
+  if (desc) desc.textContent = step.desc || 'Étire en douceur. Reste dans le confort.';
+  if (sci) { sci.textContent = 'Les étirements améliorent la récupération musculaire.'; sci.style.display = ''; }
+  if (count) { count.textContent = ''; countUnit.textContent = ''; }
+  if (breathWrap) breathWrap.style.display = 'none';
+  if (modsEl) modsEl.innerHTML = '';
+}
+
+// ── Timer RAF ────────────────────────────────────────────────
+function _stxStartTimer() {
+  if (_stx.rafId) cancelAnimationFrame(_stx.rafId);
+  _stx.lastTs = performance.now();
+  _stx.running = true;
+  _stx.paused = false;
+  _stAcquireWL();
+  _stSoundStart();
+  _stx.rafId = requestAnimationFrame(_stxTick);
+  const actionBtn = document.getElementById('st-action-btn');
+  if (actionBtn) { actionBtn.textContent = 'Pause'; actionBtn.onclick = stTogglePause; }
+}
+
+function _stxTick(ts) {
+  if (!_stx.running || _stx.paused) return;
+  const dt = (ts - _stx.lastTs) / 1000;
+  _stx.lastTs = ts;
+  _stx.remaining -= dt;
+  _stx.elapsed = Math.min(_stx.total, _stx.elapsed + dt);
+
+  const timeEl = document.getElementById('st-time-left');
+  if (timeEl) timeEl.textContent = _stFormatTime(_stx.remaining);
+
+  const progress = Math.max(0, Math.min(1, _stx.remaining / _stx.duration));
+  _stxSetArc(progress);
+  _stxUpdateHeader();
+
+  if (_stx.remaining <= 3.05 && _stx.remaining > 2.95) _stSoundTick();
+  if (_stx.remaining <= 2.05 && _stx.remaining > 1.95) _stSoundTick();
+  if (_stx.remaining <= 1.05 && _stx.remaining > 0.95) _stSoundTick();
+
+  if (_stx.remaining <= 0) { _stxTimerEnd(); return; }
+  _stx.rafId = requestAnimationFrame(_stxTick);
+}
+
+function _stxTimerEnd() {
+  _stx.running = false;
+  _stx.rafId = null;
+  _stxAdvance();
+}
+
+function _stxAdvance() {
+  _stx.idx++;
+  if (_stx.idx >= _stx.steps.length) { _stxDone(); return; }
+  const nextStep = _stx.steps[_stx.idx];
+  if (nextStep.type === 'rest_series' || nextStep.type === 'rest_exercise') {
+    _stSoundRest();
+  } else {
+    _stSoundNext();
+  }
+  _stxRender();
+  _stxStartTimer();
+}
+
+// ── Actions utilisatrice ─────────────────────────────────────
+function stAction() {
+  if (!_stx.running) _stxStartTimer();
+}
+
+function stSkip() {
+  if (_stx.rafId) { cancelAnimationFrame(_stx.rafId); _stx.rafId = null; }
+  _stx.running = false;
+  _stxAdvance();
+}
+
+function stTogglePause() {
+  if (_stx.paused) {
+    _stx.paused = false;
+    _stx.running = true;
+    _stx.lastTs = performance.now();
+    _stx.rafId = requestAnimationFrame(_stxTick);
+    _stxOverlay('st-pause-ov', false);
+    const actionBtn = document.getElementById('st-action-btn');
+    if (actionBtn) { actionBtn.textContent = 'Pause'; actionBtn.onclick = stTogglePause; }
+    _stAcquireWL();
+  } else {
+    _stx.paused = true;
+    _stx.running = false;
+    if (_stx.rafId) { cancelAnimationFrame(_stx.rafId); _stx.rafId = null; }
+    _stxOverlay('st-pause-ov', true);
+    const actionBtn = document.getElementById('st-action-btn');
+    if (actionBtn) { actionBtn.textContent = 'Reprendre'; actionBtn.onclick = stTogglePause; }
+    _stReleaseWL();
+  }
+}
+
+function stAskStop() {
+  if (_stx.running) {
+    _stx.paused = true;
+    _stx.running = false;
+    if (_stx.rafId) { cancelAnimationFrame(_stx.rafId); _stx.rafId = null; }
+  }
+  _stxOverlay('st-pause-ov', false);
+  _stxOverlay('st-stop-ov', true);
+}
+
+function stCancelStop() {
+  _stxOverlay('st-stop-ov', false);
+  if (_stx.paused) stTogglePause();
+}
+
+function stConfirmStop() {
+  _stxOverlay('st-stop-ov', false);
+  _stxClose();
+}
+
+function stToggleSound() {
+  _stx.soundOn = !_stx.soundOn;
+  const btn = document.getElementById('st-snd-btn');
+  if (btn) btn.textContent = _stx.soundOn ? '' : '';
+  if (_stx.soundOn) _stBeep(660, 0.1, 0.2, 'sine');
+}
+
+function stShowMod(type, text) {
+  const modText = document.getElementById('st-mod-text');
+  if (modText) modText.textContent = text;
+  const modTitle = document.getElementById('st-mod-title');
+  if (modTitle) modTitle.textContent = type === 'easy' ? 'Version plus facile' : 'Version plus difficile';
+  _stxOverlay('st-mod-ov', true);
+}
+
+function stCloseMod() {
+  _stxOverlay('st-mod-ov', false);
+}
+
+// ── Header progress ──────────────────────────────────────────
+function _stxUpdateHeader() {
+  const fill = document.getElementById('st-prog-fill');
+  const text = document.getElementById('st-prog-text');
+  const pct = _stx.total > 0 ? Math.round((_stx.elapsed / _stx.total) * 100) : 0;
+  if (fill) fill.style.width = pct + '%';
+  const remaining = Math.max(0, _stx.total - _stx.elapsed);
+  if (text) text.textContent = _stFormatTime(remaining) + ' restant';
+}
+
+// ── SVG arc ──────────────────────────────────────────────────
+function _stxSetArc(progress) {
+  const arc = document.getElementById('st-arc');
+  if (!arc) return;
+  const offset = _ST_C * (1 - Math.max(0, Math.min(1, progress)));
+  arc.style.strokeDashoffset = offset;
+}
+
+// ── Breath animation ─────────────────────────────────────────
+function _stxStartBreath(inhale, hold, exhale) {
+  if (_stx.breathRaf) { cancelAnimationFrame(_stx.breathRaf); _stx.breathRaf = null; }
+  const ring = document.getElementById('st-breath-dot');
+  if (!ring) return;
+  const total = (inhale + hold + exhale) * 1000;
+  _stx.breathStart = performance.now();
+  const inMs = inhale * 1000;
+  const holdMs = hold * 1000;
+  const exMs = exhale * 1000;
+
+  function tick(ts) {
+    const elapsed = (ts - _stx.breathStart) % total;
+    let scale;
+    if (elapsed < inMs) {
+      scale = 0.7 + 0.3 * (elapsed / inMs);
+    } else if (elapsed < inMs + holdMs) {
+      scale = 1.0;
+    } else {
+      const t = (elapsed - inMs - holdMs) / exMs;
+      scale = 1.0 - 0.3 * t;
+    }
+    ring.style.transform = 'scale(' + scale.toFixed(3) + ')';
+    _stx.breathRaf = requestAnimationFrame(tick);
+  }
+  _stx.breathRaf = requestAnimationFrame(tick);
+}
+
+// ── Done ─────────────────────────────────────────────────────
+function _stxDone() {
+  _stx.running = false;
+  if (_stx.rafId) { cancelAnimationFrame(_stx.rafId); _stx.rafId = null; }
+  if (_stx.breathRaf) { cancelAnimationFrame(_stx.breathRaf); _stx.breathRaf = null; }
+  _stReleaseWL();
+  _stSoundDone();
+
+  const body = document.getElementById('st-body');
+  const doneWrap = document.getElementById('st-done-wrap');
+  if (body) body.style.display = 'none';
+  if (doneWrap) {
+    doneWrap.classList.add('visible');
+    const stats = document.getElementById('st-done-stats');
+    const totalMin = Math.round(_stx.total / 60);
+    const phase = (typeof ST !== 'undefined' && ST.currentSaison) ? ST.currentSaison : 'printemps';
+    const msg = _stPhaseMsg[phase] || 'Bravo pour cette séance !';
+    if (stats) stats.innerHTML =
+      '<div class="st-done-big">Séance terminée !</div>' +
+      '<div class="st-done-detail">' + totalMin + ' min · ' + _stx.steps.length + ' étapes</div>' +
+      '<div class="st-done-msg">' + msg + '</div>';
+  }
+  _stxSetArc(1);
+  _stxConfetti();
+}
+
+function stFinish() {
+  _stxClose();
+  if (typeof validerSeanceDash === 'function') validerSeanceDash();
+}
+
+// ── Confetti ─────────────────────────────────────────────────
+function _stxConfetti() {
+  const container = document.getElementById('st-confetti');
+  if (!container) return;
+  container.innerHTML = '';
+  const colors = ['#f6c90e', '#43b89c', '#e8a0bf', '#7c5cbf', '#f9844a', '#4cc9f0'];
+  for (let i = 0; i < 40; i++) {
+    const el = document.createElement('div');
+    el.className = 'st-confetti-piece';
+    el.style.cssText =
+      'left:' + Math.random() * 100 + '%;' +
+      'background:' + colors[i % colors.length] + ';' +
+      'animation-delay:' + (Math.random() * 0.6).toFixed(2) + 's;' +
+      'animation-duration:' + (0.8 + Math.random() * 0.6).toFixed(2) + 's;' +
+      'width:' + (6 + Math.random() * 6) + 'px;' +
+      'height:' + (6 + Math.random() * 6) + 'px;' +
+      'border-radius:' + (Math.random() > 0.5 ? '50%' : '2px') + ';';
+    container.appendChild(el);
+  }
+}
+
+// ── Overlay helper ────────────────────────────────────────────
+function _stxOverlay(id, show) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle('visible', !!show);
+}

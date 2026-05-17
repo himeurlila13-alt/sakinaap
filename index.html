@@ -308,7 +308,7 @@
     <div class="qs-exercises" id="qs-exercises" style="margin-top:10px;"></div>
     <div id="qs-btn-wrap" style="margin-top:12px;">
       <button class="day-card-btn" onclick="validerSeanceDash()">&#10003; Alhamdulillah, c&#8217;est fait !</button>
-      <button class="day-card-btn" onclick="openTimer()" style="margin-top:8px;background:var(--season-soft);color:var(--season);border:1.5px solid var(--season-light);font-size:13px;">&#9654; Commencer avec le timer</button>
+      <button class="day-card-btn" onclick="openSeanceTimer()" style="margin-top:8px;background:var(--season-soft);color:var(--season);border:1.5px solid var(--season-light);font-size:13px;">&#9654; Commencer avec le timer</button>
       <div style="display:flex;gap:8px;margin-top:8px;">
         <button id="sport-express-btn" onclick="openSeanceExpress()" class="sport-secondary-btn">&#9889; Version 5 min</button>
         <button onclick="reporterSeance()" class="sport-secondary-btn">&#128197; Reporter</button>
@@ -1560,6 +1560,115 @@
     <button onclick="closeAddCycleModal()" style="width:100%;padding:11px;background:transparent;color:var(--gris);border:none;border-radius:14px;font-size:13px;font-family:var(--sans);cursor:pointer;">Annuler</button>
   </div>
 </div>
+
+
+<!-- ════════════════════════════════════════════════════════
+     SEANCE TIMER — overlay plein écran
+════════════════════════════════════════════════════════ -->
+<div id="st-overlay" class="st-overlay" aria-modal="true" role="dialog">
+
+  <!-- Header : barre de progression + contrôles -->
+  <div class="st-header">
+    <div class="st-header-left">
+      <div class="st-prog-text" id="st-prog-text"></div>
+      <div class="st-prog-bar-wrap">
+        <div class="st-prog-bar"><div class="st-prog-fill" id="st-prog-fill"></div></div>
+      </div>
+      <div class="st-time-left" id="st-time-left"></div>
+    </div>
+    <div class="st-header-btns">
+      <button class="st-hbtn" id="st-snd-btn" onclick="stToggleSound()" title="Son">🔔</button>
+      <button class="st-hbtn" id="st-pause-btn" onclick="stTogglePause()" title="Pause">⏸️</button>
+      <button class="st-hbtn" onclick="stAskStop()" title="Arrêter">⏹️</button>
+    </div>
+  </div>
+
+  <!-- Corps principal -->
+  <div class="st-body" id="st-body">
+
+    <div class="st-state-label" id="st-state-label"></div>
+    <div class="st-ex-title" id="st-ex-title"></div>
+
+    <!-- Cercle SVG animé -->
+    <div class="st-circle-outer">
+      <svg class="st-svg" viewBox="0 0 200 200" fill="none" aria-hidden="true">
+        <circle class="st-arc-bg" cx="100" cy="100" r="85"/>
+        <circle class="st-arc-track" id="st-arc" cx="100" cy="100" r="85"
+          stroke-dasharray="534.07" stroke-dashoffset="0"
+          transform="rotate(-90 100 100)" stroke-linecap="round"/>
+      </svg>
+      <div class="st-circle-inner">
+        <div class="st-count" id="st-count"></div>
+        <div class="st-count-unit" id="st-count-unit"></div>
+      </div>
+    </div>
+
+    <div class="st-desc" id="st-desc"></div>
+
+    <!-- Phrase scientifique (états repos) -->
+    <div class="st-science" id="st-science" style="display:none"></div>
+
+    <!-- Animation respiration (repos inter-exercices) -->
+    <div class="st-breath-wrap" id="st-breath-wrap" style="display:none">
+      <div class="st-breath-dot" id="st-breath-dot"></div>
+      <div class="st-breath-lbl" id="st-breath-lbl">Inspire...</div>
+    </div>
+
+    <!-- Prochain exercice -->
+    <div class="st-next" id="st-next"></div>
+
+    <!-- Boutons modification (état exercice) -->
+    <div class="st-mods" id="st-mods"></div>
+
+    <!-- Bouton d'action principal -->
+    <div class="st-actions">
+      <button class="st-action-btn" id="st-action-btn" onclick="stAction()"></button>
+      <button class="st-skip-btn" id="st-skip-btn" onclick="stSkip()" style="display:none">Passer →</button>
+    </div>
+
+  </div><!-- /st-body -->
+
+  <!-- État FIN -->
+  <div class="st-done-wrap" id="st-done-wrap">
+    <div class="st-confetti" id="st-confetti"></div>
+    <div class="st-done-emoji">🌸</div>
+    <div class="st-done-title">Séance accomplie ✓</div>
+    <div class="st-done-sub">Alhamdulillah</div>
+    <div class="st-done-stats" id="st-done-stats"></div>
+    <button class="st-done-btn" onclick="stFinish()">Valider ma séance →</button>
+  </div>
+
+  <!-- Overlay pause -->
+  <div class="st-inner-ov" id="st-pause-ov">
+    <div class="st-ov-box">
+      <div class="st-ov-icon">⏸️</div>
+      <div class="st-ov-title">En pause</div>
+      <button class="st-ov-btn primary" onclick="stTogglePause()">▶ Reprendre</button>
+      <button class="st-ov-btn danger" onclick="stAskStop()">⏹️ Arrêter la séance</button>
+    </div>
+  </div>
+
+  <!-- Overlay confirmation arrêt -->
+  <div class="st-inner-ov" id="st-stop-ov">
+    <div class="st-ov-box">
+      <div class="st-ov-icon">🤔</div>
+      <div class="st-ov-title">Tu es sûre ?</div>
+      <div class="st-ov-sub">Ta progression est sauvegardée.</div>
+      <button class="st-ov-btn danger" onclick="stConfirmStop()">Oui, arrêter</button>
+      <button class="st-ov-btn secondary" onclick="stCancelStop()">Continuer ▶</button>
+    </div>
+  </div>
+
+  <!-- Overlay modification exercice -->
+  <div class="st-inner-ov" id="st-mod-ov">
+    <div class="st-ov-box">
+      <div class="st-ov-title" id="st-mod-title"></div>
+      <div class="st-ov-sub" id="st-mod-text"></div>
+      <button class="st-ov-btn primary" onclick="stCloseMod()">Compris ✓</button>
+    </div>
+  </div>
+
+</div><!-- /st-overlay -->
 
 <script src="/data.js" defer></script>
 <script src="/sport-additions.js" defer></script>

@@ -1544,3 +1544,197 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
 .feedback-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .feedback-btn{background:var(--creme);border:1.5px solid var(--sable);border-radius:14px;padding:16px 8px;font-size:13px;font-weight:600;color:var(--noir);cursor:pointer;font-family:var(--sans);line-height:1.4}
 .feedback-btn:active{transform:scale(.97)}
+
+/* ═══════════════════════════════════════════════
+   SEANCE TIMER — overlay plein écran
+═══════════════════════════════════════════════ */
+.st-overlay{
+  position:fixed;inset:0;z-index:9999;
+  background:#FDF8F2;
+  display:none;flex-direction:column;
+  font-family:var(--sans);
+  overflow:hidden;
+}
+.st-overlay.open{display:flex;}
+/* Header ─────────────────────────────────── */
+.st-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px 10px;
+  border-bottom:1px solid var(--sable);
+  flex-shrink:0;
+}
+.st-header-left{flex:1;min-width:0;margin-right:10px}
+.st-prog-text{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gris);margin-bottom:5px}
+.st-prog-bar-wrap{margin-bottom:4px}
+.st-prog-bar{height:5px;background:var(--sable);border-radius:3px;overflow:hidden}
+.st-prog-fill{height:100%;background:var(--season-grad);border-radius:3px;transition:width .4s ease}
+.st-time-left{font-size:11px;color:var(--gris)}
+.st-header-btns{display:flex;gap:6px;flex-shrink:0}
+.st-hbtn{
+  width:34px;height:34px;border:none;background:var(--sable);
+  border-radius:10px;font-size:15px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .15s;-webkit-tap-highlight-color:transparent;
+}
+.st-hbtn:active{opacity:.7}
+
+/* Corps ──────────────────────────────────── */
+.st-body{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;padding:12px 20px 16px;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  gap:8px;
+}
+.st-state-label{
+  font-size:11px;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--season);
+  background:var(--season-soft);border-radius:20px;
+  padding:4px 14px;
+}
+.st-ex-title{
+  font-family:var(--serif);font-size:22px;
+  font-style:italic;color:var(--noir);
+  text-align:center;line-height:1.2;
+  max-width:280px;
+}
+
+/* Cercle SVG ─────────────────────────────── */
+.st-circle-outer{position:relative;width:190px;height:190px;flex-shrink:0}
+.st-svg{width:190px;height:190px}
+.st-arc-bg{stroke:var(--sable);stroke-width:10;fill:none}
+.st-arc-track{stroke:var(--season);stroke-width:10;fill:none;transition:stroke-dashoffset .9s linear}
+.st-circle-inner{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+}
+.st-count{
+  font-family:var(--serif);font-size:44px;font-weight:700;
+  color:var(--noir);line-height:1;
+}
+.st-count-unit{font-size:12px;color:var(--gris);letter-spacing:1px;margin-top:2px}
+
+/* Description ────────────────────────────── */
+.st-desc{
+  font-size:13px;color:var(--gris);text-align:center;
+  line-height:1.6;max-width:300px;
+}
+
+/* Science (repos) ────────────────────────── */
+.st-science{
+  background:var(--season-soft);border-radius:14px;
+  padding:10px 14px;font-size:12px;color:var(--gris);
+  text-align:center;line-height:1.5;max-width:300px;
+  transition:opacity .4s;
+}
+
+/* Animation respiration ──────────────────── */
+.st-breath-wrap{display:flex;flex-direction:column;align-items:center;gap:6px}
+.st-breath-dot{
+  width:40px;height:40px;border-radius:50%;
+  background:var(--season-light);opacity:.6;
+  transition:transform 4s ease-in-out, opacity 4s ease-in-out;
+}
+.st-breath-dot.expand{transform:scale(1.8);opacity:.9}
+.st-breath-lbl{font-size:12px;color:var(--gris);letter-spacing:1px}
+
+/* Prochain exercice ──────────────────────── */
+.st-next{
+  font-size:12px;color:var(--gris);text-align:center;
+  padding:6px 14px;background:var(--sable);
+  border-radius:20px;max-width:280px;
+}
+.st-next:empty{display:none}
+
+/* Modification buttons ───────────────────── */
+.st-mods{display:flex;gap:8px;width:100%;max-width:300px}
+.st-mod-btn{
+  flex:1;padding:9px 8px;border:1.5px solid var(--sable);
+  border-radius:12px;background:none;font-size:12px;
+  color:var(--gris);cursor:pointer;font-family:var(--sans);
+  transition:background .15s;-webkit-tap-highlight-color:transparent;
+}
+.st-mod-btn:active{background:var(--sable)}
+
+/* Boutons d'action ───────────────────────── */
+.st-actions{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;max-width:300px}
+.st-action-btn{
+  width:100%;padding:16px;
+  background:var(--season-grad);color:white;
+  border:none;border-radius:16px;
+  font-size:15px;font-weight:700;font-family:var(--sans);
+  cursor:pointer;transition:opacity .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.st-action-btn:active{opacity:.85}
+.st-skip-btn{
+  background:none;border:none;color:var(--gris);
+  font-size:12px;font-family:var(--sans);cursor:pointer;
+  padding:4px 12px;opacity:.7;
+}
+
+/* État FIN ───────────────────────────────── */
+.st-done-wrap{
+  flex:1;display:none;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:32px 24px;gap:12px;position:relative;
+  overflow:hidden;
+}
+.st-done-wrap.visible{display:flex;}
+.st-confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.st-confetti-dot{
+  position:absolute;border-radius:50%;
+  animation:stConfettiFall linear forwards;
+}
+@keyframes stConfettiFall{
+  0%{transform:translateY(-20px) rotate(0deg);opacity:1}
+  100%{transform:translateY(110vh) rotate(720deg);opacity:0}
+}
+.st-done-emoji{font-size:54px}
+.st-done-title{
+  font-family:var(--serif);font-size:26px;font-style:italic;
+  color:var(--noir);text-align:center;
+}
+.st-done-sub{
+  font-size:14px;color:var(--gris);letter-spacing:2px;
+  text-transform:uppercase;
+}
+.st-done-stats{
+  background:var(--season-soft);border-radius:16px;
+  padding:14px 20px;font-size:13px;color:var(--gris);
+  text-align:center;line-height:1.7;width:100%;max-width:280px;
+}
+.st-done-btn{
+  width:100%;max-width:280px;padding:16px;
+  background:var(--season-grad);color:white;
+  border:none;border-radius:16px;font-size:15px;
+  font-weight:700;font-family:var(--sans);cursor:pointer;
+  margin-top:8px;
+}
+
+/* Overlays intérieurs ────────────────────── */
+.st-inner-ov{
+  position:absolute;inset:0;z-index:10;
+  background:rgba(253,248,242,.92);backdrop-filter:blur(6px);
+  display:none;align-items:center;justify-content:center;
+  padding:24px;
+}
+.st-inner-ov.visible{display:flex;}
+.st-ov-box{
+  background:white;border-radius:24px;
+  padding:28px 24px;width:100%;max-width:300px;
+  text-align:center;box-shadow:0 8px 32px rgba(44,32,24,.12);
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+}
+.st-ov-icon{font-size:36px}
+.st-ov-title{font-family:var(--serif);font-size:20px;color:var(--noir)}
+.st-ov-sub{font-size:13px;color:var(--gris);line-height:1.5;text-align:center}
+.st-ov-btn{
+  width:100%;padding:14px;border:none;border-radius:14px;
+  font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;
+  -webkit-tap-highlight-color:transparent;transition:opacity .15s;
+}
+.st-ov-btn:active{opacity:.8}
+.st-ov-btn.primary{background:var(--season-grad);color:white}
+.st-ov-btn.secondary{background:var(--sable);color:var(--noir)}
+.st-ov-btn.danger{background:#F9E8E4;color:#C46B50;border:1px solid #F0C4B0}
