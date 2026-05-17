@@ -110,7 +110,7 @@ async function initSupabase() {
 // ═══════════════════════════════════════════════
 // EMAIL DE BIENVENUE
 // ═══════════════════════════════════════════════
-function _buildWelcomeEmailHtml(prenom) {
+function _buildWelcomeEmailHtml(prenom, email) {
   const p = prenom || 'sœur';
   return `<!DOCTYPE html>
 <html lang="fr">
@@ -245,7 +245,7 @@ function _buildWelcomeEmailHtml(prenom) {
       <tr><td style="background:#F0F0EC;padding:20px 32px;text-align:center;border-radius:0 0 20px 20px;">
         <p style="font-size:12px;color:#8A8078;margin:0 0 6px;">© 2026 SakinApp · <a href="https://sakinaap.com" style="color:#4A7C59;text-decoration:none;">sakinaap.com</a></p>
         <p style="font-size:11px;color:#A09088;margin:0 0 6px;">Données stockées sur ton téléphone · Jamais partagées · RGPD</p>
-        <p style="font-size:11px;color:#A09088;margin:0;"><a href="https://sakinaap.com/unsubscribe?email=${encodeURIComponent('{{email}}')}" style="color:#A09088;">Se désabonner des emails</a></p>
+        <p style="font-size:11px;color:#A09088;margin:0;"><a href="https://sakinaap.com/unsubscribe?email=${encodeURIComponent(email || '')}" style="color:#A09088;">Se désabonner des emails</a></p>
       </td></tr>
 
     </table>
@@ -264,7 +264,7 @@ async function _doSendWelcomeEmail() {
     const sb = await initSupabase();
     if (!sb) throw new Error('supabase not ready');
     await sb.functions.invoke('send-welcome-email', {
-      body: { to: email, prenom, subject, html: _buildWelcomeEmailHtml(prenom) }
+      body: { to: email, prenom, subject, html: _buildWelcomeEmailHtml(prenom, email) }
     });
     ST.welcomeEmailSent = true;
     saveState();
@@ -1132,7 +1132,9 @@ function phaseThresholds(dur) {
 }
 
 function computeCycle() {
-  if (!ST.cycleStart) { ST.currentDay = 1; ST.currentSaison = 'hiver'; return; }
+  if (!ST.cycleStart || !/^\d{4}-\d{2}-\d{2}$/.test(ST.cycleStart)) {
+    ST.cycleStart = null; ST.currentDay = 1; ST.currentSaison = 'hiver'; return;
+  }
   const now = new Date();
   const todayLocal = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const [sy, sm, sd] = ST.cycleStart.split('-').map(Number);
@@ -2363,6 +2365,8 @@ function validerSeanceDash() {
 
   _updateStreakPhase(1);
   ST.checkpointProgress = (ST.checkpointProgress || 0) + 1;
+  if (typeof updateNiveauStreak === 'function') updateNiveauStreak(true);
+  if (typeof checkNiveauProgression === 'function') checkNiveauProgression();
 
   saveState();
   const s = SAISONS[ST.currentSaison];
@@ -4981,7 +4985,7 @@ const _stPhaseMsg = {
 };
 
 function _stParseDur(str) {
-  if (!str) return 30;
+  if (!str || str === '—' || str === '-' || str === 'aucun') return 0;
   if (typeof str === 'number') return str;
   const s = String(str).trim();
   const m = s.match(/^(\d+)\s*min/i);
@@ -5132,11 +5136,11 @@ function _stxBuildSteps(spec) {
           exIdx: exIdx,
           exTotal: exList.length,
         });
-        if (s < seriesCount - 1) {
+        if (s < seriesCount - 1 && repoDur > 0) {
           steps.push({ type: 'rest_series', label: 'Repos série', title: 'Repos — ' + ex.nom, duration: repoDur, serieIdx: s, seriesTotal: seriesCount });
         }
       }
-      if (exIdx < exList.length - 1) {
+      if (exIdx < exList.length - 1 && restDur > 0) {
         steps.push({ type: 'rest_exercise', label: 'Repos', title: 'Repos entre exercices', duration: restDur, exIdx: exIdx, exTotal: exList.length });
       }
     });
