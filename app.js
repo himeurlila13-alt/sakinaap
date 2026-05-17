@@ -4630,19 +4630,22 @@ async function confirmDeleteMyData() {
 
   const userId = ST.supabaseUserId;
 
-  try {
-    const sb = await initSupabase().catch(() => null);
-    if (sb && userId) {
-      // Supprimer les données applicatives
-      await sb.from('user_data').delete().eq('user_id', userId);
-      // Déconnecter TOUS les appareils/navigateurs avant de supprimer le compte
-      await sb.auth.signOut({ scope: 'global' });
-      // Supprimer le compte Auth via Edge Function (service_role)
-      try {
-        await sb.functions.invoke('delete-account', { body: { userId } });
-      } catch(e) { console.warn('delete-account edge fn:', e); }
-    }
-  } catch(e) { console.error('Supabase deletion error:', e); }
+  // Supabase uniquement si l'utilisatrice est connectée — jamais bloquant
+  if (userId) {
+    try {
+      const sb = await Promise.race([
+        initSupabase(),
+        new Promise(r => setTimeout(() => r(null), 3000))
+      ]).catch(() => null);
+      if (sb) {
+        await sb.from('user_data').delete().eq('user_id', userId).catch(() => {});
+        await sb.auth.signOut({ scope: 'global' }).catch(() => {});
+        try {
+          await sb.functions.invoke('delete-account', { body: { userId } });
+        } catch(e) {}
+      }
+    } catch(e) {}
+  }
 
   // Cookies
   clearAuthCookie();
@@ -4669,12 +4672,10 @@ async function confirmDeleteMyData() {
   // Timers
   _notifTimers.forEach(t => clearTimeout(t)); _notifTimers.length = 0;
 
-  // localStorage — en dernier
+  // localStorage — toujours exécuté, connectée ou non
   try { localStorage.clear(); } catch(e) {}
-  // Message à afficher après rechargement (sessionStorage survit au location.reload)
   try { sessionStorage.setItem('sakina_deleted', '1'); } catch(e) {}
 
-  // Rechargement complet : zéro état résiduel en mémoire (ST, prénom, tout)
   closeDeleteModal();
   location.reload();
 }
