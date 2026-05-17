@@ -3592,6 +3592,12 @@ function initApp() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+  // Message post-suppression (sessionStorage survit au reload, pas au fermer/rouvrir)
+  if (sessionStorage.getItem('sakina_deleted') === '1') {
+    sessionStorage.removeItem('sakina_deleted');
+    setTimeout(() => showToast('Toutes tes données ont été supprimées. Jazakillah khayran d\'avoir utilisé SakinApp 🌸'), 600);
+  }
+
   const inp = document.getElementById('input-prenom');
   if (inp) inp.addEventListener('blur', () => { setTimeout(() => { window.scrollTo(0, 0); }, 100); });
 
@@ -4624,25 +4630,24 @@ async function confirmDeleteMyData() {
 
   const userId = ST.supabaseUserId;
 
-  // 1 — Supabase : supprimer données + compte Auth
   try {
     const sb = await initSupabase().catch(() => null);
     if (sb && userId) {
-      // Supprimer toutes les lignes de données de l'utilisatrice
+      // Supprimer les données applicatives
       await sb.from('user_data').delete().eq('user_id', userId);
-      // Appel Edge Function pour supprimer le compte Auth (service_role côté serveur)
+      // Déconnecter TOUS les appareils/navigateurs avant de supprimer le compte
+      await sb.auth.signOut({ scope: 'global' });
+      // Supprimer le compte Auth via Edge Function (service_role)
       try {
         await sb.functions.invoke('delete-account', { body: { userId } });
       } catch(e) { console.warn('delete-account edge fn:', e); }
-      // Déconnecter la session
-      await sb.auth.signOut();
     }
   } catch(e) { console.error('Supabase deletion error:', e); }
 
-  // 2 — Cookies
+  // Cookies
   clearAuthCookie();
 
-  // 3 — IndexedDB (Supabase peut créer des bases en interne)
+  // IndexedDB
   if ('indexedDB' in window) {
     try {
       const dbs = await indexedDB.databases();
@@ -4653,7 +4658,7 @@ async function confirmDeleteMyData() {
     } catch(e) {}
   }
 
-  // 4 — Cache Service Worker (assets + données)
+  // Cache Service Worker
   if ('caches' in window) {
     try {
       const keys = await caches.keys();
@@ -4661,20 +4666,17 @@ async function confirmDeleteMyData() {
     } catch(e) {}
   }
 
-  // 5 — localStorage (tout effacer d'un coup)
-  try { localStorage.clear(); } catch(e) {}
-
-  // 6 — Timers en cours
+  // Timers
   _notifTimers.forEach(t => clearTimeout(t)); _notifTimers.length = 0;
 
-  // 7 — Confirmation visuelle puis redirection
+  // localStorage — en dernier
+  try { localStorage.clear(); } catch(e) {}
+  // Message à afficher après rechargement (sessionStorage survit au location.reload)
+  try { sessionStorage.setItem('sakina_deleted', '1'); } catch(e) {}
+
+  // Rechargement complet : zéro état résiduel en mémoire (ST, prénom, tout)
   closeDeleteModal();
-  showToast('Toutes tes données ont été supprimées. Jazakillah khayran d\'avoir utilisé SakinApp 🌸');
-  setTimeout(() => {
-    document.getElementById('app').style.display = 'none';
-    document.getElementById('onboarding').style.display = 'none';
-    showAuthScreen();
-  }, 2800);
+  location.reload();
 }
 
 // ═══════════════════════════════════════════════
