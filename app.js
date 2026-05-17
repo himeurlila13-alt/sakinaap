@@ -300,8 +300,43 @@ function _getCookie(name) {
   return m ? m[1] : null;
 }
 
-function showAuthScreen() {
-  document.getElementById('auth-screen').style.display = 'flex';
+function _fadeIn(el) {
+  if (!el) return;
+  el.classList.remove('screen-enter');
+  void el.offsetWidth; // force reflow
+  el.classList.add('screen-enter');
+}
+
+function _hideLoader() {
+  const loader = document.getElementById('app-loader');
+  if (loader) loader.classList.add('hidden');
+}
+
+function showAuthScreen(cas) {
+  // cas 2 : a un prenom mais session expirée
+  // cas 3 (défaut) : nouvelle utilisatrice
+  const isReturning = cas === 2 || (!cas && ST.prenom && ST.cycleStart);
+  const title   = document.querySelector('#auth-screen [data-auth-title]');
+  const sub     = document.querySelector('#auth-screen [data-auth-sub]');
+  const emailEl = document.getElementById('auth-email');
+
+  if (title) {
+    title.textContent = isReturning
+      ? 'Bon retour ' + (ST.prenom || '') + ' 🌸'
+      : 'As-salamu alaykum 🌸';
+  }
+  if (sub) {
+    sub.textContent = isReturning
+      ? 'Entre ton email pour te reconnecter.'
+      : 'Entre ton adresse email pour accéder à ton espace SakinApp.';
+  }
+  if (emailEl && isReturning && (ST.userEmail || ST.supabaseEmail)) {
+    emailEl.value = ST.userEmail || ST.supabaseEmail;
+  }
+
+  const screen = document.getElementById('auth-screen');
+  screen.style.display = 'flex';
+  _fadeIn(screen);
   document.getElementById('onboarding').style.display = 'none';
   document.getElementById('app').style.display = 'none';
 }
@@ -468,12 +503,15 @@ function setupAuthListener(sb) {
       checkWeeklyReset();
       if (ST.prenom && ST.cycleStart) {
         document.getElementById('onboarding').style.display = 'none';
-        document.getElementById('app').style.display = 'flex';
+        const _appEl = document.getElementById('app');
+        _appEl.style.display = 'flex';
+        _fadeIn(_appEl);
         initApp();
-        // Email de bienvenue — envoyé une seule fois (ne fait rien si déjà envoyé)
         sendWelcomeEmail();
       } else {
-        document.getElementById('onboarding').style.display = 'block';
+        const _obEl = document.getElementById('onboarding');
+        _obEl.style.display = 'block';
+        _fadeIn(_obEl);
       }
     } else if (event === 'SIGNED_OUT') {
       if (!ST.isAuthenticated) showAuthScreen();
@@ -3563,48 +3601,52 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   if (!ST.installDate) { ST.installDate = Date.now(); saveState(); }
 
+  // Masquer les écrans arrière (loader couvre tout visuellement)
   document.getElementById('revelation').style.display = 'none';
   document.getElementById('app').style.display = 'none';
   document.getElementById('auth-screen').style.display = 'none';
 
-  // ── Décision d'écran SYNCHRONE (localStorage) — élimine le flash onboarding ──
+  // ── Décision d'écran SYNCHRONE (localStorage) ──────────────────────────────
   const _hasAccount = !!(ST.prenom && ST.cycleStart);
   if (_hasAccount) {
-    document.getElementById('app').style.display = 'flex';
+    // CAS 1 — Déjà configurée : préparer l'app derrière le loader
+    const appEl = document.getElementById('app');
+    appEl.style.display = 'flex';
+    appEl.style.opacity = '0';
     initApp();
     scheduleLocalNotifications();
-    const _now = new Date();
-    if (ST.checkinDate !== _now.toDateString() && _now.getHours() < 14) {
-      setTimeout(() => {
-        const ov = document.getElementById('checkin-overlay');
-        if (ov) { ov.style.display = 'flex'; ov.style.alignItems = 'flex-end'; }
-      }, 800);
-    }
   } else if (!ST.isAuthenticated && !ST.prenom) {
-    showAuthScreen();
+    // CAS 3 — Nouvelle utilisatrice
+    showAuthScreen(3);
   } else {
+    // CAS partiel — a un prenom mais pas de session (rare : onboarding interrompu)
     document.getElementById('onboarding').style.display = 'block';
+    _fadeIn(document.getElementById('onboarding'));
   }
-  // Rendre le body visible avec le bon écran déjà en place
-  document.body.style.opacity = '1';
 
-  // ── Vérification Supabase (async — ne bloque plus l'affichage) ──
+  // ── Vérification Supabase — max 2 secondes ──────────────────────────────────
   try {
     const sb = await initSupabase();
     if (sb) {
-      const { data: { session } } = await sb.auth.getSession();
+      const _timeout2s = new Promise(resolve =>
+        setTimeout(() => resolve({ data: { session: null }, _timedOut: true }), 2000)
+      );
+      const result = await Promise.race([sb.auth.getSession(), _timeout2s]);
+      const session = result.data && result.data.session;
+
       if (!session) {
+        // Pas de session (ou timeout)
         if (ST.isAuthenticated) {
           setupAuthListener(sb);
         } else if (ST.prenom && ST.cycleStart) {
           setupAuthListener(sb);
           setTimeout(_showReconnectNudge, 1800);
         } else {
-          showAuthScreen();
+          showAuthScreen(3);
           setupAuthListener(sb);
-          return;
         }
       } else {
+        // Session valide — CAS 1 confirmé
         ST.supabaseUserId = session.user.id;
         ST.supabaseEmail = session.user.email;
         ST.isAuthenticated = true;
@@ -3613,24 +3655,40 @@ document.addEventListener('DOMContentLoaded', async () => {
         ST.isAuthenticated = true;
         await verifyPremiumFromDB(sb, session.user.id);
         setupAuthListener(sb);
-        // Rafraîchir si l'app est déjà affichée (données Supabase peuvent enrichir l'état)
         if (_hasAccount) initApp();
+
+        // Cas où Supabase a complété les données manquantes
+        if (!_hasAccount && ST.prenom && ST.cycleStart) {
+          document.getElementById('onboarding').style.display = 'none';
+          const appEl = document.getElementById('app');
+          appEl.style.display = 'flex';
+          appEl.style.opacity = '0';
+          initApp();
+          scheduleLocalNotifications();
+        }
       }
     }
   } catch(e) {}
+
+  // ── Masquer le loader + révéler le bon écran ────────────────────────────────
+  _hideLoader();
+  if (_hasAccount) {
+    const appEl = document.getElementById('app');
+    appEl.style.transition = 'opacity .3s ease';
+    appEl.style.opacity = '1';
+    const _now = new Date();
+    if (ST.checkinDate !== _now.toDateString() && _now.getHours() < 14) {
+      setTimeout(() => {
+        const ov = document.getElementById('checkin-overlay');
+        if (ov) { ov.style.display = 'flex'; ov.style.alignItems = 'flex-end'; }
+      }, 800);
+    }
+  }
 
   checkPaymentSuccess();
   checkTrialEnd();
   checkDailyReset();
   checkWeeklyReset();
-
-  // Cas où Supabase a chargé des données qui complètent l'onboarding
-  if (!_hasAccount && ST.prenom && ST.cycleStart) {
-    document.getElementById('onboarding').style.display = 'none';
-    document.getElementById('app').style.display = 'flex';
-    initApp();
-    scheduleLocalNotifications();
-  }
 
   // Sync immédiat quand l'app passe en arrière-plan (évite la perte de données à la fermeture)
   const _onAppHide = () => {
