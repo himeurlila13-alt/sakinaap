@@ -436,7 +436,8 @@ const SAISONS = {
       bien: "Tu vas bien en Hiver — c'est précieux. Repose-toi vraiment, sans culpabilité. Ton corps travaille même quand tu ne le sens pas.",
       fatiguee: "Tu n'es pas paresseuse. Ton corps est en mode économie d'énergie — c'est biologique. Faire peu aujourd'hui, c'est déjà beaucoup.",
       difficile: "Merci de l'avoir dit. Tu n'as pas à aller bien tout le temps. Aujourd'hui, une chose douce suffit — pour toi.",
-      foi: "Les hormones influencent ton état intérieur — c'est physiologique, pas de l'hypocrisie. Un seul dhikr aujourd'hui, c'est déjà immense."
+      foi: "Les hormones influencent ton état intérieur — c'est physiologique, pas de l'hypocrisie. Un seul dhikr aujourd'hui, c'est déjà immense.",
+      calme: "Ton corps te demande du calme — c'est une sagesse, pas une faiblesse. Tisane, silence, douceur. Allah est avec toi dans ce repos."
     },
     suggestions: ['🌿 Étirements doux','😴 Repos — c\'est ton entraînement','📖 Lecture ou tafsir','🤲 Dhikr doux','🫖 Tisane chaude'],
     invocation: { arabic:'حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ', fr:'"Allah nous suffit, et Il est le meilleur garant."', source:'Coran 3:173' },
@@ -485,7 +486,8 @@ const SAISONS = {
       bien: "Tu remarques peut-être plus d'élan — profites-en pour avancer sur ce qui attend depuis un moment.",
       fatiguee: "La fatigue en Printemps mérite attention. Écoute ce que ton corps demande.",
       difficile: "Merci de l'avoir dit. Tu n'as pas à aller bien tout le temps. Aujourd'hui, une chose douce suffit.",
-      foi: "La foi fluctue avec le corps — c'est humain. Un seul acte aujourd'hui, le plus simple que tu puisses faire."
+      foi: "La foi fluctue avec le corps — c'est humain. Un seul acte aujourd'hui, le plus simple que tu puisses faire.",
+      calme: "Un moment de pause au milieu de l'élan du Printemps — tu sais ce dont tu as besoin. Écoute cette voix intérieure."
     },
     suggestions: ['☎️ Appeler un proche','🚀 Avancer un projet','✉️ Message de gratitude','🌸 Sortir marcher','📚 Apprendre quelque chose'],
     invocation: { arabic:'رَبِّ أَوْزِعْنِي أَنْ أَشْكُرَ نِعْمَتَكَ', fr:'"Seigneur, inspire-moi de remercier pour Tes bienfaits."', source:'Coran 27:19' },
@@ -534,7 +536,8 @@ const SAISONS = {
       bien: "Tu es à ton pic. C'est le bon moment pour les efforts physiques, les conversations importantes.",
       fatiguee: "Si tu te sens fatiguée alors que ton cycle dit Été — c'est un signal. Le corps parle toujours juste.",
       difficile: "Merci de l'avoir dit. Tu n'as pas à aller bien tout le temps. Aujourd'hui, une chose douce suffit.",
-      foi: "L'Été est une bonne fenêtre pour un petit acte de reconnexion. Pas une liste — juste un geste."
+      foi: "L'Été est une bonne fenêtre pour un petit acte de reconnexion. Pas une liste — juste un geste.",
+      calme: "Même au pic, le cœur peut avoir besoin de silence. C'est de la sagesse, pas un recul. Prends ce calme comme un cadeau."
     },
     suggestions: ['🎁 Offrir quelque chose','💬 Conversation importante','🌍 Sortir et voir du monde','💝 Sadaqa','✍️ Écrire un mot doux'],
     invocation: { arabic:'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً', fr:'"Seigneur, accorde-nous le bien ici-bas et dans l\'au-delà."', source:'Coran 2:201' },
@@ -583,7 +586,8 @@ const SAISONS = {
       bien: "Des fluctuations arrivent peut-être — maintenant que tu le sais, elles ne te surprendront pas.",
       fatiguee: "Peut-être que tout te semble plus lourd — c'est ton Automne. Une chose. La plus petite. Juste une.",
       difficile: "Ce que tu ressens — ce doute — c'est ton Automne qui parle, pas la réalité. Attends le Printemps pour décider.",
-      foi: "Tenir malgré la lourdeur, c'est déjà un acte spirituel. Tu es vue."
+      foi: "Tenir malgré la lourdeur, c'est déjà un acte spirituel. Tu es vue.",
+      calme: "Ton cœur cherche le calme — c'est la voix de ta sagesse intérieure. As-Salam est l'un des noms d'Allah. Invoque-Le."
     },
     suggestions: ['📞 Appeler ses parents','🌬️ Respiration profonde','📖 Cours islamique','✍️ Journaling profond','🛁 Se dorloter'],
     invocation: { arabic:'اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ', fr:'"Ô Allah, je me réfugie en Toi contre l\'anxiété et la tristesse."', source:'Authentique — Boukhari' },
@@ -1482,6 +1486,20 @@ function renderDayScore() {
   `).join('');
 }
 
+function _sportEnrSectionHtml(items, label) {
+  if (!items || !items.length) return '';
+  const rows = items.map(item => {
+    const nom = item.exercice || item.nom || '';
+    const dur = item.duree || '';
+    const desc = item.description || '';
+    return `<div class="sport-ex-row sport-enr-row">
+      <div class="sport-ex-name-reps"><span class="sport-ex-name">${nom}</span><span class="sport-ex-reps">${dur}</span></div>
+      ${desc ? `<div class="sport-ex-detail">${desc}</div>` : ''}
+    </div>`;
+  }).join('');
+  return `<div class="sport-enr-section"><div class="sport-enr-label">${label}</div>${rows}</div>`;
+}
+
 function _sportExHtml(exercices, reposSec) {
   if (!exercices || !exercices.length) return '';
   const rows = exercices.map(ex => {
@@ -1528,8 +1546,12 @@ function renderCarteBouger(s) {
       const d = spec.data;
       titleText = d.nom; metaText = 'Douceur menstruelle'; durText = d.duree;
       levelLabel = `Niveau ${spec.level || level}/4`;
-      exContent = _sportExHtml(d.exercices);
-      msgHtml = d.message; spirituelHtml = d.messageSpirituel;
+      const enrichieH = (typeof getSeanceEnrichie === 'function') ? getSeanceEnrichie('hiver', spec.level || level) : null;
+      exContent = _sportEnrSectionHtml(enrichieH && enrichieH.echauffement, '🔥 Échauffement')
+               + _sportExHtml(d.exercices)
+               + _sportEnrSectionHtml(enrichieH && enrichieH.retour_au_calme, '🌿 Retour au calme');
+      msgHtml = d.message;
+      spirituelHtml = (enrichieH && enrichieH.message_fin) || d.messageSpirituel;
       break;
     }
     case 'repos': {
@@ -1558,9 +1580,12 @@ function renderCarteBouger(s) {
       metaText = spec.type === 'printemps-bas' ? '🦵 Bas du corps' : '💪 Haut du corps';
       durText = d.duree || '~25 min';
       levelLabel = `Niveau ${level}/4 · ${['Essentielle','À ton rythme','Vitalité','Pleine puissance'][level-1] || ''}`;
-      exContent = _sportExHtml(d.exercices, reposSec);
+      const enrichieP = (typeof getSeanceEnrichie === 'function') ? getSeanceEnrichie('printemps', level) : null;
+      exContent = _sportEnrSectionHtml(enrichieP && enrichieP.echauffement, '🔥 Échauffement')
+               + _sportExHtml(d.exercices, reposSec)
+               + _sportEnrSectionHtml(enrichieP && enrichieP.retour_au_calme, '🌿 Retour au calme');
       msgHtml = 'Bismillah — chaque mouvement est une ibada.';
-      spirituelHtml = 'Ton corps est une amânah. Prends-en soin avec intention.';
+      spirituelHtml = (enrichieP && enrichieP.message_fin) || 'Ton corps est une amânah. Prends-en soin avec intention.';
       break;
     }
     case 'ete-intense': {
@@ -1602,25 +1627,36 @@ function renderCarteBouger(s) {
       titleText = d.nom; metaText = '🍂 Phase active';
       durText = d.duree || '~25 min';
       levelLabel = `Niveau ${level}/4`;
-      exContent = _sportExHtml(d.exercices, reposSec + (spec.reposExtra || 10));
+      const enrichieAA = (typeof getSeanceEnrichie === 'function') ? getSeanceEnrichie('automne', level) : null;
+      exContent = _sportEnrSectionHtml(enrichieAA && enrichieAA.echauffement, '🔥 Échauffement')
+               + _sportExHtml(d.exercices, reposSec + (spec.reposExtra || 10))
+               + _sportEnrSectionHtml(enrichieAA && enrichieAA.retour_au_calme, '🌿 Retour au calme');
       msgHtml = spec.message || '';
+      spirituelHtml = (enrichieAA && enrichieAA.message_fin) || '';
       break;
     }
     case 'automne-doux': {
       const d = spec.data;
       titleText = 'Mobilité douce'; metaText = '🍂 Phase de transition'; durText = '~15 min';
-      exContent = _sportExHtml(d.mobilite);
+      const enrichieAD = (typeof getSeanceEnrichie === 'function') ? getSeanceEnrichie('automne', level) : null;
+      exContent = _sportEnrSectionHtml(enrichieAD && enrichieAD.echauffement, '🔥 Échauffement')
+               + _sportExHtml(d.mobilite);
       if (level >= 3 && typeof SEANCES_SPORT !== 'undefined') {
         exContent += _sportExHtml(SEANCES_SPORT.printemps.bas[level]?.exercices, d.repos);
       }
+      exContent += _sportEnrSectionHtml(enrichieAD && enrichieAD.retour_au_calme, '🌿 Retour au calme');
       msgHtml = d.message;
+      spirituelHtml = (enrichieAD && enrichieAD.message_fin) || '';
       break;
     }
     case 'automne-fin': {
       const d = spec.data;
       titleText = 'Douceur profonde'; metaText = '🍂 Fin de cycle'; durText = '~10 min';
-      exContent = _sportExHtml(d.exercices);
+      const enrichieAF = (typeof getSeanceEnrichie === 'function') ? getSeanceEnrichie('automne', level) : null;
+      exContent = _sportExHtml(d.exercices)
+               + _sportEnrSectionHtml(enrichieAF && enrichieAF.retour_au_calme, '🌿 Retour au calme');
       msgHtml = d.message;
+      spirituelHtml = (enrichieAF && enrichieAF.message_fin) || '';
       break;
     }
     case 'calme': {
@@ -3715,8 +3751,9 @@ function getTodaySeanceSpec() {
   switch (phase) {
     case 'hiver': {
       const h = sport.hiver;
-      const hiverData = (h.niveaux ? h.niveaux[level] : null) || h;
-      return { type: 'hiver', data: hiverData, level };
+      const effectiveLevel = (checkin === 'fatiguee') ? Math.max(1, level - 1) : level;
+      const hiverData = (h.niveaux ? h.niveaux[effectiveLevel] : null) || h;
+      return { type: 'hiver', data: hiverData, level: effectiveLevel };
     }
 
     case 'printemps': {

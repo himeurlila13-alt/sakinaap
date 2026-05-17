@@ -1446,6 +1446,24 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
   background: var(--season-soft) !important;
   margin-top: 4px;
 }
+.sport-enr-section {
+  margin: 10px 0 4px;
+  border-left: 3px solid var(--season-light);
+  padding-left: 10px;
+}
+.sport-enr-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--season);
+  margin-bottom: 6px;
+}
+.sport-enr-row .sport-ex-detail {
+  font-size: 11px;
+  color: var(--gris);
+  margin-top: 2px;
+}
 
 /* ═══ BOUTONS GESTION PHASES ═══ */
 .cycle-phase-btn{width:100%;padding:12px 16px;background:var(--season-soft);border:1.5px solid var(--season);border-radius:14px;color:var(--season);font-size:13px;font-weight:600;font-family:var(--sans);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s,opacity .15s}
