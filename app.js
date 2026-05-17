@@ -4611,30 +4611,70 @@ function deleteMyData() {
   document.getElementById('delete-modal').classList.add('open');
 }
 function closeDeleteModal() {
-  document.getElementById('delete-modal').classList.remove('open');
+  const modal = document.getElementById('delete-modal');
+  if (!modal) return;
+  modal.classList.remove('open');
+  // Restaurer le bouton si suppression annulée
+  const btn = document.getElementById('delete-confirm-btn');
+  if (btn) { btn.disabled = false; btn.textContent = '✓ Supprimer tout définitivement'; }
 }
-function confirmDeleteMyData() {
-  _notifTimers.forEach(t => clearTimeout(t)); _notifTimers.length = 0;
+async function confirmDeleteMyData() {
+  const btn = document.getElementById('delete-confirm-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Suppression en cours…'; }
+
+  const userId = ST.supabaseUserId;
+
+  // 1 — Supabase : supprimer données + compte Auth
+  try {
+    const sb = await initSupabase().catch(() => null);
+    if (sb && userId) {
+      // Supprimer toutes les lignes de données de l'utilisatrice
+      await sb.from('user_data').delete().eq('user_id', userId);
+      // Appel Edge Function pour supprimer le compte Auth (service_role côté serveur)
+      try {
+        await sb.functions.invoke('delete-account', { body: { userId } });
+      } catch(e) { console.warn('delete-account edge fn:', e); }
+      // Déconnecter la session
+      await sb.auth.signOut();
+    }
+  } catch(e) { console.error('Supabase deletion error:', e); }
+
+  // 2 — Cookies
+  clearAuthCookie();
+
+  // 3 — IndexedDB (Supabase peut créer des bases en interne)
+  if ('indexedDB' in window) {
+    try {
+      const dbs = await indexedDB.databases();
+      await Promise.all(dbs.map(db => new Promise(res => {
+        const req = indexedDB.deleteDatabase(db.name);
+        req.onsuccess = req.onerror = res;
+      })));
+    } catch(e) {}
+  }
+
+  // 4 — Cache Service Worker (assets + données)
+  if ('caches' in window) {
+    try {
+      const keys = await caches.keys();
+      await Promise.all(keys.map(k => caches.delete(k)));
+    } catch(e) {}
+  }
+
+  // 5 — localStorage (tout effacer d'un coup)
   try { localStorage.clear(); } catch(e) {}
-  ST = {
-    prenom: '', cycleStart: null, cycleDuration: 28, checkin: null, checkinDate: null,
-    prayers: {}, dhikrChecks: {}, dhikrDate: null, coranDone: {}, asmaKnown: [],
-    glaire: null, glaireDate: null, symptomes: {}, autreSymptomesText: {}, currentSaison: 'printemps', currentDay: 1,
-    selectedSugg: [], mouvDone: {}, seanceDone: {}, notifFreq: 2,
-    waitlistEmail: null, feedbackSent: false, installBannerDismissed: false,
-    lastDailyReset: null, lastWeeklyReset: null, eveningCheckinDate: null,
-    eveningCheckinMood: null, cycleHistory: [], historiqueCycles: [],
-    isPremium: false, seanceValidatedCount: 0, seanceLevel: 1, sportLevelInit: false,
-    amrapRecord: null, printempsUpgradeDone: false, levelMaxShown: false, printempsBasCount: 0, _lastCycleNum: null,
-    weeklyObjChecks: {}, customObjectifs: [], customObjChecks: {},
-    marche: { phase: null, checks: {}, custom: [] },
-    trialEnded: false, bilanShown: false, _lastSaison: null, hiverEnd: null,
-    premiumPlan: null, premiumSince: null,
-    installDate: Date.now(), trialBannerDismissed: false,
-  };
+
+  // 6 — Timers en cours
+  _notifTimers.forEach(t => clearTimeout(t)); _notifTimers.length = 0;
+
+  // 7 — Confirmation visuelle puis redirection
   closeDeleteModal();
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('onboarding').style.display = 'block';
+  showToast('Toutes tes données ont été supprimées. Jazakillah khayran d\'avoir utilisé SakinApp 🌸');
+  setTimeout(() => {
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('onboarding').style.display = 'none';
+    showAuthScreen();
+  }, 2800);
 }
 
 // ═══════════════════════════════════════════════

@@ -1075,7 +1075,11 @@
       <div class="ml-titre">Données personnelles</div>
       <p class="ml-txt">SakinApp collecte ton adresse e-mail (pour l'authentification) et tes données d'utilisation (cycle, prières, humeurs, objectifs, sport), stockées sur les serveurs de <strong>Supabase</strong> (sous-traitant), ainsi qu'en local sur ton appareil (localStorage).</p>
       <p class="ml-txt" style="margin-top:8px;">Les données de paiement sont traitées exclusivement par <strong>Stripe Inc.</strong> — SakinApp n'a jamais accès à tes coordonnées bancaires.</p>
-      <p class="ml-txt" style="margin-top:8px;">Conformément au RGPD, tu peux exporter ou supprimer tes données depuis Paramètres. Pour toute demande : sakina.evolution.contact@gmail.com</p>
+      <p class="ml-txt" style="margin-top:8px;">Conformément au RGPD, tu peux exporter ou supprimer tes données à tout moment.</p>
+      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+        <button onclick="closeMentionsLegales();exportData();" style="flex:1;min-width:120px;padding:10px;background:var(--sable);color:var(--noir);border:none;border-radius:12px;font-size:13px;cursor:pointer;">&#128229; Exporter mes données</button>
+        <button onclick="closeMentionsLegales();deleteMyData();" style="flex:1;min-width:120px;padding:10px;background:#C4694A;color:#fff;border:none;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;">&#128465; Supprimer mon compte</button>
+      </div>
     </div>
 
     <div class="ml-section">
@@ -1267,10 +1271,20 @@
 <div class="modal-overlay" id="delete-modal" onclick="if(event.target===this)closeDeleteModal()">
   <div class="modal-sheet" style="text-align:center;">
     <div style="font-size:40px;margin-bottom:12px;">&#128465;</div>
-    <div style="font-family:'Playfair Display',serif;font-size:18px;color:#C4694A;margin-bottom:10px;">Supprimer mes données</div>
-    <div style="font-size:13px;color:var(--gris);line-height:1.6;margin-bottom:20px;">Ton prénom, ton cycle, tes prières, ton historique — tout sera effacé de cet appareil définitivement.<br><br>Si tu as un compte, tes données restent sur nos serveurs. Pour les supprimer complètement, écris-nous à <strong>sakina.evolution.contact@gmail.com</strong>.</div>
-    <button onclick="confirmDeleteMyData()" style="width:100%;padding:14px;background:#C4694A;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;margin-bottom:10px;">Oui, supprimer tout</button>
-    <button onclick="closeDeleteModal()" style="width:100%;padding:14px;background:var(--sable);color:var(--noir);border:none;border-radius:14px;font-size:15px;cursor:pointer;">Annuler</button>
+    <div style="font-family:'Playfair Display',serif;font-size:18px;color:#C4694A;margin-bottom:10px;">Supprimer toutes mes données</div>
+    <div style="font-size:13px;color:var(--gris);line-height:1.7;margin-bottom:8px;">
+      Es-tu sûre de vouloir supprimer toutes tes données ?<br>
+      <strong style="color:var(--noir);">Cette action est irréversible.</strong>
+    </div>
+    <div style="font-size:12px;color:var(--gris);line-height:1.7;margin-bottom:20px;text-align:left;background:var(--sable);border-radius:12px;padding:12px 14px;">
+      Seront effacés définitivement :<br>
+      &#8226; Ton cycle, tes prières, tes objectifs<br>
+      &#8226; Ton historique sport &amp; skincare<br>
+      &#8226; Tes données sur nos serveurs (RGPD)<br>
+      &#8226; Ton compte SakinApp
+    </div>
+    <button id="delete-confirm-btn" onclick="confirmDeleteMyData()" style="width:100%;padding:14px;background:#C4694A;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;margin-bottom:10px;">✓ Supprimer tout définitivement</button>
+    <button onclick="closeDeleteModal()" style="width:100%;padding:14px;background:var(--sable);color:var(--noir);border:none;border-radius:14px;font-size:15px;cursor:pointer;">✗ Annuler</button>
   </div>
 </div>
 
