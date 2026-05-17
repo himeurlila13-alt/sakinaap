@@ -1277,7 +1277,7 @@ function renderTrialCard() {
   const codeCard = document.getElementById('premium-code-card');
   if (codeCard) codeCard.style.display = ST.isPremium ? 'none' : '';
   const manageRow = document.getElementById('manage-sub-row');
-  if (manageRow) manageRow.style.display = (ST.isPremium && ST.supabaseUserId) ? '' : 'none';
+  if (manageRow) manageRow.style.display = ST.supabaseUserId ? '' : 'none';
   if (ST.isPremium) {
     const planLabel = ST.premiumPlan === 'monthly' ? 'mensuel' : ST.premiumPlan === 'annual' ? 'annuel' : '';
     el.innerHTML = `
