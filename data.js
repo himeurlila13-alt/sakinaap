@@ -600,7 +600,7 @@ const MESSAGES_JOUR = {
     bien: 'Tu traverses l\'Automne avec conscience de ce qui se passe. C\'est une vraie force.',
     fatiguee: 'Hydrate-toi, mange quelque chose de chaud, dors tôt. Simple, mais vraiment efficace.',
     difficile: 'Si les émotions sont intenses, elles ne sont pas toi — elles sont de passage.',
-    foi: 'رَبِّ إِنِّي لِمَا أَنزَلْتَ إِلَيَّ مِنْ خَيْرٍ فَقِيرٌ — « Seigneur, de tout bien que Tu fais descendre vers moi, j\'en suis dans le besoin. » (Coran 28:24 — du\'â de Musa ﷺ)'
+    foi: 'رَبِّ إِنِّي لِمَا أَنزَلْتَ إِلَيَّ مِنْ خَيْرٍ فَقِيرٌ — « Seigneur, de tout bien que Tu fais descendre vers moi, j\'en suis dans le besoin. » (Coran 28:24 — du\'â de Musa عليه السلام)'
   },
   26: {
     bien: 'Bientôt l\'Hiver — une page qui se tourne, un nouveau départ qui s\'approche doucement.',
@@ -691,7 +691,7 @@ const SEANCES_SPORT = {
         nom: 'Yin libérateur complet',
         duree: '~20 min',
         message: 'Le Yin yoga pendant les règles réduit les prostaglandines inflammatoires et libère des endorphines. Ton corps mérite cette attention.',
-        messageSpirituel: 'اللهم ارزقني القوة في الضعف — la vraie force se cultive aussi dans la douceur.',
+        messageSpirituel: 'La vraie force se cultive aussi dans la douceur — le repos est une forme d\'adoration. 🌿',
         exercices: [
           { nom: 'Papillon allongé',        duree: '5 min',
             detail: 'Allongée sur le dos, plantes de pieds jointes, genoux ouverts vers le sol. Mains sur le ventre. Respiration abdominale lente. Ouvre les hanches passivement.' },

@@ -710,7 +710,7 @@ const SAISONS = {
       calme: "Un moment de pause au milieu de l'élan du Printemps — tu sais ce dont tu as besoin. Écoute cette voix intérieure."
     },
     suggestions: ['☎️ Appeler un proche','🚀 Avancer un projet','✉️ Message de gratitude','🌸 Sortir marcher','📚 Apprendre quelque chose'],
-    invocation: { arabic:'رَبِّ أَوْزِعْنِي أَنْ أَشْكُرَ نِعْمَتَكَ', fr:'"Seigneur, inspire-moi de remercier pour Tes bienfaits."', source:'Coran 27:19' },
+    invocation: { arabic:'رَبِّ أَوْزِعْنِي أَنْ أَشْكُرَ نِعْمَتَكَ', fr:'"Seigneur, inspire-moi de remercier pour Tes bienfaits."', source:'Coran 27:19 (extrait)' },
     suggTitle: '🌸 Suggestions du Printemps',
     suggDesc: 'Des petits gestes adaptés à ton énergie du moment.',
     alimentation: {
@@ -760,7 +760,7 @@ const SAISONS = {
       calme: "Même au pic, le cœur peut avoir besoin de silence. C'est de la sagesse, pas un recul. Prends ce calme comme un cadeau."
     },
     suggestions: ['🎁 Offrir quelque chose','💬 Conversation importante','🌍 Sortir et voir du monde','💝 Sadaqa','✍️ Écrire un mot doux'],
-    invocation: { arabic:'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً', fr:'"Seigneur, accorde-nous le bien ici-bas et dans l\'au-delà."', source:'Coran 2:201' },
+    invocation: { arabic:'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ', fr:'"Seigneur, accorde-nous le bien ici-bas et dans l\'au-delà, et préserve-nous du châtiment du feu."', source:'Coran 2:201' },
     suggTitle: '☀️ Suggestions de l\'Été',
     suggDesc: 'Tu rayonnes — donne, partage, connecte.',
     alimentation: {
@@ -1080,23 +1080,23 @@ const SPORT_NIVEAUX = {
 };
 
 const ASMA = [
-  {num:1,ar:'اللَّهُ',fr:'Allah'},{num:2,ar:'الرَّحْمَنُ',fr:'Ar-Rahman · Le Tout Miséricordieux'},{num:3,ar:'الرَّحِيمُ',fr:'Ar-Rahim · Le Très Miséricordieux'},{num:4,ar:'الْمَلِكُ',fr:'Al-Malik · Le Roi'},{num:5,ar:'الْقُدُّوسُ',fr:'Al-Quddous · Le Très Saint'},
-  {num:6,ar:'السَّلَامُ',fr:'As-Salam · La Paix'},{num:7,ar:'الْمُؤْمِنُ',fr:"Al-Mu'min · Celui qui donne la sécurité"},{num:8,ar:'الْمُهَيْمِنُ',fr:'Al-Muhaimin · Le Gardien Suprême'},{num:9,ar:'الْعَزِيزُ',fr:"Al-Aziz · Le Puissant"},{num:10,ar:'الْجَبَّارُ',fr:'Al-Jabbar · Le Contraignant'},
-  {num:11,ar:'الْمُتَكَبِّرُ',fr:'Al-Mutakabbir · Le Très Grand'},{num:12,ar:'الْخَالِقُ',fr:'Al-Khaliq · Le Créateur'},{num:13,ar:'الْبَارِئُ',fr:"Al-Bari · Le Formateur"},{num:14,ar:'الْمُصَوِّرُ',fr:'Al-Mussawwir · Le Façonneur'},{num:15,ar:'الْغَفَّارُ',fr:'Al-Ghaffar · Le Grand Pardonneur'},
-  {num:16,ar:'الْقَهَّارُ',fr:'Al-Qahhar · Le Dominateur Absolu'},{num:17,ar:'الْوَهَّابُ',fr:'Al-Wahhab · Le Donateur'},{num:18,ar:'الرَّزَّاقُ',fr:'Ar-Razzaq · Le Pourvoyeur'},{num:19,ar:'الْفَتَّاحُ',fr:'Al-Fattah · Le Grand Ouvreur'},{num:20,ar:'الْعَلِيمُ',fr:"Al-Alim · L'Omniscient"},
-  {num:21,ar:'الْقَابِضُ',fr:'Al-Qabid · Celui qui retient'},{num:22,ar:'الْبَاسِطُ',fr:'Al-Basit · Celui qui étend'},{num:23,ar:'الْخَافِضُ',fr:'Al-Khafid · Celui qui abaisse'},{num:24,ar:'الرَّافِعُ',fr:"Ar-Rafi · Celui qui élève"},{num:25,ar:'الْمُعِزُّ',fr:"Al-Mu'izz · Celui qui honore"},
-  {num:26,ar:'الْمُذِلُّ',fr:'Al-Mudhill · Celui qui humilie'},{num:27,ar:'السَّمِيعُ',fr:'As-Sami · Le Tout-Entendant'},{num:28,ar:'الْبَصِيرُ',fr:'Al-Basir · Le Clairvoyant'},{num:29,ar:'الْحَكَمُ',fr:'Al-Hakam · Le Juge'},{num:30,ar:'الْعَدْلُ',fr:"Al-Adl · Le Juste"},
-  {num:31,ar:'اللَّطِيفُ',fr:'Al-Latif · Le Subtil'},{num:32,ar:'الْخَبِيرُ',fr:'Al-Khabir · Le Bien Informé'},{num:33,ar:'الْحَلِيمُ',fr:'Al-Halim · Le Clément'},{num:34,ar:'الْعَظِيمُ',fr:'Al-Azim · Le Très Grand'},{num:35,ar:'الْغَفُورُ',fr:'Al-Ghafur · Le Très Indulgent'},
-  {num:36,ar:'الشَّكُورُ',fr:'Ash-Shakur · Le Très Reconnaissant'},{num:37,ar:'الْعَلِيُّ',fr:'Al-Ali · Le Très Haut'},{num:38,ar:'الْكَبِيرُ',fr:'Al-Kabir · Le Très Grand'},{num:39,ar:'الْحَفِيظُ',fr:'Al-Hafiz · Le Gardien'},{num:40,ar:'الْمُقِيتُ',fr:'Al-Muqit · Le Mainteneur'},
-  {num:41,ar:'الْحَسِيبُ',fr:'Al-Hasib · Le Teneur de comptes'},{num:42,ar:'الْجَلِيلُ',fr:'Al-Jalil · Le Majestueux'},{num:43,ar:'الْكَرِيمُ',fr:'Al-Karim · Le Généreux'},{num:44,ar:'الرَّقِيبُ',fr:'Ar-Raqib · Le Vigilant'},{num:45,ar:'الْمُجِيبُ',fr:'Al-Mujib · Celui qui répond'},
-  {num:46,ar:'الْوَاسِعُ',fr:'Al-Wasi · Le Vaste'},{num:47,ar:'الْحَكِيمُ',fr:'Al-Hakim · Le Sage'},{num:48,ar:'الْوَدُودُ',fr:"Al-Wadud · Le Plein d'Amour"},{num:49,ar:'الْمَجِيدُ',fr:'Al-Majid · Le Très Glorieux'},{num:50,ar:'الْبَاعِثُ',fr:"Al-Ba'ith · Le Ressuscitateur"},
-  {num:51,ar:'الشَّهِيدُ',fr:'Ash-Shahid · Le Témoin'},{num:52,ar:'الْحَقُّ',fr:'Al-Haqq · La Vérité'},{num:53,ar:'الْوَكِيلُ',fr:'Al-Wakil · Le Garant'},{num:54,ar:'الْقَوِيُّ',fr:'Al-Qawi · Le Très Fort'},{num:55,ar:'الْمَتِينُ',fr:'Al-Matin · Le Ferme'},
-  {num:56,ar:'الْوَلِيُّ',fr:'Al-Waliyy · Le Proche Protecteur'},{num:57,ar:'الْحَمِيدُ',fr:'Al-Hamid · Le Digne de louanges'},{num:58,ar:'الْمُحْصِي',fr:'Al-Muhsi · Le Dénombrateur'},{num:59,ar:'الْمُبْدِئُ',fr:'Al-Mubdi · Le Principe'},{num:60,ar:'الْمُعِيدُ',fr:"Al-Mu'id · Celui qui restaure"},
-  {num:61,ar:'الْمُحْيِي',fr:'Al-Muhyi · Le Vivificateur'},{num:62,ar:'الْمُمِيتُ',fr:'Al-Mumit · Le Donneur de mort'},{num:63,ar:'الْحَيُّ',fr:'Al-Hayy · Le Vivant'},{num:64,ar:'الْقَيُّومُ',fr:'Al-Qayyum · Le Subsistant'},{num:65,ar:'الْوَاجِدُ',fr:'Al-Wajid · Celui qui trouve'},
-  {num:66,ar:'الْمَاجِدُ',fr:'Al-Majid · Le Glorieux'},{num:67,ar:'الْوَاحِدُ',fr:"Al-Wahid · L'Unique"},{num:68,ar:'الصَّمَدُ',fr:"As-Samad · L'Indépendant"},{num:69,ar:'الْقَادِرُ',fr:'Al-Qadir · Le Puissant'},{num:70,ar:'الْمُقْتَدِرُ',fr:'Al-Muqtadir · Le Très Puissant'},
+  {num:1,ar:'الرَّحْمَنُ',fr:'Ar-Rahman · Le Tout Miséricordieux'},{num:2,ar:'الرَّحِيمُ',fr:'Ar-Rahim · Le Très Miséricordieux'},{num:3,ar:'الْمَلِكُ',fr:'Al-Malik · Le Roi'},{num:4,ar:'الْقُدُّوسُ',fr:'Al-Quddous · Le Très Saint'},{num:5,ar:'السَّلَامُ',fr:'As-Salam · La Paix'},
+  {num:6,ar:'الْمُؤْمِنُ',fr:"Al-Mu'min · Celui qui donne la sécurité"},{num:7,ar:'الْمُهَيْمِنُ',fr:'Al-Muhaimin · Le Surveillant Suprême'},{num:8,ar:'الْعَزِيزُ',fr:"Al-Aziz · Le Puissant"},{num:9,ar:'الْجَبَّارُ',fr:'Al-Jabbar · Le Contraignant'},{num:10,ar:'الْمُتَكَبِّرُ',fr:'Al-Mutakabbir · Le Très Grand'},
+  {num:11,ar:'الْخَالِقُ',fr:'Al-Khaliq · Le Créateur'},{num:12,ar:'الْبَارِئُ',fr:"Al-Bari · Le Formateur"},{num:13,ar:'الْمُصَوِّرُ',fr:'Al-Mussawwir · Le Façonneur'},{num:14,ar:'الْغَفَّارُ',fr:'Al-Ghaffar · Le Grand Pardonneur'},{num:15,ar:'الْقَهَّارُ',fr:'Al-Qahhar · Le Dominateur Absolu'},
+  {num:16,ar:'الْوَهَّابُ',fr:'Al-Wahhab · Le Donateur'},{num:17,ar:'الرَّزَّاقُ',fr:'Ar-Razzaq · Le Pourvoyeur'},{num:18,ar:'الْفَتَّاحُ',fr:'Al-Fattah · Le Grand Ouvreur'},{num:19,ar:'الْعَلِيمُ',fr:"Al-Alim · L'Omniscient"},{num:20,ar:'الْقَابِضُ',fr:'Al-Qabid · Celui qui retient'},
+  {num:21,ar:'الْبَاسِطُ',fr:'Al-Basit · Celui qui étend'},{num:22,ar:'الْخَافِضُ',fr:'Al-Khafid · Celui qui abaisse'},{num:23,ar:'الرَّافِعُ',fr:"Ar-Rafi · Celui qui élève"},{num:24,ar:'الْمُعِزُّ',fr:"Al-Mu'izz · Celui qui honore"},{num:25,ar:'الْمُذِلُّ',fr:'Al-Mudhill · Celui qui humilie'},
+  {num:26,ar:'السَّمِيعُ',fr:'As-Sami · Le Tout-Entendant'},{num:27,ar:'الْبَصِيرُ',fr:'Al-Basir · Le Clairvoyant'},{num:28,ar:'الْحَكَمُ',fr:'Al-Hakam · Le Juge'},{num:29,ar:'الْعَدْلُ',fr:"Al-Adl · Le Juste"},{num:30,ar:'اللَّطِيفُ',fr:'Al-Latif · Le Subtil'},
+  {num:31,ar:'الْخَبِيرُ',fr:'Al-Khabir · Le Bien Informé'},{num:32,ar:'الْحَلِيمُ',fr:'Al-Halim · Le Clément'},{num:33,ar:'الْعَظِيمُ',fr:'Al-Azim · Le Très Grand'},{num:34,ar:'الْغَفُورُ',fr:'Al-Ghafur · Le Très Indulgent'},{num:35,ar:'الشَّكُورُ',fr:'Ash-Shakur · Le Très Reconnaissant'},
+  {num:36,ar:'الْعَلِيُّ',fr:'Al-Ali · Le Très Haut'},{num:37,ar:'الْكَبِيرُ',fr:'Al-Kabir · Le Très Grand'},{num:38,ar:'الْحَفِيظُ',fr:'Al-Hafiz · Le Gardien'},{num:39,ar:'الْمُقِيتُ',fr:'Al-Muqit · Celui qui pourvoit à la subsistance'},{num:40,ar:'الْحَسِيبُ',fr:'Al-Hasib · Le Teneur de comptes'},
+  {num:41,ar:'الْجَلِيلُ',fr:'Al-Jalil · Le Majestueux'},{num:42,ar:'الْكَرِيمُ',fr:'Al-Karim · Le Généreux'},{num:43,ar:'الرَّقِيبُ',fr:'Ar-Raqib · Le Vigilant'},{num:44,ar:'الْمُجِيبُ',fr:'Al-Mujib · Celui qui répond'},{num:45,ar:'الْوَاسِعُ',fr:'Al-Wasi · Le Vaste'},
+  {num:46,ar:'الْحَكِيمُ',fr:'Al-Hakim · Le Sage'},{num:47,ar:'الْوَدُودُ',fr:"Al-Wadud · Le Plein d'Amour"},{num:48,ar:'الْمَجِيدُ',fr:'Al-Majid · Le Très Glorieux'},{num:49,ar:'الْبَاعِثُ',fr:"Al-Ba'ith · Le Ressuscitateur"},{num:50,ar:'الشَّهِيدُ',fr:'Ash-Shahid · Le Témoin'},
+  {num:51,ar:'الْحَقُّ',fr:'Al-Haqq · La Vérité'},{num:52,ar:'الْوَكِيلُ',fr:'Al-Wakil · Le Garant'},{num:53,ar:'الْقَوِيُّ',fr:'Al-Qawi · Le Très Fort'},{num:54,ar:'الْمَتِينُ',fr:'Al-Matin · Le Ferme'},{num:55,ar:'الْوَلِيُّ',fr:'Al-Waliyy · Le Proche Protecteur'},
+  {num:56,ar:'الْحَمِيدُ',fr:'Al-Hamid · Le Digne de louanges'},{num:57,ar:'الْمُحْصِي',fr:'Al-Muhsi · Le Dénombrateur'},{num:58,ar:'الْمُبْدِئُ',fr:"Al-Mubdi · Celui qui initie la création"},{num:59,ar:'الْمُعِيدُ',fr:"Al-Mu'id · Celui qui restaure"},{num:60,ar:'الْمُحْيِي',fr:'Al-Muhyi · Le Vivificateur'},
+  {num:61,ar:'الْمُمِيتُ',fr:'Al-Mumit · Le Donneur de mort'},{num:62,ar:'الْحَيُّ',fr:'Al-Hayy · Le Vivant'},{num:63,ar:'الْقَيُّومُ',fr:'Al-Qayyum · Le Subsistant'},{num:64,ar:'الْوَاجِدُ',fr:'Al-Wajid · Celui qui trouve'},{num:65,ar:'الْمَاجِدُ',fr:'Al-Majid · Le Glorieux'},
+  {num:66,ar:'الْوَاحِدُ',fr:"Al-Wahid · L'Unique"},{num:67,ar:'الأَحَدُ',fr:"Al-Ahad · L'Unique Absolu (Coran 112:1)"},{num:68,ar:'الصَّمَدُ',fr:"As-Samad · Le Soutien Absolu (Coran 112:2)"},{num:69,ar:'الْقَادِرُ',fr:'Al-Qadir · Le Puissant'},{num:70,ar:'الْمُقْتَدِرُ',fr:'Al-Muqtadir · Le Très Puissant'},
   {num:71,ar:'الْمُقَدِّمُ',fr:'Al-Muqaddim · Celui qui avance'},{num:72,ar:'الْمُؤَخِّرُ',fr:"Al-Mu'akhkhir · Celui qui retarde"},{num:73,ar:'الأَوَّلُ',fr:'Al-Awwal · Le Premier'},{num:74,ar:'الآخِرُ',fr:'Al-Akhir · Le Dernier'},{num:75,ar:'الظَّاهِرُ',fr:"Az-Zahir · L'Apparent"},
   {num:76,ar:'الْبَاطِنُ',fr:'Al-Batin · Le Caché'},{num:77,ar:'الْوَالِي',fr:'Al-Wālī · Le Maître de toute chose'},{num:78,ar:'الْمُتَعَالِي',fr:"Al-Muta'ali · Le Très Élevé"},{num:79,ar:'الْبَرُّ',fr:'Al-Barr · Le Bienfaisant'},{num:80,ar:'التَّوَّابُ',fr:'At-Tawwāb · Celui qui accepte le repentir'},
-  {num:81,ar:'الْمُنْتَقِمُ',fr:'Al-Muntaqim · Celui qui punit'},{num:82,ar:'الْعَفُوُّ',fr:'Al-Afuww · Celui qui pardonne'},{num:83,ar:'الرَّؤُوفُ',fr:"Ar-Ra'uf · Le Très Compatissant"},{num:84,ar:'مَالِكُ الْمُلْكِ',fr:'Malik-ul-Mulk · Maître du Royaume'},{num:85,ar:'ذُو الْجَلَالِ',fr:'Dhu-l-Jalal · Maître de la Majesté'},
+  {num:81,ar:'الْمُنْتَقِمُ',fr:'Al-Muntaqim · Celui qui punit'},{num:82,ar:'الْعَفُوُّ',fr:'Al-Afuww · Celui qui pardonne'},{num:83,ar:'الرَّؤُوفُ',fr:"Ar-Ra'uf · Le Très Compatissant"},{num:84,ar:'مَالِكُ الْمُلْكِ',fr:'Malik-ul-Mulk · Maître du Royaume'},{num:85,ar:'ذُو الْجَلَالِ وَالْإِكْرَامِ',fr:'Dhu-l-Jalali wal-Ikram · Maître de la Majesté et de la Générosité'},
   {num:86,ar:'الْمُقْسِطُ',fr:"Al-Muqsit · L'Équitable"},{num:87,ar:'الْجَامِعُ',fr:'Al-Jami · Le Rassembleur'},{num:88,ar:'الْغَنِيُّ',fr:'Al-Ghani · Le Riche'},{num:89,ar:'الْمُغْنِي',fr:'Al-Mughni · Celui qui enrichit'},{num:90,ar:'الْمَانِعُ',fr:"Al-Mani'u · Celui qui empêche"},
   {num:91,ar:'الضَّارُّ',fr:'Ad-Darr · Celui qui affecte'},{num:92,ar:'النَّافِعُ',fr:'An-Nafi · Le Bienfaiteur'},{num:93,ar:'النُّورُ',fr:'An-Nur · La Lumière'},{num:94,ar:'الْهَادِي',fr:'Al-Hadi · Le Guide'},{num:95,ar:'الْبَدِيعُ',fr:"Al-Badi · L'Innovateur Absolu"},
   {num:96,ar:'الْبَاقِي',fr:"Al-Baqi · L'Éternel"},{num:97,ar:'الْوَارِثُ',fr:"Al-Warith · L'Héritier"},{num:98,ar:'الرَّشِيدُ',fr:'Ar-Rashid · Le Guide Juste'},{num:99,ar:'الصَّبُورُ',fr:'As-Sabur · Le Patient'},
@@ -4618,66 +4618,40 @@ function importData() {
   input.click();
 }
 function deleteMyData() {
+  const emailEl = document.getElementById('delete-modal-email');
+  if (emailEl) emailEl.textContent = ST.userEmail || ST.supabaseEmail || 'ton adresse email';
   document.getElementById('delete-modal').classList.add('open');
 }
 function closeDeleteModal() {
   const modal = document.getElementById('delete-modal');
   if (!modal) return;
   modal.classList.remove('open');
-  // Restaurer le bouton si suppression annulée
   const btn = document.getElementById('delete-confirm-btn');
-  if (btn) { btn.disabled = false; btn.textContent = '✓ Supprimer tout définitivement'; }
+  if (btn) { btn.disabled = false; btn.textContent = 'Confirmer la suppression'; }
 }
 async function confirmDeleteMyData() {
   const btn = document.getElementById('delete-confirm-btn');
-  if (btn) { btn.disabled = true; btn.textContent = 'Suppression en cours…'; }
+  if (btn) { btn.disabled = true; btn.textContent = 'Envoi en cours…'; }
 
-  // 1. localStorage
-  try { localStorage.clear(); } catch(e) {}
-  try { sessionStorage.setItem('sakina_deleted', '1'); } catch(e) {}
-
-  // 2. clearAuthCookie
-  clearAuthCookie();
-  _notifTimers.forEach(t => clearTimeout(t)); _notifTimers.length = 0;
-
-  // 3. Supabase — TOUT pendant que la session est encore valide
-  const _notifEmail = ST.supabaseEmail || ST.userEmail || 'inconnue';
-  const _notifUserId = ST.supabaseUserId || 'non connectée';
-  const _notifDate = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  const userEmail = ST.userEmail || ST.supabaseEmail || 'non renseigné';
+  const userId = ST.supabaseUserId || 'non connectée';
+  const now = new Date();
+  const date = now.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
+  const heure = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
 
   try {
-    const sb = await Promise.race([
-      initSupabase(),
-      new Promise(r => setTimeout(() => r(null), 2000))
-    ]).catch(() => null);
-    if (sb) {
-      const userId = ST.supabaseUserId;
-
-      // Email de notification AVANT signOut (session encore valide)
-      await sb.functions.invoke('notify-deletion', {
-        body: { userEmail: _notifEmail, userId: _notifUserId, date: _notifDate }
-      }).catch(() => {});
-
-      if (userId) {
-        await sb.from('user_data').delete().eq('user_id', userId).catch(() => {});
-        sb.functions.invoke('delete-account', { body: { userId } }).catch(() => {});
-      }
-
-      // signOut en dernier
-      const { error } = await sb.auth.signOut({ scope: 'global' }).catch(() => ({}));
-    }
-  } catch(e) {}
-
-  // Réinitialiser ST pour bloquer tout re-sync
-  ST.isAuthenticated = false;
-  ST.prenom = '';
-  ST.userEmail = null;
-  ST.supabaseUserId = null;
-  ST.manualSignOut = true;
-
-  closeDeleteModal();
-  alert('Ta demande de suppression a été envoyée 🌸\n\nNous traiterons ta demande dans les 48 heures.\nTu recevras un email de confirmation.');
-  setTimeout(() => { window.location.href = '/'; }, 1500);
+    const sb = await initSupabase();
+    if (!sb) throw new Error('supabase not ready');
+    const { error } = await sb.functions.invoke('notify-deletion', {
+      body: { userEmail, userId, date: `${date} à ${heure}` }
+    });
+    if (error) throw error;
+    closeDeleteModal();
+    showToast('Ta demande a été envoyée 🌸 Nous traiterons ta demande dans les 48 heures. Tu recevras un email de confirmation.');
+  } catch(e) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Confirmer la suppression'; }
+    showToast('Une erreur est survenue. Contacte-nous directement : sakina.evolution.contact@gmail.com');
+  }
 }
 
 // ═══════════════════════════════════════════════

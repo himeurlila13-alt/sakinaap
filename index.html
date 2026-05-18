@@ -992,7 +992,7 @@
     </div>
     <div class="ps-acc-body" id="acc-legal">
       <div class="ps-row" style="padding-left:20px;" onclick="exportData()"><div class="ps-ico">&#128229;</div><div><div class="ps-lbl">Exporter mes données</div><div class="ps-sub">Télécharger un fichier JSON — RGPD</div></div><div class="ps-arr">&#8250;</div></div>
-      <div class="ps-row" style="padding-left:20px;" onclick="deleteMyData()"><div class="ps-ico">&#128465;</div><div><div class="ps-lbl" style="color:#C4694A;">Réinitialiser mes données</div><div class="ps-sub">Efface tout de cet appareil — RGPD</div></div><div class="ps-arr">&#8250;</div></div>
+      <div class="ps-row" style="padding-left:20px;" onclick="deleteMyData()"><div class="ps-ico">&#128465;</div><div><div class="ps-lbl" style="color:#C4694A;">Supprimer mes données</div><div class="ps-sub">Demande de suppression RGPD — 48h</div></div><div class="ps-arr">&#8250;</div></div>
       <div class="ps-row" style="padding-left:20px;" onclick="openMentionsLegales()"><div class="ps-ico">&#9878;</div><div><div class="ps-lbl">Mentions légales</div><div class="ps-sub">Éditrice, hébergeur, données</div></div><div class="ps-arr">&#8250;</div></div>
       <div class="ps-row" style="padding-left:20px;" onclick="openConfidentialite()"><div class="ps-ico">&#128274;</div><div><div class="ps-lbl">Politique de confidentialité</div><div class="ps-sub">Tes données &amp; tes droits RGPD</div></div><div class="ps-arr">&#8250;</div></div>
       <div class="ps-row" style="padding-left:20px;" onclick="openCGU()"><div class="ps-ico">&#128203;</div><div><div class="ps-lbl">CGU &amp; Conditions d'abonnement</div><div class="ps-sub">Conditions d'utilisation de SakinApp</div></div><div class="ps-arr">&#8250;</div></div>
@@ -1205,21 +1205,16 @@
 <!-- MODAL SUPPRESSION DONNÉES -->
 <div class="modal-overlay" id="delete-modal" onclick="if(event.target===this)closeDeleteModal()">
   <div class="modal-sheet" style="text-align:center;">
-    <div style="font-size:40px;margin-bottom:12px;">&#128465;</div>
-    <div style="font-family:'Playfair Display',serif;font-size:18px;color:#C4694A;margin-bottom:10px;">Supprimer toutes mes données</div>
-    <div style="font-size:13px;color:var(--gris);line-height:1.7;margin-bottom:8px;">
-      Es-tu sûre de vouloir supprimer toutes tes données ?<br>
-      <strong style="color:var(--noir);">Cette action est irréversible.</strong>
+    <div class="modal-handle"></div>
+    <div style="font-size:36px;margin-bottom:12px;">🌸</div>
+    <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--noir);margin-bottom:14px;">Supprimer mes données</div>
+    <div style="font-size:13px;color:var(--gris);line-height:1.8;margin-bottom:20px;background:var(--sable);border-radius:14px;padding:14px 16px;">
+      Ta demande sera traitée dans les <strong style="color:var(--noir);">48 heures</strong>.<br>
+      Tu recevras un email de confirmation à<br>
+      <strong id="delete-modal-email" style="color:var(--noir);word-break:break-all;"></strong>
     </div>
-    <div style="font-size:12px;color:var(--gris);line-height:1.7;margin-bottom:20px;text-align:left;background:var(--sable);border-radius:12px;padding:12px 14px;">
-      Seront effacés définitivement :<br>
-      &#8226; Ton cycle, tes prières, tes objectifs<br>
-      &#8226; Ton historique sport &amp; skincare<br>
-      &#8226; Tes données sur nos serveurs (RGPD)<br>
-      &#8226; Ton compte SakinApp
-    </div>
-    <button id="delete-confirm-btn" onclick="confirmDeleteMyData()" style="width:100%;padding:14px;background:#C4694A;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;margin-bottom:10px;">✓ Supprimer tout définitivement</button>
-    <button onclick="closeDeleteModal()" style="width:100%;padding:14px;background:var(--sable);color:var(--noir);border:none;border-radius:14px;font-size:15px;cursor:pointer;">✗ Annuler</button>
+    <button id="delete-confirm-btn" onclick="confirmDeleteMyData()" style="width:100%;padding:14px;background:#C4694A;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:var(--sans);margin-bottom:10px;">Confirmer la suppression</button>
+    <button onclick="closeDeleteModal()" style="width:100%;padding:14px;background:var(--sable);color:var(--noir);border:none;border-radius:14px;font-size:15px;cursor:pointer;font-family:var(--sans);">Annuler</button>
   </div>
 </div>
 
