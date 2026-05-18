@@ -4624,48 +4624,37 @@ function closeDeleteModal() {
   const btn = document.getElementById('delete-confirm-btn');
   if (btn) { btn.disabled = false; btn.textContent = '✓ Supprimer tout définitivement'; }
 }
-function confirmDeleteMyData() {
+async function confirmDeleteMyData() {
   const btn = document.getElementById('delete-confirm-btn');
   if (btn) { btn.disabled = true; btn.textContent = 'Suppression en cours…'; }
 
-  // ── SYNCHRONE EN PREMIER — ne peut pas bloquer ──
-  _notifTimers.forEach(t => clearTimeout(t)); _notifTimers.length = 0;
-  clearAuthCookie();
+  // 1. localStorage
   try { localStorage.clear(); } catch(e) {}
   try { sessionStorage.setItem('sakina_deleted', '1'); } catch(e) {}
 
-  // ── SUPABASE — fire-and-forget, ne bloque pas le reload ──
-  const userId = ST.supabaseUserId;
-  if (userId) {
-    initSupabase().then(function(sb) {
-      if (!sb) return;
-      sb.from('user_data').delete().eq('user_id', userId).catch(function(){});
-      sb.auth.signOut({ scope: 'global' }).catch(function(){});
-      sb.functions.invoke('delete-account', { body: { userId } }).catch(function(){});
-    }).catch(function(){});
-  }
+  // 2. clearAuthCookie
+  clearAuthCookie();
+  _notifTimers.forEach(t => clearTimeout(t)); _notifTimers.length = 0;
 
-  // ── IndexedDB — fire-and-forget ──
-  if ('indexedDB' in window) {
-    try {
-      if (typeof indexedDB.databases === 'function') {
-        indexedDB.databases().then(function(dbs) {
-          dbs.forEach(function(db) { try { indexedDB.deleteDatabase(db.name); } catch(e){} });
-        }).catch(function(){});
+  // 3. await signOut — AVANT le reload pour couper la session Supabase
+  try {
+    const sb = await Promise.race([
+      initSupabase(),
+      new Promise(r => setTimeout(() => r(null), 2000))
+    ]).catch(() => null);
+    if (sb) {
+      const userId = ST.supabaseUserId;
+      if (userId) {
+        await sb.from('user_data').delete().eq('user_id', userId).catch(() => {});
+        sb.functions.invoke('delete-account', { body: { userId } }).catch(() => {});
       }
-    } catch(e) {}
-  }
+      await sb.auth.signOut({ scope: 'global' }).catch(() => {});
+    }
+  } catch(e) {}
 
-  // ── SW cache — fire-and-forget ──
-  if ('caches' in window) {
-    caches.keys().then(function(keys) {
-      keys.forEach(function(k) { caches.delete(k); });
-    }).catch(function(){});
-  }
-
-  // ── RELOAD après 400ms — laisse les appels réseau partir ──
+  // 4. Redirection
   closeDeleteModal();
-  setTimeout(function() { location.reload(); }, 400);
+  location.reload();
 }
 
 // ═══════════════════════════════════════════════
