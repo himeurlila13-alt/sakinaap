@@ -131,7 +131,7 @@
 
     <div id="auth-step2" style="display:none;">
       <div style="font-size:13px;color:#6B5B53;margin-bottom:16px;line-height:1.6;padding:12px;background:rgba(201,169,110,0.12);border-radius:12px;">
-        📧 Code envoyé&nbsp;! Ouvre ton email et entre les <strong>6 caractères</strong> ici.<br><span style="font-size:11px;color:#C9A96E;">(Vérifie aussi les spams)</span>
+        📧 Code envoyé&nbsp;! Ouvre ton email et entre les <strong>8 caractères</strong> ici.<br><span style="font-size:11px;color:#C9A96E;">(Vérifie aussi les spams)</span>
       </div>
       <input id="auth-otp-input" type="text" placeholder="· · · · · · · ·" inputmode="text" maxlength="8" autocomplete="one-time-code"
         style="width:100%;box-sizing:border-box;padding:16px;border:2px solid #C9A96E;border-radius:16px;font-size:26px;color:#2D2420;background:white;margin-bottom:12px;font-family:'DM Sans',sans-serif;outline:none;text-align:center;letter-spacing:10px;">
@@ -158,7 +158,7 @@
       </div>
       <div style="display:flex;align-items:flex-start;gap:10px;font-size:12px;color:#6B5B53;line-height:1.5;">
         <span style="color:#C9A96E;font-weight:700;flex-shrink:0;">2.</span>
-        Tu reçois un email avec un code à 6 caractères (vérifie les spams)
+        Tu reçois un email avec un code à 8 caractères (vérifie les spams)
       </div>
       <div style="display:flex;align-items:flex-start;gap:10px;font-size:12px;color:#6B5B53;line-height:1.5;">
         <span style="color:#C9A96E;font-weight:700;flex-shrink:0;">3.</span>
@@ -167,7 +167,7 @@
     </div>
 
     <div style="font-size:11px;color:#6B5B53;line-height:1.7;">
-      En continuant, tu acceptes nos conditions d&rsquo;utilisation.<br>Tes données sont chiffrées et sécurisées.
+      En continuant, tu acceptes nos <button onclick="openCGU()" style="background:none;border:none;padding:0;font-size:inherit;color:#7B5EA7;text-decoration:underline;cursor:pointer;font-family:inherit;">conditions d&rsquo;utilisation</button>.<br>Tes données sont chiffrées et sécurisées.
     </div>
   </div>
 </div>
@@ -188,6 +188,9 @@
       <span class="ob-privacy-txt">Tes donn&eacute;es sont sauvegard&eacute;es sur ton compte s&eacute;curis&eacute;. Jamais vendues, jamais partag&eacute;es.</span>
     </div>
     <button class="ob-btn" onclick="nextStep(1)" style="margin-top:24px;">Commencer</button>
+    <div style="font-size:11px;color:#6B5B53;line-height:1.7;text-align:center;margin-top:14px;">
+      En continuant, tu acceptes nos <button onclick="openCGU()" style="background:none;border:none;padding:0;font-size:inherit;color:#7B5EA7;text-decoration:underline;cursor:pointer;font-family:inherit;">conditions d&rsquo;utilisation</button>.
+    </div>
   </div>
   <div class="ob-step" id="step-1">
     <div class="ob-logo">SakinApp</div>
@@ -1542,7 +1545,7 @@
     </div>
     <div id="reconnect-step2" style="display:none;margin-top:4px;">
       <div style="font-size:13px;color:var(--gris);margin-bottom:14px;line-height:1.6;padding:10px;background:rgba(201,169,110,0.1);border-radius:10px;">
-        📧 Code envoyé&nbsp;! Entre les 6 caractères de ton email&nbsp;:
+        📧 Code envoyé&nbsp;! Entre les 8 caractères de ton email&nbsp;:
       </div>
       <input id="reconnect-otp" type="text" placeholder="· · · · · · · ·" inputmode="text" maxlength="8" autocomplete="one-time-code"
         style="width:100%;box-sizing:border-box;padding:14px;border:2px solid var(--gold,#C9A96E);border-radius:14px;font-size:26px;font-family:var(--sans);outline:none;text-align:center;letter-spacing:10px;margin-bottom:12px;">

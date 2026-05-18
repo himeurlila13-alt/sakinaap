@@ -393,7 +393,7 @@ async function verifyReconnectCode() {
   const email = document.getElementById('reconnect-email')?.value.trim();
   const code = document.getElementById('reconnect-otp')?.value.trim().replace(/\s/g, '');
   const msg = document.getElementById('reconnect-msg');
-  if (!code || code.length < 6) {
+  if (!code || code.length < 8) {
     if (msg) { msg.style.display = 'block'; msg.textContent = 'Entre le code complet.'; msg.style.color = '#C4694A'; msg.style.background = 'rgba(196,105,74,0.08)'; }
     return;
   }
@@ -445,7 +445,7 @@ async function handleMagicLink() {
 async function verifyAuthCode() {
   const email = document.getElementById('auth-email').value.trim();
   const code = document.getElementById('auth-otp-input').value.trim().replace(/\s/g, '');
-  if (!code || code.length < 6) { showAuthMsg('Entre le code complet.', 'error'); return; }
+  if (!code || code.length < 8) { showAuthMsg('Entre le code complet.', 'error'); return; }
   const btn = document.getElementById('auth-verify-btn');
   btn.disabled = true;
   btn.textContent = 'Vérification…';
@@ -1117,9 +1117,9 @@ function effectiveCycleDur() {
 }
 
 function phaseThresholds(dur) {
-  const hiverDays  = Math.round(dur * 0.20);
+  const hiverDays  = Math.floor(dur * 0.20);
   const springDays = Math.floor(dur * 0.30);
-  const eteDays    = Math.round(dur * 0.15);
+  const eteDays    = Math.floor(dur * 0.15);
   let springStartD = hiverDays + 1;
   if (ST.hiverEnd && ST.cycleStart) {
     const [hey, hem, hed] = ST.hiverEnd.split('-').map(Number);
@@ -1249,7 +1249,9 @@ function checkPaymentSuccess() {
 // ═══════════════════════════════════════════════
 function getTrialDays() {
   if (!ST.installDate) return 0;
-  return Math.max(0, Math.floor((Date.now() - ST.installDate) / 86400000));
+  const days = Math.floor((Date.now() - ST.installDate) / 86400000);
+  if (days < 0) { ST.installDate = Date.now(); saveState(); return 0; }
+  return days;
 }
 function isFullAccess() { return ST.isPremium || getTrialDays() < 20; }
 function isTrialActive() { return isFullAccess(); }
@@ -3718,6 +3720,7 @@ function nextStep(step) {
     const prenom = document.getElementById('input-prenom').value.trim();
     if (!prenom) { alert('Dis-moi ton prénom 🌸'); return; }
     ST.prenom = prenom;
+    saveState();
     const _n = new Date(); const today = _n.getFullYear() + '-' + String(_n.getMonth()+1).padStart(2,'0') + '-' + String(_n.getDate()).padStart(2,'0');
     const dateInput = document.getElementById('input-date');
     if (dateInput) { dateInput.value = today; dateInput.max = today; }
@@ -4667,7 +4670,7 @@ async function confirmDeleteMyData() {
 
   // Réinitialiser ST pour bloquer tout re-sync
   ST.isAuthenticated = false;
-  ST.userName = null;
+  ST.prenom = '';
   ST.userEmail = null;
   ST.supabaseUserId = null;
   ST.manualSignOut = true;
@@ -4732,7 +4735,7 @@ function renderHistoriqueCycles() {
       ${c.note ? `<div style="font-size:11px;color:var(--gris);margin-top:5px;font-style:italic;">"${c.note}"</div>` : ''}
     </div>`;
   }).join('');
-  const atLimit = cycles.length >= 4;
+  const atLimit = cycles.length >= 6;
   if (btn) btn.style.display = atLimit ? 'none' : '';
   if (limitMsg) limitMsg.style.display = atLimit ? '' : 'none';
 }
@@ -4838,7 +4841,7 @@ function saveHistoriqueCycle() {
     const idx = ST.historiqueCycles.findIndex(c => String(c.id) === String(editId));
     if (idx >= 0) ST.historiqueCycles[idx] = { ...ST.historiqueCycles[idx], dateDebut: dateVal, dureeCycle, dureeRegles, intensite, symptomes, note };
   } else {
-    if (ST.historiqueCycles.length >= 4) { showToast('Maximum 4 cycles passés.'); return; }
+    if (ST.historiqueCycles.length >= 6) { showToast('Maximum 6 cycles passés.'); return; }
     ST.historiqueCycles.push({ id: Date.now(), dateDebut: dateVal, dureeCycle, dureeRegles, intensite, symptomes, note });
     ST.historiqueCycles.sort((a, b) => b.dateDebut.localeCompare(a.dateDebut));
   }
@@ -5037,7 +5040,7 @@ function _stParseDur(str) {
 }
 
 function _stGetRest(phase) {
-  const map = { hiver: 60, printemps: 45, ete: 30, automne: 60 };
+  const map = { hiver: 60, printemps: 45, ete: 30, automne: 65 };
   return map[phase] || 45;
 }
 
@@ -5056,7 +5059,7 @@ function _stNormalizeEx(ex, idx) {
     reps: ex.repetitions || ex.reps || null,
     duree: ex.duree || ex.duration || null,
     repos: ex.repos || ex.rest || null,
-    desc: ex.description || ex.desc || '',
+    desc: ex.description || ex.desc || ex.detail || '',
     conseil: ex.conseil_cycle || ex.conseil || '',
     mod_easy: ex.modification_facile || '',
     mod_hard: ex.modification_difficile || '',
@@ -5129,10 +5132,10 @@ document.addEventListener('visibilitychange', function() {
 });
 
 // ── Construire les étapes ─────────────────────────────────────
-function _stxBuildSteps(spec) {
+function _stxBuildSteps(spec, overrideRest) {
   const steps = [];
   const phase = (typeof ST !== 'undefined' && ST.currentSaison) || 'printemps';
-  const restDur = _stGetRest(phase);
+  const restDur = (overrideRest != null) ? overrideRest : _stGetRest(phase);
 
   const warmup = (spec && spec.echauffement) ? spec.echauffement : null;
   if (warmup && warmup.length) {
@@ -5212,7 +5215,16 @@ function openSeanceTimer() {
     : null;
   const data = enriched || (spec && spec.data) || null;
 
-  _stx.steps = _stxBuildSteps(data);
+  let _stLevelRest = null;
+  if (spec && typeof SEANCES_SPORT !== 'undefined') {
+    const _nrMap = SEANCES_SPORT.printemps && SEANCES_SPORT.printemps.niveauxRepos;
+    const _baseRest = _nrMap ? (_nrMap[spec.level || 1] || null) : null;
+    if (_baseRest != null) {
+      if (spec.type && spec.type.startsWith('printemps-')) _stLevelRest = _baseRest;
+      else if (spec.type === 'automne-actif') _stLevelRest = _baseRest + (spec.reposExtra || 10);
+    }
+  }
+  _stx.steps = _stxBuildSteps(data, _stLevelRest);
   _stx.idx = 0;
   _stx.elapsed = 0;
   _stx.total = _stx.steps.reduce(function(sum, s) { return sum + s.duration; }, 0);
@@ -5246,8 +5258,8 @@ function _stxClose() {
 function _stxRender() {
   const step = _stx.steps[_stx.idx];
   if (!step) { _stxDone(); return; }
-  _stx.duration = step.duration;
-  _stx.remaining = step.duration;
+  _stx.duration = Math.max(1, step.duration);
+  _stx.remaining = Math.max(1, step.duration);
 
   const label = document.getElementById('st-state-label');
   const title = document.getElementById('st-ex-title');
