@@ -538,6 +538,11 @@ margin-bottom: 4px;
     Le Prophète ﷺ a dit : <strong>"Allah a quatre-vingt-dix-neuf noms — cent moins un. Celui qui les préserve entrera au Paradis."</strong> <span style="font-size:9px;color:var(--gris);">(Al-Bukhari)</span>
   </div>
 
+  <div class="intro-callout" style="background:#FAF6F0;border-left:2px solid var(--or);margin-bottom:4mm;">
+    <div class="intro-callout-label" style="color:var(--or-dark);">اَللَّهُ — Le Nom Suprême</div>
+    <div class="intro-callout-text">«&nbsp;Allah&nbsp;» est l'<em>ism al-jāmi'</em> — le Nom qui rassemble tous les autres. Il n'est pas l'un des 99 : il les contient tous. Les 99 noms que tu vas traverser sont Ses attributs ; «&nbsp;Allah&nbsp;» est Son Nom propre, au-dessus de tout.</div>
+  </div>
+
   <div class="intro-body">
     "Préserver" ne veut pas dire réciter une liste de mémoire. Cela signifie les connaître, les comprendre, les méditer, les invoquer — et laisser chacun d'eux transformer ta façon de voir Allah et de te voir toi-même.
   </div>
@@ -1097,7 +1102,7 @@ const ASMA = [
    med:"\"Tu donnes la royauté à qui Tu veux et Tu l'enlèves à qui Tu veux.\" (Coran 3:26) Aucun trône n'est permanent.",
    inv:"يَا مَالِكَ الْمُلْكِ أَعْطِنِي مَا يَنْفَعُنِي", inv_fr:'"Ô Maître du Royaume, donne-moi ce qui me profite."'},
 
-  {num:85, ar:'ذُو الْجَلَالِ',    tl:'Dhu-l-Jalal',    fr:'Maître de la Majesté et de la Générosité',
+  {num:85, ar:'ذُو الْجَلَالِ وَالْإِكْرَامِ',    tl:'Dhu-l-Jalali wal-Ikram',    fr:'Maître de la Majesté et de la Générosité',
    sens:"Ce nom combine deux opposés que seul Allah réunit : la majesté qui impose le respect et la générosité qui invite à l'amour.",
    med:"Le Prophète ﷺ aimait répéter ce nom. Il dit : \"Accrochez-vous à 'Ô Maître de la Majesté et de la Générosité'.\"",
    inv:"يَا ذَا الْجَلَالِ وَالْإِكْرَامِ", inv_fr:'"Ô Maître de la Majesté et de la Générosité." (Coran 55:27)'},
@@ -1173,14 +1178,28 @@ const ASMA = [
    inv:"يَا صَبُورُ أَعِنِّي عَلَى الصَّبْرِ", inv_fr:'"Ô Patient, aide-moi à être patiente."'},
 ];
 
+// "Allah" est l'ism al-jami (الاسم الجامع) — le Nom Suprême qui englobe tous les autres,
+// distinct des 99 noms des attributs (position des savants classiques, liste Tirmidhi 3507).
+// Al-Ahad (الأَحَدُ, Coran 112:1) est réintégré à sa position canonique entre Al-Wahid et As-Samad.
+const ASMA_DISPLAY = (() => {
+  const base = ASMA.slice(1).map(n => ({...n, num: n.num <= 67 ? n.num - 1 : n.num}));
+  base.splice(66, 0, {
+    num:67, ar:'الأَحَدُ', tl:'Al-Ahad', fr:"L'Unique Absolu, L'Un sans second",
+    sens:"Il est Un d'une unicité absolue qui n'admet aucune division, aucun semblable, aucun équivalent. La sourate Al-Ikhlas (Coran 112) Lui est entièrement consacrée — elle vaut un tiers du Coran.",
+    med:"قُلْ هُوَ اللَّهُ أَحَدٌ — Récite Al-Ikhlas ce soir. Répète-la trois fois. Elle vaut un tiers du Coran (Bukhari 5015).",
+    inv:"قُلْ هُوَ اللَّهُ أَحَدٌ", inv_fr:'"Dis : Il est Allah, L\'Unique." (Coran 112:1)'
+  });
+  return base;
+})();
+
 // Build nom pages (3 per page)
 function buildNomPages() {
   const container = document.getElementById('noms-pages');
   let pageHtml = '';
   let pageNum = 4;
 
-  for (let i = 0; i < ASMA.length; i += 3) {
-    const group = ASMA.slice(i, i + 3);
+  for (let i = 0; i < ASMA_DISPLAY.length; i += 3) {
+    const group = ASMA_DISPLAY.slice(i, i + 3);
     pageHtml += `<div class="page med-page">
       <svg class="page-corner tl" viewBox="0 0 60 60"><path d="M0 60 Q0 0 60 0" fill="none" stroke="#C9A96E" stroke-width="1.5"/></svg>
       <svg class="page-corner tr" viewBox="0 0 60 60"><path d="M0 60 Q0 0 60 0" fill="none" stroke="#C9A96E" stroke-width="1.5"/></svg>
