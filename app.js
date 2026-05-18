@@ -4651,12 +4651,8 @@ async function confirmDeleteMyData() {
       const userId = ST.supabaseUserId;
 
       // Email de notification AVANT signOut (session encore valide)
-      await sb.functions.invoke('send-welcome-email', {
-        body: {
-          to: 'sakina.evolution.contact@gmail.com',
-          subject: 'Demande suppression compte SakinApp',
-          html: `<p>Une utilisatrice demande la suppression de son compte.</p><p><b>Email :</b> ${_notifEmail}<br><b>User ID :</b> ${_notifUserId}<br><b>Date :</b> ${_notifDate}</p>`
-        }
+      await sb.functions.invoke('notify-deletion', {
+        body: { userEmail: _notifEmail, userId: _notifUserId, date: _notifDate }
       }).catch(() => {});
 
       if (userId) {
