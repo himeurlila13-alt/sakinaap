@@ -4350,6 +4350,7 @@ async function sendFeedback() {
   const text=document.getElementById('feedback-text').value.trim();
   const email=document.getElementById('feedback-email').value.trim();
   if (!selectedRating) { msg.style.color='#C4694A'; msg.textContent="Sélectionne une note 🌸"; return; }
+  if (!email || !email.includes('@')) { msg.style.color='#C4694A'; msg.textContent="Entre ton email pour qu'on puisse te répondre 🌸"; return; }
   const likes=[]; document.querySelectorAll('#likes-chips > div[data-selected="true"]').forEach(c=>likes.push(c.textContent.trim()));
   const btn=document.querySelector('[onclick="sendFeedback()"]'); if(btn){btn.disabled=true;btn.textContent='Envoi…';}
   try {
