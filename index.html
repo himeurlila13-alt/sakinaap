@@ -1178,7 +1178,72 @@
   </div>
 </div>
 
-<!-- MODAL CGU -->
+<!-- BOTTOM NAV -->
+<div class="bottom-nav" id="bottomNav">
+  <div class="nav-item active" id="nav-accueil" onclick="switchTab('accueil',this)">
+    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+    <div class="nav-label">Accueil</div><div class="nav-pip"></div>
+  </div>
+  <div class="nav-item" id="nav-cycle" onclick="switchTab('cycle',this)">
+    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+    <div class="nav-label">Cycle</div><div class="nav-pip"></div>
+  </div>
+  <div class="nav-item" id="nav-ame" onclick="switchTab('ame',this)">
+    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+    <div class="nav-label">Ame</div><div class="nav-pip"></div>
+  </div>
+  <div class="nav-item" id="nav-objectifs" onclick="switchTab('objectifs',this)">
+    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+    <div class="nav-label">Objectifs</div><div class="nav-pip"></div>
+  </div>
+  <div class="nav-item" id="nav-moi" onclick="switchTab('moi',this)">
+    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+    <div class="nav-label">Moi</div><div class="nav-pip"></div>
+  </div>
+</div>
+
+<!-- MODAL SUPPRESSION DONNÉES -->
+<div class="modal-overlay" id="delete-modal" onclick="if(event.target===this)closeDeleteModal()">
+  <div class="modal-sheet" style="text-align:center;">
+    <div style="font-size:40px;margin-bottom:12px;">&#128465;</div>
+    <div style="font-family:'Playfair Display',serif;font-size:18px;color:#C4694A;margin-bottom:10px;">Supprimer toutes mes données</div>
+    <div style="font-size:13px;color:var(--gris);line-height:1.7;margin-bottom:8px;">
+      Es-tu sûre de vouloir supprimer toutes tes données ?<br>
+      <strong style="color:var(--noir);">Cette action est irréversible.</strong>
+    </div>
+    <div style="font-size:12px;color:var(--gris);line-height:1.7;margin-bottom:20px;text-align:left;background:var(--sable);border-radius:12px;padding:12px 14px;">
+      Seront effacés définitivement :<br>
+      &#8226; Ton cycle, tes prières, tes objectifs<br>
+      &#8226; Ton historique sport &amp; skincare<br>
+      &#8226; Tes données sur nos serveurs (RGPD)<br>
+      &#8226; Ton compte SakinApp
+    </div>
+    <button id="delete-confirm-btn" onclick="confirmDeleteMyData()" style="width:100%;padding:14px;background:#C4694A;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;margin-bottom:10px;">✓ Supprimer tout définitivement</button>
+    <button onclick="closeDeleteModal()" style="width:100%;padding:14px;background:var(--sable);color:var(--noir);border:none;border-radius:14px;font-size:15px;cursor:pointer;">✗ Annuler</button>
+  </div>
+</div>
+
+<!-- MODAL 99 NOMS -->
+<div class="asma-modal-ov" id="asma-modal" onclick="if(event.target.id==='asma-modal')closeAsmaModal()">
+  <div class="asma-sheet">
+    <div class="asma-hdr">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div><div style="font-family:var(--serif);font-size:18px;color:var(--noir);">&#1575;&#1604;&#1571;&#1587;&#1605;&#1575;&#1569; &#1575;&#1604;&#1581;&#1587;&#1606;&#1609;</div><div style="font-size:12px;color:var(--gris);margin-top:2px;">Les 99 plus beaux noms d'Allah</div></div>
+        <button onclick="closeAsmaModal()" style="background:var(--sable);border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#215;</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:12px;">
+        <div style="flex:1;height:5px;background:var(--sable);border-radius:3px;overflow:hidden;"><div id="asma-modal-progress" style="height:100%;border-radius:3px;background:var(--season);transition:width .4s;width:0%"></div></div>
+        <div style="font-size:12px;color:var(--gris);white-space:nowrap;"><span id="asma-modal-count">0</span> / 99 appris</div>
+      </div>
+      <div style="font-size:11px;color:var(--gris);margin-top:8px;font-style:italic;font-family:var(--serif);">Coche les noms que tu connais</div>
+    </div>
+    <div class="asma-list" id="asma-list"></div>
+  </div>
+</div>
+
+</div><!-- app -->
+
+<!-- MODAL CGU — hors #app pour être visible depuis l'auth screen -->
 <div class="modal-overlay" id="cgu-modal" onclick="if(event.target.id==='cgu-modal')closeCGU()">
   <div class="modal-sheet" style="max-height:85vh;overflow-y:auto;">
     <div class="modal-handle"></div>
@@ -1245,71 +1310,6 @@
     </div>
   </div>
 </div>
-
-<!-- BOTTOM NAV -->
-<div class="bottom-nav" id="bottomNav">
-  <div class="nav-item active" id="nav-accueil" onclick="switchTab('accueil',this)">
-    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-    <div class="nav-label">Accueil</div><div class="nav-pip"></div>
-  </div>
-  <div class="nav-item" id="nav-cycle" onclick="switchTab('cycle',this)">
-    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-    <div class="nav-label">Cycle</div><div class="nav-pip"></div>
-  </div>
-  <div class="nav-item" id="nav-ame" onclick="switchTab('ame',this)">
-    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
-    <div class="nav-label">Ame</div><div class="nav-pip"></div>
-  </div>
-  <div class="nav-item" id="nav-objectifs" onclick="switchTab('objectifs',this)">
-    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
-    <div class="nav-label">Objectifs</div><div class="nav-pip"></div>
-  </div>
-  <div class="nav-item" id="nav-moi" onclick="switchTab('moi',this)">
-    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-    <div class="nav-label">Moi</div><div class="nav-pip"></div>
-  </div>
-</div>
-
-<!-- MODAL SUPPRESSION DONNÉES -->
-<div class="modal-overlay" id="delete-modal" onclick="if(event.target===this)closeDeleteModal()">
-  <div class="modal-sheet" style="text-align:center;">
-    <div style="font-size:40px;margin-bottom:12px;">&#128465;</div>
-    <div style="font-family:'Playfair Display',serif;font-size:18px;color:#C4694A;margin-bottom:10px;">Supprimer toutes mes données</div>
-    <div style="font-size:13px;color:var(--gris);line-height:1.7;margin-bottom:8px;">
-      Es-tu sûre de vouloir supprimer toutes tes données ?<br>
-      <strong style="color:var(--noir);">Cette action est irréversible.</strong>
-    </div>
-    <div style="font-size:12px;color:var(--gris);line-height:1.7;margin-bottom:20px;text-align:left;background:var(--sable);border-radius:12px;padding:12px 14px;">
-      Seront effacés définitivement :<br>
-      &#8226; Ton cycle, tes prières, tes objectifs<br>
-      &#8226; Ton historique sport &amp; skincare<br>
-      &#8226; Tes données sur nos serveurs (RGPD)<br>
-      &#8226; Ton compte SakinApp
-    </div>
-    <button id="delete-confirm-btn" onclick="confirmDeleteMyData()" style="width:100%;padding:14px;background:#C4694A;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;margin-bottom:10px;">✓ Supprimer tout définitivement</button>
-    <button onclick="closeDeleteModal()" style="width:100%;padding:14px;background:var(--sable);color:var(--noir);border:none;border-radius:14px;font-size:15px;cursor:pointer;">✗ Annuler</button>
-  </div>
-</div>
-
-<!-- MODAL 99 NOMS -->
-<div class="asma-modal-ov" id="asma-modal" onclick="if(event.target.id==='asma-modal')closeAsmaModal()">
-  <div class="asma-sheet">
-    <div class="asma-hdr">
-      <div style="display:flex;align-items:center;justify-content:space-between;">
-        <div><div style="font-family:var(--serif);font-size:18px;color:var(--noir);">&#1575;&#1604;&#1571;&#1587;&#1605;&#1575;&#1569; &#1575;&#1604;&#1581;&#1587;&#1606;&#1609;</div><div style="font-size:12px;color:var(--gris);margin-top:2px;">Les 99 plus beaux noms d'Allah</div></div>
-        <button onclick="closeAsmaModal()" style="background:var(--sable);border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#215;</button>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;margin-top:12px;">
-        <div style="flex:1;height:5px;background:var(--sable);border-radius:3px;overflow:hidden;"><div id="asma-modal-progress" style="height:100%;border-radius:3px;background:var(--season);transition:width .4s;width:0%"></div></div>
-        <div style="font-size:12px;color:var(--gris);white-space:nowrap;"><span id="asma-modal-count">0</span> / 99 appris</div>
-      </div>
-      <div style="font-size:11px;color:var(--gris);margin-top:8px;font-style:italic;font-family:var(--serif);">Coche les noms que tu connais</div>
-    </div>
-    <div class="asma-list" id="asma-list"></div>
-  </div>
-</div>
-
-</div><!-- app -->
 
 <!-- MODAL RECETTE PREMIUM -->
 <div class="modal-overlay" id="recipe-modal" onclick="if(event.target===this)closeRecipeModal()">
