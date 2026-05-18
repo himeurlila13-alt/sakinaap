@@ -4637,7 +4637,11 @@ async function confirmDeleteMyData() {
   clearAuthCookie();
   _notifTimers.forEach(t => clearTimeout(t)); _notifTimers.length = 0;
 
-  // 3. await signOut — AVANT le reload pour couper la session Supabase
+  // 3. Supabase — TOUT pendant que la session est encore valide
+  const _notifEmail = ST.supabaseEmail || ST.userEmail || 'inconnue';
+  const _notifUserId = ST.supabaseUserId || 'non connectée';
+  const _notifDate = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
   try {
     const sb = await Promise.race([
       initSupabase(),
@@ -4645,10 +4649,22 @@ async function confirmDeleteMyData() {
     ]).catch(() => null);
     if (sb) {
       const userId = ST.supabaseUserId;
+
+      // Email de notification AVANT signOut (session encore valide)
+      await sb.functions.invoke('send-welcome-email', {
+        body: {
+          to: 'sakina.evolution.contact@gmail.com',
+          subject: 'Demande suppression compte SakinApp',
+          html: `<p>Une utilisatrice demande la suppression de son compte.</p><p><b>Email :</b> ${_notifEmail}<br><b>User ID :</b> ${_notifUserId}<br><b>Date :</b> ${_notifDate}</p>`
+        }
+      }).catch(() => {});
+
       if (userId) {
         await sb.from('user_data').delete().eq('user_id', userId).catch(() => {});
         sb.functions.invoke('delete-account', { body: { userId } }).catch(() => {});
       }
+
+      // signOut en dernier
       const { error } = await sb.auth.signOut({ scope: 'global' }).catch(() => ({}));
     }
   } catch(e) {}
@@ -4659,23 +4675,6 @@ async function confirmDeleteMyData() {
   ST.userEmail = null;
   ST.supabaseUserId = null;
   ST.manualSignOut = true;
-
-  // 4. Email de notification + message + redirection
-  const userEmail = ST.supabaseEmail || ST.userEmail || 'inconnue';
-  const userId = ST.supabaseUserId || 'non connectée';
-  const dateStr = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-  try {
-    const sb = _supabase || await initSupabase().catch(() => null);
-    if (sb) {
-      sb.functions.invoke('send-welcome-email', {
-        body: {
-          to: 'sakina.evolution.contact@gmail.com',
-          subject: 'Demande suppression compte SakinApp',
-          html: `<p>Une utilisatrice demande la suppression de son compte.</p><p><b>Email :</b> ${userEmail}<br><b>User ID :</b> ${userId}<br><b>Date :</b> ${dateStr}</p>`
-        }
-      }).catch(() => {});
-    }
-  } catch(e) {}
 
   closeDeleteModal();
   alert('Ta demande de suppression a été envoyée 🌸\n\nNous traiterons ta demande dans les 48 heures.\nTu recevras un email de confirmation.');
