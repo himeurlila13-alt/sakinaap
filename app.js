@@ -487,6 +487,7 @@ function showAuthMsg(msg, type) {
 
 function setupAuthListener(sb) {
   sb.auth.onAuthStateChange(async (event, session) => {
+    if (ST.manualSignOut) return;
     if (event === 'SIGNED_IN' && session) {
       ST.supabaseUserId = session.user.id;
       ST.supabaseEmail = session.user.email;
@@ -4648,9 +4649,16 @@ async function confirmDeleteMyData() {
         await sb.from('user_data').delete().eq('user_id', userId).catch(() => {});
         sb.functions.invoke('delete-account', { body: { userId } }).catch(() => {});
       }
-      await sb.auth.signOut({ scope: 'global' }).catch(() => {});
+      const { error } = await sb.auth.signOut({ scope: 'global' }).catch(() => ({}));
     }
   } catch(e) {}
+
+  // Réinitialiser ST pour bloquer tout re-sync
+  ST.isAuthenticated = false;
+  ST.userName = null;
+  ST.userEmail = null;
+  ST.supabaseUserId = null;
+  ST.manualSignOut = true;
 
   // 4. Email de notification + message + redirection
   const userEmail = ST.supabaseEmail || ST.userEmail || 'inconnue';
@@ -4671,7 +4679,7 @@ async function confirmDeleteMyData() {
 
   closeDeleteModal();
   alert('Ta demande de suppression a été envoyée 🌸\n\nNous traiterons ta demande dans les 48 heures.\nTu recevras un email de confirmation.');
-  location.reload();
+  setTimeout(() => { window.location.href = '/'; }, 1500);
 }
 
 // ═══════════════════════════════════════════════
