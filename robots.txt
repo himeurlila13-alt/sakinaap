@@ -1,7 +1,8 @@
 User-agent: *
-Allow: /landing
-Allow: /landing.html
+Allow: /
+
 Disallow: /api/
 Disallow: /admin/
+Disallow: /supabase/
 
 Sitemap: https://sakinaap.com/sitemap.xml
