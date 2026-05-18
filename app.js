@@ -4355,7 +4355,7 @@ async function sendFeedback() {
   const btn=document.querySelector('[onclick="sendFeedback()"]'); if(btn){btn.disabled=true;btn.textContent='Envoi…';}
   try {
     const res=await fetch('https://formspree.io/f/xojpknkq',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({type:'FEEDBACK_BETA',note:selectedRating+'/5',jaime:likes.join(', ')||'Non renseigné',ameliorer:text||'Non renseigné',email:email||'Non renseigné',saison:ST.currentSaison,prenom:ST.prenom})});
-    if (res.ok) { ST.feedbackSent=true; saveState(); document.getElementById('feedback-form-wrap').style.display='none'; document.getElementById('feedback-sent-wrap').style.display='block'; }
+    if (res.ok) { ST.feedbackSent=true; saveState(); document.getElementById('feedback-section').style.display='none'; showToast('Merci pour ton retour 🌸 Barak Allahu fik !'); }
     else throw new Error();
   } catch(e) { if(btn){btn.disabled=false;btn.textContent='Envoyer mon avis ✦';} }
 }
