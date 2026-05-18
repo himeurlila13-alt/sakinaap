@@ -791,7 +791,7 @@ const SEANCES_SPORT = {
   // ── ÉTÉ — Performance, EMOM/AMRAP, 2 séances intenses + repos ────
   ete: {
     planning: ['intense','repos','intense','repos'],
-    messageApresIntense: 'Repose-toi demain — ton corps construit sa force pendant la récupération.',
+    messageApresIntense: 'Ton corps reconstruit sa force aujourd\'hui — c\'est le repos qui crée la progression. 🌿',
     niveaux: {
       1: { type: 'emom', duree: 10, label: 'EMOM 10 min', exercice: 'Squat', reps: 5,
            detail: 'Au début de chaque minute : 5 squats. Récupère le reste de la minute. 10 rounds.' },
