@@ -1688,7 +1688,7 @@ function renderDayScore() {
     ...(ST.currentSaison !== 'hiver' ? [{ emoji: '🕌', label: 'Prières', done: prayersDone >= 3, sub: prayersDone + '/5', onclick: "switchTabById('ame')" }] : []),
     { emoji: '📿', label: 'Dhikr',   done: dhikrDone, onclick: "switchTabById('ame')" },
     { emoji: '💪', label: 'Séance',  done: !!seanceDone, onclick: '' },
-    ...(ST.currentSaison !== 'hiver' ? [{ emoji: '📖', label: 'Coran', done: !!coranDone, onclick: "switchTabById('ame')" }] : []),
+    { emoji: '📖', label: 'Coran', done: !!coranDone, onclick: "switchTabById('ame')" },
   ];
 
   const doneCount = items.filter(it => it.done).length;
@@ -3064,9 +3064,9 @@ function renderAme(s) {
   // Dhikr cases à cocher
   renderDhikrChecks();
 
-  // Coran case à cocher — masqué pendant hiver (règles)
-  const coranCard = document.querySelector('.coran-check-card');
-  if (coranCard) coranCard.style.display = ST.currentSaison === 'hiver' ? 'none' : '';
+  // Coran case à cocher — note juridique affichée pendant hiver (divergence savants)
+  const coranNote = document.getElementById('coran-hiver-note');
+  if (coranNote) coranNote.style.display = ST.currentSaison === 'hiver' ? 'block' : 'none';
   renderCoranCheck();
 }
 
