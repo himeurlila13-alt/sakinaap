@@ -4652,8 +4652,25 @@ async function confirmDeleteMyData() {
     }
   } catch(e) {}
 
-  // 4. Redirection
+  // 4. Email de notification + message + redirection
+  const userEmail = ST.supabaseEmail || ST.userEmail || 'inconnue';
+  const userId = ST.supabaseUserId || 'non connectée';
+  const dateStr = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  try {
+    const sb = _supabase || await initSupabase().catch(() => null);
+    if (sb) {
+      sb.functions.invoke('send-welcome-email', {
+        body: {
+          to: 'sakina.evolution.contact@gmail.com',
+          subject: 'Demande suppression compte SakinApp',
+          html: `<p>Une utilisatrice demande la suppression de son compte.</p><p><b>Email :</b> ${userEmail}<br><b>User ID :</b> ${userId}<br><b>Date :</b> ${dateStr}</p>`
+        }
+      }).catch(() => {});
+    }
+  } catch(e) {}
+
   closeDeleteModal();
+  alert('Ta demande de suppression a été envoyée 🌸\n\nNous traiterons ta demande dans les 48 heures.\nTu recevras un email de confirmation.');
   location.reload();
 }
 
