@@ -1550,22 +1550,24 @@ const STRIPE_LINKS = {
 
 async function startStripeCheckout() {
   const plan = _selectedBilanPlan || 'annual';
-  if (ST.supabaseUserId) {
-    const params = new URLSearchParams({ plan, user_id: ST.supabaseUserId });
-    if (ST.supabaseEmail) params.set('email', ST.supabaseEmail);
-    try {
-      const sb = await initSupabase();
-      const { data: { session } } = await sb?.auth.getSession() || { data: { session: null } };
-      const jwt = session?.access_token;
-      const r = await fetch('/api/create-checkout?' + params.toString(), {
-        headers: jwt ? { Authorization: 'Bearer ' + jwt } : {}
-      });
-      const data = r.ok ? await r.json() : null;
-      if (data && data.url) { window.location.href = data.url; return; }
-    } catch (_) {}
-    window.location.href = STRIPE_LINKS[plan] || STRIPE_LINKS.annual;
-  } else {
-    window.location.href = STRIPE_LINKS[plan] || STRIPE_LINKS.annual;
+  if (!ST.supabaseUserId) {
+    showToast('Connecte-toi pour souscrire. 🌙');
+    return;
+  }
+  const params = new URLSearchParams({ plan });
+  try {
+    const sb = await initSupabase();
+    const { data: { session } } = await sb?.auth.getSession() || { data: { session: null } };
+    const jwt = session?.access_token;
+    if (!jwt) { showToast('Session expirée — reconnecte-toi. 🌙'); return; }
+    const r = await fetch('/api/create-checkout?' + params.toString(), {
+      headers: { Authorization: 'Bearer ' + jwt }
+    });
+    const data = r.ok ? await r.json() : null;
+    if (data && data.url) { window.location.href = data.url; return; }
+    showToast('Erreur lors de la redirection. Réessaie dans quelques instants. 🌙');
+  } catch (_) {
+    showToast('Erreur lors de la redirection. Réessaie dans quelques instants. 🌙');
   }
 }
 
@@ -4714,9 +4716,11 @@ async function confirmDeleteMyData() {
       body: { date: `${date} à ${heure}` }
     }).catch(() => {});
 
-    // Supprimer les données Supabase et déconnecter
+    // Supprimer le compte Auth + données via la Edge Function (best-effort)
     if (ST.supabaseUserId) {
-      await sb.from('user_data').delete().eq('user_id', ST.supabaseUserId).catch(() => {});
+      await sb.functions.invoke('delete-account', {
+        body: { userId: ST.supabaseUserId }
+      }).catch(() => {});
     }
     ST.manualSignOut = true;
     await sb.auth.signOut().catch(() => {});

@@ -12,17 +12,7 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
-    // 1 — Récupérer le userId depuis le body
-    const { userId } = await req.json();
-    if (!userId) {
-      return new Response(JSON.stringify({ error: 'userId manquant' }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    // 2 — Vérifier que la requête vient bien de l'utilisatrice connectée
-    //     Le JWT Bearer est envoyé automatiquement par supabase-js dans l'en-tête Authorization
+    // 1 — Vérifier le JWT et récupérer l'userId depuis le token uniquement
     const authHeader = req.headers.get('Authorization');
     if (!authHeader?.startsWith('Bearer ')) {
       return new Response(JSON.stringify({ error: 'Non authentifiée' }), {
@@ -31,7 +21,6 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    // Client avec anon key → vérifie le JWT de l'utilisatrice
     const supabaseUser = createClient(
       Deno.env.get('SUPABASE_URL')!,
       Deno.env.get('SUPABASE_ANON_KEY')!,
@@ -46,13 +35,7 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    // L'utilisatrice ne peut supprimer que son propre compte
-    if (user.id !== userId) {
-      return new Response(JSON.stringify({ error: 'Interdit' }), {
-        status: 403,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
+    const userId = user.id;
 
     // 3 — Client admin avec service_role → peut supprimer le compte Auth
     const supabaseAdmin = createClient(
