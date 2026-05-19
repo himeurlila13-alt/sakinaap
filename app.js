@@ -1255,18 +1255,24 @@ function _activatePremium(plan) {
   }, 1200);
 }
 
-function checkPaymentSuccess() {
+async function checkPaymentSuccess() {
   const params = new URLSearchParams(window.location.search);
   // Seul chemin valide : session_id Stripe vérifié côté serveur
   const sessionId = params.get('session_id');
   if (sessionId && sessionId.startsWith('cs_')) {
     window.history.replaceState({}, '', '/');
-    fetch('/api/verify-session?id=' + encodeURIComponent(sessionId))
-      .then(r => r.ok ? r.json() : null)
-      .then(data => { if (data && data.valid) _activatePremium(data.plan || 'monthly'); })
-      .catch(() => {});
+    try {
+      const sb = await initSupabase();
+      const { data: { session } } = await sb?.auth.getSession() || { data: { session: null } };
+      const jwt = session?.access_token;
+      if (!jwt) return;
+      const r = await fetch('/api/verify-session?id=' + encodeURIComponent(sessionId), {
+        headers: { Authorization: 'Bearer ' + jwt }
+      });
+      const data = r.ok ? await r.json() : null;
+      if (data && data.valid) _activatePremium(data.plan || 'monthly');
+    } catch (_) {}
   } else if (params.has('success') || params.has('payment')) {
-    // Nettoie l'URL sans activer le premium
     window.history.replaceState({}, '', '/');
   }
 }
