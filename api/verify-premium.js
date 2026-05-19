@@ -23,7 +23,8 @@ module.exports = async (req, res) => {
     const sub = rows[0];
     const now = new Date().toISOString();
     // Accès actif OU annulé mais période payée non expirée
-    const active = sub.status === 'active' ||
+    // past_due : paiement échoué mais Stripe relance — accès maintenu pendant la période de grâce
+    const active = sub.status === 'active' || sub.status === 'past_due' ||
       (sub.status === 'canceled' && sub.current_period_end && sub.current_period_end > now);
     res.json({ isPremium: active, plan: active ? sub.plan : null });
   } catch (e) {

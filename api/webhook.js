@@ -100,6 +100,20 @@ async function handler(req, res) {
         updated_at: new Date().toISOString(),
       });
     }
+  } else if (event.type === 'invoice.payment_failed') {
+    // Échec de paiement (renouvellement ou première tentative)
+    const subId = obj.subscription;
+    if (subId) {
+      const rows = await sbGetBySubId(subId);
+      if (rows && rows.length > 0) {
+        await sbUpsert('subscriptions', {
+          user_id: rows[0].user_id,
+          stripe_subscription_id: subId,
+          status: 'past_due',
+          updated_at: new Date().toISOString(),
+        });
+      }
+    }
   }
 
   res.json({ received: true });

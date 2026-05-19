@@ -600,7 +600,7 @@ async function verifyPremiumFromDB(sb, userId) {
     const { data } = await sb.from('subscriptions').select('status,plan,current_period_end').eq('user_id', userId).single();
     if (!data) { ST.isPremium = false; ST.premiumPlan = null; saveState(); return; }
     const now = new Date().toISOString();
-    ST.isPremium = data.status === 'active' ||
+    ST.isPremium = data.status === 'active' || data.status === 'past_due' ||
       (data.status === 'canceled' && data.current_period_end && data.current_period_end > now);
     ST.premiumPlan = ST.isPremium ? data.plan : null;
     if (!ST.isPremium) ST.trialEnded = false;
