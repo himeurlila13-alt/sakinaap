@@ -4716,6 +4716,14 @@ async function confirmDeleteMyData() {
     await sb.auth.signOut().catch(() => {});
   } catch(e) { /* best-effort */ }
 
+  // Réinitialiser ST avant le clear — pagehide() appelle saveState() au reload
+  // et réécrirait un état authentifié dans le localStorage qu'on vient de vider
+  ST.isAuthenticated = false;
+  ST.supabaseUserId = null;
+  ST.userEmail = null;
+  ST.supabaseEmail = null;
+  ST.prenom = null;
+  ST.cycleStart = null;
   // Effacer toutes les données locales (y compris la session Supabase)
   localStorage.clear();
   clearAuthCookie();
