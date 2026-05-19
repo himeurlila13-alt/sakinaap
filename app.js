@@ -83,6 +83,7 @@ let ST = {
   userEmail: null,
   authDate: null,
   welcomeEmailSent: false,
+  manualSignOut: false,
 };
 
 function saveState() {
@@ -1583,6 +1584,8 @@ function applyTrialLocks() {
   const la = document.getElementById('trial-lock-accueil'); if (la) la.style.display = active ? 'none' : 'block';
   const lc = document.getElementById('trial-lock-cycle'); if (lc) lc.style.display = active ? 'none' : 'block';
   const lo = document.getElementById('trial-lock-objectifs'); if (lo) lo.style.display = active ? 'none' : 'block';
+  const sc = document.getElementById('symptomes-content'); if (sc) sc.style.display = active ? '' : 'none';
+  const gc = document.getElementById('glaire-content'); if (gc) gc.style.display = active ? '' : 'none';
 }
 
 function applySaisonTheme() {
@@ -1771,7 +1774,7 @@ function renderCarteBouger(s) {
   const spec = getTodaySeanceSpec();
   const today = new Date().toDateString();
   const donVal = ST.seanceDone && ST.seanceDone[today];
-  const isDone = donVal === true || donVal === 'express';
+  const isDone = donVal === true || donVal === 'express' || donVal === 'repos-actif';
   const isReported = donVal === 'reportee';
 
   const nameEl = document.getElementById('qs-name');
@@ -2814,8 +2817,14 @@ function timerSkipRest() {
 }
 
 function _finishTimer() {
-  closeTimerModal();
+  const today = new Date().toDateString();
+  const donVal = ST.seanceDone && ST.seanceDone[today];
+  if (donVal === true || donVal === 'express' || donVal === 'repos-actif') {
+    closeTimerModal();
+    return;
+  }
   validerSeanceDash();
+  closeTimerModal();
 }
 
 function closeTimerModal() {
@@ -3269,6 +3278,7 @@ async function submitChangeEmail() {
 }
 function confirmSignOut() {
   document.getElementById('compte-modal').classList.remove('open');
+  ST.manualSignOut = true;
   ST.isAuthenticated = false; ST.userEmail = null; ST.supabaseUserId = null; ST.supabaseEmail = null;
   clearAuthCookie(); saveState();
   initSupabase().then(sb => { if (sb) sb.auth.signOut(); });
@@ -3358,7 +3368,7 @@ function checkDailyReset() {
   // Élaguer les entrées vieilles de plus de 30 jours pour limiter le localStorage
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - 30);
-  ['prayers','dhikrChecks','coranDone','seanceDone','symptomes','mouvDone','autreSymptomesText'].forEach(key => {
+  ['prayers','dhikrChecks','coranDone','seanceDone','symptomes','mouvDone','autreSymptomesText','feedbackSport'].forEach(key => {
     if (!ST[key] || typeof ST[key] !== 'object') return;
     Object.keys(ST[key]).forEach(k => { if (new Date(k) < cutoff) delete ST[key][k]; });
   });
@@ -3474,6 +3484,10 @@ function addCustomObj() {
   const inp = document.getElementById('obj-custom-input');
   if (!inp || !inp.value.trim()) return;
   if (!ST.customObjectifs) ST.customObjectifs = [];
+  if (ST.customObjectifs.length >= 10) {
+    showToast('Maximum 10 objectifs personnalisés atteint 🌙');
+    return;
+  }
   ST.customObjectifs.push(inp.value.trim());
   inp.value = '';
   saveState();
@@ -4243,6 +4257,8 @@ function selectEditDuration(el, val) {
 function saveEditCycle() {
   const dateVal=document.getElementById('edit-cycle-date').value;
   if (!dateVal) { alert('Indique la date 🌙'); return; }
+  const todayStr = new Date().toISOString().split('T')[0];
+  if (dateVal > todayStr) { alert('La date de début ne peut pas être dans le futur 🌙'); return; }
   if (ST.cycleStart && ST.cycleStart !== dateVal) {
     if (!ST.cycleHistory) ST.cycleHistory = [];
     ST.cycleHistory.unshift({ start: ST.cycleStart, duration: ST.cycleDuration || 28 });
@@ -4672,27 +4688,33 @@ function closeDeleteModal() {
 }
 async function confirmDeleteMyData() {
   const btn = document.getElementById('delete-confirm-btn');
-  if (btn) { btn.disabled = true; btn.textContent = 'Envoi en cours…'; }
-
-  const userEmail = ST.userEmail || ST.supabaseEmail || 'non renseigné';
-  const userId = ST.supabaseUserId || 'non connectée';
-  const now = new Date();
-  const date = now.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
-  const heure = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  if (btn) { btn.disabled = true; btn.textContent = 'Suppression en cours…'; }
 
   try {
     const sb = await initSupabase();
     if (!sb) throw new Error('supabase not ready');
-    const { error } = await sb.functions.invoke('notify-deletion', {
-      body: { userEmail, userId, date: `${date} à ${heure}` }
-    });
-    if (error) throw error;
-    closeDeleteModal();
-    showToast('Ta demande a été envoyée 🌸 Nous traiterons ta demande dans les 48 heures. Tu recevras un email de confirmation.');
-  } catch(e) {
-    if (btn) { btn.disabled = false; btn.textContent = 'Confirmer la suppression'; }
-    showToast('Une erreur est survenue. Contacte-nous directement : sakina.evolution.contact@gmail.com');
-  }
+
+    // Notifier l'équipe (best-effort)
+    const now = new Date();
+    const date = now.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
+    const heure = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    await sb.functions.invoke('notify-deletion', {
+      body: { date: `${date} à ${heure}` }
+    }).catch(() => {});
+
+    // Supprimer les données Supabase et déconnecter
+    if (ST.supabaseUserId) {
+      await sb.from('user_data').delete().eq('user_id', ST.supabaseUserId).catch(() => {});
+    }
+    ST.manualSignOut = true;
+    await sb.auth.signOut().catch(() => {});
+  } catch(e) { /* best-effort */ }
+
+  // Effacer les données locales dans tous les cas
+  localStorage.removeItem('sakinapp_v1');
+  clearAuthCookie();
+  sessionStorage.setItem('sakina_deleted', '1');
+  window.location.reload();
 }
 
 // ═══════════════════════════════════════════════
