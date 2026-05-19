@@ -211,7 +211,7 @@ Deno.serve(async (req: Request) => {
       body: JSON.stringify({
         from: 'SakinApp <noreply@sakinaap.com>',
         to: [verifiedEmail],
-        subject: `🌸 As-salamu alaykum ${p}, bienvenue dans SakinApp`,
+        subject: `🌸 Bienvenue dans SakinApp, ${p} !`,
         html: emailHtml,
       }),
     });
