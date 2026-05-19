@@ -1,4 +1,11 @@
+const ALLOWED_ORIGINS = ['https://sakinaap.com', 'http://localhost:3000'];
+
 module.exports = async (req, res) => {
+  const origin = req.headers['origin'];
+  if (origin && !ALLOWED_ORIGINS.includes(origin)) {
+    return res.status(403).json({ error: 'Origine non autorisée' });
+  }
+
   const { plan } = req.query;
 
   const PRICES = {

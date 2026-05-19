@@ -1,4 +1,11 @@
+const ALLOWED_ORIGINS = ['https://sakinaap.com', 'http://localhost:3000'];
+
 module.exports = async (req, res) => {
+  const origin = req.headers['origin'];
+  if (origin && !ALLOWED_ORIGINS.includes(origin)) {
+    return res.status(403).json({ valid: false, error: 'Origine non autorisée' });
+  }
+
   if (req.method !== 'POST') return res.status(405).end();
 
   const { code } = req.body || {};
@@ -21,9 +28,10 @@ module.exports = async (req, res) => {
     const user = await userRes.json();
 
     // Valide le code contre les env vars
+    const normalizedCode = code.trim().toUpperCase();
     const validCodes = (process.env.PREMIUM_CODES || '')
       .split(',').map(c => c.trim().toUpperCase()).filter(Boolean);
-    if (!validCodes.includes(code.trim().toUpperCase())) {
+    if (!validCodes.includes(normalizedCode)) {
       return res.json({ valid: false });
     }
 
@@ -36,6 +44,29 @@ module.exports = async (req, res) => {
     if (Array.isArray(existing) && existing.length > 0) {
       return res.json({ valid: true }); // Déjà actif — idempotent
     }
+
+    // Vérifie la limite globale d'utilisations du code
+    const usageRes = await fetch(
+      `${sbUrl}/rest/v1/redeemed_codes?code=eq.${encodeURIComponent(normalizedCode)}&select=user_id`,
+      { headers: { apikey: sbKey, Authorization: `Bearer ${sbKey}` } }
+    );
+    const usage = await usageRes.json();
+    const maxUses = parseInt(process.env.PREMIUM_CODE_MAX_USES || '1', 10);
+    if (Array.isArray(usage) && usage.length >= maxUses) {
+      return res.json({ valid: false, error: 'Code épuisé' });
+    }
+
+    // Enregistre l'activation du code
+    await fetch(`${sbUrl}/rest/v1/redeemed_codes`, {
+      method: 'POST',
+      headers: {
+        apikey: sbKey,
+        Authorization: `Bearer ${sbKey}`,
+        'Content-Type': 'application/json',
+        Prefer: 'resolution=ignore-duplicates,return=minimal',
+      },
+      body: JSON.stringify({ code: normalizedCode, user_id: user.id }),
+    });
 
     // Écrit l'abonnement dans Supabase
     const sbWrite = await fetch(`${sbUrl}/rest/v1/subscriptions`, {

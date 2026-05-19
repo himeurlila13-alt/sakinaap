@@ -1,4 +1,11 @@
+const ALLOWED_ORIGINS = ['https://sakinaap.com', 'http://localhost:3000'];
+
 module.exports = async (req, res) => {
+  const origin = req.headers['origin'];
+  if (origin && !ALLOWED_ORIGINS.includes(origin)) {
+    return res.status(403).json({ valid: false, error: 'Origine non autorisée' });
+  }
+
   const { id } = req.query;
   if (!id || !id.startsWith('cs_')) return res.status(400).json({ valid: false });
 
