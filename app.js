@@ -359,6 +359,17 @@ function showAuthScreen(cas) {
   _fadeIn(screen);
   document.getElementById('onboarding').style.display = 'none';
   document.getElementById('app').style.display = 'none';
+
+  // Restaurer l'étape OTP si l'utilisatrice revient après avoir quitté pour consulter ses mails
+  const pendingEmail = sessionStorage.getItem('sakina_otp_email');
+  if (pendingEmail) {
+    const emailEl = document.getElementById('auth-email');
+    if (emailEl) emailEl.value = pendingEmail;
+    document.getElementById('auth-step1').style.display = 'none';
+    document.getElementById('auth-step2').style.display = 'block';
+    document.getElementById('auth-howto').style.display = 'none';
+    document.getElementById('auth-steps').style.display = 'none';
+  }
 }
 
 function _showReconnectNudge() {
@@ -451,6 +462,7 @@ async function handleMagicLink() {
     if (!sb) throw new Error('Connexion au serveur impossible. Vérifie ta connexion internet et réessaie.');
     const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
     if (error) throw error;
+    sessionStorage.setItem('sakina_otp_email', email);
     document.getElementById('auth-step1').style.display = 'none';
     document.getElementById('auth-step2').style.display = 'block';
     document.getElementById('auth-howto').style.display = 'none';
@@ -475,6 +487,7 @@ async function verifyAuthCode() {
     if (!sb) throw new Error('Connexion au serveur impossible. Rafraîchis la page et réessaie.');
     const { error } = await sb.auth.verifyOtp({ email, token: code, type: 'email' });
     if (error) throw error;
+    sessionStorage.removeItem('sakina_otp_email');
     ST.isAuthenticated = true;
     ST.userEmail = email;
     ST.authDate = Date.now();
@@ -489,6 +502,7 @@ async function verifyAuthCode() {
 }
 
 function resetAuthStep() {
+  sessionStorage.removeItem('sakina_otp_email');
   document.getElementById('auth-step1').style.display = 'block';
   document.getElementById('auth-step2').style.display = 'none';
   document.getElementById('auth-howto').style.display = 'flex';
