@@ -3278,9 +3278,9 @@ async function submitChangeEmail() {
 }
 function confirmSignOut() {
   document.getElementById('compte-modal').classList.remove('open');
-  ST.manualSignOut = true;
   ST.isAuthenticated = false; ST.userEmail = null; ST.supabaseUserId = null; ST.supabaseEmail = null;
-  clearAuthCookie(); saveState();
+  clearAuthCookie(); saveState(); // saveState AVANT manualSignOut pour ne pas le persister
+  ST.manualSignOut = true;
   initSupabase().then(sb => { if (sb) sb.auth.signOut(); });
   showAuthScreen();
 }
