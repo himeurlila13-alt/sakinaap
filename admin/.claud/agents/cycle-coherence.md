@@ -1,3 +1,4 @@
+---
 name: cycle-coherence 
 description: Vérifie que TOUTES les recommandations (sport, alimentation, skincare) sont cohérentes avec la phase du cycle menstruel affichée. 
 tools: read, bash 

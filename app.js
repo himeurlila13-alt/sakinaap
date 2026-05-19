@@ -64,6 +64,9 @@ let ST = {
   totalSeancesAll: 0,
   totalReportsAll: 0,
   checkpointProgress: 0,
+  niveauStreak: 0,
+  _lastNiveauStreak: null,
+  _lastNiveauPhase: null,
   _proposeNewEx5: false,
   _proposeFatigue3: false,
   isAuthenticated: false,
@@ -77,7 +80,9 @@ function saveState() {
   const toSave = {...ST};
   delete toSave.currentSaison;
   delete toSave.currentDay;
-  try { localStorage.setItem('sakinapp_v1', JSON.stringify(toSave)); } catch(e) {}
+  try { localStorage.setItem('sakinapp_v1', JSON.stringify(toSave)); } catch(e) {
+    if (e && e.name === 'QuotaExceededError') showToast('Stockage presque plein — exporte tes données dans Paramètres.');
+  }
   syncToSupabase();
 }
 function loadState() {
@@ -1125,7 +1130,9 @@ function phaseThresholds(dur) {
     const [hey, hem, hed] = ST.hiverEnd.split('-').map(Number);
     const [sy, sm, sd]    = ST.cycleStart.split('-').map(Number);
     const hiverEndDiff = Math.floor((new Date(hey, hem-1, hed) - new Date(sy, sm-1, sd)) / 86400000);
-    if (hiverEndDiff > 0 && hiverEndDiff < dur) springStartD = Math.max(2, hiverEndDiff + 1);
+    const eteStartRaw = hiverDays + springDays + 1;
+    if (hiverEndDiff > 0 && hiverEndDiff < dur)
+      springStartD = Math.max(2, Math.min(hiverEndDiff + 1, eteStartRaw - 1));
   }
   const eteStartD = hiverDays + springDays + 1;
   const eteEndD   = hiverDays + springDays + eteDays;
@@ -1366,12 +1373,18 @@ function _bilanStats() {
   ).length;
   const coranDays = Object.keys(ST.coranDone || {}).filter(d => inCycle(d) && ST.coranDone[d]).length;
   let objCheckCount = 0;
-  Object.values(ST.weeklyObjChecks || {}).forEach(week => {
-    Object.values(week).forEach(arr => { objCheckCount += (arr||[]).length; });
-  });
-  Object.values(ST.customObjChecks || {}).forEach(week => {
-    Object.values(week).forEach(arr => { objCheckCount += (arr||[]).length; });
-  });
+  const cycleStartDate = ST.cycleStart ? new Date(ST.cycleStart) : null;
+  const _countObjChecks = (dict) => {
+    Object.values(dict || {}).forEach(week => {
+      Object.values(week).forEach(arr => {
+        (arr || []).forEach(dateStr => {
+          if (!cycleStartDate || new Date(dateStr) >= cycleStartDate) objCheckCount++;
+        });
+      });
+    });
+  };
+  _countObjChecks(ST.weeklyObjChecks);
+  _countObjChecks(ST.customObjChecks);
   const cycleDuration = ST.cycleDuration || 28;
   return { seanceCount, seanceLevel, symptomDays, prayerDays, allPrayersDays, dhikrDays, coranDays, objCheckCount, cycleDuration };
 }
@@ -1382,7 +1395,9 @@ function showBilanModal() {
   if (!el) return;
   const { seanceCount, seanceLevel, symptomDays, prayerDays, allPrayersDays, dhikrDays, coranDays, objCheckCount, cycleDuration } = _bilanStats();
 
-  const joursSuivis = Math.min(ST.currentDay || getTrialDays() || 20, ST.cycleDuration || 28);
+  const joursSuivis = ST.cycleStart
+    ? Math.min(ST.currentDay || 1, ST.cycleDuration || 28)
+    : Math.min(getTrialDays() || 0, 20);
   const headerDays = document.getElementById('bilan-header-days');
   if (headerDays) headerDays.textContent = `tu as traversé ${joursSuivis} jour${joursSuivis > 1 ? 's' : ''}`;
 
@@ -2285,9 +2300,7 @@ function openNiveauModal(idx) {
 }
 function closeNiveauModal() { document.getElementById('niveau-modal').classList.remove('open'); }
 
-function checkSeanceProgression() {
-  // Remplacé par checkpointProgress dans validerSeanceDash — gardé pour compatibilité
-}
+
 
 function handleProgressionAnswer(ans) {
   document.getElementById('progression-modal').classList.remove('open');
@@ -2648,8 +2661,8 @@ function refuseSeanceSurprise() {
 }
 
 function _triggerCheckpoint() {
-  if (!isFullAccess()) return;
   ST.checkpointProgress = 0;
+  if (!isFullAccess()) { saveState(); return; }
   saveState();
   document.getElementById('progression-modal')?.classList.add('open');
 }
@@ -2847,7 +2860,9 @@ function renderHistoriqueSport() {
   const levelNames = ['Essentielle','À ton rythme','Vitalité','Pleine puissance'];
   const streak = _getStreakLabel();
   const prog = (ST.checkpointProgress || 0) % 5;
-  const nextCp = prog < 0.01 ? 5 : Math.ceil((5 - prog) * 2) / 2;
+  const nextCpRaw = prog < 0.01 ? 5 : Math.ceil((5 - prog) * 2) / 2;
+  const nextCpInt = Number.isInteger(nextCpRaw) ? nextCpRaw : nextCpRaw;
+  const nextCpLabel = Number.isInteger(nextCpInt) ? `${nextCpInt} séance${nextCpInt > 1 ? 's' : ''}` : `encore ~${Math.ceil(nextCpRaw)} séance${Math.ceil(nextCpRaw) > 1 ? 's' : ''}`;
   el.innerHTML = `
     <div class="sport-histo-title">💪 Ton parcours sport</div>
     <div class="sport-histo-grid">
@@ -2857,7 +2872,7 @@ function renderHistoriqueSport() {
       <div class="sport-histo-stat"><div class="sport-histo-num">${totalReported}</div><div class="sport-histo-lbl">reportées</div></div>
     </div>
     ${streak ? `<div class="sport-histo-streak">${streak}</div>` : ''}
-    <div class="sport-histo-next">Prochain checkpoint dans <strong>${nextCp} séance${nextCp > 1 ? 's' : ''}</strong></div>`;
+    <div class="sport-histo-next">Prochain checkpoint dans <strong>${nextCpLabel}</strong></div>`;
 }
 
 function showLevelMax() {
@@ -3796,7 +3811,17 @@ function updateMessage() {
   const mood = ST.checkin || 'bien';
   const el = document.getElementById('daily-message');
   if (!el) return;
-  const dayMsg = typeof MESSAGES_JOUR !== 'undefined' && MESSAGES_JOUR[ST.currentDay];
+  // MESSAGES_JOUR est calibré sur 28 jours — on vérifie que la phase du message
+  // correspond à la phase réelle avant de l'utiliser (sinon fallback générique)
+  let dayMsg = null;
+  if (typeof MESSAGES_JOUR !== 'undefined') {
+    const candidate = MESSAGES_JOUR[ST.currentDay];
+    if (candidate) {
+      const d = ST.currentDay;
+      const phaseFor28 = d <= 5 ? 'hiver' : d <= 13 ? 'printemps' : d <= 17 ? 'ete' : 'automne';
+      if (phaseFor28 === ST.currentSaison) dayMsg = candidate;
+    }
+  }
   el.textContent = (dayMsg && dayMsg[mood]) || s.messages[mood] || s.messages.bien;
 }
 
@@ -3975,18 +4000,19 @@ function restoreGlaire() {
 // Retourne l'index 0-basé dans la phase courante (pour pick dans REPAS/SOINS_QUOTIDIENS)
 function dayWithinPhase(cycleDay, cycleDur) {
   const dur = Math.max(20, Math.min(60, cycleDur));
+  const day = Math.max(1, cycleDay);
   const { springStartD, eteStartD, eteEndD } = phaseThresholds(dur);
-  if (cycleDay < springStartD) return cycleDay - 1;
-  if (cycleDay < eteStartD) return cycleDay - springStartD;
-  if (cycleDay <= eteEndD) return cycleDay - eteStartD;
-  return cycleDay - (eteEndD + 1);
+  if (day < springStartD) return day - 1;
+  if (day < eteStartD) return day - springStartD;
+  if (day <= eteEndD) return day - eteStartD;
+  return day - (eteEndD + 1);
 }
 
 function getAutomneMicroPhase(cycleDay, cycleDur) {
   const dur = Math.max(20, Math.min(60, cycleDur));
   const { eteEndD } = phaseThresholds(dur);
   const autLen = dur - eteEndD;
-  const autDay = cycleDay - eteEndD;
+  const autDay = Math.max(1, cycleDay - eteEndD);
   if (autDay <= Math.floor(autLen * 0.35)) return 'actif';
   if (autDay <= Math.floor(autLen * 0.70)) return 'doux';
   return 'fin';
@@ -4363,7 +4389,8 @@ function restoreFeedback() {
   const section=document.getElementById('feedback-section'); if(!section) return;
   if (!ST.cycleStart) { section.style.display='none'; return; }
   const [_fy,_fm,_fd]=ST.cycleStart.split('-').map(Number);
-  const daysSince=Math.floor((Date.now()-new Date(_fy,_fm-1,_fd))/86400000);
+  const now=new Date(); const todayMidnight=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const daysSince=Math.floor((todayMidnight-new Date(_fy,_fm-1,_fd))/86400000);
   if (ST.feedbackSent) { section.style.display='none'; return; }
   if (daysSince<3) { section.style.display='none'; return; }
   section.style.display='block';

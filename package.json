@@ -4,5 +4,11 @@
   "private": true,
   "engines": {
     "node": "20.x"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1"
+  },
+  "dependencies": {
+    "sharp": "^0.34.5"
   }
 }

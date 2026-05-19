@@ -10,6 +10,8 @@ function verifyStripeSignature(payload, sigHeader, secret) {
     if (k === 'v1') signatures.push(v);
   }
   if (!timestamp || signatures.length === 0) return false;
+  // Rejette les webhooks de plus de 5 minutes (protection anti-replay)
+  if (Math.abs(Date.now() / 1000 - parseInt(timestamp, 10)) > 300) return false;
   const signedPayload = `${timestamp}.${payload}`;
   const expected = crypto.createHmac('sha256', secret).update(signedPayload, 'utf8').digest('hex');
   const expectedBuf = Buffer.from(expected, 'hex');

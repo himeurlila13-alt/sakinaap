@@ -27,6 +27,16 @@ module.exports = async (req, res) => {
       return res.json({ valid: false });
     }
 
+    // Vérifie que l'utilisatrice n'a pas déjà un abonnement actif via code
+    const existingRes = await fetch(
+      `${sbUrl}/rest/v1/subscriptions?user_id=eq.${user.id}&plan=eq.code&status=eq.active&select=user_id`,
+      { headers: { apikey: sbKey, Authorization: `Bearer ${sbKey}` } }
+    );
+    const existing = await existingRes.json();
+    if (Array.isArray(existing) && existing.length > 0) {
+      return res.json({ valid: true }); // Déjà actif — idempotent
+    }
+
     // Écrit l'abonnement dans Supabase
     const sbWrite = await fetch(`${sbUrl}/rest/v1/subscriptions`, {
       method: 'POST',

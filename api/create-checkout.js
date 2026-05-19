@@ -1,5 +1,5 @@
 module.exports = async (req, res) => {
-  const { plan, user_id, email } = req.query;
+  const { plan, email } = req.query;
 
   const PRICES = {
     monthly: process.env.STRIPE_PRICE_MENSUEL,
@@ -17,21 +17,21 @@ module.exports = async (req, res) => {
     return res.status(500).json({ error: 'Config manquante' });
   }
 
-  // Vérifie JWT et cohérence avec user_id
+  // JWT obligatoire — l'ID de l'utilisatrice vient du token, pas du query param
   const authHeader = req.headers['authorization'] || '';
   const jwt = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
-  if (jwt) {
-    try {
-      const userRes = await fetch(`${sbUrl}/auth/v1/user`, {
-        headers: { apikey: sbKey, Authorization: `Bearer ${jwt}` }
-      });
-      if (userRes.ok) {
-        const userData = await userRes.json();
-        if (user_id && userData.id !== user_id) {
-          return res.status(403).json({ error: 'Non autorisée' });
-        }
-      }
-    } catch (_) {}
+  if (!jwt) return res.status(401).json({ error: 'Non authentifiée' });
+
+  let verifiedUserId;
+  try {
+    const userRes = await fetch(`${sbUrl}/auth/v1/user`, {
+      headers: { apikey: sbKey, Authorization: `Bearer ${jwt}` }
+    });
+    if (!userRes.ok) return res.status(401).json({ error: 'Token invalide' });
+    const userData = await userRes.json();
+    verifiedUserId = userData.id;
+  } catch (_) {
+    return res.status(401).json({ error: 'Vérification impossible' });
   }
 
   try {
@@ -46,7 +46,7 @@ module.exports = async (req, res) => {
         customerId = searchData.data[0].id;
       } else {
         const params = new URLSearchParams({ email });
-        if (user_id) params.set('metadata[user_id]', user_id);
+        params.set('metadata[user_id]', verifiedUserId);
         const create = await fetch('https://api.stripe.com/v1/customers', {
           method: 'POST',
           headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -66,7 +66,7 @@ module.exports = async (req, res) => {
       success_url: `https://sakinaap.com/?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: 'https://sakinaap.com/',
       'metadata[plan]': plan,
-      'metadata[user_id]': user_id || '',
+      'metadata[user_id]': verifiedUserId,
     });
     if (customerId) body.append('customer', customerId);
 

@@ -114,10 +114,11 @@ function updateNiveauStreak(validated) {
     ST.niveauStreak = 0;
     return;
   }
-  // Réinitialise si changement de niveau
-  if (ST._lastNiveauStreak !== ST.seanceLevel) {
+  // Réinitialise si changement de niveau ou de phase
+  if (ST._lastNiveauStreak !== ST.seanceLevel || ST._lastNiveauPhase !== ST.currentSaison) {
     ST.niveauStreak = 0;
     ST._lastNiveauStreak = ST.seanceLevel;
+    ST._lastNiveauPhase = ST.currentSaison;
   }
   ST.niveauStreak = (ST.niveauStreak || 0) + 1;
 }

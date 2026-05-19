@@ -15,12 +15,17 @@ module.exports = async (req, res) => {
     const user = await userRes.json();
 
     const r = await fetch(
-      `${url}/rest/v1/subscriptions?user_id=eq.${user.id}&select=status,plan`,
+      `${url}/rest/v1/subscriptions?user_id=eq.${user.id}&select=status,plan,current_period_end&order=updated_at.desc&limit=1`,
       { headers: { apikey: key, Authorization: `Bearer ${key}` } }
     );
     const rows = await r.json();
-    const active = Array.isArray(rows) && rows.length > 0 && rows[0].status === 'active';
-    res.json({ isPremium: active, plan: active ? rows[0].plan : null });
+    if (!Array.isArray(rows) || rows.length === 0) return res.json({ isPremium: false, plan: null });
+    const sub = rows[0];
+    const now = new Date().toISOString();
+    // Accès actif OU annulé mais période payée non expirée
+    const active = sub.status === 'active' ||
+      (sub.status === 'canceled' && sub.current_period_end && sub.current_period_end > now);
+    res.json({ isPremium: active, plan: active ? sub.plan : null });
   } catch (e) {
     res.status(500).json({ isPremium: false, error: e.message });
   }
