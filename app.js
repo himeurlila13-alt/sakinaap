@@ -336,8 +336,12 @@ function showAuthScreen(cas) {
   // cas 2 : a un prenom mais session expirée
   // cas 3 (défaut) : nouvelle utilisatrice
   const isReturning = cas === 2 || (!cas && ST.prenom && ST.cycleStart);
-  const title   = document.querySelector('#auth-screen [data-auth-title]');
-  const sub     = document.querySelector('#auth-screen [data-auth-sub]');
+  const isPwa = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+  const hasEmail = !!(ST.userEmail || ST.supabaseEmail || _getCookie('sakina_email'));
+  const isPwaFirstOpen = isPwa && hasEmail && !ST.prenom;
+
+  const title = document.querySelector('#auth-screen [data-auth-title]');
+  const sub   = document.querySelector('#auth-screen [data-auth-sub]');
   const emailEl = document.getElementById('auth-email');
 
   if (title) {
@@ -346,12 +350,17 @@ function showAuthScreen(cas) {
       : 'As-salamu alaykum 🌸';
   }
   if (sub) {
-    sub.textContent = isReturning
-      ? 'Entre ton email pour te reconnecter.'
-      : 'Entre ton adresse email pour accéder à ton espace SakinApp.';
+    if (isPwaFirstOpen) {
+      sub.textContent = 'Une dernière étape pour retrouver ton espace — entre ton email, tu recevras un code. C\'est la seule fois. 🌸';
+    } else {
+      sub.textContent = isReturning
+        ? 'Entre ton email pour te reconnecter.'
+        : 'Entre ton adresse email pour accéder à ton espace SakinApp.';
+    }
   }
-  if (emailEl && isReturning && (ST.userEmail || ST.supabaseEmail)) {
-    emailEl.value = ST.userEmail || ST.supabaseEmail;
+  const savedEmail = ST.userEmail || ST.supabaseEmail || decodeURIComponent(_getCookie('sakina_email') || '');
+  if (emailEl && (isReturning || isPwaFirstOpen) && savedEmail) {
+    emailEl.value = savedEmail;
   }
 
   const screen = document.getElementById('auth-screen');
