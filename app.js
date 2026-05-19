@@ -1,3 +1,13 @@
+function _esc(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;');
+}
+
 // ═══════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════
@@ -587,8 +597,11 @@ function syncToSupabase() {
 
 async function verifyPremiumFromDB(sb, userId) {
   try {
-    const { data } = await sb.from('subscriptions').select('status,plan').eq('user_id', userId).single();
-    ST.isPremium = !!(data && data.status === 'active');
+    const { data } = await sb.from('subscriptions').select('status,plan,current_period_end').eq('user_id', userId).single();
+    if (!data) { ST.isPremium = false; ST.premiumPlan = null; saveState(); return; }
+    const now = new Date().toISOString();
+    ST.isPremium = data.status === 'active' ||
+      (data.status === 'canceled' && data.current_period_end && data.current_period_end > now);
     ST.premiumPlan = ST.isPremium ? data.plan : null;
     if (!ST.isPremium) ST.trialEnded = false;
     saveState();
@@ -3434,7 +3447,7 @@ function renderWeeklyObjs() {
       return `
         <div class="obj-item ${todayDone ? 'done' : ''}" onclick="toggleCustomObj(${i})">
           <div class="obj-check">${todayDone ? '✓' : ''}</div>
-          <div class="obj-content"><div class="obj-label">📌 ${label}</div></div>
+          <div class="obj-content"><div class="obj-label">📌 ${_esc(label)}</div></div>
           <button onclick="event.stopPropagation();removeCustomObj(${i})" class="obj-remove-btn">×</button>
         </div>`;
     }).join('');
@@ -4731,10 +4744,10 @@ function renderHistoriqueCycles() {
       <div style="display:flex;gap:6px;flex-wrap:wrap;">
         <span style="font-size:11px;background:white;border-radius:8px;padding:3px 8px;color:var(--gris);">📅 ${c.dureeCycle} jours</span>
         <span style="font-size:11px;background:white;border-radius:8px;padding:3px 8px;color:var(--gris);">🩸 ${c.dureeRegles}j de règles</span>
-        ${c.intensite ? `<span style="font-size:11px;background:white;border-radius:8px;padding:3px 8px;color:var(--gris);">${intLabel[c.intensite] || c.intensite}</span>` : ''}
+        ${c.intensite ? `<span style="font-size:11px;background:white;border-radius:8px;padding:3px 8px;color:var(--gris);">${_esc(intLabel[c.intensite] || c.intensite)}</span>` : ''}
       </div>
       ${symp ? `<div style="font-size:14px;margin-top:7px;letter-spacing:2px;">${symp}</div>` : ''}
-      ${c.note ? `<div style="font-size:11px;color:var(--gris);margin-top:5px;font-style:italic;">"${c.note}"</div>` : ''}
+      ${c.note ? `<div style="font-size:11px;color:var(--gris);margin-top:5px;font-style:italic;">"${_esc(c.note)}"</div>` : ''}
     </div>`;
   }).join('');
   const atLimit = cycles.length >= 6;

@@ -1,5 +1,5 @@
 module.exports = async (req, res) => {
-  const { plan, email } = req.query;
+  const { plan } = req.query;
 
   const PRICES = {
     monthly: process.env.STRIPE_PRICE_MENSUEL,
@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
   const jwt = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
   if (!jwt) return res.status(401).json({ error: 'Non authentifiée' });
 
-  let verifiedUserId;
+  let verifiedUserId, verifiedEmail;
   try {
     const userRes = await fetch(`${sbUrl}/auth/v1/user`, {
       headers: { apikey: sbKey, Authorization: `Bearer ${jwt}` }
@@ -30,22 +30,23 @@ module.exports = async (req, res) => {
     if (!userRes.ok) return res.status(401).json({ error: 'Token invalide' });
     const userData = await userRes.json();
     verifiedUserId = userData.id;
+    verifiedEmail = userData.email;
   } catch (_) {
     return res.status(401).json({ error: 'Vérification impossible' });
   }
 
   try {
     let customerId;
-    if (email) {
+    if (verifiedEmail) {
       const search = await fetch(
-        `https://api.stripe.com/v1/customers?email=${encodeURIComponent(email)}&limit=1`,
+        `https://api.stripe.com/v1/customers?email=${encodeURIComponent(verifiedEmail)}&limit=1`,
         { headers: { Authorization: `Bearer ${key}` } }
       );
       const searchData = await search.json();
       if (searchData.data && searchData.data.length > 0) {
         customerId = searchData.data[0].id;
       } else {
-        const params = new URLSearchParams({ email });
+        const params = new URLSearchParams({ email: verifiedEmail });
         params.set('metadata[user_id]', verifiedUserId);
         const create = await fetch('https://api.stripe.com/v1/customers', {
           method: 'POST',
