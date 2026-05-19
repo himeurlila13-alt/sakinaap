@@ -4716,8 +4716,8 @@ async function confirmDeleteMyData() {
     await sb.auth.signOut().catch(() => {});
   } catch(e) { /* best-effort */ }
 
-  // Effacer les données locales dans tous les cas
-  localStorage.removeItem('sakinapp_v1');
+  // Effacer toutes les données locales (y compris la session Supabase)
+  localStorage.clear();
   clearAuthCookie();
   sessionStorage.setItem('sakina_deleted', '1');
   window.location.reload();
