@@ -88,9 +88,11 @@ let ST = {
 
 function saveState() {
   // Ne jamais sauvegarder currentSaison/currentDay — recalculés a chaque lancement
+  // Ne jamais persister manualSignOut — flag mémoire uniquement
   const toSave = {...ST};
   delete toSave.currentSaison;
   delete toSave.currentDay;
+  delete toSave.manualSignOut;
   try { localStorage.setItem('sakinapp_v1', JSON.stringify(toSave)); } catch(e) {
     if (e && e.name === 'QuotaExceededError') showToast('Stockage presque plein — exporte tes données dans Paramètres.');
   }
@@ -103,9 +105,11 @@ function loadState() {
       const parsed = JSON.parse(saved);
       delete parsed.currentSaison;
       delete parsed.currentDay;
+      delete parsed.manualSignOut; // jamais restaurer ce flag — mémoire uniquement
       ST = {...ST, ...parsed};
     }
   } catch(e) {}
+  ST.manualSignOut = false; // garantir la valeur initiale après chargement
 }
 
 // ═══════════════════════════════════════════════
@@ -444,6 +448,7 @@ async function handleMagicLink() {
   btn.textContent = 'Envoi en cours…';
   try {
     const sb = await initSupabase();
+    if (!sb) throw new Error('Connexion au serveur impossible. Vérifie ta connexion internet et réessaie.');
     const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
     if (error) throw error;
     document.getElementById('auth-step1').style.display = 'none';
@@ -467,6 +472,7 @@ async function verifyAuthCode() {
   btn.textContent = 'Vérification…';
   try {
     const sb = await initSupabase();
+    if (!sb) throw new Error('Connexion au serveur impossible. Rafraîchis la page et réessaie.');
     const { error } = await sb.auth.verifyOtp({ email, token: code, type: 'email' });
     if (error) throw error;
     ST.isAuthenticated = true;
