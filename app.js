@@ -1586,11 +1586,14 @@ async function startStripeCheckout() {
     const r = await fetch('/api/create-checkout?' + params.toString(), {
       headers: { Authorization: 'Bearer ' + jwt }
     });
-    const data = r.ok ? await r.json() : null;
+    const data = await r.json().catch(() => ({}));
     if (data && data.url) { window.location.href = data.url; return; }
-    showToast('Erreur lors de la redirection. Réessaie dans quelques instants. 🌙');
-  } catch (_) {
-    showToast('Erreur lors de la redirection. Réessaie dans quelques instants. 🌙');
+    // Repli sur le lien Stripe direct si l'API échoue
+    console.error('create-checkout error:', data);
+    window.location.href = STRIPE_LINKS[plan] || STRIPE_LINKS.annual;
+  } catch (e) {
+    console.error('startStripeCheckout error:', e);
+    window.location.href = STRIPE_LINKS[plan] || STRIPE_LINKS.annual;
   }
 }
 
