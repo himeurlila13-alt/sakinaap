@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SakinApp — Confirmation suppression</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Arial,Helvetica,sans-serif;background:#FDF8F2;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+  .card{background:#fff;border-radius:20px;padding:40px 36px;width:100%;max-width:420px;box-shadow:0 4px 24px rgba(74,124,89,0.12)}
+  h1{font-family:Georgia,serif;font-size:22px;color:#2C2018;margin-bottom:6px}
+  .sub{font-size:13px;color:#8A8078;margin-bottom:28px}
+  label{display:block;font-size:12px;font-weight:700;color:#5A4A3A;letter-spacing:.5px;margin-bottom:6px}
+  input{width:100%;padding:12px 14px;border:1.5px solid #E8E0D8;border-radius:10px;font-size:14px;font-family:inherit;color:#2C2018;background:#FDFAF7;outline:none;transition:border .2s}
+  input:focus{border-color:#4A7C59}
+  .btn{width:100%;padding:14px;background:#4A7C59;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:20px;transition:background .2s}
+  .btn:hover{background:#3d6a4b}
+  .btn:disabled{background:#aaa;cursor:not-allowed}
+  .msg{margin-top:16px;padding:12px 16px;border-radius:10px;font-size:13px;display:none}
+  .msg.ok{background:#F0FAF6;color:#3DAE8A}
+  .msg.err{background:rgba(196,105,74,0.08);color:#C4694A}
+  .field{margin-bottom:16px}
+  #login-screen,#main-screen{display:none}
+  #login-screen.active,#main-screen.active{display:block}
+  .logo{font-family:Georgia,serif;font-size:28px;color:#4A7C59;font-weight:700;letter-spacing:1px;margin-bottom:20px}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">SakinApp</div>
+
+  <!-- ÉCRAN MOT DE PASSE -->
+  <div id="login-screen" class="active">
+    <h1>Accès admin</h1>
+    <p class="sub">Entre le mot de passe pour accéder à l'outil.</p>
+    <div class="field">
+      <label>Mot de passe</label>
+      <input type="password" id="pwd-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPwd()">
+    </div>
+    <button class="btn" onclick="checkPwd()">Accéder</button>
+    <div id="pwd-msg" class="msg err">Mot de passe incorrect.</div>
+  </div>
+
+  <!-- ÉCRAN PRINCIPAL -->
+  <div id="main-screen">
+    <h1>Confirmation suppression</h1>
+    <p class="sub">Envoie l'email de confirmation RGPD à l'utilisatrice.</p>
+    <div class="field">
+      <label>Email de l'utilisatrice</label>
+      <input type="email" id="user-email" placeholder="utilisatrice@example.com">
+    </div>
+    <div class="field">
+      <label>Prénom (optionnel)</label>
+      <input type="text" id="user-prenom" placeholder="Laissez vide si inconnu">
+    </div>
+    <button class="btn" id="send-btn" onclick="sendConfirmation()">Envoyer l'email de confirmation</button>
+    <div id="send-msg" class="msg"></div>
+  </div>
+</div>
+
+<script>
+const TOKEN_KEY = 'sakina_admin_token';
+
+function checkPwd() {
+  const pwd = document.getElementById('pwd-input').value;
+  if (!pwd) return;
+  fetch('/api/admin-auth', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password: pwd })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.token) {
+      sessionStorage.setItem(TOKEN_KEY, data.token);
+      document.getElementById('login-screen').classList.remove('active');
+      document.getElementById('main-screen').classList.add('active');
+    } else {
+      document.getElementById('pwd-msg').style.display = 'block';
+    }
+  })
+  .catch(() => {
+    document.getElementById('pwd-msg').style.display = 'block';
+  });
+}
+
+function sendConfirmation() {
+  const email = document.getElementById('user-email').value.trim();
+  const prenom = document.getElementById('user-prenom').value.trim();
+  const token = sessionStorage.getItem(TOKEN_KEY);
+  const btn = document.getElementById('send-btn');
+  const msg = document.getElementById('send-msg');
+
+  if (!email || !email.includes('@')) {
+    msg.textContent = 'Entre une adresse email valide.';
+    msg.className = 'msg err';
+    msg.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Envoi en cours…';
+  msg.style.display = 'none';
+
+  fetch('/api/send-deletion-confirmation', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-Admin-Token': token },
+    body: JSON.stringify({ email, prenom })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.success) {
+      msg.textContent = '✅ Email envoyé à ' + email;
+      msg.className = 'msg ok';
+      document.getElementById('user-email').value = '';
+      document.getElementById('user-prenom').value = '';
+    } else {
+      msg.textContent = 'Erreur : ' + (data.error || 'Réessaie.');
+      msg.className = 'msg err';
+    }
+    msg.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Envoyer l\'email de confirmation';
+  })
+  .catch(() => {
+    msg.textContent = 'Erreur réseau. Réessaie.';
+    msg.className = 'msg err';
+    msg.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Envoyer l\'email de confirmation';
+  });
+}
+
+// Vérifier si déjà connectée
+window.addEventListener('DOMContentLoaded', () => {
+  const token = sessionStorage.getItem(TOKEN_KEY);
+  if (token) {
+    document.getElementById('login-screen').classList.remove('active');
+    document.getElementById('main-screen').classList.add('active');
+  }
+});
+</script>
+</body>
+</html>
