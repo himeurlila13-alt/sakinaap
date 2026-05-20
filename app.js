@@ -1187,7 +1187,7 @@ function phaseThresholds(dur) {
     const hiverEndDiff = Math.floor((new Date(hey, hem-1, hed) - new Date(sy, sm-1, sd)) / 86400000);
     const eteStartRaw = hiverDays + springDays + 1;
     if (hiverEndDiff > 0 && hiverEndDiff < dur)
-      springStartD = Math.max(2, Math.min(hiverEndDiff + 1, eteStartRaw - 1));
+      springStartD = Math.max(2, Math.min(hiverEndDiff + 2, eteStartRaw - 1));
   }
   const eteStartD = hiverDays + springDays + 1;
   const eteEndD   = hiverDays + springDays + eteDays;
@@ -1444,8 +1444,9 @@ function _bilanStats(startStr, endStr) {
     Object.values(dict || {}).forEach(week => {
       Object.values(week).forEach(arr => {
         (arr || []).forEach(dateStr => {
-          const [dy, dm, dd] = (dateStr || '').split('-').map(Number);
-          const objDay = dy * 10000 + dm * 100 + dd;
+          const d = new Date(dateStr);
+          if (isNaN(d)) return;
+          const objDay = d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
           if (!cycleStartDay || (objDay >= cycleStartDay && (!cycleEndDay || objDay < cycleEndDay))) objCheckCount++;
         });
       });
@@ -3046,7 +3047,8 @@ function startNewCycleToday() {
     if (ST.cycleHistory.length > 6) ST.cycleHistory = ST.cycleHistory.slice(0, 6);
   }
   ST.cycleStart = todayStr;
-  ST.hiverEnd = null; // nouveau cycle — réinitialise la fin d'Hiver déclarée
+  ST.hiverEnd = null;
+  ST._lastCycleNum = -1;
   saveState();
   computeCycle();
   applySaisonTheme();
