@@ -1422,16 +1422,27 @@ function _bilanStats(startStr, endStr) {
     return keyDay >= cycleStartDay && (!cycleEndDay || keyDay < cycleEndDay);
   };
 
+  const cycleDuration = ST.cycleDuration || 28;
+  const { springStartD } = phaseThresholds(cycleDuration);
+  const isHaidhDay = (dateStr) => {
+    if (!effectiveStart) return false;
+    const d = new Date(dateStr);
+    if (isNaN(d)) return false;
+    const [sy, sm, sd] = effectiveStart.split('-').map(Number);
+    const cycleDay = Math.floor((d - new Date(sy, sm-1, sd)) / 86400000) + 1;
+    return cycleDay >= 1 && cycleDay < springStartD;
+  };
+
   const seanceCount = Object.keys(ST.seanceDone || {}).filter(inCycle).length;
   const seanceLevel = ST.seanceLevel || 1;
   const symptomDays = Object.keys(ST.symptomes || {}).filter(d => inCycle(d) && (ST.symptomes[d]||[]).length > 0).length;
   const prayerDays = Object.keys(ST.prayers || {}).filter(d => {
-    if (!inCycle(d)) return false;
+    if (!inCycle(d) || isHaidhDay(d)) return false;
     const p = ST.prayers[d] || {};
     return ['fajr','dohr','asr','maghrib','isha'].filter(n => p[n]).length >= 3;
   }).length;
   const allPrayersDays = Object.keys(ST.prayers || {}).filter(d => {
-    if (!inCycle(d)) return false;
+    if (!inCycle(d) || isHaidhDay(d)) return false;
     const p = ST.prayers[d] || {};
     return ['fajr','dohr','asr','maghrib','isha'].filter(n => p[n]).length === 5;
   }).length;
@@ -1454,7 +1465,6 @@ function _bilanStats(startStr, endStr) {
   };
   _countObjChecks(ST.weeklyObjChecks);
   _countObjChecks(ST.customObjChecks);
-  const cycleDuration = ST.cycleDuration || 28;
   return { seanceCount, seanceLevel, symptomDays, prayerDays, allPrayersDays, dhikrDays, coranDays, objCheckCount, cycleDuration };
 }
 
