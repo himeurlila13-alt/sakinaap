@@ -30,7 +30,7 @@ const REPAS_QUOTIDIENS = {
     },
     {
       nom: 'Pâtes complètes aux épinards et œuf poché',
-      benefice: 'Magnésium et fer en duo — ce que ton corps réclame exactement en J2.'
+      benefice: 'Magnésium et fer en duo — ce que ton corps réclame au cœur des règles.'
     },
     {
       nom: 'Sardines au citron sur pain de seigle',
@@ -557,7 +557,7 @@ const MESSAGES_JOUR = {
   18: {
     bien: 'Automne qui commence — les émotions peuvent s\'intensifier. C\'est normal, attendu, et temporaire.',
     fatiguee: 'L\'Automne commence et ton corps ralentit. Accompagne-le plutôt que d\'y résister.',
-    difficile: 'Ce que tu ressens en Automne est amplifié par les hormones. Attends le Printemps pour décider.',
+    difficile: 'Ce que tu ressens en Automne est souvent amplifié par les hormones. Note tes pensées aujourd\'hui — et reviens-y dans quelques jours avec un regard plus frais.',
     foi: 'L\'Automne est une phase de retour vers soi. Utilise-la pour revenir à l\'essentiel.'
   },
   19: {
