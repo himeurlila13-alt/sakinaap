@@ -84,6 +84,8 @@ let ST = {
   authDate: null,
   welcomeEmailSent: false,
   manualSignOut: false,
+  consentDate: null,
+  consentVersion: null,
 };
 
 function saveState() {
@@ -1200,7 +1202,7 @@ function computeCycle() {
   const todayLocal = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const [sy, sm, sd] = ST.cycleStart.split('-').map(Number);
   const startLocal = new Date(sy, sm - 1, sd);
-  const diff = Math.floor((todayLocal - startLocal) / (1000 * 60 * 60 * 24));
+  const diff = Math.floor((todayLocal - startLocal) / 86400000);
   if (diff < 0) { ST.currentDay = 1; ST.currentSaison = 'hiver'; return; }
   const dur = effectiveCycleDur();
   const cycleNum = Math.floor(diff / dur);
@@ -1213,8 +1215,10 @@ function computeCycle() {
     for (let i = 0; i < cycleNum; i++) {
       const cStart = new Date(sy, sm - 1, sd + i * dur);
       const cStr = cStart.getFullYear() + '-' + String(cStart.getMonth()+1).padStart(2,'0') + '-' + String(cStart.getDate()).padStart(2,'0');
+      const nextStart = new Date(sy, sm - 1, sd + (i + 1) * dur);
+      const nextStr = nextStart.getFullYear() + '-' + String(nextStart.getMonth()+1).padStart(2,'0') + '-' + String(nextStart.getDate()).padStart(2,'0');
       if (!ST.cycleHistory.find(c => c.start === cStr)) {
-        const snap = (i === 0) ? _bilanStats() : { seanceCount: 0, prayerDays: 0, symptomDays: 0 };
+        const snap = (i === 0) ? _bilanStats(cStr, nextStr) : { seanceCount: 0, prayerDays: 0, symptomDays: 0 };
         ST.cycleHistory.unshift({ start: cStr, duration: dur,
           seanceCount: snap.seanceCount, prayerDays: snap.prayerDays, symptomDays: snap.symptomDays });
         if (ST.cycleHistory.length > 6) ST.cycleHistory = ST.cycleHistory.slice(0, 6);
@@ -1320,7 +1324,6 @@ function getTrialDays() {
   return days;
 }
 function isFullAccess() { return ST.isPremium || getTrialDays() < 20; }
-function isTrialActive() { return isFullAccess(); }
 
 function checkTrialEnd() {
   if (ST.isPremium || ST.trialEnded) return;
@@ -1400,18 +1403,23 @@ function dismissTrialBanner() {
   if (el) el.style.display = 'none';
 }
 
-function _bilanStats() {
-  // Filtre sur le cycle courant uniquement
+function _bilanStats(startStr, endStr) {
+  const effectiveStart = startStr || ST.cycleStart;
   let cycleStartDay = 0;
-  if (ST.cycleStart) {
-    const [csy, csm, csd] = ST.cycleStart.split('-').map(Number);
+  if (effectiveStart) {
+    const [csy, csm, csd] = effectiveStart.split('-').map(Number);
     cycleStartDay = csy * 10000 + csm * 100 + csd;
+  }
+  let cycleEndDay = 0;
+  if (endStr) {
+    const [ey, em, ed] = endStr.split('-').map(Number);
+    cycleEndDay = ey * 10000 + em * 100 + ed;
   }
   const inCycle = key => {
     const d = new Date(key);
     if (isNaN(d)) return false;
     const keyDay = d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
-    return keyDay >= cycleStartDay;
+    return keyDay >= cycleStartDay && (!cycleEndDay || keyDay < cycleEndDay);
   };
 
   const seanceCount = Object.keys(ST.seanceDone || {}).filter(inCycle).length;
@@ -1432,12 +1440,13 @@ function _bilanStats() {
   ).length;
   const coranDays = Object.keys(ST.coranDone || {}).filter(d => inCycle(d) && ST.coranDone[d]).length;
   let objCheckCount = 0;
-  const cycleStartDate = ST.cycleStart ? new Date(ST.cycleStart) : null;
   const _countObjChecks = (dict) => {
     Object.values(dict || {}).forEach(week => {
       Object.values(week).forEach(arr => {
         (arr || []).forEach(dateStr => {
-          if (!cycleStartDate || new Date(dateStr) >= cycleStartDate) objCheckCount++;
+          const [dy, dm, dd] = (dateStr || '').split('-').map(Number);
+          const objDay = dy * 10000 + dm * 100 + dd;
+          if (!cycleStartDay || (objDay >= cycleStartDay && (!cycleEndDay || objDay < cycleEndDay))) objCheckCount++;
         });
       });
     });
@@ -3606,14 +3615,18 @@ function renderCalendar() {
       const [sy, sm, sd] = ST.cycleStart.split('-').map(Number);
       const startLocal = new Date(sy, sm - 1, sd);
       const diff = Math.floor((date - startLocal) / 86400000);
-      const dayOfCycle = ((diff % dur) + dur) % dur;
-      phase = phaseForDay(dayOfCycle + 1, dur);
+      if (diff < 0) {
+        phase = null;
+      } else {
+        phase = phaseForDay((diff % dur) + 1, dur);
+      }
     }
     const isToday = d === now.getDate();
     const seanceDone = !!(ST.seanceDone && ST.seanceDone[dateStr]);
     const prayers = ST.prayers && ST.prayers[dateStr] ? Object.values(ST.prayers[dateStr]).filter(Boolean).length : 0;
+    const phaseClass = phase ? ` cal-day-${phase}` : '';
     cells += `
-      <div class="cal-day cal-day-${phase}${isToday ? ' cal-today' : ''}" onclick="openDayModal('${dateStr}','${phase}')">
+      <div class="cal-day${phaseClass}${isToday ? ' cal-today' : ''}" onclick="openDayModal('${dateStr}','${phase || ''}')">
         <span class="cal-day-num">${d}</span>
         <div class="cal-day-icons">
           ${seanceDone ? '<span class="cal-dot"></span>' : ''}
@@ -3704,7 +3717,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     ST.authDate = ST.authDate || Date.now();
     saveState();
   }
-  if (!ST.installDate) { ST.installDate = Date.now(); saveState(); }
+  if (!ST.installDate) { ST.installDate = Date.now(); saveState(); } // ms, pas ISO
 
   // Masquer les écrans arrière (loader couvre tout visuellement)
   document.getElementById('revelation').style.display = 'none';
@@ -3826,6 +3839,10 @@ function nextStep(step) {
     if (!dateVal) { alert('Indique la date de début de ton dernier cycle 🌙'); return; }
     ST.cycleStart = dateVal;
     ST.cycleDuration = selectedDuration;
+    if (!ST.consentDate) {
+      ST.consentDate = new Date().toISOString();
+      ST.consentVersion = '1.0';
+    }
     computeCycle();
     applySaisonTheme();
     showRévelation();
@@ -4714,6 +4731,9 @@ function importData() {
       try {
         const parsed = JSON.parse(e.target.result);
         if (typeof parsed !== 'object' || parsed === null) throw new Error();
+        // Bloquer les champs de session et Premium — ne doivent jamais venir d'un fichier externe
+        ['supabaseUserId','supabaseEmail','isPremium','premiumPlan','premiumSince',
+         'isAuthenticated','authDate','userEmail','welcomeEmailSent'].forEach(f => delete parsed[f]);
         if (confirm('Restaurer ces données ? Tes données actuelles seront remplacées.')) {
           localStorage.setItem('sakinapp_v1', JSON.stringify(parsed));
           location.reload();
@@ -4742,9 +4762,9 @@ async function confirmDeleteMyData() {
 
   try {
     const sb = await initSupabase();
-    if (!sb) throw new Error('supabase not ready');
+    if (!sb) throw new Error('Connexion impossible. Réessaie dans quelques instants.');
 
-    // Notifier l'équipe (best-effort)
+    // Notifier l'équipe (best-effort — ne bloque pas si ça échoue)
     const now = new Date();
     const date = now.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
     const heure = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
@@ -4752,15 +4772,20 @@ async function confirmDeleteMyData() {
       body: { date: `${date} à ${heure}` }
     }).catch(() => {});
 
-    // Supprimer le compte Auth + données via la Edge Function (best-effort)
+    // Supprimer le compte Auth + données via la Edge Function
     if (ST.supabaseUserId) {
-      await sb.functions.invoke('delete-account', {
+      const { error: deleteErr } = await sb.functions.invoke('delete-account', {
         body: { userId: ST.supabaseUserId }
-      }).catch(() => {});
+      });
+      if (deleteErr) throw new Error('La suppression a échoué côté serveur. Réessaie ou contacte sakina.evolution.contact@gmail.com');
     }
     ST.manualSignOut = true;
     await sb.auth.signOut().catch(() => {});
-  } catch(e) { /* best-effort */ }
+  } catch(e) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Confirmer la suppression'; }
+    showToast('❌ ' + (e.message || 'Erreur lors de la suppression. Réessaie.'));
+    return;
+  }
 
   // Réinitialiser ST avant le clear — pagehide() appelle saveState() au reload
   // et réécrirait un état authentifié dans le localStorage qu'on vient de vider
@@ -4770,6 +4795,8 @@ async function confirmDeleteMyData() {
   ST.supabaseEmail = null;
   ST.prenom = null;
   ST.cycleStart = null;
+  ST.hiverEnd = null;
+  ST._lastSaison = null;
   // Effacer toutes les données locales (y compris la session Supabase)
   localStorage.clear();
   clearAuthCookie();
