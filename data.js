@@ -582,7 +582,7 @@ const MESSAGES_JOUR = {
     bien: 'Tu commences à sentir la fin du cycle — honore ce que tu as traversé ce mois-ci.',
     fatiguee: 'Plus que quelques jours. Tu peux te reposer vraiment sans culpabilité.',
     difficile: 'Ce moment difficile a une date de fin. L\'Hiver arrive, et avec lui le renouvellement.',
-    foi: 'الصَّبْرُ ضِيَاء — « La patience est un éclat. » (hadith Muslim). Tu l\'exerces plus que tu ne le réalises.'
+    foi: 'الصَّبْرُ ضِيَاء — « La patience est un éclat. » (Muslim n°223). Tu l\'exerces plus que tu ne le réalises.'
   },
   23: {
     bien: 'Tes besoins changent en fin de cycle — écoute ce dont tu as vraiment envie sans te juger.',

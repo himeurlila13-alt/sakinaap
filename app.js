@@ -709,7 +709,7 @@ const SAISONS = {
       foi: "Les hormones influencent ton état intérieur — c'est physiologique, pas de l'hypocrisie. Un seul dhikr aujourd'hui, c'est déjà immense.",
       calme: "Ton corps te demande du calme — c'est une sagesse, pas une faiblesse. Tisane, silence, douceur. Allah est avec toi dans ce repos."
     },
-    suggestions: ['🌿 Étirements doux','😴 Repos — c\'est ton entraînement','📖 Lecture ou tafsir','🤲 Dhikr doux','🫖 Tisane chaude'],
+    suggestions: ['🌿 Étirements doux','😴 Repos — c\'est ton entraînement','📖 Tafsir ou livres islamiques','🤲 Dhikr doux','🫖 Tisane chaude'],
     invocation: { arabic:'حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ', fr:'"Allah nous suffit, et Il est le meilleur garant."', source:'Coran 3:173' },
     suggTitle: '🌙 Suggestions de l\'Hiver',
     suggDesc: 'Douce, intentionnelle, sans pression.',
@@ -860,7 +860,7 @@ const SAISONS = {
       calme: "Ton cœur cherche le calme — c'est la voix de ta sagesse intérieure. As-Salam est l'un des noms d'Allah. Invoque-Le."
     },
     suggestions: ['📞 Appeler ses parents','🌬️ Respiration profonde','📖 Cours islamique','✍️ Journaling profond','🛁 Se dorloter'],
-    invocation: { arabic:'اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ', fr:'"Ô Allah, je me réfugie en Toi contre l\'anxiété et la tristesse."', source:'Authentique — Boukhari' },
+    invocation: { arabic:'اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ', fr:'"Ô Allah, je me réfugie en Toi contre l\'anxiété et la tristesse."', source:'Boukhari n°2893' },
     suggTitle: '🍂 Suggestions de l\'Automne',
     suggDesc: 'Ralentis, retourne vers toi.',
     alimentation: {
