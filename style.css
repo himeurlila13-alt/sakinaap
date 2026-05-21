@@ -3,11 +3,12 @@
   --creme:#FAF6F0;--or:#C9A96E;--noir:#2D2420;--gris:#6B5B53;--sable:#E8DDD0;
   --serif:'Playfair Display',serif;--script:'Dancing Script',cursive;--sans:'DM Sans',sans-serif;
   --season:#7B5EA7;--season-light:#B89FD4;--season-soft:#F0EBF8;--season-dark:#3D2060;
-  --season-grad:linear-gradient(145deg,#3D2060,#7B5EA7);
+  --season-grad:linear-gradient(145deg,#3D2060,#7B5EA7);--season-rgb:123,94,167;
 }
 
 /* ═══ RESET ═══ */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--season);outline-offset:2px;border-radius:4px;}
 html,body{height:100%;overflow-x:hidden}
 body{font-family:var(--sans);background:var(--bg-phase,var(--creme));max-width:430px;margin:0 auto;color:var(--noir);font-size:15px;transition:background 1.2s ease}
 ::-webkit-scrollbar{width:0}
@@ -1508,7 +1509,7 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
   .ps-accordion:active{background:#2E2924}
   .ps-acc-body .ps-row{background:#1C1916;border-bottom-color:#2E2924}
   .obj-item{background:#252220;border-color:#2E2924}
-  .obj-item.done{background:rgba(var(--season-rgb,61,174,138),.12)}
+  .obj-item.done{background:rgba(var(--season-rgb,123,94,167),.12)}
   .home-header{background:var(--season-grad)}
   .moi-hero-name{color:var(--season)}
   .moi-hero-msg{color:rgba(255,255,255,.45)}

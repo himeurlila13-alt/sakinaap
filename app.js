@@ -118,15 +118,21 @@ function loadState() {
 // SUPABASE AUTH
 // ═══════════════════════════════════════════════
 let _supabase = null;
+let _supabaseLoading = null;
 async function initSupabase() {
   if (_supabase) return _supabase;
-  try {
-    const cfg = await fetch('/api/public-config').then(r => r.json());
-    if (cfg.supabaseUrl && cfg.supabaseAnonKey) {
-      _supabase = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
-    }
-  } catch(e) {}
-  return _supabase;
+  if (_supabaseLoading) return _supabaseLoading;
+  _supabaseLoading = (async () => {
+    try {
+      const cfg = await fetch('/api/public-config').then(r => r.json());
+      if (cfg.supabaseUrl && cfg.supabaseAnonKey) {
+        _supabase = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+      }
+    } catch(e) {}
+    _supabaseLoading = null;
+    return _supabase;
+  })();
+  return _supabaseLoading;
 }
 
 // ═══════════════════════════════════════════════
@@ -699,7 +705,7 @@ const DHIKR_CHECKS = [
 const SAISONS = {
   hiver: {
     nom: 'Hiver', foodTeaser: 'Bouillons chauds, épices, fer', skinTeaser: 'Hydratation intense & réparation', emoji: '🌙', phase: 'Phase menstruelle',
-    color: '#7B5EA7', light: '#B89FD4', soft: '#F0EBF8', dark: '#3D2060',
+    color: '#7B5EA7', light: '#B89FD4', soft: '#F0EBF8', dark: '#3D2060', rgb: '123,94,167',
     grad: 'linear-gradient(145deg, #3D2060, #7B5EA7)',
     jours: [1,5],
     messages: {
@@ -749,7 +755,7 @@ const SAISONS = {
   },
   printemps: {
     nom: 'Printemps', foodTeaser: 'Légumes verts, probiotiques, zinc', skinTeaser: 'Exfoliation douce & éclat', emoji: '🌸', phase: 'Phase folliculaire',
-    color: '#3DAE8A', light: '#80D4B8', soft: '#E8F8F3', dark: '#1A6B52',
+    color: '#3DAE8A', light: '#80D4B8', soft: '#E8F8F3', dark: '#1A6B52', rgb: '61,174,138',
     grad: 'linear-gradient(145deg, #1A6B52, #3DAE8A)',
     jours: [6,13],
     messages: {
@@ -799,7 +805,7 @@ const SAISONS = {
   },
   ete: {
     nom: 'Été', foodTeaser: 'Protéines, antioxydants, oméga-3', skinTeaser: 'Protection & légèreté', emoji: '☀️', phase: 'Phase ovulatoire',
-    color: '#E8834A', light: '#F5C040', soft: '#FFF8EE', dark: '#7A3A10',
+    color: '#E8834A', light: '#F5C040', soft: '#FFF8EE', dark: '#7A3A10', rgb: '232,131,74',
     grad: 'linear-gradient(145deg, #7A3A10, #E8834A, #F5C040)',
     jours: [14,17],
     messages: {
@@ -849,7 +855,7 @@ const SAISONS = {
   },
   automne: {
     nom: 'Automne', foodTeaser: 'Magnésium, complexe B, chocolat noir', skinTeaser: 'Apaisement & barrière cutanée', emoji: '🍂', phase: 'Phase lutéale',
-    color: '#C4694A', light: '#E8A090', soft: '#FDF0EE', dark: '#5A2018',
+    color: '#C4694A', light: '#E8A090', soft: '#FDF0EE', dark: '#5A2018', rgb: '196,105,74',
     grad: 'linear-gradient(145deg, #5A2018, #C4694A)',
     jours: [18,28],
     messages: {
@@ -1297,6 +1303,7 @@ async function checkPaymentSuccess() {
   // Seul chemin valide : session_id Stripe vérifié côté serveur
   const sessionId = params.get('session_id');
   if (sessionId && sessionId.startsWith('cs_')) {
+    showToast('Vérification du paiement… 🌙');
     window.history.replaceState({}, '', '/');
     try {
       const sb = await initSupabase();
@@ -1607,6 +1614,9 @@ async function startStripeCheckout() {
     showToast('Connecte-toi pour souscrire. 🌙');
     return;
   }
+  const btn = (document.activeElement?.tagName === 'BUTTON') ? document.activeElement : null;
+  const origText = btn?.textContent;
+  if (btn) { btn.disabled = true; btn.textContent = 'Chargement…'; }
   const params = new URLSearchParams({ plan });
   try {
     const sb = await initSupabase();
@@ -1624,6 +1634,8 @@ async function startStripeCheckout() {
   } catch (e) {
     console.error('startStripeCheckout error:', e);
     window.location.href = STRIPE_LINKS[plan] || STRIPE_LINKS.annual;
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = origText; }
   }
 }
 
@@ -1666,6 +1678,7 @@ function applySaisonTheme() {
   r.setProperty('--season-soft', s.soft);
   r.setProperty('--season-grad', s.grad);
   r.setProperty('--season-dark', s.dark);
+  r.setProperty('--season-rgb', s.rgb);
   r.setProperty('--bg-phase', BG_PHASE[ST.currentSaison] || '#FAF6F0');
   const av = document.querySelector('.av-btn');
   if (av) { av.style.background = s.grad; av.textContent = s.emoji; }
