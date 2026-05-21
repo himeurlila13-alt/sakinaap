@@ -1620,9 +1620,17 @@ async function startStripeCheckout() {
   const params = new URLSearchParams({ plan });
   try {
     const sb = await initSupabase();
-    const { data: { session } } = await sb?.auth.getSession() || { data: { session: null } };
+    let session = (await sb?.auth.getSession().catch(() => null))?.data?.session;
+    if (!session?.access_token) {
+      // Token absent ou expiré — tentative de refresh silencieux
+      session = (await sb?.auth.refreshSession().catch(() => null))?.data?.session || null;
+    }
     const jwt = session?.access_token;
-    if (!jwt) { showToast('Ta session a expiré — reviens te connecter 🌸'); return; }
+    if (!jwt) {
+      // Refresh échoué — repli sur le lien Stripe direct plutôt que bloquer
+      window.location.href = STRIPE_LINKS[plan] || STRIPE_LINKS.annual;
+      return;
+    }
     const r = await fetch('/api/create-checkout?' + params.toString(), {
       headers: { Authorization: 'Bearer ' + jwt }
     });
