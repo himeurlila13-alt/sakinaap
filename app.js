@@ -4057,22 +4057,16 @@ function getTodaySeanceSpec() {
     case 'automne': {
       const micro = getAutomneMicroPhase(day, dur);
       if (micro === 'actif') {
+        const effectiveLevel = Math.min(level, 2); // ligaments relâchés par progestérone — cap N3/N4
         const dayIdx = dayWithinPhase(day, dur);
         const planning = sport.printemps.planning;
         const dayType = planning[dayIdx % planning.length];
         if (dayType === 'repos') {
-          return { type: 'repos', reposSec: (sport.printemps.niveauxRepos[level] || 45) + sport.automne.actif.reposExtra, level, message: sport.automne.actif.message };
+          return { type: 'repos', reposSec: (sport.printemps.niveauxRepos[effectiveLevel] || 45) + sport.automne.actif.reposExtra, level: effectiveLevel, message: sport.automne.actif.message };
         }
-        const niveauData = sport.printemps[dayType]?.[level];
+        const niveauData = sport.printemps[dayType]?.[effectiveLevel];
         if (!niveauData) return null;
-        // Niveau 4 Bas : résoudre la rotation comme en Printemps
-        let resolvedData = niveauData;
-        if (dayType === 'bas' && level === 4 && niveauData.rotation) {
-          const rotIdx = (ST.printempsBasCount || 0) % 3;
-          const rot = niveauData.rotation[rotIdx];
-          resolvedData = { nom: rot.nom, duree: niveauData.duree, exercices: rot.exercices };
-        }
-        return { type: 'automne-actif', data: resolvedData, level, message: sport.automne.actif.message, reposExtra: sport.automne.actif.reposExtra };
+        return { type: 'automne-actif', data: niveauData, level: effectiveLevel, message: sport.automne.actif.message, reposExtra: sport.automne.actif.reposExtra };
       }
       if (micro === 'doux') return { type: 'automne-doux', data: sport.automne.doux, level };
       return { type: 'automne-fin', data: sport.automne.fin };
