@@ -197,241 +197,83 @@ const REPAS_QUOTIDIENS = {
 // ───────────────────────────────────────────────────────────────────────
 const SOINS_QUOTIDIENS = {
 
-  // ── HIVER (5 entrées) — Peau sèche, sensible, barrière affaiblie ──
+  // ── HIVER — Apaiser et régénérer (peau sensible, barrière fragilisée) ──
   hiver: [
     {
-      nom: 'Masque miel brut et huile de coco',
-      duree: '10 min',
-      geste: 'Mélange 1 c.à.c de miel brut et quelques gouttes d\'huile de coco. Applique sur visage propre, laisse 10 min, rince à l\'eau tiède.',
-      benefice: 'Le miel hydrate et apaise, l\'huile de coco répare la barrière cutanée fragilisée.'
-    },
-    {
-      nom: 'Tonique à l\'eau de rose',
-      duree: '2 min',
-      geste: 'Après nettoyage doux, vaporise ou tampon d\'eau de rose pur sur visage et cou. Laisse pénétrer sans rincer.',
-      benefice: 'Anti-inflammatoire naturel qui réduit les rougeurs et resserre les pores délicatement.'
-    },
-    {
-      nom: 'Huile de rose musquée au coucher',
+      nom: 'Eau de rose + huile de nigelle',
       duree: '3 min',
-      geste: '2-3 gouttes d\'huile de rose musquée réchauffées entre les paumes, pressées doucement sur le visage sec.',
-      benefice: 'Régénère les cellules et nourrit la barrière cutanée pendant ton sommeil réparateur.'
+      moment: 'Matin',
+      geste: 'Vaporise l\'eau de rose sur le visage. Applique 1 goutte d\'huile de nigelle sur peau légèrement humide, tapote doucement.',
+      benefice: 'Anti-inflammatoire naturel — réduit la sensibilité et les rougeurs menstruelles.',
+      source: '☪️ Sunnah — huile de nigelle : "Dans la nigelle il y a une guérison pour tout sauf la mort" (Bukhari 5688)'
     },
     {
-      nom: 'Brume aloe vera maison',
-      duree: '2 min',
-      geste: 'Dans un spray propre : gel d\'aloé vera pur dilué dans de l\'eau. Vaporise à tout moment de la journée.',
-      benefice: 'Hydratation continue et effet apaisant immédiat sur peau réactive et inconfortable.'
-    },
-    {
-      nom: 'Massage doux à l\'huile de jojoba',
-      duree: '5 min',
-      geste: 'Quelques gouttes d\'huile de jojoba, massage circulaire très doux du centre vers l\'extérieur du visage.',
-      benefice: 'La jojoba imite le sébum naturel — nourrit sans obstruer les pores ni alourdir la peau.'
+      nom: 'Masque miel pur',
+      duree: '10 min',
+      moment: 'Soir',
+      geste: '1 c.à.c de miel pur sur le visage sec. Laisse 10 min, rince à l\'eau tiède.',
+      benefice: 'Antibactérien et apaisant — répare la barrière cutanée fragilisée pendant ton sommeil.',
+      source: '☪️ Sunnah — miel : "Le miel est une guérison pour les hommes" (Coran 16:69)'
     },
   ],
 
-  // ── PRINTEMPS (14 entrées) — Peau lumineuse, réceptive aux soins ──
+  // ── PRINTEMPS — Éclaircir et nourrir (peau en renouveau, œstrogènes montants) ──
   printemps: [
     {
-      nom: 'Exfoliation douce au sucre et huile d\'olive',
-      duree: '5 min',
-      geste: '1 c.à.c de sucre fin + 1 c.à.c d\'huile d\'olive. Massage circulaire 2 min, rince à l\'eau tiède.',
-      benefice: 'Élimine les cellules mortes de l\'Hiver pour révéler l\'éclat naturel du Printemps.'
-    },
-    {
-      nom: 'Soin hydratant eau de rose et huile de noisette',
+      nom: 'Eau de rose + huile d\'olive',
       duree: '3 min',
-      geste: '4-5 gouttes d\'huile de noisette sur peau légèrement humide d\'eau de rose. Tapote doucement jusqu\'à absorption complète.',
-      benefice: 'Huile de noisette sébo-régulatrice + eau de rose tonifiante — éclat naturel du Printemps sans risque de photosensibilisation.'
+      moment: 'Matin',
+      geste: 'Tonifie à l\'eau de rose. Applique 1 goutte d\'huile d\'olive sur peau légèrement humide, masse en cercles doux.',
+      benefice: 'Nourrissante et antioxydante — accompagne le renouveau naturel de la peau folliculaire.',
+      source: '☪️ Sunnah — huile d\'olive : "Mangez l\'huile d\'olive et oignez-vous en" (Tirmidhi)'
     },
     {
-      nom: 'Masque argile blanche et eau de rose',
-      duree: '12 min',
-      geste: 'Argile blanche + eau de rose jusqu\'à consistance crémeuse. Applique, laisse 10 min, rince à l\'eau tiède.',
-      benefice: 'Purifie les pores en douceur sans agresser — idéal pour la peau réceptive du Printemps.'
-    },
-    {
-      nom: 'Gua sha au galet froid (ou pierre de quartz)',
-      duree: '5 min',
-      geste: 'Après quelques gouttes d\'huile légère, fais glisser du menton vers les oreilles et du front vers les tempes.',
-      benefice: 'Drainage lymphatique, éclat immédiat, microcirculation stimulée — effet bonne mine garanti.'
-    },
-    {
-      nom: 'Masque avocat mûr et miel',
-      duree: '12 min',
-      geste: '¼ avocat écrasé + 1 c.à.c miel. Applique en couche généreuse, laisse 10-12 min, rince.',
-      benefice: 'Vitamines E et B5 de l\'avocat pour peau éclatante et bien nourrie — léger et efficace.'
-    },
-    {
-      nom: 'Tonique à l\'eau florale d\'hamamélis',
-      duree: '3 min',
-      geste: 'Verse de l\'eau florale d\'hamamélis pur sur un coton. Passe sur visage propre après nettoyage, sans rincer. Matin ou soir.',
-      benefice: 'Rééquilibre le pH cutané naturellement, resserre les pores — astringent doux sans risque d\'irritation.'
-    },
-    {
-      nom: 'Rouleau facial froid (ou glaçon dans tissu)',
-      duree: '5 min',
-      geste: 'Rouleau ou glaçon enveloppé dans un tissu propre. Du centre du visage vers l\'extérieur.',
-      benefice: 'Réduit les poches matinales, stimule la circulation, effet bonne mine instantané.'
-    },
-    {
-      nom: 'Nettoyage à l\'huile (méthode OCM)',
-      duree: '5 min',
-      geste: 'Quelques gouttes d\'huile de tournesol sur visage sec. Massage 2 min. Essuie avec un gant doux et humide.',
-      benefice: 'Dissout les impuretés sans dessécher — la peau reste souple et équilibrée.'
-    },
-    {
-      nom: 'Masque argile verte express (3 min)',
-      duree: '6 min',
-      geste: 'Argile verte + eau de rose. Laisse seulement 3 min — rince avant séchage complet pour ne pas assécher.',
-      benefice: 'Purifie sans agresser — durée courte pour respecter la barrière cutanée.'
-    },
-    {
-      nom: 'Bain de vapeur à la camomille',
-      duree: '10 min',
-      geste: 'Bol d\'eau chaude + 2 sachets de camomille. Visage à 20 cm, serviette sur la tête, 5 min. Rince à l\'eau fraîche.',
-      benefice: 'Ouvre les pores, facilite la pénétration des soins suivants, effet apaisant global.'
-    },
-    {
-      nom: 'Huile de noisette en sérum léger',
-      duree: '3 min',
-      geste: '2-3 gouttes d\'huile de noisette pressées sur visage propre, matin ou soir.',
-      benefice: 'Matifiante naturelle, rééquilibre le sébum sans obstruer — légèreté du Printemps.'
-    },
-    {
-      nom: 'Masque aloe vera et miel',
-      duree: '12 min',
-      geste: '1 c.à.s gel d\'aloé vera + 1 c.à.c miel. Mélange et applique sur visage propre, laisse 10-12 min.',
-      benefice: 'Double hydratation et apaisement — prépare la peau au pic d\'Été qui arrive.'
-    },
-    {
-      nom: 'Compresses thé vert froid sur les yeux',
+      nom: 'Rhassoul à l\'eau de rose',
       duree: '8 min',
-      geste: 'Prépare un thé vert, laisse refroidir. Imbibe deux rondins de coton, applique sur les yeux fermés 8 min.',
-      benefice: 'EGCG antioxydants qui protègent et calment — anti-poches et anti-oxydant en même temps.'
-    },
-    {
-      nom: 'Huile de jojoba + 1 goutte de lavande vraie',
-      duree: '3 min',
-      geste: '5 gouttes d\'huile de jojoba + 1 goutte d\'huile essentielle de lavande vraie. Massage doux le soir.',
-      benefice: 'Lavande antibactérienne et apaisante — parfait pour finir le Printemps et préparer l\'Été.'
+      moment: 'Soir',
+      geste: '1 c.à.s de rhassoul + eau de rose jusqu\'à pâte crémeuse. Applique sur visage propre, laisse 5 min, rince à l\'eau tiède.',
+      benefice: 'Purifie les pores en douceur sans agresser — idéal pour la peau réceptive du Printemps.',
+      source: '🌿 Tradition islamique — le rhassoul est utilisé depuis des siècles dans le monde islamique'
     },
   ],
 
-  // ── ÉTÉ (4 entrées) — Peau au meilleur, légèreté et protection ───
+  // ── ÉTÉ — Purifier et protéger (pic de sébum, peau éclatante) ──
   ete: [
     {
-      nom: 'Brume eau de rose et aloe vera',
+      nom: 'Brume eau de rose + aloe vera',
       duree: '2 min',
-      geste: 'Dans un spray : eau de rose + gel d\'aloé vera. Vaporise toute la journée sur visage et décolleté. Complète avec une crème solaire SPF30 le matin.',
-      benefice: 'Hydratation ultra-légère sans surcharger la peau au pic naturel de sébum — protection UV essentielle en phase d\'Été.'
+      moment: 'Matin',
+      geste: 'Dans un spray propre : eau de rose + gel d\'aloe vera pur. Vaporise sur visage et décolleté. Protège du soleil avec voile ou chapeau.',
+      benefice: 'Hydratation ultra-légère sans surcharger la peau au pic naturel de sébum — compatible wudu.',
+      source: '🌿 Eau de rose : tradition islamique de purification · Aloe vera : médecine islamique classique'
     },
     {
-      nom: 'Masque argile verte express (5 min)',
-      duree: '8 min',
-      geste: 'Argile verte + eau de source. 5 min maximum — rince avant séchage complet.',
-      benefice: 'Absorbe l\'excès de sébum sans agresser — adapté au pic d\'Été.'
-    },
-    {
-      nom: 'Rondelles de concombre froid sur les yeux',
-      duree: '10 min',
-      geste: 'Deux rondelles de concombre direct du frigo sur les yeux. Allongée, 10 min.',
-      benefice: 'Drainant, anti-gonflement, hydratant — zero ingrédient ajouté, zero risque.'
-    },
-    {
-      nom: 'Nettoyage doux au lait d\'amande',
-      duree: '3 min',
-      geste: 'Lait d\'amande pur sur coton, passe sur visage en cercles légers. Rinçage facultatif.',
-      benefice: 'Vitamine E nourrissante, démaquillage délicat — la légèreté parfaite pour l\'Été.'
+      nom: 'Masque rhassoul purifiant',
+      duree: '7 min',
+      moment: 'Soir',
+      geste: '1 c.à.s de rhassoul + eau de rose = pâte légère. Applique sur visage propre, laisse 5 min, rince avant séchage complet.',
+      benefice: 'Absorbe le sébum excédentaire sans agresser la peau — équilibre le teint de l\'Été.',
+      source: '🌿 Tradition islamique — rhassoul, argile du Maroc'
     },
   ],
 
-  // ── AUTOMNE (14 entrées) — Peau réactive, besoins en apaisement ──
+  // ── AUTOMNE — Nourrir et consolider (SPM, boutons hormonaux, ligaments relâchés) ──
   automne: [
     {
-      nom: 'Masque miel brut et curcuma',
-      duree: '10 min',
-      geste: '1 c.à.c miel + une pincée de curcuma. Mélange bien. Applique sur visage propre. Laisse 10 min. Rince.',
-      benefice: 'Curcuma anti-inflammatoire + miel antibactérien — combat les imperfections hormonales en douceur.'
-    },
-    {
-      nom: 'Compresses chaudes à la camomille',
-      duree: '8 min',
-      geste: 'Tisane de camomille concentrée. Laisse tiédir. Imbibe une serviette propre, applique sur visage 5 min.',
-      benefice: 'L\'azulène de la camomille réduit les rougeurs et calme la peau réactive de l\'Automne.'
-    },
-    {
-      nom: 'Huile de rose musquée en soin de nuit',
+      nom: 'Huile de nigelle pure',
       duree: '3 min',
-      geste: '3-4 gouttes sur peau propre et légèrement humide. Pas de rinçage. Dors dessus.',
-      benefice: 'Régénère les cellules pendant le sommeil — particulièrement efficace en phase lutéale.'
+      moment: 'Matin',
+      geste: '2 gouttes d\'huile de nigelle sur peau légèrement humide après nettoyage. Masse doucement en cercles.',
+      benefice: 'Anti-inflammatoire — prépare la peau aux changements hormonaux de la phase lutéale.',
+      source: '☪️ Sunnah — huile de nigelle : "Dans la nigelle il y a une guérison pour tout sauf la mort" (Bukhari 5688)'
     },
     {
-      nom: 'Masque à l\'avoine colloïdale',
-      duree: '18 min',
-      geste: 'Flocons d\'avoine mixés finement. Mélange à l\'eau tiède jusqu\'à pâte. Applique 15 min. Rince délicatement.',
-      benefice: 'L\'avoine calme les démangeaisons, nourrit et protège la barrière cutanée fragilisée.'
-    },
-    {
-      nom: 'Nettoyage doux au lait de coco',
-      duree: '3 min',
-      geste: 'Lait de coco sur coton, passe sur visage sans frotter. Rinçage léger à l\'eau tiède.',
-      benefice: 'Acide laurique antibactérien + nettoyage ultra-doux pour peau sensible de l\'Automne.'
-    },
-    {
-      nom: 'Masque argile blanche et huile de jojoba',
+      nom: 'Masque miel + curcuma',
       duree: '10 min',
-      geste: 'Argile blanche + quelques gouttes d\'huile de jojoba + eau de rose. Plus doux que l\'argile seule.',
-      benefice: 'Purifie sans assécher — adapté à la peau hypersensible prémenstruelle.'
-    },
-    {
-      nom: 'Masque yaourt nature et niacinamide',
-      duree: '12 min',
-      geste: '1 c.à.s yaourt entier nature + 2 gouttes de sérum niacinamide 10%. Applique en couche régulière, laisse 10-12 min, rince à l\'eau tiède.',
-      benefice: 'Acide lactique doux + niacinamide — renforce la barrière cutanée et réduit les taches liées aux fluctuations hormonales d\'Automne.'
-    },
-    {
-      nom: 'Mélange huile de noisette et chanvre',
-      duree: '3 min',
-      geste: 'Parts égales des deux huiles. Applique le soir sur visage propre. Pas de rinçage.',
-      benefice: 'Oméga-6 anti-inflammatoires — calment les réactions cutanées hormonales en profondeur.'
-    },
-    {
-      nom: 'Cataplasme d\'aloé vera pur',
-      duree: '8 min',
-      geste: 'Gel d\'aloé vera pur (feuille fraîche ou 99% pur) en couche épaisse. Laisse 5-8 min sans rincer.',
-      benefice: 'Hydratation intense et apaisement immédiat des zones réactives ou irritées.'
-    },
-    {
-      nom: 'Eau thermale ou de source en brume',
-      duree: '2 min',
-      geste: 'Vaporise matin et soir avant ta crème. Tapote pour faire pénétrer. Ne frotte pas.',
-      benefice: 'Minéraux apaisants, réduit la sensibilité cutanée des derniers jours du cycle.'
-    },
-    {
-      nom: 'Compresses thé vert et miel sur zones réactives',
-      duree: '10 min',
-      geste: 'Thé vert refroidi + 1 c.à.c miel dissous. Imbibe des compresses rondes, applique sur zones rouges 8 min.',
-      benefice: 'Antioxydants du thé + miel antibactérien — duo efficace contre les éruptions hormonales.'
-    },
-    {
-      nom: 'Masque argile kaolin et eau florale de lavande',
-      duree: '10 min',
-      geste: 'Argile kaolin (la plus douce) + eau florale de lavande. Laisse 10 min. Rince à l\'eau tiède.',
-      benefice: 'La lavande apaise et assainit, le kaolin purifie ultra-doucement — parfait pour finir le cycle sereinement.'
-    },
-    {
-      nom: 'Bain de pieds chaud aux huiles essentielles de lavande',
-      duree: '15 min',
-      geste: 'Eau chaude, 3 gouttes lavande + 2 gouttes camomille dans une cuillère d\'huile végétale. Trempe 12-15 min.',
-      benefice: 'Réflexologie naturelle + aromathérapie — réduit les tensions et favorise la détente en fin de cycle.'
-    },
-    {
-      nom: 'Masque sucre et huile de sésame',
-      duree: '8 min',
-      geste: '1 c.à.c sucre roux + 1 c.à.c huile de sésame. Massage circulaire 2 min. Laisse 5 min, rince.',
-      benefice: 'Exfoliation douce + acides gras nourrissants pour regénérer la peau avant le prochain cycle.'
+      moment: 'Soir',
+      geste: '1 c.à.c de miel + 1 pincée de curcuma. Mélange bien, applique sur visage propre. Laisse 10 min, rince à l\'eau tiède.',
+      benefice: 'Antibactérien + anti-inflammatoire — duo contre les boutons hormonaux de fin de cycle.',
+      source: '☪️ Sunnah — miel (Coran 16:69) · Curcuma : médecine islamique traditionnelle · ⚠️ Peut légèrement teinter la peau claire — tester d\'abord'
     },
   ],
 };
