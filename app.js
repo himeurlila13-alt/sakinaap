@@ -410,7 +410,7 @@ function openReconnectFromNudge() {
 
 async function handleReconnect() {
   const email = document.getElementById('reconnect-email')?.value.trim();
-  if (!email || !email.includes('@')) { alert('Entre une adresse email valide.'); return; }
+  if (!email || !email.includes('@')) { showToast('Entre une adresse email valide.'); return; }
   const btn = document.getElementById('reconnect-send-btn');
   if (btn) { btn.disabled = true; btn.textContent = 'Envoi…'; }
   try {
@@ -1665,6 +1665,7 @@ function applySaisonTheme() {
   r.setProperty('--season-light', s.light);
   r.setProperty('--season-soft', s.soft);
   r.setProperty('--season-grad', s.grad);
+  r.setProperty('--season-dark', s.dark);
   r.setProperty('--bg-phase', BG_PHASE[ST.currentSaison] || '#FAF6F0');
   const av = document.querySelector('.av-btn');
   if (av) { av.style.background = s.grad; av.textContent = s.emoji; }
@@ -3835,7 +3836,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 function nextStep(step) {
   if (step === 1) {
     const prenom = document.getElementById('input-prenom').value.trim();
-    if (!prenom) { alert('Dis-moi ton prénom 🌸'); return; }
+    if (!prenom) { showToast('Dis-moi ton prénom 🌸'); return; }
     ST.prenom = prenom;
     saveState();
     const _n = new Date(); const today = _n.getFullYear() + '-' + String(_n.getMonth()+1).padStart(2,'0') + '-' + String(_n.getDate()).padStart(2,'0');
@@ -3848,7 +3849,7 @@ function nextStep(step) {
     window.scrollTo(0, 0);
   } else if (step === 2) {
     const dateVal = document.getElementById('input-date').value;
-    if (!dateVal) { alert('Indique la date de début de ton dernier cycle 🌙'); return; }
+    if (!dateVal) { showToast('Indique la date de début de ton dernier cycle 🌙'); return; }
     ST.cycleStart = dateVal;
     ST.cycleDuration = selectedDuration;
     if (!ST.consentDate) {
@@ -4335,9 +4336,9 @@ function selectEditDuration(el, val) {
 }
 function saveEditCycle() {
   const dateVal=document.getElementById('edit-cycle-date').value;
-  if (!dateVal) { alert('Indique la date 🌙'); return; }
+  if (!dateVal) { showToast('Indique la date 🌙'); return; }
   const todayStr = new Date().toISOString().split('T')[0];
-  if (dateVal > todayStr) { alert('La date de début ne peut pas être dans le futur 🌙'); return; }
+  if (dateVal > todayStr) { showToast('La date de début ne peut pas être dans le futur 🌙'); return; }
   if (ST.cycleStart && ST.cycleStart !== dateVal) {
     if (!ST.cycleHistory) ST.cycleHistory = [];
     ST.cycleHistory.unshift({ start: ST.cycleStart, duration: ST.cycleDuration || 28 });
@@ -4515,7 +4516,7 @@ function showInstallBanner() {
 function dismissInstallBanner() { ST.installBannerDismissed=true; saveState(); const banner=document.getElementById('install-banner'); if(banner) banner.style.display='none'; }
 function showToast(msg) {
   let el=document.getElementById('toastEl');
-  if (!el) { el=document.createElement('div'); el.id='toastEl'; el.className='toast'; document.body.appendChild(el); }
+  if (!el) { el=document.createElement('div'); el.id='toastEl'; el.className='toast'; el.setAttribute('role','alert'); el.setAttribute('aria-live','assertive'); document.body.appendChild(el); }
   el.textContent=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),2900);
 }
 function formatDateFr(dateStr) {

@@ -180,7 +180,7 @@
     <div class="ob-eye">As-salamu alaykum, 
       ✨</div>
     <div class="ob-title">Ton corps a sa propre sagesse.<br><em>Apprends à l'écouter.</em></div>
-    <div class="ob-sub">SakinApp t'accompagne chaque jour selon ton cycle, ta foi et ton energie.</div>
+    <div class="ob-sub">SakinApp t'accompagne chaque jour selon ton cycle, ta foi et ton énergie.</div>
     <div class="ob-fl">Ton prenom</div>
     <input class="ob-input" id="input-prenom" type="text" placeholder="Lisa, Aya, Lila..." maxlength="30" autocomplete="given-name" autocorrect="off" autocapitalize="words" spellcheck="false" inputmode="text">
     <div class="ob-privacy" style="margin-top:12px;">
@@ -195,9 +195,9 @@
   <div class="ob-step" id="step-1">
     <div class="ob-logo">SakinApp</div>
     <div class="ob-eye">Ton cycle</div>
-    <div class="ob-title">Ou en es-tu<br><em>dans ton cycle ?</em></div>
-    <div class="ob-sub">Je calcule ta saison du moment pour personnaliser ton experience.</div>
-    <div class="ob-fl">1er jour de tes dernieres regles</div>
+    <div class="ob-title">Où en es-tu<br><em>dans ton cycle ?</em></div>
+    <div class="ob-sub">Je calcule ta saison du moment pour personnaliser ton expérience.</div>
+    <div class="ob-fl">1er jour de tes dernières règles</div>
     <input class="ob-input" id="input-date" type="date" style="margin-bottom:18px">
     <div class="ob-fl">Duree habituelle de ton cycle</div>
     <div class="ob-options" id="duration-options">
@@ -205,7 +205,7 @@
       <div class="ob-option selected" onclick="selectDuration(this,28)"><span class="ob-option-emoji">&#127800;</span><div><div class="ob-option-text">Moyen - 27 a 30 jours</div></div><div class="ob-option-chk">&#10003;</div></div>
       <div class="ob-option" onclick="selectDuration(this,33)"><span class="ob-option-emoji">&#9728;&#65039;</span><div><div class="ob-option-text">Long - 31 a 35 jours</div></div><div class="ob-option-chk">&#10003;</div></div>
     </div>
-    <button class="ob-btn" onclick="nextStep(2)" style="margin-top:24px">Reveler ma saison</button>
+    <button class="ob-btn" onclick="nextStep(2)" style="margin-top:24px">Révéler ma saison</button>
   </div>
 </div>
 </div>
@@ -1184,23 +1184,23 @@
 
 <!-- BOTTOM NAV -->
 <div class="bottom-nav" id="bottomNav">
-  <div class="nav-item active" id="nav-accueil" onclick="switchTab('accueil',this)">
+  <div class="nav-item active" id="nav-accueil" role="button" tabindex="0" aria-label="Accueil" onclick="switchTab('accueil',this)" onkeydown="if(event.key==='Enter'||event.key===' ')switchTab('accueil',this)">
     <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
     <div class="nav-label">Accueil</div><div class="nav-pip"></div>
   </div>
-  <div class="nav-item" id="nav-cycle" onclick="switchTab('cycle',this)">
+  <div class="nav-item" id="nav-cycle" role="button" tabindex="0" aria-label="Cycle" onclick="switchTab('cycle',this)" onkeydown="if(event.key==='Enter'||event.key===' ')switchTab('cycle',this)">
     <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
     <div class="nav-label">Cycle</div><div class="nav-pip"></div>
   </div>
-  <div class="nav-item" id="nav-ame" onclick="switchTab('ame',this)">
+  <div class="nav-item" id="nav-ame" role="button" tabindex="0" aria-label="Âme" onclick="switchTab('ame',this)" onkeydown="if(event.key==='Enter'||event.key===' ')switchTab('ame',this)">
     <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
-    <div class="nav-label">Ame</div><div class="nav-pip"></div>
+    <div class="nav-label">Âme</div><div class="nav-pip"></div>
   </div>
-  <div class="nav-item" id="nav-objectifs" onclick="switchTab('objectifs',this)">
+  <div class="nav-item" id="nav-objectifs" role="button" tabindex="0" aria-label="Objectifs" onclick="switchTab('objectifs',this)" onkeydown="if(event.key==='Enter'||event.key===' ')switchTab('objectifs',this)">
     <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
     <div class="nav-label">Objectifs</div><div class="nav-pip"></div>
   </div>
-  <div class="nav-item" id="nav-moi" onclick="switchTab('moi',this)">
+  <div class="nav-item" id="nav-moi" role="button" tabindex="0" aria-label="Moi" onclick="switchTab('moi',this)" onkeydown="if(event.key==='Enter'||event.key===' ')switchTab('moi',this)">
     <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
     <div class="nav-label">Moi</div><div class="nav-pip"></div>
   </div>
