@@ -734,12 +734,12 @@ const SAISONS = {
       seance: { name:'Douceur profonde', duration:'7 min', meta:'Sol · Tapis · Zéro impact',
         exercices:[
           {num:'01', name:'Respiration abdominale', detail:'Allongée, mains sur le ventre. 10 respirations.'},
-          {num:'02', name:'Posture enfant', detail:'Genoux écartés, front au sol. 2 minutes.'},
+          {num:'02', name:'Étirement bas du dos', detail:'Genoux écartés, front au sol. 2 minutes.'},
           {num:'03', name:'Rotation douce dos', detail:'Genoux pliés, tomber à droite/gauche. 5×.'},
           {num:'04', name:'Étirement hanches', detail:'Genou sur la poitrine. 30 sec chaque côté.'},
         ]
       },
-      mouvements: ['Étirements doux','Mobilité du bassin','Posture enfant','Respiration profonde','Marche contemplative']
+      mouvements: ['Étirements doux','Mobilité du bassin','Étirement bas du dos','Respiration profonde','Marche contemplative']
     },
     skincare: {
       whatHappens: 'Les hormones sont au plus bas — ta peau est plus sèche, plus sensible et la barrière cutanée est affaiblie.',
@@ -1041,28 +1041,28 @@ const ROUTINES_PREMIUM = {
 
 const SPORT_NIVEAUX = {
   hiver: [
-    { niveau:1, name:'Soulagement', duration:'7 min', meta:'Sol · Anti-douleur · Yin', exercices:[
+    { niveau:1, name:'Soulagement', duration:'7 min', meta:'Sol · Anti-douleur · Repos actif', exercices:[
       {num:'01', name:'Position anti-douleur', detail:'3 min allongée en boule sur le côté gauche, genoux remontés. Réduit la pression utérine et soulage les crampes.'},
       {num:'02', name:'Respiration 4-4-6', detail:'Inspire 4 temps, retiens 4 temps, souffle 6 temps. 6 cycles. Active le parasympathique anti-douleur.'},
       {num:'03', name:'Détente abdominale', detail:'Mains chaudes sur le ventre. Relâche total des abdos à chaque expiration. Cercles très doux.'},
     ]},
     { niveau:2, name:'Douceur profonde', duration:'10 min', meta:'Sol · Tapis · Respiratoire', exercices:[
       {num:'01', name:'Respiration abdominale', detail:'10 respirations. Mains sur le ventre, sentir l\'expansion à chaque inspire.'},
-      {num:'02', name:'Posture enfant étendue', detail:'2 minutes, bras tendus devant. Respirer dans le bas du dos.'},
+      {num:'02', name:'Étirement bas du dos étendu', detail:'2 minutes, genoux écartés, front au sol, bras tendus devant. Respirer dans le bas du dos.'},
       {num:'03', name:'Rotation de bassin', detail:'À quatre pattes, cercles lents dans les deux sens. 2 min.'},
       {num:'04', name:'Étirement hanches', detail:'1 minute chaque côté. Souffle long, ne pas forcer.'},
     ]},
     { niveau:3, name:'Mobilité libératrice', duration:'15 min', meta:'Sol · Aucun impact · Endorphines', exercices:[
-      {num:'01', name:'Chat-vache lent', detail:'3 min. 10 cycles. Vertèbre par vertèbre — libère les tensions lombaires.'},
-      {num:'02', name:'Posture enfant', detail:'2 min. Front au sol, bras tendus. Respire dans le bas du dos.'},
-      {num:'03', name:'Pigeon modifié', detail:'2 min chaque côté. Ouvre la hanche passivement, laisse la gravité faire.'},
+      {num:'01', name:'Mobilité lombaire en 4 appuis', detail:'3 min. 10 cycles. Dos creux à l\'inspire, dos arrondi à l\'expire. Vertèbre par vertèbre — libère les tensions lombaires.'},
+      {num:'02', name:'Étirement bas du dos', detail:'2 min. Genoux écartés, front au sol, bras tendus. Respire dans le bas du dos.'},
+      {num:'03', name:'Étirement psoas-hanches', detail:'2 min chaque côté. Genou avant plié, jambe arrière tendue. Ouvre la hanche passivement, laisse la gravité faire.'},
       {num:'04', name:'Torsion douce au sol', detail:'1 min par côté. Genoux tombent d\'un côté, épaules restent au sol.'},
     ]},
-    { niveau:4, name:'Yin libérateur', duration:'20 min', meta:'Yin yoga · Sol · Méditatif', exercices:[
+    { niveau:4, name:'Mobilité libératrice complète', duration:'20 min', meta:'Étirements passifs · Sol · Méditatif', exercices:[
       {num:'01', name:'Papillon allongé', detail:'5 minutes. Plantes de pieds jointes, genoux ouverts. Respiration abdominale ample.'},
-      {num:'02', name:'Dragon (fente Yin)', detail:'3 min chaque côté. Psoas et hanches en étirement profond passif.'},
+      {num:'02', name:'Étirement profond du psoas', detail:'3 min chaque côté. Genou avant plié, jambe arrière allongée. Descends sur les avant-bras, laisse le poids étirer. Respire sans forcer.'},
       {num:'03', name:'Jambes au mur', detail:'4 minutes. Retour veineux, soulage les lombaires et les gonflements.'},
-      {num:'04', name:'Savasana guidé', detail:'5 minutes. Scan corporel complet. Laisse chaque muscle se fondre dans le sol.'},
+      {num:'04', name:'Relaxation profonde guidée', detail:'5 minutes. Allongée, yeux fermés. Relâche chaque zone du corps de la tête aux pieds à chaque expiration.'},
     ]},
   ],
   printemps: [
@@ -1070,7 +1070,7 @@ const SPORT_NIVEAUX = {
       {num:'01', name:'Marche sur place', detail:'3 min. Bras qui balancent, montée de genoux progressive. Préparation articulaire complète.'},
       {num:'02', name:'5 squats lents', detail:'3 séries. Pieds largeur épaules, descente 3 sec, remontée contrôlée. Pas plus bas que le confort le permet.'},
       {num:'03', name:'Gainage genoux 15 sec', detail:'2 séries. Planche sur les genoux, corps droit. Respire normalement.'},
-      {num:'04', name:'Chat-vache', detail:'8 cycles pour fermer la séance en douceur. Vertèbre par vertèbre.'},
+      {num:'04', name:'Mobilité lombaire en 4 appuis', detail:'8 cycles pour fermer la séance en douceur. Dos creux / dos arrondi, vertèbre par vertèbre.'},
     ]},
     { niveau:2, name:'Activation', duration:'15 min', meta:'Debout + sol', exercices:[
       {num:'01', name:'Échauffement articulaire', detail:'3 minutes. Chevilles, hanches, épaules — cercles fluides.'},
@@ -1118,29 +1118,29 @@ const SPORT_NIVEAUX = {
     ]},
   ],
   automne: [
-    { niveau:1, name:'Récupération active', duration:'12 min', meta:'Sol · Yoga doux · Débutante', exercices:[
+    { niveau:1, name:'Récupération active', duration:'12 min', meta:'Sol · Mobilité douce · Débutante', exercices:[
       {num:'01', name:'Respiration libératrice', detail:'5 cycles. Expire 2× plus longtemps qu\'inspire. Calme le système nerveux.'},
-      {num:'02', name:'Posture enfant', detail:'3 min. Genoux écartés, front au sol, bras tendus devant. Relâche total.'},
+      {num:'02', name:'Étirement bas du dos', detail:'3 min. Genoux écartés, front au sol, bras tendus devant. Relâche total.'},
       {num:'03', name:'Rotation lombaire douce', detail:'Allongée, genoux pliés, laisse-les tomber de chaque côté 5×.'},
       {num:'04', name:'Étirement ischio-jambiers', detail:'Jambe levée tenue avec les mains. Respire dans l\'étirement, 45 sec chaque côté.'},
     ]},
-    { niveau:2, name:'Détente active', duration:'15 min', meta:'Yoga · Sol', exercices:[
+    { niveau:2, name:'Détente active', duration:'15 min', meta:'Pilates · Sol', exercices:[
       {num:'01', name:'Respiration libératrice', detail:'5 cycles, expiration 2× plus longue que l\'inspiration.'},
-      {num:'02', name:'Guerrier I & II', detail:'1 minute chaque posture, chaque côté. Ancrage dans le sol.'},
-      {num:'03', name:'Torsion assise', detail:'1 min par côté. Respire dans la torsion, pas de force.'},
+      {num:'02', name:'Fentes basses tenues', detail:'1 min chaque côté. Genou arrière posé au sol. Respire profondément, garde l\'ancrage. Renforce sans fatiguer.'},
+      {num:'03', name:'Torsion libératrice assise', detail:'1 min par côté. Assis, torsion du buste, respire dans l\'étirement, pas de force.'},
       {num:'04', name:'Pont lent 12×', detail:'3 sec en haut, squeeze. Lombaires collées au sol.'},
     ]},
-    { niveau:3, name:'Équilibre & ancrage', duration:'18 min', meta:'Yoga + renfo doux', exercices:[
-      {num:'01', name:'Salutation au soleil × 3', detail:'Enchaînement fluide. 1 min par cycle complet.'},
-      {num:'02', name:'Guerrier III — équilibre', detail:'30 sec par jambe. Regard fixe sur un point.'},
+    { niveau:3, name:'Équilibre & ancrage', duration:'18 min', meta:'Renforcement doux + mobilité', exercices:[
+      {num:'01', name:'Circuit mobilité globale × 3', detail:'Depuis debout : descente lente au sol, 4 appuis, mobilité lombaire (dos creux / dos arrondi), remontée contrôlée. 1 min par cycle.'},
+      {num:'02', name:'Équilibre sur une jambe', detail:'30 sec par jambe. Bras tendus en avant ou mains sur les hanches. Regard fixe sur un point. Renforce les chevilles et la proprioception.'},
       {num:'03', name:'Étirement psoas en fente basse', detail:'2 min par côté. Laisser le poids du corps étirer.'},
-      {num:'04', name:'Savasana conscient', detail:'3 min. Scan corporel, relâche totale.'},
+      {num:'04', name:'Relaxation profonde', detail:'3 min. Allongée, yeux fermés, relâche totale de la tête aux pieds.'},
     ]},
-    { niveau:4, name:'Yin libérateur', duration:'22 min', meta:'Yin yoga · Profond', exercices:[
-      {num:'01', name:'Dragon — fente yin', detail:'4 min par côté. Gravité fait le travail, pas les muscles.'},
-      {num:'02', name:'Papillon (baddha konasana)', detail:'5 min. Dos droit ou arrondi selon confort.'},
-      {num:'03', name:'Demi-tortue', detail:'4 min. Front au sol si possible. Bras tendus.'},
-      {num:'04', name:'Savasana + respiration 4-7-8', detail:'5 min. Inspirer 4, retenir 7, souffler 8. 8 cycles.'},
+    { niveau:4, name:'Étirements libérateurs profonds', duration:'22 min', meta:'Étirements passifs longs · Profond', exercices:[
+      {num:'01', name:'Étirement profond du psoas', detail:'4 min par côté. Gravité fait le travail, pas les muscles. Genou avant plié, jambe arrière allongée.'},
+      {num:'02', name:'Papillon allongé', detail:'5 min. Plantes de pieds jointes, genoux ouverts, dos au sol. Respiration abdominale.'},
+      {num:'03', name:'Étirement complet du dos', detail:'4 min. Genoux écartés, front au sol, bras tendus. Relâche les épaules et la nuque.'},
+      {num:'04', name:'Relaxation profonde + respiration 4-7-8', detail:'5 min. Inspirer 4, retenir 7, souffler 8. 8 cycles. Laisse chaque muscle fondre dans le sol.'},
     ]},
   ],
 };
