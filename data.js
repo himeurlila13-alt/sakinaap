@@ -657,7 +657,7 @@ const SEANCES_SPORT = {
         exercices: [
           { nom: 'Respiration abdominale', duree: '2 min',
             detail: 'Mains sur le ventre. Inspire profondément par le nez, expire lentement par la bouche.' },
-          { nom: 'Posture enfant',         duree: '2 min',
+          { nom: 'Étirement bas du dos',   duree: '2 min',
             detail: 'Genoux écartés, front au sol, bras étirés devant toi. Respire et laisse le sol te porter.' },
           { nom: 'Rotation de bassin',     duree: '2 min',
             detail: 'À quatre pattes, dessine des cercles lents avec les hanches dans les deux sens.' },
@@ -839,7 +839,7 @@ const SEANCES_SPORT = {
       exercices: [
         { nom: 'Respiration abdominale', duree: '2 min',
           detail: 'Mains sur le ventre. Lente, profonde, bienveillante.' },
-        { nom: 'Posture enfant',         duree: '3 min',
+        { nom: 'Étirement bas du dos',   duree: '3 min',
           detail: 'Genoux écartés, front au sol. Lâche prise.' },
         { nom: 'Rotation de bassin',     duree: '2 min',
           detail: 'Cercles lents, sans effort, juste la fluidité.' },
