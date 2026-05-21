@@ -907,3 +907,194 @@ const SEANCES_SPORT = {
     detail: 'Marche 10 minutes dehors à ton rythme. À chaque pas, dis SubhanAllah dans ton cœur. Aucune pression. Juste la présence.',
   },
 };
+
+// ─── OBJECTIFS PAR PHASE ──────────────────────────────────────────────────────
+const OBJECTIFS_CATEGORIES = {
+  spiritualite: { icon: '🕌', label: 'Spiritualité' },
+  maison:       { icon: '🏠', label: 'Maison' },
+  famille:      { icon: '👨‍👩‍👧', label: 'Famille' },
+  apprentissage:{ icon: '📚', label: 'Apprentissage' },
+  projet:       { icon: '💼', label: 'Projet' },
+  soin:         { icon: '💆', label: 'Soin de soi' },
+  croissance:   { icon: '🌱', label: 'Croissance' },
+};
+
+const OBJECTIFS_PAR_PHASE = {
+  hiver: {
+    spiritualite: [
+      'Écouter le Coran',
+      'Faire du dhikr silencieux',
+      'Lire une page islamique',
+      'Du\'a personnel et intime',
+      'Méditer sur un nom d\'Allah',
+    ],
+    maison: [
+      'Ranger 1 tiroir ou 1 placard',
+      'Faire la lessive',
+      'Préparer un repas réconfortant',
+      'Trier des papiers administratifs',
+      'Dresser une liste de tâches à venir',
+    ],
+    famille: [
+      'Appeler sa mère ou une sœur',
+      'Envoyer un message affectueux',
+      'Regarder un film en famille',
+      'Écrire ce qu\'on aime chez son mari',
+    ],
+    apprentissage: [
+      'Écouter un podcast islamique',
+      'Lire 5 pages d\'un livre',
+      'Regarder une courte vidéo instructive',
+      'Revoir ses notes de formation',
+    ],
+    projet: [
+      'Relire et corriger sans créer',
+      'Faire le bilan de ce qui avance',
+      'Organiser ses notes et idées',
+      'Trier ses emails ou messages',
+    ],
+    soin: [
+      'Se coucher tôt ce soir',
+      'Prendre un bain chaud',
+      'Appliquer son soin nigelle ou miel',
+      'S\'accorder une vraie pause',
+    ],
+    croissance: [
+      'Écrire dans son journal',
+      'Lister 3 choses pour lesquelles être reconnaissante',
+      'Identifier ce dont on a besoin ce cycle',
+    ],
+  },
+  printemps: {
+    spiritualite: [
+      'Reprendre une habitude spirituelle abandonnée',
+      'Mémoriser un verset ou dhikr nouveau',
+      'Faire ses prières à l\'heure',
+      'Faire une sadaqa',
+      'Assister à un cours islamique',
+    ],
+    maison: [
+      'Grand rangement d\'une pièce',
+      'Cuisiner une nouvelle recette',
+      'Faire les courses avec une liste planifiée',
+      'Réorganiser un espace qui ne fonctionne pas',
+      'Démarrer un projet déco ou organisation',
+    ],
+    famille: [
+      'Planifier une sortie en famille',
+      'Proposer une activité nouvelle aux enfants',
+      'Avoir une vraie conversation avec son mari',
+      'Contacter une amie perdue de vue',
+    ],
+    apprentissage: [
+      'Commencer un nouveau livre',
+      'S\'inscrire à une formation',
+      'Apprendre quelque chose de nouveau',
+      'Démarrer un cours en ligne',
+    ],
+    projet: [
+      'Lancer l\'idée qui attendait',
+      'Contacter quelqu\'un pour avancer',
+      'Créer, rédiger, démarrer',
+      'Fixer des objectifs pour le mois',
+    ],
+    soin: [
+      'Essayer une nouvelle routine sportive',
+      'Tester une recette beauté naturelle',
+      'Sortir se promener',
+      'Prendre soin de son corps avec gratitude',
+    ],
+    croissance: [
+      'Définir 3 intentions pour ce cycle',
+      'Écrire sa vision de la femme qu\'on veut être',
+      'Identifier une peur à dépasser ce mois',
+    ],
+  },
+  ete: {
+    spiritualite: [
+      'Faire une sadaqa généreuse',
+      'Rendre visite à quelqu\'un dans le besoin',
+      'Partager une connaissance islamique',
+      'Inviter des proches à manger',
+      'Faire du bénévolat',
+    ],
+    maison: [
+      'Grand ménage complet',
+      'Cuisiner en grande quantité',
+      'Revoir l\'organisation globale de la maison',
+      'Préparer un repas et inviter du monde',
+    ],
+    famille: [
+      'Organiser une sortie mémorable',
+      'Avoir une conversation importante sur les projets',
+      'Passer du temps de qualité avec chaque enfant',
+      'Reconnecter avec la famille élargie',
+    ],
+    apprentissage: [
+      'Partager ce qu\'on a appris',
+      'Enseigner quelque chose à ses enfants',
+      'Présenter un projet ou une idée',
+      'Explorer un nouveau domaine',
+    ],
+    projet: [
+      'Pitcher, convaincre, présenter',
+      'Passer les appels importants',
+      'Lancer officiellement ce qui était en préparation',
+      'Collaborer et connecter',
+    ],
+    soin: [
+      'Séance sport plus intense',
+      'Sortie dans la nature',
+      'Soin beauté complet',
+      'Nourrir son énergie sans la gaspiller',
+    ],
+    croissance: [
+      'Faire quelque chose qui fait peur',
+      'Dire oui à une opportunité',
+      'Prendre position sur quelque chose d\'important',
+    ],
+  },
+  automne: {
+    spiritualite: [
+      'Muhasaba — bilan spirituel du cycle',
+      'Faire du istighfar régulier',
+      'Préparer spirituellement le repos à venir',
+      'Lire sur la patience et l\'acceptation',
+    ],
+    maison: [
+      'Finir les tâches qui traînent',
+      'Préparer des repas à congeler',
+      'Trier et donner ce qui ne sert plus',
+      'Préparer l\'espace pour le repos à venir',
+    ],
+    famille: [
+      'Résoudre une tension non dite',
+      'Préparer quelque chose de spécial pour ses proches',
+      'Écrire une lettre à ses enfants',
+      'Planifier un moment calme en famille',
+    ],
+    apprentissage: [
+      'Finir le livre commencé',
+      'Revoir ses notes, consolider',
+      'Tirer les leçons de ce qu\'on a appris',
+      'Préparer la prochaine période d\'apprentissage',
+    ],
+    projet: [
+      'Finir, livrer, clôturer',
+      'Corriger et peaufiner',
+      'Bilan de ce qui a avancé',
+      'Préparer la prochaine phase créative',
+    ],
+    soin: [
+      'Réduire le café et le sucre',
+      'Se coucher plus tôt',
+      'Bain chaud et masque miel',
+      'Dire non sans culpabilité',
+    ],
+    croissance: [
+      'Bilan du cycle — ce qui a bien marché',
+      'Ce que je veux faire différemment',
+      'Identifier ce dont j\'ai besoin en Hiver',
+    ],
+  },
+};

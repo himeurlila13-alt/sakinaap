@@ -1097,6 +1097,79 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
 }
 .obj-remove-btn:active { opacity: .8; }
 
+.obj-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 4px 0 8px;
+}
+.obj-cat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--creme);
+  border: 1.5px solid var(--sable);
+  border-radius: 14px;
+  padding: 12px 6px 10px;
+  gap: 4px;
+  cursor: pointer;
+  transition: opacity .15s;
+}
+.obj-cat-item:active { opacity: .7; }
+.obj-cat-icon { font-size: 22px; line-height: 1; }
+.obj-cat-label {
+  font-size: 10px;
+  font-family: var(--sans);
+  color: var(--noir);
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.2;
+}
+.obj-cat-count {
+  font-size: 10px;
+  color: var(--gris);
+  background: var(--sable);
+  border-radius: 8px;
+  padding: 1px 6px;
+}
+.obj-phase-tag {
+  font-size: 10px;
+  color: var(--season);
+  font-weight: 600;
+  margin-top: 2px;
+  letter-spacing: .03em;
+}
+.obj-empty {
+  padding: 16px 0 8px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--gris);
+}
+.obj-premium-chip {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--or);
+  background: rgba(201,169,110,.12);
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+.obj-rec-select {
+  border: 1.5px solid var(--sable);
+  border-radius: 10px;
+  padding: 10px 8px;
+  font-size: 12px;
+  font-family: var(--sans);
+  color: var(--noir);
+  background: var(--creme);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  flex-shrink: 0;
+}
+
 /* ═══ CALENDRIER CYCLE ═══ */
 .cal-weekdays {
   display: grid;
@@ -1510,6 +1583,9 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
   .ps-acc-body .ps-row{background:#1C1916;border-bottom-color:#2E2924}
   .obj-item{background:#252220;border-color:#2E2924}
   .obj-item.done{background:rgba(var(--season-rgb,123,94,167),.12)}
+  .obj-cat-item{background:#252220;border-color:#2E2924}
+  .obj-cat-count{background:#2E2924}
+  .obj-rec-select{background:#252220;color:#E8DDD0;border-color:#2E2924}
   .home-header{background:var(--season-grad)}
   .moi-hero-name{color:var(--season)}
   .moi-hero-msg{color:rgba(255,255,255,.45)}

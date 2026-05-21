@@ -1562,6 +1562,7 @@ function applyTrialLocks() {
   const la = document.getElementById('trial-lock-accueil'); if (la) la.style.display = active ? 'none' : 'block';
   const lc = document.getElementById('trial-lock-cycle'); if (lc) lc.style.display = active ? 'none' : 'block';
   const lo = document.getElementById('trial-lock-objectifs'); if (lo) lo.style.display = active ? 'none' : 'block';
+  const addWrap = document.getElementById('obj-perso-add-wrap'); if (addWrap) addWrap.style.display = active ? '' : 'none';
   const sc = document.getElementById('symptomes-content'); if (sc) sc.style.display = active ? '' : 'none';
   const gc = document.getElementById('glaire-content'); if (gc) gc.style.display = active ? '' : 'none';
 }
@@ -3324,13 +3325,6 @@ function checkDailyReset() {
 // ═══════════════════════════════════════════════
 // OBJECTIFS
 // ═══════════════════════════════════════════════
-const WEEKLY_OBJECTIVES = [
-  { id: 'bouger',  label: 'Bouger 3×/sem',      emoji: '💪', target: 3 },
-  { id: 'eau',     label: 'Eau 1,5 L/jour',      emoji: '💧', target: 7 },
-  { id: 'coran',   label: 'Lire le Coran',        emoji: '📖', target: 7 },
-  { id: 'dormir',  label: 'Dormir avant 23h',     emoji: '🌙', target: 7 },
-  { id: 'prieres', label: '5 prières accomplies', emoji: '🕌', target: 7 },
-];
 
 function _getWeekKey() {
   const now = new Date();
@@ -3340,79 +3334,152 @@ function _getWeekKey() {
   return monday.toISOString().split('T')[0];
 }
 
+function _getPhaseForSuggestions() {
+  const checkin = ST.checkin;
+  if (checkin === 'calme' || checkin === 'fatiguee') return 'hiver';
+  return ST.currentSaison || 'printemps';
+}
+
+function _getSuggestionsJour(phase) {
+  const pool = OBJECTIFS_PAR_PHASE[phase] || OBJECTIFS_PAR_PHASE.printemps;
+  const dayNum = Math.floor(Date.now() / 86400000);
+  const PRAYER_WORDS = ['prière', 'prières', '5 prières'];
+
+  const pick = (cat) => {
+    let items = pool[cat] || [];
+    if (phase === 'hiver') items = items.filter(t => !PRAYER_WORDS.some(kw => t.toLowerCase().includes(kw)));
+    if (!items.length) return null;
+    const idx = dayNum % items.length;
+    return { id: `${phase}_${cat}_${idx}`, cat, texte: items[idx] };
+  };
+
+  const rotating = ['maison', 'famille', 'apprentissage', 'projet', 'croissance'];
+  const r = dayNum % rotating.length;
+  return ['spiritualite', 'soin', rotating[r], rotating[(r + 1) % 5], rotating[(r + 2) % 5]]
+    .map(pick)
+    .filter(Boolean);
+}
+
 function renderObjectifs() {
-  renderWeeklyObjs();
+  renderObjSummary();
+  renderSuggestionsJour();
+  renderCategoriesGrid();
+  renderObjPerso();
   renderHistoriqueSport();
   renderCalendar();
 }
 
-function renderWeeklyObjs() {
+function renderObjSummary() {
   const weekKey = _getWeekKey();
   const todayStr = new Date().toDateString();
   const checks = (ST.weeklyObjChecks && ST.weeklyObjChecks[weekKey]) || {};
-  const customs = ST.customObjectifs || [];
   const customChecks = (ST.customObjChecks && ST.customObjChecks[weekKey]) || {};
 
-  // ─ Résumé du jour ─
-  const doneToday = WEEKLY_OBJECTIVES.filter(o => (checks[o.id] || []).includes(todayStr)).length
-    + customs.filter((_, i) => (customChecks[i] || []).includes(todayStr)).length;
-  const total = WEEKLY_OBJECTIVES.length + customs.length;
-  const pctDay = total > 0 ? Math.round((doneToday / total) * 100) : 0;
+  const donePhase = Object.values(checks).filter(arr => (arr || []).includes(todayStr)).length;
+  const donePerso = Object.values(customChecks).filter(arr => (arr || []).includes(todayStr)).length;
+  const doneToday = donePhase + donePerso;
+
   const summaryEmojis = ['🌱', '🌸', '⚡', '🔥', '✨'];
   const summaryEmoji = summaryEmojis[Math.min(doneToday, summaryEmojis.length - 1)];
+  const msg = doneToday === 0 ? 'Commence ta journée ✦' : doneToday >= 4 ? 'Mashaa Allah — quelle journée !' : 'Tu avances — continue';
   const summaryCard = document.getElementById('obj-summary-card');
-  if (summaryCard) {
-    summaryCard.innerHTML = `
-      <div class="obj-summary-emoji">${summaryEmoji}</div>
-      <div class="obj-summary-text">
-        <div class="obj-summary-count">${doneToday}/${total} aujourd'hui</div>
-        <div class="obj-summary-label">${doneToday === 0 ? 'Commence ta journée ✦' : doneToday === total ? 'Tous les objectifs cochés !' : 'Tu avances — continue'}</div>
-      </div>
-      <div class="obj-summary-pct">${pctDay}%</div>`;
-  }
-
-  // ─ Objectifs prédéfinis ─
-  const container = document.getElementById('obj-weekly-list');
-  if (container) {
-    container.innerHTML = WEEKLY_OBJECTIVES.map(obj => {
-      const daysArr = checks[obj.id] || [];
-      const todayDone = daysArr.includes(todayStr);
-      const count = daysArr.length;
-      const pct = Math.min(100, Math.round((count / obj.target) * 100));
-      return `
-        <div class="obj-item ${todayDone ? 'done' : ''}" onclick="toggleWeeklyObj('${obj.id}')">
-          <div class="obj-check">${todayDone ? '✓' : ''}</div>
-          <div class="obj-content">
-            <div class="obj-label">${obj.emoji} ${obj.label}</div>
-            <div class="obj-progress-row">
-              <div class="obj-progress-bar-wrap"><div class="obj-progress-bar" style="width:${pct}%"></div></div>
-              <div class="obj-progress-txt">${count}/${obj.target}</div>
-            </div>
-          </div>
-        </div>`;
-    }).join('');
-  }
-
-  // ─ Objectifs perso ─
-  const customContainer = document.getElementById('obj-custom-list');
-  if (customContainer) {
-    customContainer.innerHTML = customs.map((label, i) => {
-      const daysArr = customChecks[i] || [];
-      const todayDone = daysArr.includes(todayStr);
-      return `
-        <div class="obj-item ${todayDone ? 'done' : ''}" onclick="toggleCustomObj(${i})">
-          <div class="obj-check">${todayDone ? '✓' : ''}</div>
-          <div class="obj-content"><div class="obj-label">📌 ${_esc(label)}</div></div>
-          <button onclick="event.stopPropagation();removeCustomObj(${i})" class="obj-remove-btn">×</button>
-        </div>`;
-    }).join('');
-  }
-
-  // Trial lock
-  applyTrialLocks();
+  if (!summaryCard) return;
+  summaryCard.innerHTML = `
+    <div class="obj-summary-emoji">${summaryEmoji}</div>
+    <div class="obj-summary-text">
+      <div class="obj-summary-count">${doneToday} accompli${doneToday > 1 ? 's' : ''} aujourd'hui</div>
+      <div class="obj-summary-label">${msg}</div>
+    </div>`;
 }
 
-function toggleWeeklyObj(id) {
+function renderSuggestionsJour() {
+  const phase = _getPhaseForSuggestions();
+  const suggestions = _getSuggestionsJour(phase);
+  const weekKey = _getWeekKey();
+  const todayStr = new Date().toDateString();
+  const checks = (ST.weeklyObjChecks && ST.weeklyObjChecks[weekKey]) || {};
+  const phaseLabel = { hiver: '🌙 Hiver', printemps: '🌿 Printemps', ete: '☀️ Été', automne: '🍂 Automne' }[phase] || '';
+  const container = document.getElementById('obj-suggestions-list');
+  if (!container) return;
+  container.innerHTML = suggestions.map(s => {
+    const catInfo = OBJECTIFS_CATEGORIES[s.cat] || {};
+    const done = (checks[s.id] || []).includes(todayStr);
+    return `
+      <div class="obj-item ${done ? 'done' : ''}" onclick="toggleSuggestion('${s.id}')">
+        <div class="obj-check">${done ? '✓' : ''}</div>
+        <div class="obj-content">
+          <div class="obj-label">${catInfo.icon || ''} ${_esc(s.texte)}</div>
+          <div class="obj-phase-tag">${phaseLabel}</div>
+        </div>
+      </div>`;
+  }).join('') || '<div class="obj-empty">Reviens demain pour de nouvelles suggestions ✨</div>';
+}
+
+function renderCategoriesGrid() {
+  const phase = _getPhaseForSuggestions();
+  const container = document.getElementById('obj-categories-grid');
+  if (!container) return;
+  container.innerHTML = Object.entries(OBJECTIFS_CATEGORIES).map(([key, cat]) => {
+    const count = ((OBJECTIFS_PAR_PHASE[phase] || {})[key] || []).length;
+    return `
+      <div class="obj-cat-item" onclick="openObjCatModal('${key}')">
+        <div class="obj-cat-icon">${cat.icon}</div>
+        <div class="obj-cat-label">${cat.label}</div>
+        <div class="obj-cat-count">${count}</div>
+      </div>`;
+  }).join('');
+}
+
+function openObjCatModal(catKey) {
+  const phase = _getPhaseForSuggestions();
+  const cat = OBJECTIFS_CATEGORIES[catKey] || {};
+  const items = ((OBJECTIFS_PAR_PHASE[phase] || {})[catKey]) || [];
+  const weekKey = _getWeekKey();
+  const todayStr = new Date().toDateString();
+  const checks = (ST.weeklyObjChecks && ST.weeklyObjChecks[weekKey]) || {};
+  const phaseLabel = { hiver: '🌙 Hiver', printemps: '🌿 Printemps', ete: '☀️ Été', automne: '🍂 Automne' }[phase] || '';
+  const content = document.getElementById('obj-cat-modal-content');
+  if (!content) return;
+  content.innerHTML = `
+    <div class="modal-handle"></div>
+    <div style="padding:0 20px 4px;font-size:17px;font-weight:700;color:var(--noir)">${cat.icon || ''} ${cat.label || ''}</div>
+    <div style="padding:0 20px 14px;font-size:11px;color:var(--gris);text-transform:uppercase;letter-spacing:.06em;">${phaseLabel}</div>
+    <div>
+      ${items.map((texte, i) => {
+        const id = `${phase}_${catKey}_${i}`;
+        const done = (checks[id] || []).includes(todayStr);
+        return `
+          <div class="obj-item ${done ? 'done' : ''}" style="margin:0 16px 2px;border-radius:12px;" onclick="toggleSuggestion('${id}');_refreshCatModal('${catKey}')">
+            <div class="obj-check">${done ? '✓' : ''}</div>
+            <div class="obj-content"><div class="obj-label" style="font-size:13px;">${_esc(texte)}</div></div>
+          </div>`;
+      }).join('')}
+    </div>
+    <button onclick="closeObjCatModal()" class="modal-cta" style="margin:16px 20px 0;width:calc(100% - 40px);">Fermer</button>`;
+  document.getElementById('obj-cat-modal').classList.add('open');
+}
+
+function _refreshCatModal(catKey) {
+  const phase = _getPhaseForSuggestions();
+  const weekKey = _getWeekKey();
+  const todayStr = new Date().toDateString();
+  const checks = (ST.weeklyObjChecks && ST.weeklyObjChecks[weekKey]) || {};
+  document.querySelectorAll('#obj-cat-modal-content .obj-item').forEach((el, i) => {
+    const id = `${phase}_${catKey}_${i}`;
+    const done = (checks[id] || []).includes(todayStr);
+    el.classList.toggle('done', done);
+    el.querySelector('.obj-check').textContent = done ? '✓' : '';
+  });
+  renderObjSummary();
+  renderSuggestionsJour();
+}
+
+function closeObjCatModal() {
+  const m = document.getElementById('obj-cat-modal');
+  if (m) m.classList.remove('open');
+}
+
+function toggleSuggestion(id) {
   const weekKey = _getWeekKey();
   const todayStr = new Date().toDateString();
   if (!ST.weeklyObjChecks) ST.weeklyObjChecks = {};
@@ -3422,21 +3489,77 @@ function toggleWeeklyObj(id) {
   const idx = arr.indexOf(todayStr);
   if (idx > -1) arr.splice(idx, 1); else arr.push(todayStr);
   saveState();
-  renderWeeklyObjs();
+  renderSuggestionsJour();
+  renderObjSummary();
 }
 
-function addCustomObj() {
-  const inp = document.getElementById('obj-custom-input');
+function renderObjPerso() {
+  // Migrate old string format to objects
+  if (ST.customObjectifs && ST.customObjectifs.some(c => typeof c === 'string')) {
+    ST.customObjectifs = ST.customObjectifs.map((c, i) =>
+      typeof c === 'string'
+        ? { id: `perso_${i}`, texte: c, recurrence: 'permanent', cree_le: '', phase_cree: '' }
+        : c
+    );
+    saveState();
+  }
+
+  const customs = ST.customObjectifs || [];
+  const weekKey = _getWeekKey();
+  const todayStr = new Date().toDateString();
+  const customChecks = (ST.customObjChecks && ST.customObjChecks[weekKey]) || {};
+  const todayDate = new Date().toISOString().split('T')[0];
+
+  const active = customs.filter(c => {
+    if (c.recurrence === 'today') return c.cree_le === todayDate;
+    if (c.recurrence === 'phase') return c.phase_cree === (ST.currentSaison || '');
+    return true;
+  });
+
+  const container = document.getElementById('obj-perso-list');
+  if (!container) return;
+
+  if (active.length === 0) {
+    container.innerHTML = '<div class="obj-empty">Ajoute un objectif qui te ressemble ✨</div>';
+  } else {
+    container.innerHTML = active.map(c => {
+      const origIdx = customs.indexOf(c);
+      const done = (customChecks[origIdx] || []).includes(todayStr);
+      const recLabel = { today: 'Aujourd\'hui', phase: 'Cette phase', cycle: 'Ce cycle', permanent: 'Toujours' }[c.recurrence] || '';
+      return `
+        <div class="obj-item ${done ? 'done' : ''}" onclick="toggleCustomObj(${origIdx})">
+          <div class="obj-check">${done ? '✓' : ''}</div>
+          <div class="obj-content">
+            <div class="obj-label">📌 ${_esc(c.texte)}</div>
+            <div class="obj-phase-tag" style="margin-top:3px;">${recLabel}</div>
+          </div>
+          <button onclick="event.stopPropagation();removeCustomObj(${origIdx})" class="obj-remove-btn">×</button>
+        </div>`;
+    }).join('');
+  }
+
+  applyTrialLocks();
+}
+
+function addObjPerso() {
+  const inp = document.getElementById('obj-perso-input');
   if (!inp || !inp.value.trim()) return;
   if (!ST.customObjectifs) ST.customObjectifs = [];
   if (ST.customObjectifs.length >= 10) {
     showToast('Maximum 10 objectifs personnalisés atteint 🌙');
     return;
   }
-  ST.customObjectifs.push(inp.value.trim());
+  const sel = document.getElementById('obj-perso-recurrence');
+  ST.customObjectifs.push({
+    id: `perso_${Date.now()}`,
+    texte: inp.value.trim(),
+    recurrence: sel ? sel.value : 'permanent',
+    cree_le: new Date().toISOString().split('T')[0],
+    phase_cree: ST.currentSaison || 'printemps',
+  });
   inp.value = '';
   saveState();
-  renderWeeklyObjs();
+  renderObjPerso();
 }
 
 function removeCustomObj(i) {
@@ -3456,7 +3579,7 @@ function removeCustomObj(i) {
     });
   }
   saveState();
-  renderWeeklyObjs();
+  renderObjPerso();
 }
 
 function toggleCustomObj(i) {
@@ -3469,7 +3592,8 @@ function toggleCustomObj(i) {
   const idx = arr.indexOf(todayStr);
   if (idx > -1) arr.splice(idx, 1); else arr.push(todayStr);
   saveState();
-  renderWeeklyObjs();
+  renderObjPerso();
+  renderObjSummary();
 }
 
 function renderCalendar() {
