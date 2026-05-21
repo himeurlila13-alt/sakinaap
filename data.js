@@ -193,47 +193,47 @@ const REPAS_QUOTIDIENS = {
 
 // ───────────────────────────────────────────────────────────────────────
 // SOINS_QUOTIDIENS
-// 1 soin par jour d'index de phase — naturel, halal, fait maison
+// 2 soins par phase (Matin + Soir), rotation par dayIdx — naturel, halal, médecine prophétique
 // ───────────────────────────────────────────────────────────────────────
 const SOINS_QUOTIDIENS = {
 
   // ── HIVER — Apaiser et régénérer (peau sensible, barrière fragilisée) ──
   hiver: [
     {
-      nom: 'Eau de rose + huile de nigelle',
+      nom: 'Eau de rose + aloe vera',
       duree: '3 min',
       moment: 'Matin',
-      geste: 'Vaporise l\'eau de rose sur le visage. Applique 1 goutte d\'huile de nigelle sur peau légèrement humide, tapote doucement.',
-      benefice: 'Anti-inflammatoire naturel — réduit la sensibilité et les rougeurs menstruelles.',
-      source: '☪️ Sunnah — huile de nigelle : "Dans la nigelle il y a une guérison pour tout sauf la mort" (Bukhari 5688)'
+      geste: 'Vaporise l\'eau de rose sur le visage. Applique 2-3 gouttes de gel d\'aloe vera pur sur peau encore humide, tapote sans frotter.',
+      benefice: 'Apaisant et anti-inflammatoire — calme les rougeurs et régénère la barrière cutanée fragilisée.',
+      source: '🌿 Eau de rose : tradition islamique · Aloe vera : médecine islamique classique',
     },
     {
-      nom: 'Masque miel pur',
-      duree: '10 min',
+      nom: 'Masque aloe vera + miel + huile d\'olive',
+      duree: '15 min',
       moment: 'Soir',
-      geste: '1 c.à.c de miel pur sur le visage sec. Laisse 10 min, rince à l\'eau tiède.',
-      benefice: 'Antibactérien et apaisant — répare la barrière cutanée fragilisée pendant ton sommeil.',
-      source: '☪️ Sunnah — miel : "Le miel est une guérison pour les hommes" (Coran 16:69)'
+      geste: 'Mélange 1 c.à.s de gel d\'aloe vera + 1 c.à.c de miel + 3 gouttes d\'huile d\'olive. Applique sur visage propre, laisse 15 min, rince à l\'eau tiède.',
+      benefice: 'Triple action : hydratation, cicatrisation et nutrition — répare la peau pendant ton sommeil.',
+      source: '☪️ Sunnah — miel (Coran 16:69) · huile d\'olive : "Oignez-vous en" (Tirmidhi)',
     },
   ],
 
   // ── PRINTEMPS — Éclaircir et nourrir (peau en renouveau, œstrogènes montants) ──
   printemps: [
     {
-      nom: 'Eau de rose + huile d\'olive',
-      duree: '3 min',
+      nom: 'Gommage doux sucre + huile d\'olive',
+      duree: '5 min',
       moment: 'Matin',
-      geste: 'Tonifie à l\'eau de rose. Applique 1 goutte d\'huile d\'olive sur peau légèrement humide, masse en cercles doux.',
-      benefice: 'Nourrissante et antioxydante — accompagne le renouveau naturel de la peau folliculaire.',
-      source: '☪️ Sunnah — huile d\'olive : "Mangez l\'huile d\'olive et oignez-vous en" (Tirmidhi)'
+      geste: 'Sur peau humide : mélange 1 c.à.c sucre fin + 1 c.à.c huile d\'olive. Masse doucement en cercles 1-2 min, rince à l\'eau tiède.',
+      benefice: 'Élimine les cellules mortes de l\'Hiver et révèle l\'éclat naturel du Printemps.',
+      source: '☪️ Sunnah — huile d\'olive : "Oignez-vous en" (Tirmidhi)',
     },
     {
-      nom: 'Rhassoul à l\'eau de rose',
-      duree: '8 min',
+      nom: 'Masque éclat miel + curcuma',
+      duree: '10 min',
       moment: 'Soir',
-      geste: '1 c.à.s de rhassoul + eau de rose jusqu\'à pâte crémeuse. Applique sur visage propre, laisse 5 min, rince à l\'eau tiède.',
-      benefice: 'Purifie les pores en douceur sans agresser — idéal pour la peau réceptive du Printemps.',
-      source: '🌿 Tradition islamique — le rhassoul est utilisé depuis des siècles dans le monde islamique'
+      geste: 'Mélange 1 c.à.c de miel + 1 pincée de curcuma. Applique sur visage propre, laisse 10 min, rince à l\'eau tiède.',
+      benefice: 'Antibactérien + anti-inflammatoire — éclat naturel et peau unifiée pour le pic du Printemps.',
+      source: '☪️ Sunnah — miel (Coran 16:69) · Curcuma : médecine islamique traditionnelle · ⚠️ Peut légèrement teinter la peau claire',
     },
   ],
 
@@ -243,37 +243,37 @@ const SOINS_QUOTIDIENS = {
       nom: 'Brume eau de rose + aloe vera',
       duree: '2 min',
       moment: 'Matin',
-      geste: 'Dans un spray propre : eau de rose + gel d\'aloe vera pur. Vaporise sur visage et décolleté. Protège du soleil avec voile ou chapeau.',
-      benefice: 'Hydratation ultra-légère sans surcharger la peau au pic naturel de sébum — compatible wudu.',
-      source: '🌿 Eau de rose : tradition islamique de purification · Aloe vera : médecine islamique classique'
+      geste: 'Dans un spray propre : eau de rose + gel d\'aloe vera pur. Vaporise sur visage et décolleté. Laisse sécher naturellement, ne pas tamponner.',
+      benefice: 'Hydratation ultra-légère non occlusive — respecte le sébum naturel du pic estival.',
+      source: '🌿 Eau de rose : tradition islamique · Aloe vera : médecine islamique classique',
     },
     {
-      nom: 'Masque rhassoul purifiant',
-      duree: '7 min',
+      nom: 'Masque purifiant argile + huile de nigelle',
+      duree: '12 min',
       moment: 'Soir',
-      geste: '1 c.à.s de rhassoul + eau de rose = pâte légère. Applique sur visage propre, laisse 5 min, rince avant séchage complet.',
-      benefice: 'Absorbe le sébum excédentaire sans agresser la peau — équilibre le teint de l\'Été.',
-      source: '🌿 Tradition islamique — rhassoul, argile du Maroc'
+      geste: 'Mélange argile blanche + 3 gouttes huile de nigelle + eau de rose jusqu\'à pâte crémeuse. Applique sur visage propre, laisse 10 min, rince avant séchage complet.',
+      benefice: 'Purifie les pores et apaise simultanément — maîtrise le sébum du pic ovulatoire sans agresser.',
+      source: '☪️ Sunnah — huile de nigelle (Bukhari 5688) · 🌿 Argile : tradition islamique du rhassoul',
     },
   ],
 
-  // ── AUTOMNE — Nourrir et consolider (SPM, boutons hormonaux, ligaments relâchés) ──
+  // ── AUTOMNE — Nourrir et consolider (SPM, boutons hormonaux) ──
   automne: [
     {
       nom: 'Huile de nigelle pure',
       duree: '3 min',
       moment: 'Matin',
-      geste: '2 gouttes d\'huile de nigelle sur peau légèrement humide après nettoyage. Masse doucement en cercles.',
-      benefice: 'Anti-inflammatoire — prépare la peau aux changements hormonaux de la phase lutéale.',
-      source: '☪️ Sunnah — huile de nigelle : "Dans la nigelle il y a une guérison pour tout sauf la mort" (Bukhari 5688)'
+      geste: '2 gouttes d\'huile de nigelle sur peau légèrement humide après nettoyage doux. Masse doucement en cercles, laisse absorber.',
+      benefice: 'Anti-inflammatoire — prévient les boutons hormonaux et prépare la peau aux fluctuations lutéales.',
+      source: '☪️ Sunnah — huile de nigelle : "Dans la nigelle il y a une guérison pour tout sauf la mort" (Bukhari 5688)',
     },
     {
-      nom: 'Masque miel + curcuma',
-      duree: '10 min',
+      nom: 'Masque aloe vera + miel + huile d\'olive',
+      duree: '15 min',
       moment: 'Soir',
-      geste: '1 c.à.c de miel + 1 pincée de curcuma. Mélange bien, applique sur visage propre. Laisse 10 min, rince à l\'eau tiède.',
-      benefice: 'Antibactérien + anti-inflammatoire — duo contre les boutons hormonaux de fin de cycle.',
-      source: '☪️ Sunnah — miel (Coran 16:69) · Curcuma : médecine islamique traditionnelle · ⚠️ Peut légèrement teinter la peau claire — tester d\'abord'
+      geste: 'Mélange 1 c.à.s de gel d\'aloe vera + 1 c.à.c de miel + 3 gouttes d\'huile d\'olive. Applique sur visage propre, laisse 15 min, rince à l\'eau tiède.',
+      benefice: 'Hydratation et apaisement profonds — contre la sécheresse et les réactions cutanées prémenstruelles.',
+      source: '☪️ Sunnah — miel (Coran 16:69) · huile d\'olive (Tirmidhi) · Aloe vera : médecine islamique classique',
     },
   ],
 };

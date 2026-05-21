@@ -984,57 +984,50 @@ const RECETTES = {
 const ROUTINES_PREMIUM = {
   hiver: {
     matin: [
-      { icon:'🧴', geste:'Nettoyage ultra-doux', duree:'1 min', detail:'Eau tiède + nettoyant crémeux sans sulfates. Pas de frottement — tamponner délicatement.' },
-      { icon:'🌿', geste:'Aloé vera pur', duree:'30 sec', detail:'Gel d\'aloé sur peau légèrement humide. Laisser absorber 1 min avant la suite.' },
-      { icon:'🌹', geste:'Huile de rose musquée', duree:'1 min', detail:'3-4 gouttes. Presser entre les paumes, appliquer par petits tamponnements.' },
-      { icon:'☀️', geste:'SPF 30 minimum', duree:'30 sec', detail:'Même par temps gris. Protège la barrière cutanée fragilisée par les hormones basses.' },
+      { icon:'💧', geste:'Rinçage eau tiède', duree:'1 min', detail:'Eau tiède sur le visage, tamponner avec un tissu propre. Pas de nettoyant agressif — la peau menstruelle est déjà fragilisée.' },
+      { icon:'🌹', geste:'Eau de rose', duree:'30 sec', detail:'Vaporiser sur visage ou tampon de coton, laisser pénétrer sans rincer. Anti-inflammatoire naturel, apaise les rougeurs.' },
+      { icon:'🖤', geste:'Huile de nigelle (1 goutte)', duree:'1 min', detail:'Presser sur peau légèrement humide. ☪️ Sunnah — anti-inflammatoire, parfaite pour la sensibilité menstruelle (Bukhari 5688).' },
     ],
     soir: [
-      { icon:'🛢️', geste:'Nettoyage à l\'huile', duree:'2 min', detail:'Huile de jojoba sur visage sec, masser 60 sec en cercles, rincer à l\'eau tiède.' },
-      { icon:'🍯', geste:'Masque miel brut (2×/sem)', duree:'10 min', detail:'Couche fine sur visage propre. Anti-inflammatoire et réparateur. Rincer à l\'eau tiède.' },
-      { icon:'🌹', geste:'Sérum rose musquée', duree:'1 min', detail:'5-6 gouttes sur peau légèrement humide pour maximiser la pénétration.' },
-      { icon:'💧', geste:'Crème barrière riche', duree:'30 sec', detail:'Scelle tout en dernier. Rechercher : céramides, beurre de karité, squalane.' },
+      { icon:'🫒', geste:'Nettoyage huile d\'olive', duree:'2 min', detail:'Quelques gouttes sur visage sec, masser 60 sec en cercles. Rincer à l\'eau tiède. Démaquille et nourrit sans agresser. ☪️ Sunnah (Tirmidhi).' },
+      { icon:'🍯', geste:'Masque miel pur (3×/sem)', duree:'10 min', detail:'1 c.à.c de miel pur sur visage propre. Laisser 10 min, rincer à l\'eau tiède. Antibactérien et réparateur. ☪️ Sunnah (Coran 16:69).' },
+      { icon:'🫒', geste:'Huile d\'olive soin de nuit', duree:'1 min', detail:'2-3 gouttes pressées entre les paumes, appliquer sur peau légèrement humide. Nourrit en profondeur pendant le sommeil. ☪️ Sunnah.' },
     ],
   },
   printemps: {
     matin: [
-      { icon:'🧴', geste:'Nettoyage en douceur', duree:'1 min', detail:'Mousse légère ou eau micellaire. Rincer à l\'eau légèrement fraîche pour tonifier.' },
-      { icon:'✨', geste:'Sérum vitamine C', duree:'1 min', detail:'3-4 gouttes sur peau sèche. Presser doucement. Laisser absorber 2 minutes.' },
-      { icon:'🌺', geste:'Crème légère niacinamide', duree:'30 sec', detail:'Unifie le teint, resserre les pores. Parfaite pour amplifier l\'éclat du Printemps.' },
-      { icon:'☀️', geste:'SPF 30+', duree:'30 sec', detail:'Dernier geste impératif. La vitamine C + SPF = combo anti-taches optimal.' },
+      { icon:'🌿', geste:'Rhassoul léger à l\'eau de rose', duree:'3 min', detail:'1 c.à.c rhassoul + eau de rose jusqu\'à pâte crémeuse. Masser en douceur, rincer à l\'eau tiède. Purifie sans agresser. 🌿 Tradition islamique.' },
+      { icon:'🌹', geste:'Eau de rose tonique', duree:'30 sec', detail:'Vaporiser ou tampon sur visage propre. Rééquilibre le pH, tonifie, resserre les pores délicatement. Laisser sécher naturellement.' },
+      { icon:'🫒', geste:'Huile d\'olive (1 goutte)', duree:'30 sec', detail:'Sur peau légèrement humide, laisser absorber. Légère et antioxydante — accompagne l\'éclat naturel du Printemps. ☪️ Sunnah (Tirmidhi).' },
     ],
     soir: [
-      { icon:'🛢️', geste:'Double nettoyage', duree:'2 min', detail:'Huile pour démaquiller en premier, puis nettoyant doux pour purifier en profondeur.' },
-      { icon:'🪨', geste:'Gua sha 3 min', duree:'3 min', detail:'Mouvements ascendants sur sérum hydratant. Drainer, tonifier, stimuler la microcirculation.' },
-      { icon:'🌾', geste:'Masque argile blanche (1×/sem)', duree:'8 min', detail:'Appliquer sur zone T. Rincer avant séchage complet — jamais plus de 8 min.' },
-      { icon:'💧', geste:'Hydratant léger', duree:'30 sec', detail:'Texture gel ou fluide. Laisser absorber sans frotter.' },
+      { icon:'✨', geste:'Gommage sucre + olive (2×/sem)', duree:'5 min', detail:'1 c.à.c sucre fin + 1 c.à.c huile d\'olive. Massage doux 2 min en cercles, rincer. Révèle le renouveau cellulaire du Printemps. ☪️ Sunnah.' },
+      { icon:'🍯', geste:'Masque miel + curcuma (2×/sem)', duree:'10 min', detail:'1 c.à.c miel + 1 pincée curcuma. Appliquer 10 min, rincer à l\'eau tiède. ⚠️ Peut légèrement teinter la peau claire. ☪️ Sunnah.' },
+      { icon:'🫒', geste:'Huile d\'olive soin de nuit', duree:'1 min', detail:'2-3 gouttes sur peau propre, presser entre les paumes. Nourrit sans occlure — légèreté de la phase folliculaire. ☪️ Sunnah (Tirmidhi).' },
     ],
   },
   ete: {
     matin: [
-      { icon:'💧', geste:'Nettoyage express à l\'eau fraîche', duree:'30 sec', detail:'Eau fraîche uniquement le matin. La peau est équilibrée — ne pas sur-nettoyer.' },
-      { icon:'🌸', geste:'Brume eau de rose', duree:'20 sec', detail:'Spritzer à 20 cm du visage. Laisser sécher naturellement, ne pas tamponner.' },
-      { icon:'🌿', geste:'Gel aloé ultra-léger', duree:'30 sec', detail:'Texture quasi invisible. Hydrate sans occlure les pores dilatés par la chaleur.' },
-      { icon:'☀️', geste:'SPF 50 — impératif', duree:'30 sec', detail:'Pic hormonal + peau au meilleur d\'elle-même. Protège-la absolument.' },
+      { icon:'💧', geste:'Eau fraîche uniquement', duree:'30 sec', detail:'En Été, rincer le visage à l\'eau froide suffit le matin. La peau est équilibrée — le sur-nettoyage perturbe le sébum naturel.' },
+      { icon:'🌹', geste:'Brume eau de rose', duree:'20 sec', detail:'Spritzer à 20 cm du visage. Laisser sécher naturellement, ne pas tamponner. Rafraîchit et hydrate sans surcharger. 🌿 Tradition islamique.' },
+      { icon:'🌿', geste:'Aloe vera gel pur', duree:'30 sec', detail:'Fine couche sur peau humide. Ultra-léger, non occlusif — laisse respirer les pores au pic naturel de sébum. 🌿 Médecine islamique classique.' },
     ],
     soir: [
-      { icon:'🛢️', geste:'Double nettoyage', duree:'2 min', detail:'Huile pour enlever le SPF et le sébum, puis gel nettoyant léger purifiant.' },
-      { icon:'🌿', geste:'Brume hamamélis', duree:'20 sec', detail:'Resserre les pores après nettoyage. Tonique naturel astringent doux.' },
-      { icon:'💦', geste:'Sérum hydratant ultra-léger', duree:'1 min', detail:'Gel d\'aloé ou hyaluronate. Pas d\'huile le soir — la peau est déjà équilibrée.' },
+      { icon:'🌿', geste:'Rhassoul purifiant', duree:'7 min', detail:'1 c.à.s rhassoul + eau de rose = pâte légère. Appliquer 5 min, rincer avant séchage complet. Absorbe l\'excès de sébum sans agresser. 🌿 Tradition islamique.' },
+      { icon:'🖤', geste:'Masque argile + huile de nigelle', duree:'12 min', detail:'Argile blanche + 3 gouttes huile de nigelle + eau de rose. Appliquer 10 min, rincer. Purifie et apaise simultanément. ☪️ Sunnah.' },
+      { icon:'🌹', geste:'Eau de rose finale', duree:'30 sec', detail:'Tampon d\'eau de rose sur peau propre après rinçage. Ne pas rincer — referme les pores et fixe le soin. 🌿 Tradition islamique.' },
     ],
   },
   automne: {
     matin: [
-      { icon:'🧼', geste:'Nettoyage rigoureux', duree:'1 min 30', detail:'Nettoyant sans huile, sans sulfates agressifs. Bien insister sur la zone T.' },
-      { icon:'🍵', geste:'Tonique thé vert', duree:'30 sec', detail:'Appliquer sur coton. Anti-inflammatoire — calme les rougeurs hormonales en 30 sec.' },
-      { icon:'🌾', geste:'Sérum zinc', duree:'1 min', detail:'Cible le sébum et les imperfections hormonales. Appliquer sur les zones à acné.' },
-      { icon:'☀️', geste:'Crème SPF légère non-comédogène', duree:'30 sec', detail:'Vérifier "non-comédogène" sur l\'emballage. Essentiel en phase lutéale.' },
+      { icon:'🧼', geste:'Nettoyage savon d\'Alep', duree:'1 min', detail:'Savon d\'Alep = nettoyant naturel au laurier antibactérien. Rincer à l\'eau tiède — pas d\'eau chaude en phase lutéale. 🌿 Tradition levantine islamique.' },
+      { icon:'🖤', geste:'Huile de nigelle pure', duree:'1 min', detail:'2 gouttes sur peau légèrement humide, masser doucement en cercles. Anti-inflammatoire — prévient les boutons hormonaux. ☪️ Sunnah (Bukhari 5688).' },
+      { icon:'🌹', geste:'Eau de rose tonique', duree:'30 sec', detail:'Tamponner après la nigelle pour apaiser et fixer. Referme les pores actifs de la phase lutéale. 🌿 Tradition islamique.' },
     ],
     soir: [
-      { icon:'🧼', geste:'Nettoyage soigneux', duree:'2 min', detail:'Le nettoyage du soir est le plus important. Prends le temps de bien enlever tout.' },
-      { icon:'🌿', geste:'Tea tree en soin local', duree:'30 sec', detail:'1 goutte pure sur les imperfections uniquement. Jamais sur la peau saine.' },
-      { icon:'🍵', geste:'Crème thé vert apaisante', duree:'30 sec', detail:'Calme l\'inflammation nocturne. Récupération pendant le sommeil.' },
-      { icon:'🛏️', geste:'Changer ta taie d\'oreiller', duree:'1 min', detail:'Les bactéries s\'accumulent vite. En Automne, changer 2× par semaine minimum.' },
+      { icon:'🫒', geste:'Démaquillage huile d\'olive', duree:'2 min', detail:'Quelques gouttes sur visage sec, masser 60 sec. Rincer à l\'eau tiède. Dissout maquillage et impuretés sans assécher. ☪️ Sunnah (Tirmidhi).' },
+      { icon:'🍯', geste:'Masque miel + curcuma (3×/sem)', duree:'10 min', detail:'1 c.à.c miel + 1 pincée curcuma. Appliquer 10 min, rincer. Antibactérien + anti-inflammatoire contre les boutons hormonaux. ⚠️ Peut teinter. ☪️ Sunnah.' },
+      { icon:'🫒', geste:'Huile d\'olive soin de nuit', duree:'1 min', detail:'2-3 gouttes pressées, appliquer sur peau légèrement humide. Nourrit en profondeur — indispensable en fin de cycle. ☪️ Sunnah (Tirmidhi).' },
     ],
   },
 };
@@ -2170,9 +2163,12 @@ function renderCarteSkincare(s) {
   const actifEl = document.getElementById('dc-skin-actifs');
   if (actifEl) {
     if (soinJour) {
+      const momentBadge = soinJour.moment
+        ? `<span style="font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;background:var(--season-light,#e8f7f2);color:var(--season,#3DAE8A);border-radius:4px;padding:2px 7px;margin-right:6px;">${soinJour.moment}</span>`
+        : '';
       actifEl.innerHTML = `
         <div class="day-card-actif-row">
-          <span class="day-card-actif-nom">✨ ${soinJour.nom} <span class="dc-skin-duree">${soinJour.duree}</span></span>
+          <span class="day-card-actif-nom">${momentBadge}✨ ${soinJour.nom} <span class="dc-skin-duree">${soinJour.duree}</span></span>
           <span class="day-card-actif-usage">${soinJour.geste}</span>
         </div>`;
     } else {
@@ -2187,7 +2183,10 @@ function renderCarteSkincare(s) {
   const gestesEl = document.getElementById('dc-skin-gestes');
   if (gestesEl) {
     if (soinJour) {
-      gestesEl.innerHTML = `<span class="day-card-chip">💡 ${soinJour.benefice}</span>`;
+      const sourceChip = soinJour.source
+        ? `<span class="day-card-chip" style="opacity:.75;font-size:10px;">${soinJour.source}</span>`
+        : '';
+      gestesEl.innerHTML = `<span class="day-card-chip">💡 ${soinJour.benefice}</span>${sourceChip}`;
     } else {
       gestesEl.innerHTML = (skin.gestes || []).map(g => `<span class="day-card-chip">${g}</span>`).join('');
     }

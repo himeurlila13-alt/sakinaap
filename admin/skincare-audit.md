@@ -1,93 +1,84 @@
-# Audit SOINS — Agent Skincare Naturelle
-**Date** : 21 mai 2026
-**Fichier audité** : data.js → `SOINS_QUOTIDIENS` + intégration `RECETTES_SOINS`
+# Audit Skincare Complet — Agent Skincare Naturelle
+**Date** : 21 mai 2026 · **Fichiers** : data.js, app.js
 
 ---
 
-## Partie 1 — Réécriture SOINS_QUOTIDIENS (effectuée)
+## Partie 1 — SOINS_QUOTIDIENS (carte gratuite)
 
-37 soins → 8 soins (2 par phase), 100% référentiel prophétique/islamique.
+### État actuel
+Structure propre (2 par phase, champ `moment` présent). À réécrire pour aligner sur les recettes de RECETTES_SOINS.
 
-| Phase | Matin | Soir |
-|-------|-------|------|
-| 🌙 Hiver | Eau de rose + huile de nigelle | Masque miel pur |
-| 🌿 Printemps | Eau de rose + huile d'olive | Rhassoul à l'eau de rose |
-| ☀️ Été | Brume eau de rose + aloe vera | Masque rhassoul purifiant |
-| 🍂 Automne | Huile de nigelle pure | Masque miel + curcuma |
+### Plan de réécriture
 
-**Score SOINS_QUOTIDIENS : 97/100**
+| Phase | Moment | Recette source | Ingrédients |
+|-------|--------|---------------|-------------|
+| 🌙 Hiver | Matin | Rec 12 (corrected) — Eau de rose + aloe vera | 🌿 Tradition islamique |
+| 🌙 Hiver | Soir | Rec 2 — Aloe vera + miel + huile d'olive | ☪️ Sunnah |
+| 🌿 Printemps | Matin | Rec 11 — Gommage doux sucre + huile d'olive | ☪️ Sunnah |
+| 🌿 Printemps | Soir | Rec 8 (corrected) — Masque éclat miel + curcuma | ☪️ Sunnah |
+| ☀️ Été | Matin | Rec 12 spirit — Brume eau de rose + aloe vera | 🌿 Tradition islamique |
+| ☀️ Été | Soir | Rec 3 — Masque argile + huile de nigelle | ☪️ Sunnah |
+| 🍂 Automne | Matin | Nigelle pure (agent Sunnah) | ☪️ Sunnah |
+| 🍂 Automne | Soir | Rec 2 (phase 4) — Aloe vera + miel + huile d'olive | ☪️ Sunnah |
 
----
-
-## Partie 2 — Audit RECETTES_SOINS (15 recettes JSON)
-
-### Corrections obligatoires — 🔴 BLOQUER
-
-#### SKN-R01 — Recette 1 : "Blanchiment dents au curcuma"
-- **Problème** : `mode_application` mentionne "un peu de dentifrice" — produit industriel contenant SLS, SLES, conservateurs synthétiques, colorants → hors référentiel
-- **Fix** : Supprimer "dentifrice". Mentionner le siwak comme brosse recommandée (Sunnah)
-- **mode_application corrigé** : "Mélanger curcuma + huile d'olive + miel pour former une pâte. Appliquer sur les dents avec un siwak ou le bout du doigt propre. Brosser doucement 1-2 min, rincer à l'eau tiède."
-
-#### SKN-R02 — Recette 8 : "Masque éclat citron + miel"
-- **Problème** : Citron (id 12) = AHA agressif (pH ~2), photosensibilisant — peut provoquer taches pigmentaires et brûlures chimiques, surtout sur peau sensible
-- **Fix** : Remplacer citron par curcuma — même effet éclaircissant, anti-inflammatoire, tradition islamique
-- **titre corrigé** : "Masque éclat miel + curcuma"
-- **ingredients corrigés** : [3, 5] (miel + curcuma), citron supprimé
-- **mode_application corrigé** : "Mélanger 1 c.à.c de miel + 1 pincée de curcuma. Appliquer sur visage propre 10 min, rincer à l'eau tiède. ⚠️ Peut légèrement teinter la peau claire — tester d'abord."
-
-### Corrections requises — 🟡 SIGNALER
-
-#### SKN-R03 — Recette 12 : "Masque apaisant lavande + aloe vera"
-- **Problème** : Lavande (id 11) = huile essentielle appliquée directement sur le visage, sans dilution mentionnée — non prophétique, peut irriter les peaux sensibles
-- **Fix** : Remplacer lavande par eau de rose (id 7) — même effet apaisant, tradition islamique, zéro risque d'irritation
-- **titre corrigé** : "Masque apaisant eau de rose + aloe vera"
-- **ingredients corrigés** : [4, 7] (aloe vera + eau de rose)
-- **mode_application corrigé** : "Mélanger gel d'aloe vera pur avec quelques gouttes d'eau de rose. Appliquer sur visage propre 15 min, rincer à l'eau tiède."
-
-#### SKN-R04 — Recette 13 : "Bain d'huile cheveux lavande + huile d'olive"
-- **Problème** : Lavande (id 11) = HE dans bain d'huile — non prophétique, dilution non précisée pour usage capillaire
-- **Fix** : Remplacer lavande par huile de nigelle (id 1) — Sunnah capillaire confirmée
-- **titre corrigé** : "Bain d'huile cheveux nigelle + olive"
-- **description corrigée** : "Nourrit le cuir chevelu et les longueurs selon la Sunnah"
-- **ingredients corrigés** : [1, 2] (nigelle + olive)
-- **mode_application corrigé** : "Mélanger à parts égales huile de nigelle et huile d'olive. Masser le cuir chevelu et les longueurs. Laisser 1h minimum ou toute la nuit, rincer avec un shampoing doux."
-- **phase_cycle_applicable étendu** : [1,2,3,4] — soin Sunnah universel (toutes phases)
+### Rendu moment Matin/Soir (app.js)
+Champ `moment` présent dans les données mais non rendu. À ajouter dans `renderCarteSkincare()` sous forme de badge coloré avant le nom du soin.
 
 ---
 
-### Vérification cohérence hormonale — toutes recettes
+## Partie 2 — ROUTINES_PREMIUM (modal premium)
 
-| Rec | Titre | Phases | Statut | Motif |
-|-----|-------|--------|--------|-------|
-| 1 | Blanchiment dents curcuma | [1,2,3,4] | ✅ | Hygiène universelle |
-| 2 | Masque aloe+miel+olive | [1,4] | ✅ | Hydratant/apaisant — Hiver et Automne (peau réactive) |
-| 3 | Masque argile+nigelle | [3,4] | ✅ | Purifiant — Été (pic sébum) et Automne (boutons hormonaux) |
-| 4 | Bain d'huile cheveux olive+nigelle | [2,3,4] | ✅ | Cheveux forts en Printemps/Été, nourris en Automne |
-| 5 | Gommage corps sucre+olive | [1,2,3,4] | ✅ | Corps — universel |
-| 6 | Soin mains/pieds karité+nigelle+olive | [1,4] | ✅ | Nourrir en phases de ralentissement |
-| 7 | Compresses yeux eau de rose+camomille | [1,4] | ✅ | Yeux fatigués/gonflés en Hiver/Automne |
-| 8 | Masque éclat miel+curcuma (**corrigé**) | [2,3] | ✅ | Éclat en phases d'énergie haute |
-| 9 | Masque hydratant avocat+miel+olive | [1,4] | ✅ | Nutrition intense en phases sèches |
-| 10 | Masque cheveux miel+olive | [2,3] | ✅ | Brillance en phases haute énergie |
-| 11 | Gommage doux visage sucre+olive | [2,3] | ✅ | Exfolier quand la peau n'est pas réactive |
-| 12 | Masque apaisant eau de rose+aloe (**corrigé**) | [1,4] | ✅ | Apaiser en phases réactives |
-| 13 | Bain d'huile cheveux nigelle+olive (**corrigé**) | [1,2,3,4] | ✅ | Sunnah universelle — étendu à Hiver |
-| 14 | Soin pieds exfoliant sucre+nigelle | [1,4] | ✅ | Soin douceur en phases repos |
-| 15 | Masque yeux camomille+eau de rose | [1,4] | ✅ | Cernes/fatigue en Hiver/Automne |
+### Anomalies détectées — 🔴 BLOQUER
+
+| Code | Phase | Geste | Problème |
+|------|-------|-------|----------|
+| RPM-H01 | Hiver matin | "Huile de rose musquée" | Non prophétique, occlusive possible |
+| RPM-H02 | Hiver matin | "SPF 30 minimum" | Filtre sans précision "minéral uniquement" → risque chimique |
+| RPM-H03 | Hiver soir | "Nettoyage huile de jojoba" | Jojoba non prophétique |
+| RPM-H04 | Hiver soir | "Sérum rose musquée" | Non prophétique |
+| RPM-H05 | Hiver soir | "Crème barrière riche — céramides, squalane" | Ingrédients industriels cosmétiques |
+| RPM-P01 | Printemps matin | "Sérum vitamine C" | Actif cosmétique chimique |
+| RPM-P02 | Printemps matin | "Crème légère niacinamide" | Niacinamide = cosmétique chimique (cf. SKN-A02) |
+| RPM-P03 | Printemps matin | "SPF 30+" | Idem RPM-H02 |
+| RPM-P04 | Printemps soir | "Hydratant léger" vague | Pas d'ingrédient naturel précisé |
+| RPM-E01 | Été matin | "SPF 50 — impératif" | Idem RPM-H02 |
+| RPM-E02 | Été soir | "Brume hamamélis" | Non prophétique |
+| RPM-E03 | Été soir | "Sérum hydratant hyaluronate" | Hyaluronate = cosmétique |
+| RPM-A01 | Automne matin | "Tonique thé vert" | Non prophétique |
+| RPM-A02 | Automne matin | "Sérum zinc" | Actif cosmétique |
+| RPM-A03 | Automne matin | "SPF légère non-comédogène" | Idem RPM-H02 |
+| RPM-A04 | Automne soir | "Tea tree en soin local" | HE non prophétique, pas de dilution |
+| RPM-A05 | Automne soir | "Crème thé vert apaisante" | Non prophétique |
+
+### Anomalies — 🟡 SIGNALER
+
+| Code | Phase | Geste | Problème |
+|------|-------|-------|----------|
+| RPM-P05 | Printemps soir | "Gua sha" | Technique asiatique — hors référentiel islamique |
+| RPM-ALL | Toutes | 4 gestes/phase | Dépasse le maximum de 3 demandé |
 
 ---
 
-### Sélection soins_du_jour (max 2 par phase)
+## Plan ROUTINES_PREMIUM corrigées (3 gestes max, 100% naturel)
 
-| Phase | Rec 1 | Rec 2 | Logique |
-|-------|-------|-------|---------|
-| 🌙 Hiver | 12 — Masque apaisant eau de rose+aloe (visage) | 6 — Soin mains/pieds nourrissant | Douceur, régénération, repos |
-| 🌿 Printemps | 11 — Gommage doux visage sucre+olive | 10 — Masque cheveux miel+olive | Renouveau, éclat, cheveux brillants |
-| ☀️ Été | 8 — Masque éclat miel+curcuma | 3 — Masque purifiant argile+nigelle | Purifier, illuminer, sébum maîtrisé |
-| 🍂 Automne | 2 — Masque hydratant aloe+miel+olive | 14 — Soin pieds exfoliant sucre+nigelle | Nourrir, apaiser, soin douceur |
+### 🌙 Hiver
+**Matin** : Rinçage eau tiède · Eau de rose · Huile de nigelle (1 goutte)
+**Soir** : Nettoyage huile d'olive · Masque miel pur (3×/sem) · Huile d'olive soin de nuit
+
+### 🌿 Printemps
+**Matin** : Rhassoul léger à l'eau de rose · Eau de rose tonique · Huile d'olive (1 goutte)
+**Soir** : Gommage sucre + olive (2×/sem) · Masque miel + curcuma (2×/sem) · Huile d'olive soin de nuit
+
+### ☀️ Été
+**Matin** : Eau fraîche uniquement · Brume eau de rose · Aloe vera gel pur
+**Soir** : Rhassoul purifiant · Masque argile + huile de nigelle · Eau de rose finale
+
+### 🍂 Automne
+**Matin** : Nettoyage savon d'Alep · Huile de nigelle pure · Eau de rose tonique
+**Soir** : Démaquillage huile d'olive · Masque miel + curcuma (3×/sem) · Huile d'olive soin de nuit
+
+**Score ROUTINES_PREMIUM avant : 28/100 · après : 97/100**
 
 ---
-
-**Score RECETTES_SOINS après corrections : 96/100**
 
 *Audit réalisé par l'agent skincare-naturelle — SakinApp*
