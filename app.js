@@ -2004,13 +2004,35 @@ function renderCarteRepas(s) {
 // MON MARCHÉ
 // ═══════════════════════════════════════════════
 function switchRepasTab(tab) {
-  ['recettes', 'marche'].forEach(t => {
+  ['recettes', 'phase', 'marche'].forEach(t => {
     const btn = document.getElementById('repas-tab-btn-' + t);
     const pane = document.getElementById('repas-tab-' + t);
     if (btn) btn.classList.toggle('active', t === tab);
     if (pane) pane.style.display = t === tab ? 'block' : 'none';
   });
   if (tab === 'marche') renderMarcheTab();
+  if (tab === 'phase') renderRepasPhaseTab();
+}
+
+function renderRepasPhaseTab() {
+  const saison = ST.currentSaison;
+  const recettes = RECETTES[saison] || [];
+  const premium = isFullAccess();
+  const container = document.getElementById('repas-phase-content');
+  if (!container) return;
+  const phaseLabel = { hiver: '🌙 Hiver', printemps: '🌿 Printemps', ete: '☀️ Été', automne: '🍂 Automne' }[saison] || '';
+  container.innerHTML = `
+    <div class="repas-phase-header">${phaseLabel} · ${recettes.length} recettes</div>
+    ${recettes.map((r, i) => `
+      <div class="repas-phase-item" onclick="${premium ? `openRecipeModal('${saison}',${i})` : 'startStripeCheckout()'}">
+        <span class="repas-phase-emoji">${r.emoji}</span>
+        <div class="repas-phase-info">
+          <div class="repas-phase-nom">${r.nom}</div>
+          <div class="repas-phase-why">${r.pourquoi.length > 65 ? r.pourquoi.slice(0, 65) + '…' : r.pourquoi}</div>
+        </div>
+        <span class="repas-phase-arrow">${premium ? '›' : '🔒'}</span>
+      </div>`).join('')}
+    ${!premium ? `<button class="modal-cta" style="width:100%;margin-top:14px;padding:14px;" onclick="startStripeCheckout()">✨ Accéder à toutes les recettes</button>` : ''}`;
 }
 
 function _getMarcheItems(saison) {

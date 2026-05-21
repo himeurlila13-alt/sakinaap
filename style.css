@@ -1274,6 +1274,15 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
 .repas-tab-bar{display:flex;gap:5px;background:var(--creme);border-radius:12px;padding:4px;margin:10px 0 12px}
 .repas-tab-btn{flex:1;padding:8px 6px;font-size:12px;font-weight:600;color:var(--gris);background:transparent;border:none;border-radius:9px;cursor:pointer;font-family:var(--sans);transition:all .18s;white-space:nowrap}
 .repas-tab-btn.active{background:white;color:var(--season);box-shadow:0 2px 8px rgba(45,36,32,.08)}
+.repas-phase-header{padding:10px 0 8px;font-size:11px;color:var(--gris);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.repas-phase-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--sable);cursor:pointer;transition:opacity .15s}
+.repas-phase-item:last-of-type{border-bottom:none}
+.repas-phase-item:active{opacity:.7}
+.repas-phase-emoji{font-size:26px;flex-shrink:0;line-height:1}
+.repas-phase-info{flex:1;min-width:0}
+.repas-phase-nom{font-size:13px;font-weight:600;color:var(--noir);line-height:1.3}
+.repas-phase-why{font-size:11px;color:var(--gris);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.repas-phase-arrow{color:var(--gris);font-size:18px;flex-shrink:0}
 .marche-section-lbl{font-size:9px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--season);margin:14px 0 8px}
 .marche-section-lbl:first-child{margin-top:2px}
 .marche-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:12px;margin-bottom:4px;background:var(--creme);cursor:pointer;transition:opacity .15s}
@@ -1583,6 +1592,8 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
   .ps-acc-body .ps-row{background:#1C1916;border-bottom-color:#2E2924}
   .obj-item{background:#252220;border-color:#2E2924}
   .obj-item.done{background:rgba(var(--season-rgb,123,94,167),.12)}
+  .repas-phase-item{border-bottom-color:#2E2924}
+  .repas-phase-nom{color:#E8DDD0}
   .obj-cat-item{background:#252220;border-color:#2E2924}
   .obj-cat-count{background:#2E2924}
   .obj-rec-select{background:#252220;color:#E8DDD0;border-color:#2E2924}
