@@ -1039,111 +1039,6 @@ const ROUTINES_PREMIUM = {
   },
 };
 
-const SPORT_NIVEAUX = {
-  hiver: [
-    { niveau:1, name:'Soulagement', duration:'7 min', meta:'Sol · Anti-douleur · Repos actif', exercices:[
-      {num:'01', name:'Position anti-douleur', detail:'3 min allongée en boule sur le côté gauche, genoux remontés. Réduit la pression utérine et soulage les crampes.'},
-      {num:'02', name:'Respiration 4-4-6', detail:'Inspire 4 temps, retiens 4 temps, souffle 6 temps. 6 cycles. Active le parasympathique anti-douleur.'},
-      {num:'03', name:'Détente abdominale', detail:'Mains chaudes sur le ventre. Relâche total des abdos à chaque expiration. Cercles très doux.'},
-    ]},
-    { niveau:2, name:'Douceur profonde', duration:'10 min', meta:'Sol · Tapis · Respiratoire', exercices:[
-      {num:'01', name:'Respiration abdominale', detail:'10 respirations. Mains sur le ventre, sentir l\'expansion à chaque inspire.'},
-      {num:'02', name:'Étirement bas du dos étendu', detail:'2 minutes, genoux écartés, front au sol, bras tendus devant. Respirer dans le bas du dos.'},
-      {num:'03', name:'Rotation de bassin', detail:'À quatre pattes, cercles lents dans les deux sens. 2 min.'},
-      {num:'04', name:'Étirement hanches', detail:'1 minute chaque côté. Souffle long, ne pas forcer.'},
-    ]},
-    { niveau:3, name:'Mobilité libératrice', duration:'15 min', meta:'Sol · Aucun impact · Endorphines', exercices:[
-      {num:'01', name:'Mobilité lombaire en 4 appuis', detail:'3 min. 10 cycles. Dos creux à l\'inspire, dos arrondi à l\'expire. Vertèbre par vertèbre — libère les tensions lombaires.'},
-      {num:'02', name:'Étirement bas du dos', detail:'2 min. Genoux écartés, front au sol, bras tendus. Respire dans le bas du dos.'},
-      {num:'03', name:'Étirement psoas-hanches', detail:'2 min chaque côté. Genou avant plié, jambe arrière tendue. Ouvre la hanche passivement, laisse la gravité faire.'},
-      {num:'04', name:'Torsion douce au sol', detail:'1 min par côté. Genoux tombent d\'un côté, épaules restent au sol.'},
-    ]},
-    { niveau:4, name:'Mobilité libératrice complète', duration:'20 min', meta:'Étirements passifs · Sol · Méditatif', exercices:[
-      {num:'01', name:'Papillon allongé', detail:'5 minutes. Plantes de pieds jointes, genoux ouverts. Respiration abdominale ample.'},
-      {num:'02', name:'Étirement profond du psoas', detail:'3 min chaque côté. Genou avant plié, jambe arrière allongée. Descends sur les avant-bras, laisse le poids étirer. Respire sans forcer.'},
-      {num:'03', name:'Jambes au mur', detail:'4 minutes. Retour veineux, soulage les lombaires et les gonflements.'},
-      {num:'04', name:'Relaxation profonde guidée', detail:'5 minutes. Allongée, yeux fermés. Relâche chaque zone du corps de la tête aux pieds à chaque expiration.'},
-    ]},
-  ],
-  printemps: [
-    { niveau:1, name:'Découverte', duration:'12 min', meta:'Sol + debout · Débutante', exercices:[
-      {num:'01', name:'Marche sur place', detail:'3 min. Bras qui balancent, montée de genoux progressive. Préparation articulaire complète.'},
-      {num:'02', name:'5 squats lents', detail:'3 séries. Pieds largeur épaules, descente 3 sec, remontée contrôlée. Pas plus bas que le confort le permet.'},
-      {num:'03', name:'Gainage genoux 15 sec', detail:'2 séries. Planche sur les genoux, corps droit. Respire normalement.'},
-      {num:'04', name:'Mobilité lombaire en 4 appuis', detail:'8 cycles pour fermer la séance en douceur. Dos creux / dos arrondi, vertèbre par vertèbre.'},
-    ]},
-    { niveau:2, name:'Activation', duration:'15 min', meta:'Debout + sol', exercices:[
-      {num:'01', name:'Échauffement articulaire', detail:'3 minutes. Chevilles, hanches, épaules — cercles fluides.'},
-      {num:'02', name:'15 squats lents', detail:'3 séries. Descente 3 sec, remontée contrôlée.'},
-      {num:'03', name:'Gainage planche genoux', detail:'3× 25 secondes. Bassin ni trop haut ni trop bas.'},
-      {num:'04', name:'12 fentes alternées / jambe', detail:'Genou arrière proche du sol. Pousser sur le talon avant.'},
-    ]},
-    { niveau:3, name:'Renforcement', duration:'18 min', meta:'Debout + sol · Progressif', exercices:[
-      {num:'01', name:'Squat sauté doux', detail:'3× 10. Atterrissage silencieux, genoux mous à l\'impact.'},
-      {num:'02', name:'Pompes sur les genoux', detail:'3× 10. Gainage abdominal actif, coudes à 45°.'},
-      {num:'03', name:'Pont fessier pulsé', detail:'3× 15 avec pause 2 sec en haut, squeeze.'},
-      {num:'04', name:'Mountain climbers lents', detail:'20 alternés. Contrôle la respiration, pas de tête qui plonge.'},
-    ]},
-    { niveau:4, name:'Circuit progressif', duration:'22 min', meta:'HIIT léger · Cardio', exercices:[
-      {num:'01', name:'Squats sautés', detail:'4× 12. Bras en avant pour l\'élan, profondeur maximale.'},
-      {num:'02', name:'Pompes + rotation du tronc', detail:'3× 8. Après chaque pompe, rotation du bras vers le ciel.'},
-      {num:'03', name:'Burpees sans saut', detail:'3× 8. Descente contrôlée, montée explosive.'},
-      {num:'04', name:'Sprint sur place 30 sec', detail:'4 fois avec 20 sec de récup active (marche).'},
-    ]},
-  ],
-  ete: [
-    { niveau:1, name:'Éveil cardio', duration:'15 min', meta:'Debout · Impact faible · Débutante', exercices:[
-      {num:'01', name:'Marche tonique', detail:'5 min. Bras actifs, pas énergique. Ou marche rapide sur place avec bras.'},
-      {num:'02', name:'Squats lents 3×8', detail:'Descente 3 sec, pause 1 sec en bas, montée 2 sec. Amplitude complète.'},
-      {num:'03', name:'Montée de genoux 2 min', detail:'Sur place, genoux à hauteur de hanche. Rythme modéré, bras opposés.'},
-      {num:'04', name:'Fentes arrières 2×6', detail:'Pas en arrière, genou arrière proche du sol. Alterner. Pause si instable.'},
-    ]},
-    { niveau:2, name:'Circuit cardio', duration:'22 min', meta:'Debout · Force explosive', exercices:[
-      {num:'01', name:'Squat sauté 3×12', detail:'Atterrissage contrôlé, fesses en arrière, bras en avant.'},
-      {num:'02', name:'Gainage latéral', detail:'3× 30 sec par côté. Corps parfaitement droit.'},
-      {num:'03', name:'Fentes sautées alternées', detail:'3× 10 alternées. Élan des bras opposés pour l\'équilibre.'},
-      {num:'04', name:'Pompes standard', detail:'3× 8. Poitrine effleure le sol, coudes proches du corps.'},
-    ]},
-    { niveau:3, name:'Force & cardio', duration:'25 min', meta:'Mix force + intensité', exercices:[
-      {num:'01', name:'Burpees complets', detail:'4× 10. Gainage, saut groupé, retour en souplesse.'},
-      {num:'02', name:'Pompes pieds surélevés', detail:'3× 8. Pieds sur le canapé — charge sur les épaules.'},
-      {num:'03', name:'Box squat explosif', detail:'3× 15 sur une chaise. Toucher et repartir immédiatement.'},
-      {num:'04', name:'Sprint genoux hauts 1 min', detail:'4 séries. Récupération 30 sec marche.'},
-    ]},
-    { niveau:4, name:'HIIT complet', duration:'30 min', meta:'Haute intensité · Cardio fort', exercices:[
-      {num:'01', name:'Jumping jacks 45 sec', detail:'4 séries. Récup 15 sec. Pleine amplitude.'},
-      {num:'02', name:'Squats chargés 20 reps', detail:'Sac à dos lesté ou bouteilles dans les bras.'},
-      {num:'03', name:'Burpees + pompes', detail:'4× 10. Pompe à chaque descente, saut groupé à chaque montée.'},
-      {num:'04', name:'Tabata sprint-récup', detail:'20 sec sprint max, 10 sec repos. 8 rounds.'},
-    ]},
-  ],
-  automne: [
-    { niveau:1, name:'Récupération active', duration:'12 min', meta:'Sol · Mobilité douce · Débutante', exercices:[
-      {num:'01', name:'Respiration libératrice', detail:'5 cycles. Expire 2× plus longtemps qu\'inspire. Calme le système nerveux.'},
-      {num:'02', name:'Étirement bas du dos', detail:'3 min. Genoux écartés, front au sol, bras tendus devant. Relâche total.'},
-      {num:'03', name:'Rotation lombaire douce', detail:'Allongée, genoux pliés, laisse-les tomber de chaque côté 5×.'},
-      {num:'04', name:'Étirement ischio-jambiers', detail:'Jambe levée tenue avec les mains. Respire dans l\'étirement, 45 sec chaque côté.'},
-    ]},
-    { niveau:2, name:'Détente active', duration:'15 min', meta:'Pilates · Sol', exercices:[
-      {num:'01', name:'Respiration libératrice', detail:'5 cycles, expiration 2× plus longue que l\'inspiration.'},
-      {num:'02', name:'Fentes basses tenues', detail:'1 min chaque côté. Genou arrière posé au sol. Respire profondément, garde l\'ancrage. Renforce sans fatiguer.'},
-      {num:'03', name:'Torsion libératrice assise', detail:'1 min par côté. Assis, torsion du buste, respire dans l\'étirement, pas de force.'},
-      {num:'04', name:'Pont lent 12×', detail:'3 sec en haut, squeeze. Lombaires collées au sol.'},
-    ]},
-    { niveau:3, name:'Équilibre & ancrage', duration:'18 min', meta:'Renforcement doux + mobilité', exercices:[
-      {num:'01', name:'Circuit mobilité globale × 3', detail:'Depuis debout : descente lente au sol, 4 appuis, mobilité lombaire (dos creux / dos arrondi), remontée contrôlée. 1 min par cycle.'},
-      {num:'02', name:'Équilibre sur une jambe', detail:'30 sec par jambe. Bras tendus en avant ou mains sur les hanches. Regard fixe sur un point. Renforce les chevilles et la proprioception.'},
-      {num:'03', name:'Étirement psoas en fente basse', detail:'2 min par côté. Laisser le poids du corps étirer.'},
-      {num:'04', name:'Relaxation profonde', detail:'3 min. Allongée, yeux fermés, relâche totale de la tête aux pieds.'},
-    ]},
-    { niveau:4, name:'Étirements libérateurs profonds', duration:'22 min', meta:'Étirements passifs longs · Profond', exercices:[
-      {num:'01', name:'Étirement profond du psoas', detail:'4 min par côté. Gravité fait le travail, pas les muscles. Genou avant plié, jambe arrière allongée.'},
-      {num:'02', name:'Papillon allongé', detail:'5 min. Plantes de pieds jointes, genoux ouverts, dos au sol. Respiration abdominale.'},
-      {num:'03', name:'Étirement complet du dos', detail:'4 min. Genoux écartés, front au sol, bras tendus. Relâche les épaules et la nuque.'},
-      {num:'04', name:'Relaxation profonde + respiration 4-7-8', detail:'5 min. Inspirer 4, retenir 7, souffler 8. 8 cycles. Laisse chaque muscle fondre dans le sol.'},
-    ]},
-  ],
-};
 
 const ASMA = [
   {num:1,ar:'الرَّحْمَنُ',fr:'Ar-Rahman · Le Tout Miséricordieux'},{num:2,ar:'الرَّحِيمُ',fr:'Ar-Rahim · Le Très Miséricordieux'},{num:3,ar:'الْمَلِكُ',fr:'Al-Malik · Le Roi'},{num:4,ar:'الْقُدُّوسُ',fr:'Al-Quddous · Le Très Saint'},{num:5,ar:'السَّلَامُ',fr:'As-Salam · La Paix'},
@@ -1876,7 +1771,6 @@ function renderCarteBouger(s) {
   const btnWrap = document.getElementById('qs-btn-wrap');
   const doneWrap = document.getElementById('qs-done-wrap');
   const reportedWrap = document.getElementById('qs-reported-wrap');
-  const niveauxEl = document.getElementById('qs-niveaux-premium');
 
   if (!spec) {
     if (nameEl) nameEl.textContent = '—';
@@ -2032,23 +1926,6 @@ function renderCarteBouger(s) {
   if (btnWrap) btnWrap.style.display = (isDone || isReported) ? 'none' : 'block';
   if (doneWrap) doneWrap.style.display = isDone ? 'flex' : 'none';
   if (reportedWrap) reportedWrap.style.display = isReported ? 'block' : 'none';
-  if (niveauxEl) {
-    const snArr = (typeof SPORT_NIVEAUX !== 'undefined') ? (SPORT_NIVEAUX[ST.currentSaison] || []) : [];
-    if (snArr.length) {
-      const curLv = ST.seanceLevel || 1;
-      niveauxEl.innerHTML = `<div class="sport-niveaux-discover-title" style="font-size:11px;font-weight:700;color:var(--gris);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Explorer les niveaux</div>
-        <div class="qs-niveaux-grid">
-          ${snArr.map((n, i) => `<div class="qs-niveau-card ${n.niveau <= curLv ? 'unlocked' : 'locked'}" ${n.niveau <= curLv ? `onclick="openNiveauModal(${i})"` : ''}>
-            <div class="qs-niveau-badge">N${n.niveau}</div>
-            <div class="qs-niveau-name">${n.name}</div>
-            <div class="qs-niveau-dur">${n.duration}</div>
-            ${n.niveau > curLv ? '<div class="qs-niveau-lock">🔒</div>' : ''}
-          </div>`).join('')}
-        </div>`;
-    } else {
-      niveauxEl.innerHTML = '';
-    }
-  }
 }
 
 // ═══════════════════════════════════════════════
@@ -2390,23 +2267,6 @@ function openSkinModal(phase) {
 }
 function closeSkinModal() { document.getElementById('skin-modal').classList.remove('open'); }
 
-function openNiveauModal(idx) {
-  const niveaux = SPORT_NIVEAUX[ST.currentSaison] || [];
-  const n = niveaux[idx];
-  if (!n) return;
-  const el = document.getElementById('niveau-modal-content');
-  if (el) el.innerHTML = `
-    <div class="pmod-title">Niveau ${n.niveau} · ${n.name}</div>
-    <div class="pmod-pourquoi">${n.meta} · ${n.duration}</div>
-    ${n.exercices.map(ex=>`
-      <div class="sport-exercise" style="margin-bottom:12px;">
-        <div class="sport-ex-num">${ex.num}</div>
-        <div><div class="sport-ex-name">${ex.name}</div><div class="sport-ex-detail">${ex.detail}</div></div>
-      </div>`).join('')}
-  `;
-  document.getElementById('niveau-modal').classList.add('open');
-}
-function closeNiveauModal() { document.getElementById('niveau-modal').classList.remove('open'); }
 
 
 
