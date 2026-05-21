@@ -2197,12 +2197,13 @@ function renderCarteSkincare(s) {
   if (isFullAccess()) {
     const routine = ROUTINES_PREMIUM[ST.currentSaison];
     const steps = routine ? routine.matin.length + routine.soir.length : 0;
+    const phaseEmoji = { hiver: '🌙', printemps: '🌿', ete: '☀️', automne: '🍂' }[ST.currentSaison] || '🌿';
     premEl.innerHTML = `
       <div class="action-premium-unlocked" onclick="openSkinModal('${ST.currentSaison}')">
-        <span class="action-prem-unlocked-emoji">🌿</span>
+        <span class="action-prem-unlocked-emoji">${phaseEmoji}</span>
         <div class="action-prem-unlocked-text">
-          <div class="action-prem-unlocked-name">Routine matin &amp; soir</div>
-          <div class="action-prem-unlocked-sub">${steps} gestes adaptés à ta phase →</div>
+          <div class="action-prem-unlocked-name">Ta routine · matin &amp; soir</div>
+          <div class="action-prem-unlocked-sub">${steps} gestes naturels pens&eacute;s pour toi →</div>
         </div>
         <span class="action-prem-unlocked-arrow">›</span>
       </div>`;
@@ -2210,12 +2211,12 @@ function renderCarteSkincare(s) {
     premEl.innerHTML = `
       <div class="action-premium-locked">
         <div class="action-prem-blur">
-          <div class="action-prem-recipe-preview">Matin · Soir · Gestes adaptés</div>
-          <div class="action-prem-steps-preview">Nettoyage · Actif · Soin · SPF</div>
+          <div class="action-prem-recipe-preview">Matin · Soir · M&eacute;decine proph&eacute;tique</div>
+          <div class="action-prem-steps-preview">Nigelle · Miel · Huile d&rsquo;olive · Eau de rose</div>
         </div>
         <div class="action-prem-cta">
-          <div class="action-prem-label">✦ Routine complète</div>
-          <button class="action-prem-btn" onclick="startStripeCheckout()">D&eacute;bloquer Premium</button>
+          <div class="action-prem-label">✨ Ta peau m&eacute;rite cette douceur</div>
+          <button class="action-prem-btn" onclick="startStripeCheckout()">Prendre soin de moi</button>
         </div>
       </div>`;
   }
