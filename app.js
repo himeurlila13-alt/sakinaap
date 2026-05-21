@@ -878,7 +878,7 @@ const SAISONS = {
       ],
       aliments: ['Chocolat noir 70%+','Amandes','Banane','Patate douce','Lentilles','Dattes','Avoine','Courge'],
       star: ['Chocolat noir','Amandes','Banane'],
-      eviter: ['Café en excès','Sel (rétention)','Sucre raffiné','Alcool'],
+      eviter: ['Café en excès','Sel (rétention)','Sucre raffiné'],
     },
     sport: {
       seance: { name:'Libération SPM', duration:'12 min', meta:'Mix sol + mur',
@@ -1939,7 +1939,7 @@ function renderCarteRepas(s) {
       ? `<div class="repas-hero">
            <span class="repas-hero-emoji">${r.emoji}</span>
            <div class="repas-hero-text">
-             <div class="repas-hero-phase">${saisonLabel}</div>
+             <div class="repas-hero-phase" style="text-transform:lowercase;font-variant:small-caps;letter-spacing:.08em;">${saisonLabel}</div>
              <div class="repas-hero-nom">${r.nom}</div>
            </div>
          </div>`
@@ -1949,18 +1949,10 @@ function renderCarteRepas(s) {
   const nutrimEl = document.getElementById('dc-repas-nutriments');
   if (nutrimEl) {
     if (r) {
-      const ingrs = r.ingredients || [];
-      const shown = ingrs.slice(0, 3);
-      const more = ingrs.length - 3;
-      const ingrChips = shown.map(ing => {
-        const short = ing.length > 26 ? ing.slice(0, 24) + '…' : ing;
-        return `<span class="repas-ingr-chip">${short}</span>`;
-      }).join('') + (more > 0 ? `<span class="repas-ingr-more">+${more} →</span>` : '');
       nutrimEl.innerHTML = `
         <div class="repas-pourquoi-block">
-          <div class="repas-pourquoi-text">${r.pourquoi}</div>
-        </div>
-        <div class="repas-ingr-preview">${ingrChips}</div>`;
+          <div class="repas-pourquoi-text">✨ ${r.pourquoi}</div>
+        </div>`;
     } else {
       nutrimEl.innerHTML = (alim.nutriments || []).slice(0, 2).map(n => `
         <div class="day-card-nutriment-row">
