@@ -794,9 +794,9 @@ const SEANCES_SPORT = {
     messageApresIntense: 'Ton corps reconstruit sa force aujourd\'hui — c\'est le repos qui crée la progression. 🌿',
     niveaux: {
       1: { type: 'emom', duree: 10, label: 'EMOM 10 min', exercice: 'Squat', reps: 5,
-           detail: 'Au début de chaque minute : 5 squats. Récupère le reste de la minute. 10 rounds.' },
+           detail: 'Échauffe tes articulations 2-3 min avant de démarrer (cercles de chevilles et de hanches). Au début de chaque minute : 5 squats. Récupère le reste de la minute. 10 rounds.' },
       2: { type: 'emom', duree: 10, label: 'EMOM 10 min', exercice: 'Fente arrière', reps: 8,
-           detail: 'Au début de chaque minute : 8 fentes arrières. Récupère le reste. 10 rounds.' },
+           detail: 'Échauffe tes articulations 2-3 min avant de démarrer (cercles de chevilles et de hanches). Au début de chaque minute : 8 fentes arrières. Récupère le reste. 10 rounds.' },
       3: { type: 'emom', duree: 10, label: 'EMOM 10 min', exercice: 'Squat sauté', reps: 6,
            detail: 'Échauffe tes genoux 2-3 min avant de démarrer. Au début de chaque minute : 6 squats sautés, atterrissage fléchi et silencieux. Récupère le reste de la minute. 10 rounds.' },
       4: { type: 'amrap', duree: 10, label: 'AMRAP 10 min',
@@ -814,7 +814,7 @@ const SEANCES_SPORT = {
   automne: {
     // Actif J18-J21 (standard) : reprend Printemps + repos +10s
     actif: {
-      message: 'Ton corps tient encore — honore-le sans te dépasser. Reprends ton niveau de Printemps avec 10 secondes de repos supplémentaires entre chaque exercice.',
+      message: 'Ton corps tient encore — honore-le sans te dépasser. Reprends ton niveau de Printemps avec 10 secondes de repos supplémentaires entre chaque exercice. ⚠️ Si tu es au niveau Vitalité ou Pleine puissance, supprime les sauts et exercices explosifs — la progestérone relâche tes ligaments cette semaine. Protège tes genoux et tes chevilles.',
       reposExtra: 10,
     },
     // Doux J22-J24 (standard) : mobilité + 2 exos légers
