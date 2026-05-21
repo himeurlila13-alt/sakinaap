@@ -2035,6 +2035,17 @@ function renderRepasPhaseTab() {
     ${!premium ? `<button class="modal-cta" style="width:100%;margin-top:14px;padding:14px;" onclick="startStripeCheckout()">✨ Accéder à toutes les recettes</button>` : ''}`;
 }
 
+function _cleanIngr(ing) {
+  let s = ing
+    .replace(/^[\d.,/½¼¾]+\s*(g|kg|ml|cl|l|cs|cc)?\s*/i, '')
+    .replace(/,\s*\d+[.,]?\d*\s*(g|kg|ml|cl|l|cs|cc)?\s*/gi, ', ')
+    .replace(/^(grosses?|petites?|grandes?)?\s*(poign[ée]+s?|verres?|tranches?|boîtes?|carr[ée]+s?|bottes?)\s+(d[e']\s*|de\s+l[a']?\s*)?/i, '')
+    .replace(/^(quelques|un|une|des|du|de la|de l')\s+/i, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return s ? s[0].toUpperCase() + s.slice(1) : s;
+}
+
 function _getMarcheItems(saison) {
   const items = [];
   const alim = SAISONS[saison]?.alimentation;
@@ -2054,7 +2065,7 @@ function _getMarcheItems(saison) {
       const key = 'ingr_' + norm.replace(/[\s''(),]/g, '_');
       if (!seen.has(key)) {
         seen.add(key);
-        items.push({ id: key, text: ing, section: 'recette' });
+        items.push({ id: key, text: _cleanIngr(ing), section: 'recette' });
       }
     });
   });
