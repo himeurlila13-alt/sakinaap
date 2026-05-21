@@ -339,7 +339,7 @@ body{font-family:var(--sans);background:var(--bg-phase,var(--creme));max-width:4
 /* ═══ MOI ═══ */
 .moi-hero{padding:52px 22px 0;text-align:center}
 .moi-hero-icon{font-size:40px;line-height:1;margin-bottom:14px}
-.moi-hero-name{font-family:var(--serif);font-size:28px;font-style:italic;color:var(--season);margin-bottom:12px;line-height:1.2}
+.moi-hero-name{font-family:var(--script);font-size:28px;color:var(--season);margin-bottom:12px;line-height:1.2}
 .moi-hero-badge{display:inline-flex;align-items:center;padding:6px 16px;border-radius:20px;background:var(--season-soft);font-size:13px;color:var(--season);margin-bottom:14px}
 .moi-hero-msg{font-size:14px;color:var(--gris);font-style:italic;max-width:280px;margin:0 auto;line-height:1.5}
 
@@ -793,7 +793,7 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
 }
 .home-topbar-logo {
   font-family: var(--script);
-  font-size: 22px;
+  font-size: 28px;
   color: var(--season);
 }
 
