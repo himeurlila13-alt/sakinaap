@@ -1612,7 +1612,7 @@ async function startStripeCheckout() {
     const sb = await initSupabase();
     const { data: { session } } = await sb?.auth.getSession() || { data: { session: null } };
     const jwt = session?.access_token;
-    if (!jwt) { showToast('Session expirée — reconnecte-toi. 🌙'); return; }
+    if (!jwt) { showToast('Ta session a expiré — reviens te connecter 🌸'); return; }
     const r = await fetch('/api/create-checkout?' + params.toString(), {
       headers: { Authorization: 'Bearer ' + jwt }
     });
@@ -2393,7 +2393,7 @@ function handleProgressionAnswer(ans) {
   const level = ST.seanceLevel || 1;
   if (ans === 'facile' && level < 4) {
     ST.seanceLevel = level + 1;
-    showToast(`🔥 Niveau ${ST.seanceLevel} débloqué ! Alhamdulillah 💪`);
+    showToast(`✨ Niveau ${ST.seanceLevel} — tu avances à ton rythme. Alhamdulillah 🌿`);
   } else if (ans === 'dur_trop' && level > 1) {
     ST.seanceLevel = level - 1;
     showToast(`💛 Descendre d'un niveau, c'est écouter son corps — c'est de la sagesse.`);
@@ -2537,7 +2537,7 @@ function handlePrintempsUpgrade(ans) {
       setTimeout(showLevelMax, 600);
       return;
     }
-    showToast(`🔥 Niveau ${ST.seanceLevel} débloqué ! Alhamdulillah 💪`);
+    showToast(`✨ Niveau ${ST.seanceLevel} — tu avances à ton rythme. Alhamdulillah 🌿`);
   } else if (ans === 'dur' && level > 1) {
     ST.seanceLevel = level - 1;
     showToast(`💛 Niveau ${ST.seanceLevel} — on avance à ton rythme.`);
@@ -2739,7 +2739,7 @@ function checkSeanceSurprise() {
 
 function acceptSeanceSurprise() {
   document.getElementById('seance-surprise-modal')?.classList.remove('open');
-  showToast('✨ C\'est parti — donne tout ce que tu as aujourd\'hui !');
+  showToast('Prends soin de toi à chaque mouvement 🌸');
 }
 
 function refuseSeanceSurprise() {

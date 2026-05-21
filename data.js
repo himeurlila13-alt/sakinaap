@@ -71,7 +71,7 @@ const REPAS_QUOTIDIENS = {
     },
     {
       nom: 'Taboulé au boulgour, persil frais, concombre, tomate',
-      benefice: 'Le persil est dense en vitamine C — optimise l\'absorption du fer encore stocké.'
+      benefice: 'Le persil est dense en vitamine C — amplifie l\'absorption du fer encore stocké.'
     },
     {
       nom: 'Filet de saumon au citron, légumes grillés',
@@ -91,7 +91,7 @@ const REPAS_QUOTIDIENS = {
     },
     {
       nom: 'Curry de lentilles vertes, coriandre fraîche et riz',
-      benefice: 'Fer non héminique des lentilles avec vitamine C naturelle de la coriandre — absorption optimale.'
+      benefice: 'Fer non héminique des lentilles avec vitamine C naturelle de la coriandre — absorption renforcée.'
     },
     {
       nom: 'Omelette aux champignons et épinards sautés',
@@ -562,7 +562,7 @@ const MESSAGES_JOUR = {
   },
   19: {
     bien: 'Tu navigues bien dans l\'Automne — la conscience de ta phase est ta plus grande force.',
-    fatiguee: 'Une chose à la fois. Juste une seule chose today.',
+    fatiguee: 'Une chose à la fois. Juste une seule chose, aujourd\'hui.',
     difficile: 'Si tout te semble plus lourd aujourd\'hui, c\'est réel. Et ça passera, comme toujours.',
     foi: 'اللهم إني أعوذ بك من الهم والحزن — demande Sa protection de l\'anxiété et de la tristesse.'
   },
