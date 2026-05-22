@@ -1133,6 +1133,60 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
   border-radius: 8px;
   padding: 1px 6px;
 }
+.obj-cat-perso-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--season);
+  vertical-align: super;
+  margin-left: 2px;
+  font-size: 0;
+}
+.obj-cat-section-lbl {
+  display: flex;
+  align-items: center;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gris);
+  padding: 10px 20px 4px;
+}
+.cat-perso-add-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 16px 4px;
+}
+.cat-perso-add-row input {
+  flex: 1;
+  padding: 9px 13px;
+  border: 1.5px solid var(--sable);
+  border-radius: 12px;
+  font-size: 13px;
+  font-family: var(--sans);
+  color: var(--noir);
+  background: white;
+  outline: none;
+  -webkit-appearance: none;
+}
+.cat-perso-add-row input:focus { border-color: var(--season); }
+.cat-perso-add-row button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--season);
+  color: white;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .obj-phase-tag {
   font-size: 10px;
   color: var(--season);

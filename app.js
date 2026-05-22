@@ -3672,12 +3672,15 @@ function renderCategoriesGrid() {
   if (!container) return;
 
   const categoryItems = Object.entries(OBJECTIFS_CATEGORIES).map(([key, cat]) => {
-    const count = ((OBJECTIFS_PAR_PHASE[phase] || {})[key] || []).length;
+    const phaseCount = ((OBJECTIFS_PAR_PHASE[phase] || {})[key] || []).length;
+    const persoCount = (ST.customObjectifs || []).filter(o => o.categorie === key).length;
+    const total = phaseCount + persoCount;
+    const badge = persoCount ? `<span class="obj-cat-perso-dot"></span>` : '';
     return `
       <div class="obj-cat-item" onclick="openObjCatModal('${key}')">
-        <div class="obj-cat-icon">${cat.icon}</div>
+        <div class="obj-cat-icon">${cat.icon}${badge}</div>
         <div class="obj-cat-label">${cat.label}</div>
-        <div class="obj-cat-count">${count}</div>
+        <div class="obj-cat-count">${total}</div>
       </div>`;
   });
 
@@ -3697,30 +3700,122 @@ function renderCategoriesGrid() {
 function openObjCatModal(catKey) {
   const phase = _getPhaseForSuggestions();
   const cat = OBJECTIFS_CATEGORIES[catKey] || {};
-  const items = ((OBJECTIFS_PAR_PHASE[phase] || {})[catKey]) || [];
+  const phaseItems = ((OBJECTIFS_PAR_PHASE[phase] || {})[catKey]) || [];
   const weekKey = _getWeekKey();
-  const todayStr = new Date().toISOString().slice(0, 10); // Format YYYY-MM-DD pour consistance
+  const todayStr = new Date().toISOString().slice(0, 10);
   const checks = (ST.weeklyObjChecks && ST.weeklyObjChecks[weekKey]) || {};
+  const customChecks = (ST.customObjChecks && ST.customObjChecks[weekKey]) || {};
   const phaseLabel = { hiver: '🌙 Hiver', printemps: '🌿 Printemps', ete: '☀️ Été', automne: '🍂 Automne' }[phase] || '';
+
+  // Tâches perso de cette catégorie avec leur index global (pour customObjChecks)
+  const catCustom = (ST.customObjectifs || []).map((o, idx) => ({ o, idx })).filter(({ o }) => o.categorie === catKey);
+  const maxReached = catCustom.length >= 4;
+
   const content = document.getElementById('obj-cat-modal-content');
   if (!content) return;
-  content.innerHTML = `
-    <div class="modal-handle"></div>
-    <div style="padding:0 20px 4px;font-size:17px;font-weight:700;color:var(--noir)">${cat.icon || ''} ${cat.label || ''}</div>
-    <div style="padding:0 20px 14px;font-size:11px;color:var(--gris);text-transform:uppercase;letter-spacing:.06em;">${phaseLabel}</div>
-    <div>
-      ${items.map((texte, i) => {
-        const id = `${phase}_${catKey}_${i}`;
-        const done = (checks[id] || []).includes(todayStr);
-        return `
-          <div class="obj-item ${done ? 'done' : ''}" style="margin:0 16px 2px;border-radius:12px;" onclick="toggleSuggestion('${id}');_refreshCatModal('${catKey}')">
-            <div class="obj-check">${done ? '✓' : ''}</div>
-            <div class="obj-content"><div class="obj-label" style="font-size:13px;">${_esc(texte)}</div></div>
-          </div>`;
-      }).join('')}
-    </div>
-    <button onclick="closeObjCatModal()" class="modal-cta" style="margin:16px 20px 0;width:calc(100% - 40px);">Fermer</button>`;
+
+  // Section suggestions de phase
+  let suggestHtml = '';
+  if (phaseItems.length) {
+    suggestHtml = '<div class="obj-cat-section-lbl">✨ Suggestions ' + phaseLabel + '</div><div>'
+      + phaseItems.map((texte, i) => {
+          const id = phase + '_' + catKey + '_' + i;
+          const done = (checks[id] || []).includes(todayStr);
+          return '<div class="obj-item' + (done ? ' done' : '') + '" style="margin:0 16px 2px;border-radius:12px;"'
+            + ' onclick="toggleSuggestion(\'' + id + '\');openObjCatModal(\'' + catKey + '\')">'
+            + '<div class="obj-check">' + (done ? '✓' : '') + '</div>'
+            + '<div class="obj-content"><div class="obj-label" style="font-size:13px;">' + _esc(texte) + '</div></div>'
+            + '</div>';
+        }).join('')
+      + '</div>';
+  }
+
+  // Section tâches perso
+  const persoHtml = catCustom.map(({ o, idx }) => {
+    const done = (customChecks[idx] || []).includes(todayStr);
+    return '<div class="obj-item' + (done ? ' done' : '') + '" style="margin:0 16px 2px;border-radius:12px;"'
+      + ' onclick="toggleCatCustom(\'' + o.id + '\',\'' + catKey + '\')">'
+      + '<div class="obj-check">' + (done ? '✓' : '') + '</div>'
+      + '<div class="obj-content"><div class="obj-label" style="font-size:13px;">' + _esc(o.texte) + '</div></div>'
+      + '<span onclick="event.stopPropagation();removeCatPerso(\'' + o.id + '\',\'' + catKey + '\')"'
+      + ' style="font-size:18px;color:var(--gris);padding:0 6px;flex-shrink:0;line-height:1">×</span>'
+      + '</div>';
+  }).join('');
+
+  // Formulaire ajout inline
+  const addHtml = maxReached
+    ? '<div style="text-align:center;font-size:11px;color:var(--gris);padding:8px 20px 0;">Maximum 4 tâches atteint 🌸</div>'
+    : '<div class="cat-perso-add-row">'
+      + '<input id="cat-perso-input" type="text" placeholder="Ajouter une tâche…" maxlength="60"'
+      + ' onkeydown="if(event.key===\'Enter\'){event.preventDefault();addCatPerso(\'' + catKey + '\');}">'
+      + '<button onclick="addCatPerso(\'' + catKey + '\')">+</button>'
+      + '</div>';
+
+  content.innerHTML = '<div class="modal-handle"></div>'
+    + '<div style="padding:0 20px 4px;font-size:17px;font-weight:700;color:var(--noir)">' + (cat.icon || '') + ' ' + (cat.label || '') + '</div>'
+    + suggestHtml
+    + '<div class="obj-cat-section-lbl">📌 Mes tâches <span style="margin-left:auto;font-size:10px;color:var(--gris)">' + catCustom.length + '/4</span></div>'
+    + persoHtml
+    + addHtml
+    + '<button onclick="closeObjCatModal()" class="modal-cta" style="margin:16px 20px 4px;width:calc(100% - 40px);">Fermer</button>';
+
   document.getElementById('obj-cat-modal').classList.add('open');
+  if (!maxReached) setTimeout(() => { const inp = document.getElementById('cat-perso-input'); if (inp) inp.focus(); }, 150);
+}
+
+function addCatPerso(catKey) {
+  const inp = document.getElementById('cat-perso-input');
+  if (!inp) return;
+  const texte = inp.value.trim();
+  if (!texte) { inp.focus(); return; }
+  if (!ST.customObjectifs) ST.customObjectifs = [];
+  const catCount = ST.customObjectifs.filter(o => o.categorie === catKey).length;
+  if (catCount >= 4) { showToast('Maximum 4 tâches par catégorie 🌸'); return; }
+  const todayStr = new Date().toISOString().slice(0, 10);
+  ST.customObjectifs.push({ id: 'perso_' + Date.now(), texte, recurrence: 'permanent', categorie: catKey, cree_le: todayStr, phase_cree: ST.currentSaison || 'printemps' });
+  saveState();
+  renderCategoriesGrid();
+  renderObjPerso();
+  openObjCatModal(catKey);
+}
+
+function removeCatPerso(id, catKey) {
+  if (!ST.customObjectifs) return;
+  const idx = ST.customObjectifs.findIndex(o => o.id === id);
+  if (idx === -1) return;
+  ST.customObjectifs.splice(idx, 1);
+  if (ST.customObjChecks) {
+    Object.keys(ST.customObjChecks).forEach(wk => {
+      const week = ST.customObjChecks[wk];
+      if (!week) return;
+      const rebuilt = {};
+      Object.keys(week).forEach(k => { const ki = parseInt(k); if (ki < idx) rebuilt[ki] = week[k]; else if (ki > idx) rebuilt[ki - 1] = week[k]; });
+      ST.customObjChecks[wk] = rebuilt;
+    });
+  }
+  saveState();
+  renderCategoriesGrid();
+  renderObjPerso();
+  openObjCatModal(catKey);
+}
+
+function toggleCatCustom(id, catKey) {
+  if (!ST.customObjectifs) return;
+  const idx = ST.customObjectifs.findIndex(o => o.id === id);
+  if (idx === -1) return;
+  const weekKey = _getWeekKey();
+  const todayStr = new Date().toISOString().slice(0, 10);
+  if (!ST.customObjChecks) ST.customObjChecks = {};
+  if (!ST.customObjChecks[weekKey]) ST.customObjChecks[weekKey] = {};
+  if (!ST.customObjChecks[weekKey][idx]) ST.customObjChecks[weekKey][idx] = [];
+  const arr = ST.customObjChecks[weekKey][idx];
+  const pos = arr.indexOf(todayStr);
+  if (pos > -1) { arr.splice(pos, 1); }
+  else { arr.push(todayStr); recordObjectifHistory(id, 'perso'); }
+  saveState();
+  openObjCatModal(catKey);
+  renderObjSummary();
+  renderObjPerso();
 }
 
 function _refreshCatModal(catKey) {
