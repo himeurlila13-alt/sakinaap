@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SakinApp — Preview données quotidiennes</title>
+<title>SakinApp â€” Preview donnÃ©es quotidiennes</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: system-ui, sans-serif; background: #f5f0eb; color: #1a1a1a; }
@@ -36,13 +36,13 @@
 
   .phase-hiver td:first-child { border-left: 4px solid #7B5EA7; }
   .phase-printemps td:first-child { border-left: 4px solid #3DAE8A; }
-  .phase-ete td:first-child { border-left: 4px solid #E8834A; }
-  .phase-automne td:first-child { border-left: 4px solid #C4694A; }
+  .phase-ete td:first-child { border-left: 4px solid #D4985C; }
+  .phase-automne td:first-child { border-left: 4px solid #B88189; }
 
   .bg-hiver { background: #F0EBF8 !important; }
   .bg-printemps { background: #E8F8F3 !important; }
-  .bg-ete { background: #FFF8EE !important; }
-  .bg-automne { background: #FDF0EE !important; }
+  .bg-ete { background: #FDF6ED !important; }
+  .bg-automne { background: #F9F1F3 !important; }
 
   .day-num { font-size: 20px; font-weight: 800; color: #3d2060; display: block; }
   .phase-badge {
@@ -51,8 +51,8 @@
   }
   .badge-hiver { background: #7B5EA7; color: white; }
   .badge-printemps { background: #3DAE8A; color: white; }
-  .badge-ete { background: #E8834A; color: white; }
-  .badge-automne { background: #C4694A; color: white; }
+  .badge-ete { background: #D4985C; color: white; }
+  .badge-automne { background: #B88189; color: white; }
 
   .meal-name { font-weight: 600; font-size: 13px; color: #1a1a1a; margin-bottom: 4px; }
   .meal-benefice { font-size: 11px; color: #666; line-height: 1.5; font-style: italic; }
@@ -67,8 +67,8 @@
   .msg-text { font-size: 12px; color: #444; line-height: 1.5; }
 
   .msg-bien .msg-mood { color: #3DAE8A; }
-  .msg-fatiguee .msg-mood { color: #E8834A; }
-  .msg-difficile .msg-mood { color: #C4694A; }
+  .msg-fatiguee .msg-mood { color: #D4985C; }
+  .msg-difficile .msg-mood { color: #B88189; }
   .msg-foi .msg-mood { color: #7B5EA7; }
 
   .stats-bar {
@@ -87,7 +87,7 @@
 <body>
 
 <div class="top-bar">
-  <h1>📋 SakinApp — Preview données</h1>
+  <h1>ðŸ“‹ SakinApp â€” Preview donnÃ©es</h1>
   <label>Cycle :
     <select id="cycle-select" onchange="buildTable()">
       <option value="24">24 jours (court)</option>
@@ -106,14 +106,14 @@
       <option value="message">Messages</option>
     </select>
   </label>
-  <button onclick="window.print()">🖨️ Imprimer</button>
+  <button onclick="window.print()">ðŸ–¨ï¸ Imprimer</button>
 </div>
 
 <div class="legend">
-  <span class="leg"><span class="leg-dot" style="background:#7B5EA7"></span> Hiver — Phase menstruelle</span>
-  <span class="leg"><span class="leg-dot" style="background:#3DAE8A"></span> Printemps — Phase folliculaire</span>
-  <span class="leg"><span class="leg-dot" style="background:#E8834A"></span> Été — Phase ovulatoire</span>
-  <span class="leg"><span class="leg-dot" style="background:#C4694A"></span> Automne — Phase lutéale</span>
+  <span class="leg"><span class="leg-dot" style="background:#7B5EA7"></span> Hiver â€” Phase menstruelle</span>
+  <span class="leg"><span class="leg-dot" style="background:#3DAE8A"></span> Printemps â€” Phase folliculaire</span>
+  <span class="leg"><span class="leg-dot" style="background:#D4985C"></span> Ã‰tÃ© â€” Phase ovulatoire</span>
+  <span class="leg"><span class="leg-dot" style="background:#B88189"></span> Automne â€” Phase lutÃ©ale</span>
 </div>
 
 <div class="stats-bar" id="stats-bar"></div>
@@ -127,7 +127,7 @@
 
 <script src="../data.js"></script>
 <script>
-// ── Calcul phase pour un jour donné ──────────────────────
+// â”€â”€ Calcul phase pour un jour donnÃ© â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function phaseForDay(i, dur) {
   const ovDay = Math.max(10, dur - 14);
   const eteStart = Math.max(8, ovDay - 2);
@@ -148,8 +148,8 @@ function dayWithinPhase(cycleDay, cycleDur) {
   return cycleDay - (eteEnd + 1);
 }
 
-const PHASE_NAMES = { hiver: '🌙 Hiver', printemps: '🌸 Printemps', ete: '☀️ Été', automne: '🍂 Automne' };
-const PHASE_LABELS = { hiver: 'Menstruelle', printemps: 'Folliculaire', ete: 'Ovulatoire', automne: 'Lutéale' };
+const PHASE_NAMES = { hiver: 'ðŸŒ™ Hiver', printemps: 'ðŸŒ¸ Printemps', ete: 'â˜€ï¸ Ã‰tÃ©', automne: 'ðŸ‚ Automne' };
+const PHASE_LABELS = { hiver: 'Menstruelle', printemps: 'Folliculaire', ete: 'Ovulatoire', automne: 'LutÃ©ale' };
 
 function buildTable() {
   const dur = parseInt(document.getElementById('cycle-select').value);
@@ -168,10 +168,10 @@ function buildTable() {
 
   // Stats bar
   document.getElementById('stats-bar').innerHTML =
-    `Cycle <strong>${dur} jours</strong> — ` +
+    `Cycle <strong>${dur} jours</strong> â€” ` +
     Object.entries(spans).map(([p, [s, e]]) =>
-      `<strong>${PHASE_NAMES[p]}</strong> J${s}–J${e} (${e - s + 1}j)`
-    ).join(' · ');
+      `<strong>${PHASE_NAMES[p]}</strong> J${s}â€“J${e} (${e - s + 1}j)`
+    ).join(' Â· ');
 
   // Build headers
   const showRepas = view === 'all' || view === 'repas';
@@ -181,9 +181,9 @@ function buildTable() {
   const head = document.getElementById('table-head');
   head.innerHTML = '<tr>' +
     '<th style="width:80px">Jour</th>' +
-    (showRepas ? '<th style="width:28%">🍽️ Alimentation</th>' : '') +
-    (showSoin  ? '<th style="width:28%">✨ Skincare</th>' : '') +
-    (showMsg   ? '<th>💬 Messages matin</th>' : '') +
+    (showRepas ? '<th style="width:28%">ðŸ½ï¸ Alimentation</th>' : '') +
+    (showSoin  ? '<th style="width:28%">âœ¨ Skincare</th>' : '') +
+    (showMsg   ? '<th>ðŸ’¬ Messages matin</th>' : '') +
     '</tr>';
 
   // Build rows
@@ -215,10 +215,10 @@ function buildTable() {
     if (showRepas) {
       html += `<td>`;
       if (repas) {
-        html += `<div class="meal-name">🍽️ ${repas.nom}</div>
+        html += `<div class="meal-name">ðŸ½ï¸ ${repas.nom}</div>
                  <div class="meal-benefice">${repas.benefice}</div>`;
       } else {
-        html += `<span style="color:#ccc;font-size:11px;">—</span>`;
+        html += `<span style="color:#ccc;font-size:11px;">â€”</span>`;
       }
       html += `</td>`;
     }
@@ -227,11 +227,11 @@ function buildTable() {
     if (showSoin) {
       html += `<td>`;
       if (soin) {
-        html += `<div class="soin-name">✨ ${soin.nom}<span class="soin-duree">${soin.duree}</span></div>
+        html += `<div class="soin-name">âœ¨ ${soin.nom}<span class="soin-duree">${soin.duree}</span></div>
                  <div class="soin-geste">${soin.geste}</div>
                  <div class="soin-benefice">${soin.benefice}</div>`;
       } else {
-        html += `<span style="color:#ccc;font-size:11px;">—</span>`;
+        html += `<span style="color:#ccc;font-size:11px;">â€”</span>`;
       }
       html += `</td>`;
     }
@@ -241,14 +241,14 @@ function buildTable() {
       html += `<td>`;
       if (msgs) {
         ['bien', 'fatiguee', 'difficile', 'foi'].forEach(mood => {
-          const labels = { bien: '😊 Bien', fatiguee: '😴 Fatiguée', difficile: '😔 Difficile', foi: '🤲 Foi' };
+          const labels = { bien: 'ðŸ˜Š Bien', fatiguee: 'ðŸ˜´ FatiguÃ©e', difficile: 'ðŸ˜” Difficile', foi: 'ðŸ¤² Foi' };
           html += `<div class="msg-item msg-${mood}">
             <div class="msg-mood">${labels[mood]}</div>
             <div class="msg-text">${msgs[mood]}</div>
           </div>`;
         });
       } else {
-        html += `<span style="color:#ccc;font-size:11px;">Pas de message J${d} — fallback phase utilisé</span>`;
+        html += `<span style="color:#ccc;font-size:11px;">Pas de message J${d} â€” fallback phase utilisÃ©</span>`;
       }
       html += `</td>`;
     }

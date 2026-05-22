@@ -4575,8 +4575,8 @@ function drawCycleRing() {
   const phases = [
     {id:'seg-hiver',     start:1,            end:springStartD-1, color:'#7B5EA7'},
     {id:'seg-printemps', start:springStartD,  end:eteStartD-1,    color:'#3DAE8A'},
-    {id:'seg-ete',       start:eteStartD,     end:eteEndD,        color:'#E8834A'},
-    {id:'seg-automne',   start:eteEndD+1,     end:dur,            color:'#C4694A'},
+    {id:'seg-ete',       start:eteStartD,     end:eteEndD,        color:'#D4985C'},
+    {id:'seg-automne',   start:eteEndD+1,     end:dur,            color:'#B88189'},
   ];
   function polarToCart(angle) { const rad=(angle-90)*Math.PI/180; return {x:cx+r*Math.cos(rad),y:cy+r*Math.sin(rad)}; }
   function dayToAngle(d) { return ((d-1)/dur)*360; }
