@@ -86,6 +86,7 @@ let ST = {
   manualSignOut: false,
   consentDate: null,
   consentVersion: null,
+  lastObjResetDate: null,
 };
 
 function saveState() {
@@ -112,6 +113,38 @@ function loadState() {
     }
   } catch(e) {}
   ST.manualSignOut = false; // garantir la valeur initiale après chargement
+}
+
+function checkDailyObjReset() {
+  // Remise à zéro des coches chaque matin au premier lancement
+  const todayStr = new Date().toISOString().slice(0, 10);
+  if (ST.lastObjResetDate !== todayStr) {
+    ST.lastObjResetDate = todayStr;
+    // Reset visuel : vider les checks du jour actuel dans weeklyObjChecks et customObjChecks
+    const weekKey = _getWeekKey();
+    if (ST.weeklyObjChecks && ST.weeklyObjChecks[weekKey]) {
+      // Pour chaque objectif, supprimer la date d'aujourd'hui des checks
+      Object.keys(ST.weeklyObjChecks[weekKey]).forEach(objId => {
+        const arr = ST.weeklyObjChecks[weekKey][objId];
+        if (arr && Array.isArray(arr)) {
+          const idx = arr.indexOf(todayStr);
+          if (idx > -1) arr.splice(idx, 1);
+        }
+      });
+    }
+    if (ST.customObjChecks && ST.customObjChecks[weekKey]) {
+      // Idem pour les objectifs perso
+      Object.keys(ST.customObjChecks[weekKey]).forEach(objIdx => {
+        const arr = ST.customObjChecks[weekKey][objIdx];
+        if (arr && Array.isArray(arr)) {
+          const idx = arr.indexOf(todayStr);
+          if (idx > -1) arr.splice(idx, 1);
+        }
+      });
+    }
+    // NE PAS toucher à ST.objHistory — il conserve l'historique
+    saveState();
+  }
 }
 
 // ═══════════════════════════════════════════════
@@ -1345,7 +1378,18 @@ function _bilanStats(startStr, endStr) {
     inCycle(d) && Object.values(ST.dhikrChecks[d] || {}).filter(Boolean).length >= 3
   ).length;
   const coranDays = Object.keys(ST.coranDone || {}).filter(d => inCycle(d) && ST.coranDone[d]).length;
-  let objCheckCount = 0;
+
+  // Compter les objectifs via l'historique (nouvelles entrées) + fallback ancien système
+  const objHistory = (ST.objHistory || []).filter(entry => {
+    if (!entry.date || !effectiveStart) return false;
+    const entryDate = new Date(entry.date);
+    if (isNaN(entryDate)) return false;
+    const entryDay = entryDate.getFullYear() * 10000 + (entryDate.getMonth()+1) * 100 + entryDate.getDate();
+    return entryDay >= cycleStartDay && (!cycleEndDay || entryDay < cycleEndDay);
+  });
+
+  // Fallback : compter via l'ancienne méthode si pas d'historique
+  let objCheckCountFallback = 0;
   const _countObjChecks = (dict) => {
     Object.values(dict || {}).forEach(week => {
       Object.values(week).forEach(arr => {
@@ -1353,13 +1397,17 @@ function _bilanStats(startStr, endStr) {
           const d = new Date(dateStr);
           if (isNaN(d)) return;
           const objDay = d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
-          if (!cycleStartDay || (objDay >= cycleStartDay && (!cycleEndDay || objDay < cycleEndDay))) objCheckCount++;
+          if (!cycleStartDay || (objDay >= cycleStartDay && (!cycleEndDay || objDay < cycleEndDay))) objCheckCountFallback++;
         });
       });
     });
   };
   _countObjChecks(ST.weeklyObjChecks);
   _countObjChecks(ST.customObjChecks);
+
+  // Prendre le maximum entre historique et fallback
+  const objCheckCount = Math.max(objHistory.length, objCheckCountFallback);
+
   return { seanceCount, seanceLevel, symptomDays, prayerDays, allPrayersDays, dhikrDays, coranDays, objCheckCount, cycleDuration };
 }
 
@@ -3434,7 +3482,42 @@ function _getSuggestionsJour(phase) {
     .filter(Boolean);
 }
 
+function recordObjectifHistory(id, source, texte, categorie) {
+  const todayStr = new Date().toISOString().slice(0, 10);
+  if (!ST.objHistory) ST.objHistory = [];
+
+  // Déterminer le texte et la catégorie depuis l'ID pour les suggestions
+  if (source === 'suggestion' && !texte) {
+    const phase = _getPhaseForSuggestions();
+    const suggestions = _getSuggestionsJour(phase);
+    const suggestion = suggestions.find(s => s.id === id);
+    if (suggestion) {
+      texte = suggestion.texte;
+      categorie = suggestion.cat;
+    }
+  }
+
+  // Si on n'arrive pas à déterminer les infos, on skip
+  if (!texte || !categorie) return;
+
+  ST.objHistory.push({
+    date: todayStr,
+    categorie: categorie,
+    texte: texte,
+    source: source
+  });
+
+  // Limiter à 500 entrées max (FIFO)
+  if (ST.objHistory.length > 500) {
+    ST.objHistory = ST.objHistory.slice(-500);
+  }
+}
+
 function renderObjectifs() {
+  if (!isFullAccess()) {
+    renderObjectifsBlurGate();
+    return;
+  }
   renderObjSummary();
   renderSuggestionsJour();
   renderCategoriesGrid();
@@ -3443,9 +3526,103 @@ function renderObjectifs() {
   renderCalendar();
 }
 
+function renderObjectifsBlurGate() {
+  const container = document.getElementById('tab-objectifs');
+  if (!container) return;
+
+  container.innerHTML = `
+    <div class="tab-topbar">
+      <div class="tab-topbar-title">Mes Objectifs</div>
+      <div class="tab-topbar-sub">Semaine &amp; cycle</div>
+    </div>
+
+    <!-- Contenu flouté en arrière-plan -->
+    <div style="filter: blur(3px); opacity: 0.4; pointer-events: none;">
+      <!-- RÉSUMÉ DU JOUR -->
+      <div class="obj-summary-card" style="background: var(--creme); border: 1.5px solid var(--sable); border-radius: 20px; padding: 18px; margin: 0 14px 16px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="font-size: 28px;">🌱</div>
+          <div>
+            <div style="font-size: 15px; font-weight: 700; color: var(--noir); margin-bottom: 4px;">Commence ta journée ✦</div>
+            <div style="font-size: 12px; color: var(--gris);">0 objectif accompli</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 1 : Pour toi aujourd'hui -->
+      <div class="obj-card">
+        <div class="obj-card-hdr">
+          <span class="obj-card-hdr-icon">&#10022;</span>
+          <span class="obj-card-hdr-title">POUR TOI AUJOURD'HUI</span>
+        </div>
+        <div style="padding: 0 16px 16px;">
+          <div class="obj-item" style="margin-bottom: 8px;">
+            <div class="obj-check"></div>
+            <div class="obj-content">
+              <div class="obj-label">🕌 Écouter le Coran</div>
+              <div class="obj-phase-tag">🌿 Printemps</div>
+            </div>
+          </div>
+          <div class="obj-item" style="margin-bottom: 8px;">
+            <div class="obj-check"></div>
+            <div class="obj-content">
+              <div class="obj-label">💆 Faire un masque douceur</div>
+              <div class="obj-phase-tag">🌿 Printemps</div>
+            </div>
+          </div>
+          <div class="obj-item">
+            <div class="obj-check"></div>
+            <div class="obj-content">
+              <div class="obj-label">🏠 Ranger 1 tiroir</div>
+              <div class="obj-phase-tag">🌿 Printemps</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2 : Choisir mes objectifs -->
+      <div class="obj-card">
+        <div class="obj-card-hdr">
+          <span class="obj-card-hdr-icon">&#9672;</span>
+          <span class="obj-card-hdr-title">CHOISIR MES OBJECTIFS</span>
+        </div>
+        <div class="obj-cat-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 16px 16px;">
+          <div class="obj-cat-item">
+            <div class="obj-cat-icon">🕌</div>
+            <div class="obj-cat-label">Spiritualité</div>
+            <div class="obj-cat-count">5</div>
+          </div>
+          <div class="obj-cat-item">
+            <div class="obj-cat-icon">🏠</div>
+            <div class="obj-cat-label">Maison</div>
+            <div class="obj-cat-count">4</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Overlay Premium avec CTA -->
+    <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 100; background: white; border-radius: 24px; padding: 32px 24px; margin: 0 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.25); text-align: center; max-width: 320px; width: 100%;">
+      <div style="font-size: 40px; margin-bottom: 16px;">✨</div>
+      <div style="font-family: var(--serif); font-size: 20px; color: var(--noir); margin-bottom: 8px;">Objectifs Premium</div>
+      <div style="font-size: 14px; color: var(--gris); line-height: 1.6; margin-bottom: 24px;">
+        Suis tes objectifs selon ton cycle.<br>
+        Créé tes propres objectifs personnalisés.
+      </div>
+      <button onclick="startStripeCheckout()" style="width: 100%; padding: 16px; background: linear-gradient(135deg, #C9A96E, #A87A30); color: #1C1008; border: none; border-radius: 16px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: var(--sans);">
+        Rejoindre Premium 🌸
+      </button>
+      <div style="font-size: 12px; color: var(--gris); margin-top: 12px; font-style: italic;">Essai gratuit 20 jours</div>
+    </div>
+
+    <!-- Overlay background -->
+    <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 99;"></div>
+  `;
+}
+
 function renderObjSummary() {
   const weekKey = _getWeekKey();
-  const todayStr = new Date().toDateString();
+  const todayStr = new Date().toISOString().slice(0, 10); // Format YYYY-MM-DD pour consistance
   const checks = (ST.weeklyObjChecks && ST.weeklyObjChecks[weekKey]) || {};
   const customChecks = (ST.customObjChecks && ST.customObjChecks[weekKey]) || {};
 
@@ -3470,7 +3647,7 @@ function renderSuggestionsJour() {
   const phase = _getPhaseForSuggestions();
   const suggestions = _getSuggestionsJour(phase);
   const weekKey = _getWeekKey();
-  const todayStr = new Date().toDateString();
+  const todayStr = new Date().toISOString().slice(0, 10); // Format YYYY-MM-DD pour consistance
   const checks = (ST.weeklyObjChecks && ST.weeklyObjChecks[weekKey]) || {};
   const phaseLabel = { hiver: '🌙 Hiver', printemps: '🌿 Printemps', ete: '☀️ Été', automne: '🍂 Automne' }[phase] || '';
   const container = document.getElementById('obj-suggestions-list');
@@ -3493,7 +3670,8 @@ function renderCategoriesGrid() {
   const phase = _getPhaseForSuggestions();
   const container = document.getElementById('obj-categories-grid');
   if (!container) return;
-  container.innerHTML = Object.entries(OBJECTIFS_CATEGORIES).map(([key, cat]) => {
+
+  const categoryItems = Object.entries(OBJECTIFS_CATEGORIES).map(([key, cat]) => {
     const count = ((OBJECTIFS_PAR_PHASE[phase] || {})[key] || []).length;
     return `
       <div class="obj-cat-item" onclick="openObjCatModal('${key}')">
@@ -3501,7 +3679,19 @@ function renderCategoriesGrid() {
         <div class="obj-cat-label">${cat.label}</div>
         <div class="obj-cat-count">${count}</div>
       </div>`;
-  }).join('');
+  });
+
+  // Ajouter un bouton "+ Ajouter" si Premium
+  if (isFullAccess()) {
+    categoryItems.push(`
+      <div class="obj-cat-item" onclick="openObjAddModal()" style="border: 2px dashed var(--sable); background: var(--creme);">
+        <div class="obj-cat-icon" style="font-size: 24px;">+</div>
+        <div class="obj-cat-label" style="font-size: 12px;">Ajouter</div>
+        <div class="obj-cat-count"></div>
+      </div>`);
+  }
+
+  container.innerHTML = categoryItems.join('');
 }
 
 function openObjCatModal(catKey) {
@@ -3509,7 +3699,7 @@ function openObjCatModal(catKey) {
   const cat = OBJECTIFS_CATEGORIES[catKey] || {};
   const items = ((OBJECTIFS_PAR_PHASE[phase] || {})[catKey]) || [];
   const weekKey = _getWeekKey();
-  const todayStr = new Date().toDateString();
+  const todayStr = new Date().toISOString().slice(0, 10); // Format YYYY-MM-DD pour consistance
   const checks = (ST.weeklyObjChecks && ST.weeklyObjChecks[weekKey]) || {};
   const phaseLabel = { hiver: '🌙 Hiver', printemps: '🌿 Printemps', ete: '☀️ Été', automne: '🍂 Automne' }[phase] || '';
   const content = document.getElementById('obj-cat-modal-content');
@@ -3536,7 +3726,7 @@ function openObjCatModal(catKey) {
 function _refreshCatModal(catKey) {
   const phase = _getPhaseForSuggestions();
   const weekKey = _getWeekKey();
-  const todayStr = new Date().toDateString();
+  const todayStr = new Date().toISOString().slice(0, 10); // Format YYYY-MM-DD pour consistance
   const checks = (ST.weeklyObjChecks && ST.weeklyObjChecks[weekKey]) || {};
   document.querySelectorAll('#obj-cat-modal-content .obj-item').forEach((el, i) => {
     const id = `${phase}_${catKey}_${i}`;
@@ -3553,15 +3743,83 @@ function closeObjCatModal() {
   if (m) m.classList.remove('open');
 }
 
+function openObjAddModal() {
+  const modal = document.getElementById('obj-add-modal');
+  if (!modal) return;
+
+  // Reset des champs
+  const textInput = document.getElementById('obj-add-text');
+  const catSelect = document.getElementById('obj-add-category');
+  const recSelect = document.getElementById('obj-add-recurrence');
+
+  if (textInput) textInput.value = '';
+  if (catSelect) catSelect.selectedIndex = 0;
+  if (recSelect) recSelect.value = 'permanent';
+
+  modal.classList.add('open');
+
+  // Focus sur le champ texte
+  setTimeout(() => {
+    if (textInput) textInput.focus();
+  }, 200);
+}
+
+function closeObjAddModal() {
+  const modal = document.getElementById('obj-add-modal');
+  if (modal) modal.classList.remove('open');
+}
+
+function confirmAddObjPerso() {
+  const textInput = document.getElementById('obj-add-text');
+  const catSelect = document.getElementById('obj-add-category');
+  const recSelect = document.getElementById('obj-add-recurrence');
+
+  if (!textInput || !textInput.value.trim()) {
+    showToast('Entre un objectif d\'abord ✨');
+    return;
+  }
+
+  if (!ST.customObjectifs) ST.customObjectifs = [];
+  if (ST.customObjectifs.length >= 10) {
+    showToast('Maximum 10 objectifs personnalisés atteint 🌙');
+    return;
+  }
+
+  const nouvelObjectif = {
+    id: `perso_${Date.now()}`,
+    texte: textInput.value.trim(),
+    recurrence: recSelect ? recSelect.value : 'permanent',
+    categorie: catSelect ? catSelect.value : 'spiritualite',
+    cree_le: new Date().toISOString().split('T')[0],
+    phase_cree: ST.currentSaison || 'printemps',
+  };
+
+  ST.customObjectifs.push(nouvelObjectif);
+  saveState();
+
+  closeObjAddModal();
+  renderObjPerso();
+
+  showToast('Objectif ajouté ✨');
+}
+
 function toggleSuggestion(id) {
   const weekKey = _getWeekKey();
-  const todayStr = new Date().toDateString();
+  const todayStr = new Date().toISOString().slice(0, 10); // Format YYYY-MM-DD pour consistance
   if (!ST.weeklyObjChecks) ST.weeklyObjChecks = {};
   if (!ST.weeklyObjChecks[weekKey]) ST.weeklyObjChecks[weekKey] = {};
   if (!ST.weeklyObjChecks[weekKey][id]) ST.weeklyObjChecks[weekKey][id] = [];
   const arr = ST.weeklyObjChecks[weekKey][id];
   const idx = arr.indexOf(todayStr);
-  if (idx > -1) arr.splice(idx, 1); else arr.push(todayStr);
+  if (idx > -1) {
+    // Décocher : supprimer la date
+    arr.splice(idx, 1);
+  } else {
+    // Cocher : ajouter la date
+    arr.push(todayStr);
+    // Enregistrer dans l'historique pour le bilan
+    recordObjectifHistory(id, 'suggestion');
+  }
   saveState();
   renderSuggestionsJour();
   renderObjSummary();
@@ -3578,9 +3836,34 @@ function renderObjPerso() {
     saveState();
   }
 
+  const container = document.getElementById('obj-perso-list');
+  if (!container) return;
+
+  // Si Premium perdu, masquer sans supprimer les objectifs perso
+  if (!isFullAccess()) {
+    const customs = ST.customObjectifs || [];
+    if (customs.length > 0) {
+      container.innerHTML = `
+        <div style="padding: 16px; text-align: center; background: rgba(201, 169, 110, 0.1); border-radius: 14px; margin-bottom: 12px;">
+          <div style="font-size: 24px; margin-bottom: 8px;">🔒</div>
+          <div style="font-size: 13px; color: var(--gris); margin-bottom: 4px;">
+            <strong>${customs.length} objectif${customs.length > 1 ? 's' : ''} personnel${customs.length > 1 ? 's' : ''}</strong> préservé${customs.length > 1 ? 's' : ''}
+          </div>
+          <div style="font-size: 11px; color: var(--gris); font-style: italic;">
+            Redeviennent disponibles avec Premium
+          </div>
+        </div>
+      `;
+    } else {
+      container.innerHTML = '<div class="obj-empty">Ajoute un objectif qui te ressemble ✨</div>';
+    }
+    applyTrialLocks();
+    return;
+  }
+
   const customs = ST.customObjectifs || [];
   const weekKey = _getWeekKey();
-  const todayStr = new Date().toDateString();
+  const todayStr = new Date().toISOString().slice(0, 10); // Format YYYY-MM-DD pour consistance
   const customChecks = (ST.customObjChecks && ST.customObjChecks[weekKey]) || {};
   const todayDate = new Date().toISOString().split('T')[0];
 
@@ -3589,9 +3872,6 @@ function renderObjPerso() {
     if (c.recurrence === 'phase') return c.phase_cree === (ST.currentSaison || '');
     return true;
   });
-
-  const container = document.getElementById('obj-perso-list');
-  if (!container) return;
 
   if (active.length === 0) {
     container.innerHTML = '<div class="obj-empty">Ajoute un objectif qui te ressemble ✨</div>';
@@ -3658,13 +3938,24 @@ function removeCustomObj(i) {
 
 function toggleCustomObj(i) {
   const weekKey = _getWeekKey();
-  const todayStr = new Date().toDateString();
+  const todayStr = new Date().toISOString().slice(0, 10); // Format YYYY-MM-DD pour consistance
   if (!ST.customObjChecks) ST.customObjChecks = {};
   if (!ST.customObjChecks[weekKey]) ST.customObjChecks[weekKey] = {};
   if (!ST.customObjChecks[weekKey][i]) ST.customObjChecks[weekKey][i] = [];
   const arr = ST.customObjChecks[weekKey][i];
   const idx = arr.indexOf(todayStr);
-  if (idx > -1) arr.splice(idx, 1); else arr.push(todayStr);
+  if (idx > -1) {
+    // Décocher : supprimer la date
+    arr.splice(idx, 1);
+  } else {
+    // Cocher : ajouter la date
+    arr.push(todayStr);
+    // Enregistrer dans l'historique pour le bilan
+    const customObj = (ST.customObjectifs || [])[i];
+    if (customObj) {
+      recordObjectifHistory(`perso_${i}`, 'perso', customObj.texte, customObj.categorie);
+    }
+  }
   saveState();
   renderObjPerso();
   renderObjSummary();
@@ -3794,6 +4085,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (inp) inp.addEventListener('blur', () => { setTimeout(() => { window.scrollTo(0, 0); }, 100); });
 
   loadState();
+  checkDailyObjReset(); // Remise à zéro des coches chaque matin
   // iOS PWA : localStorage isolé de Safari → lire le cookie pour retrouver l'auth
   if (!ST.isAuthenticated && _getCookie('sakina_auth') === '1') {
     ST.isAuthenticated = true;

@@ -849,6 +849,63 @@
   </div>
 </div>
 
+<!-- MODAL AJOUTER OBJECTIF PERSO -->
+<div class="modal-overlay" id="obj-add-modal" onclick="if(event.target.id==='obj-add-modal')closeObjAddModal()">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div style="padding: 20px;">
+      <div style="font-size: 18px; font-weight: 700; color: var(--noir); margin-bottom: 16px; text-align: center;">
+        ✨ Nouvel objectif personnel
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--gris); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+          Ton objectif
+        </label>
+        <input type="text" id="obj-add-text" placeholder="Ex: Finir la formation Coran..." maxlength="80"
+               onkeydown="if(event.key==='Enter'){confirmAddObjPerso();}"
+               style="width: 100%; padding: 12px 16px; border: 1.5px solid var(--sable); border-radius: 14px; font-size: 14px; font-family: var(--sans); color: var(--noir); background: var(--creme); outline: none; box-sizing: border-box;">
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--gris); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+          Catégorie
+        </label>
+        <select id="obj-add-category" style="width: 100%; padding: 12px 16px; border: 1.5px solid var(--sable); border-radius: 14px; font-size: 14px; font-family: var(--sans); color: var(--noir); background: var(--creme); outline: none; box-sizing: border-box;">
+          <option value="spiritualite">🕌 Spiritualité</option>
+          <option value="maison">🏠 Maison</option>
+          <option value="famille">👨‍👩‍👧 Famille</option>
+          <option value="apprentissage">📚 Apprentissage</option>
+          <option value="projet">💼 Projet</option>
+          <option value="soin">💆 Soin de soi</option>
+          <option value="croissance">🌱 Croissance</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom: 24px;">
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--gris); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+          Durée
+        </label>
+        <select id="obj-add-recurrence" style="width: 100%; padding: 12px 16px; border: 1.5px solid var(--sable); border-radius: 14px; font-size: 14px; font-family: var(--sans); color: var(--noir); background: var(--creme); outline: none; box-sizing: border-box;">
+          <option value="today">Aujourd'hui seulement</option>
+          <option value="phase">Jusqu'à la fin de cette phase</option>
+          <option value="cycle">Jusqu'au prochain cycle</option>
+          <option value="permanent" selected>Toujours visible</option>
+        </select>
+      </div>
+
+      <div style="display: flex; gap: 12px;">
+        <button onclick="closeObjAddModal()" style="flex: 1; padding: 14px; background: var(--creme); color: var(--gris); border: 1.5px solid var(--sable); border-radius: 14px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--sans);">
+          Annuler
+        </button>
+        <button onclick="confirmAddObjPerso()" style="flex: 2; padding: 14px; background: var(--season-grad); color: white; border: none; border-radius: 14px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: var(--sans);">
+          Ajouter ✨
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL JOUR CALENDRIER -->
 <div class="modal-overlay" id="day-modal" onclick="if(event.target.id==='day-modal')closeDayModal()">
   <div class="modal-sheet">
