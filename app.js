@@ -3731,12 +3731,17 @@ function openObjCatModal(catKey) {
   }
 
   // Section tâches perso
+  const recLabels = { today: 'Aujourd\'hui', phase: 'Cette phase', cycle: 'Ce cycle', permanent: 'Toujours' };
   const persoHtml = catCustom.map(({ o, idx }) => {
     const done = (customChecks[idx] || []).includes(todayStr);
+    const recTag = recLabels[o.recurrence] || '';
     return '<div class="obj-item' + (done ? ' done' : '') + '" style="margin:0 16px 2px;border-radius:12px;"'
       + ' onclick="toggleCatCustom(\'' + o.id + '\',\'' + catKey + '\')">'
       + '<div class="obj-check">' + (done ? '✓' : '') + '</div>'
-      + '<div class="obj-content"><div class="obj-label" style="font-size:13px;">' + _esc(o.texte) + '</div></div>'
+      + '<div class="obj-content">'
+      + '<div class="obj-label" style="font-size:13px;">' + _esc(o.texte) + '</div>'
+      + '<div class="obj-phase-tag">' + recTag + '</div>'
+      + '</div>'
       + '<span onclick="event.stopPropagation();removeCatPerso(\'' + o.id + '\',\'' + catKey + '\')"'
       + ' style="font-size:18px;color:var(--gris);padding:0 6px;flex-shrink:0;line-height:1">×</span>'
       + '</div>';
@@ -3749,6 +3754,13 @@ function openObjCatModal(catKey) {
       + '<input id="cat-perso-input" type="text" placeholder="Ajouter une tâche…" maxlength="60"'
       + ' onkeydown="if(event.key===\'Enter\'){event.preventDefault();addCatPerso(\'' + catKey + '\');}">'
       + '<button onclick="addCatPerso(\'' + catKey + '\')">+</button>'
+      + '</div>'
+      + '<div style="padding:0 16px 4px;">'
+      + '<select id="cat-perso-rec" class="obj-rec-select" style="width:100%;font-size:12px;padding:7px 10px;">'
+      + '<option value="permanent">Toujours visible</option>'
+      + '<option value="phase">Cette phase seulement</option>'
+      + '<option value="today">Aujourd\'hui seulement</option>'
+      + '</select>'
       + '</div>';
 
   content.innerHTML = '<div class="modal-handle"></div>'
@@ -3771,8 +3783,10 @@ function addCatPerso(catKey) {
   if (!ST.customObjectifs) ST.customObjectifs = [];
   const catCount = ST.customObjectifs.filter(o => o.categorie === catKey).length;
   if (catCount >= 4) { showToast('Maximum 4 tâches par catégorie 🌸'); return; }
+  const recEl = document.getElementById('cat-perso-rec');
+  const recurrence = recEl ? recEl.value : 'permanent';
   const todayStr = new Date().toISOString().slice(0, 10);
-  ST.customObjectifs.push({ id: 'perso_' + Date.now(), texte, recurrence: 'permanent', categorie: catKey, cree_le: todayStr, phase_cree: ST.currentSaison || 'printemps' });
+  ST.customObjectifs.push({ id: 'perso_' + Date.now(), texte, recurrence, categorie: catKey, cree_le: todayStr, phase_cree: ST.currentSaison || 'printemps' });
   saveState();
   renderCategoriesGrid();
   renderObjPerso();
