@@ -938,56 +938,65 @@
   </a>
 
   <!-- PREMIUM CARD -->
-  <div id="premium-upsell-card" style="margin:0 14px 14px;border-radius:22px;overflow:hidden;box-shadow:0 12px 48px rgba(90,60,20,.22);">
-    <!-- En-tête doré -->
-    <div style="background:linear-gradient(145deg,#1C1008,#3A2010,#6A4018);padding:26px 22px 22px;">
-      <div style="width:32px;height:2px;background:linear-gradient(90deg,#C9A96E,#E8C88A);border-radius:1px;margin-bottom:14px;"></div>
-      <div style="font-size:9px;letter-spacing:3.5px;text-transform:uppercase;color:#C9A96E;margin-bottom:10px;font-weight:600;">SakinApp Premium</div>
-      <div style="font-family:var(--script);font-size:30px;color:#FAF6F0;margin-bottom:8px;">Passe au niveau supérieur</div>
-      <div style="font-family:var(--serif);font-size:13px;font-style:italic;color:rgba(250,246,240,.65);line-height:1.6;">Ton corps change chaque semaine.<br>Ton programme aussi.</div>
+  <div id="premium-upsell-card" style="margin:0 14px 14px;border-radius:22px;overflow:hidden;border:1.5px solid var(--season-light);box-shadow:0 12px 32px rgba(61,174,138,.15);">
+    <!-- En-tête avec couleur de phase -->
+    <div style="background:var(--season-grad);padding:26px 22px 22px;">
+      <div style="width:32px;height:2px;background:rgba(255,255,255,.3);border-radius:1px;margin-bottom:14px;"></div>
+      <div style="font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:10px;font-weight:600;">Pour toi ·</div>
+      <div style="font-family:var(--script);font-size:28px;color:white;margin-bottom:8px;">🌸 Prends soin de toi à chaque phase</div>
+      <div style="font-family:var(--serif);font-size:13px;font-style:italic;color:rgba(255,255,255,.75);line-height:1.6;">Ton corps te parle différemment chaque semaine.<br>Écoute-le avec bienveillance.</div>
     </div>
-    <!-- Corps clair -->
-    <div style="background:linear-gradient(180deg,#FAF6F0,#F5EDE0);padding:22px 22px 20px;">
-      <!-- 3 bénéfices -->
-      <div style="display:flex;flex-direction:column;">
-        <div style="display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid #EAD9C0;">
-          <span style="font-size:24px;width:30px;text-align:center;flex-shrink:0;">&#127869;&#65039;</span>
-          <div><div style="font-size:14px;font-weight:600;color:#1C1008;">Une recette cyclique chaque jour</div><div style="font-size:11px;color:#8A7060;margin-top:2px;">Adaptée à ta phase, ingrédients &amp; étapes inclus</div></div>
+    <!-- Corps clair refondu -->
+    <div style="background:white;padding:24px 22px 20px;">
+      <!-- 4 fonctionnalités refondue -->
+      <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:20px;">
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:13px;color:#2D2420;">
+          <span style="font-size:16px;flex-shrink:0;">🍯</span>
+          <div>
+            <div style="font-weight:600;color:var(--season);margin-bottom:2px;">Recettes cycliques quotidiennes</div>
+            <div style="font-size:11px;color:#8A7060;font-style:italic;line-height:1.4;">Les aliments que ton corps réclame, selon ta saison intérieure</div>
+          </div>
         </div>
-        <div style="display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid #EAD9C0;">
-          <span style="font-size:24px;width:30px;text-align:center;flex-shrink:0;">&#128170;</span>
-          <div><div style="font-size:14px;font-weight:600;color:#1C1008;">Une séance qui grandit avec toi</div><div style="font-size:11px;color:#8A7060;margin-top:2px;">4 niveaux, auto-ajustés selon ton ressenti</div></div>
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:13px;color:#2D2420;">
+          <span style="font-size:16px;flex-shrink:0;">💃</span>
+          <div>
+            <div style="font-weight:600;color:var(--season);margin-bottom:2px;">Séances sport qui t'honorent</div>
+            <div style="font-size:11px;color:#8A7060;font-style:italic;line-height:1.4;">Bouger avec douceur ou intensité — selon ton énergie du jour</div>
+          </div>
         </div>
-        <div style="display:flex;align-items:center;gap:14px;padding:13px 0;">
-          <span style="font-size:24px;width:30px;text-align:center;flex-shrink:0;">&#10024;</span>
-          <div><div style="font-size:14px;font-weight:600;color:#1C1008;">Une routine beauté selon ta saison</div><div style="font-size:11px;color:#8A7060;margin-top:2px;">Matin + soir, actifs naturels de ta phase</div></div>
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:13px;color:#2D2420;">
+          <span style="font-size:16px;flex-shrink:0;">✨</span>
+          <div>
+            <div style="font-weight:600;color:var(--season);margin-bottom:2px;">Routine skincare sacrée</div>
+            <div style="font-size:11px;color:#8A7060;font-style:italic;line-height:1.4;">Matin et soir · Médecine prophétique · Ta peau mérite cette douceur</div>
+          </div>
         </div>
-      </div>
-      <!-- Citation de clôture -->
-      <div style="background:linear-gradient(135deg,rgba(201,169,110,.13),rgba(168,122,48,.07));border-radius:14px;padding:14px 16px;margin:16px 0 20px;">
-        <div style="font-family:var(--serif);font-size:13px;font-style:italic;color:#5A3A10;line-height:1.75;">"Tout change selon comment tu te sens ce matin. C'est ça, un vrai accompagnement."</div>
+        <div style="display:flex;align-items:flex-start;gap:12px;font-size:13px;color:#2D2420;">
+          <span style="font-size:16px;flex-shrink:0;">🌱</span>
+          <div>
+            <div style="font-weight:600;color:var(--season);margin-bottom:2px;">Objectifs qui respirent avec toi</div>
+            <div style="font-size:11px;color:#8A7060;font-style:italic;line-height:1.4;">3 types d'objectifs par phase · Tes défis perso · Bilan de cycle insha'Allah</div>
+          </div>
+        </div>
       </div>
       <!-- Séparateur -->
-      <div style="height:1px;background:linear-gradient(90deg,transparent,#C9A96E,transparent);margin-bottom:18px;"></div>
+      <div style="height:1px;background:var(--season-light);margin-bottom:18px;"></div>
       <!-- Prix — sélecteur de plan -->
       <div style="display:flex;gap:10px;margin-bottom:12px;">
-        <div id="moi-plan-monthly" onclick="selectPlan('monthly')" style="flex:1;background:white;border:2px solid #D4B87A;border-radius:14px;padding:14px;text-align:center;cursor:pointer;transition:border-color .2s,box-shadow .2s;">
+        <div id="moi-plan-monthly" onclick="selectPlan('monthly')" style="flex:1;background:white;border:2px solid var(--season-light);border-radius:14px;padding:14px;text-align:center;cursor:pointer;transition:border-color .2s,box-shadow .2s;">
           <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#8A7060;margin-bottom:6px;">Mensuel</div>
-          <div style="font-family:var(--script);font-size:28px;color:#3A2010;">3,99&#8364;</div>
+          <div style="font-family:var(--script);font-size:28px;color:var(--season);">3,99&#8364;</div>
           <div style="font-size:10px;color:#8A7060;margin-top:2px;">/ mois</div>
         </div>
-        <div id="moi-plan-annual" onclick="selectPlan('annual')" style="flex:1;background:linear-gradient(145deg,#3A2010,#6A4018);border:2px solid transparent;border-radius:14px;padding:14px;text-align:center;position:relative;cursor:pointer;box-shadow:0 0 0 2px #C9A96E;">
-          <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#C9A96E,#A87A30);color:#1C1008;font-size:9px;font-weight:700;padding:3px 10px;border-radius:10px;white-space:nowrap;">MEILLEURE OFFRE</div>
-          <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:rgba(250,246,240,.5);margin-bottom:6px;">Annuel</div>
-          <div style="font-family:var(--script);font-size:28px;color:#FAF6F0;">34,99&#8364;</div>
-          <div style="font-size:10px;color:rgba(201,169,110,.7);margin-top:2px;">/ an · économise 27%</div>
+        <div id="moi-plan-annual" onclick="selectPlan('annual')" style="flex:1;background:var(--season-grad);border:2px solid transparent;border-radius:14px;padding:14px;text-align:center;position:relative;cursor:pointer;box-shadow:0 0 0 2px var(--season);">
+          <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:white;color:var(--season);font-size:9px;font-weight:700;padding:3px 10px;border-radius:10px;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.12);">RECOMMANDÉ</div>
+          <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:6px;">Annuel</div>
+          <div style="font-family:var(--script);font-size:28px;color:white;">34,99&#8364;</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.8);margin-top:2px;">/ an · économise 27%</div>
         </div>
       </div>
-      <div style="text-align:center;margin-bottom:16px;">
-        <div style="font-size:11px;color:#8A7060;font-style:italic;">Résilie quand tu veux. Aucun engagement.</div>
-      </div>
-      <button onclick="startStripeCheckout()" style="width:100%;padding:16px;background:linear-gradient(135deg,#C9A96E,#A87A30);color:#1C1008;border:none;border-radius:14px;font-size:15px;font-weight:700;font-family:var(--sans);cursor:pointer;letter-spacing:.3px;">&#10022; S&rsquo;abonner maintenant</button>
-      <div style="text-align:center;font-size:11px;color:#8A7060;margin-top:10px;">&#128274; Paiement s&eacute;curis&eacute; par Stripe &middot; R&eacute;siliation &agrave; tout moment</div>
+      <button onclick="startStripeCheckout()" style="width:100%;padding:16px;background:var(--season-grad);color:white;border:none;border-radius:14px;font-size:15px;font-weight:700;font-family:var(--sans);cursor:pointer;letter-spacing:.3px;">🤍 Choisir la douceur avec moi</button>
+      <div style="text-align:center;font-size:11px;color:#8A7060;margin-top:10px;">Bismillah · Essai 20 jours · Sécurisé par Stripe · Tu peux annuler quand tu veux</div>
     </div>
   </div>
 

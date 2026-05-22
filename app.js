@@ -286,7 +286,7 @@ function _buildWelcomeEmailHtml(prenom, email) {
       <tr><td style="padding:28px 40px 0;">
         <div style="border-left:3px solid #4A7C59;padding:16px 20px;background:#F8FBF9;border-radius:0 12px 12px 0;">
           <p style="font-family:Georgia,serif;font-size:15px;font-style:italic;color:#2C2018;line-height:1.7;margin:0;">
-            «&nbsp;J'ai créé SakinApp pour partager ce que j'avais appris. Simplement. Au plus grand nombre. Pour avancer. Pour aller de l'avant. Pour se sentir bien.&nbsp;»
+            «&nbsp;Quand j'ai découvert la beauté de mon cycle, j'ai voulu que chaque sœur puisse vivre cette même révélation. Comprendre son corps, c'est se reconnecter à sa force. C'est un cadeau que nous méritons toutes, insha'Allah.&nbsp;»
           </p>
         </div>
       </td></tr>
@@ -305,7 +305,7 @@ function _buildWelcomeEmailHtml(prenom, email) {
       <!-- FOOTER -->
       <tr><td style="background:#F0F0EC;padding:20px 32px;text-align:center;border-radius:0 0 20px 20px;">
         <p style="font-size:12px;color:#8A8078;margin:0 0 6px;">© 2026 SakinApp · <a href="https://sakinaap.com" style="color:#4A7C59;text-decoration:none;">sakinaap.com</a></p>
-        <p style="font-size:11px;color:#A09088;margin:0 0 6px;">Données stockées sur ton téléphone · Jamais partagées · RGPD</p>
+        <p style="font-size:11px;color:#A09088;margin:0 0 6px;">Tes données sont chiffrées · Jamais vendues · Protection RGPD</p>
         <p style="font-size:11px;color:#A09088;margin:0;"><a href="https://sakinaap.com/unsubscribe?email=${encodeURIComponent(email || '')}" style="color:#A09088;">Se désabonner des emails</a></p>
       </td></tr>
 
@@ -1787,9 +1787,22 @@ function _sportEnrSectionHtml(items, label) {
 function _sportExHtml(exercices, reposSec) {
   if (!exercices || !exercices.length) return '';
   const rows = exercices.map(ex => {
-    const repsStr = ex.reps
-      ? `${ex.sets || 1}×${ex.reps}`
-      : (ex.duree ? (ex.sets ? `${ex.sets}×${ex.duree}` : ex.duree) : '');
+    let repsStr = '';
+    if (ex.reps) {
+      repsStr = ex.parJambe
+        ? `${ex.sets || 1}×${ex.reps} / côté`
+        : `${ex.sets || 1}×${ex.reps}`;
+    } else if (ex.duree) {
+      if (ex.sets) {
+        repsStr = ex.parJambe
+          ? `${ex.sets}×${ex.duree} × 2 côtés`
+          : `${ex.sets}×${ex.duree}`;
+      } else {
+        repsStr = ex.parJambe
+          ? `${ex.duree} × 2 côtés`
+          : ex.duree;
+      }
+    }
     return `<div class="sport-ex-row">
       <div class="sport-ex-name-reps"><span class="sport-ex-name">${ex.nom}</span><span class="sport-ex-reps">${repsStr}</span></div>
       ${ex.detail ? `<div class="sport-ex-detail">${ex.detail}</div>` : ''}
@@ -1925,7 +1938,12 @@ function renderCarteBouger(s) {
       exContent = _sportEnrSectionHtml(enrichieAD && enrichieAD.echauffement, '🔥 Échauffement')
                + _sportExHtml(d.mobilite);
       if (level >= 3 && typeof SEANCES_SPORT !== 'undefined') {
-        exContent += _sportExHtml(SEANCES_SPORT.printemps.bas[level]?.exercices, d.repos);
+        const _rempl = (SEANCES_SPORT.automne?.actif?.remplacements) || [];
+        const _exBase = (SEANCES_SPORT.printemps.bas[level]?.exercices || []).map(ex => {
+          const sub = _rempl.find(r => r.ancien === ex.nom);
+          return sub ? Object.assign({}, ex, { nom: sub.nouveau, detail: sub.detail }) : ex;
+        });
+        exContent += _sportExHtml(_exBase, d.repos);
       }
       exContent += _sportEnrSectionHtml(enrichieAD && enrichieAD.retour_au_calme, '🌿 Retour au calme');
       msgHtml = d.message;
@@ -2041,8 +2059,8 @@ function renderCarteRepas(s) {
           <div class="action-prem-steps-preview">${previewIngr}</div>
         </div>
         <div class="action-prem-cta">
-          <div class="action-prem-label">✦ Recette complète</div>
-          <button class="action-prem-btn" onclick="startStripeCheckout()">Débloquer Premium</button>
+          <div class="action-prem-label">🍯 Nourrir ton corps avec sagesse</div>
+          <button class="action-prem-btn" onclick="startStripeCheckout()">Prendre soin de moi</button>
         </div>
       </div>`;
   }
@@ -2080,7 +2098,7 @@ function renderRepasPhaseTab() {
         </div>
         <span class="repas-phase-arrow">${premium ? '›' : '🔒'}</span>
       </div>`).join('')}
-    ${!premium ? `<button class="modal-cta" style="width:100%;margin-top:14px;padding:14px;" onclick="startStripeCheckout()">✨ Accéder à toutes les recettes</button>` : ''}`;
+    ${!premium ? `<button class="modal-cta" style="width:100%;margin-top:14px;padding:14px;" onclick="startStripeCheckout()">🍯 M'accompagner dans ma nutrition cyclique</button>` : ''}`;
 }
 
 const MARCHE_CATEGORIES = [
@@ -2330,8 +2348,8 @@ function renderCarteSkincare(s) {
           <div class="action-prem-steps-preview">Nigelle · Miel · Huile d&rsquo;olive · Eau de rose</div>
         </div>
         <div class="action-prem-cta">
-          <div class="action-prem-label">✨ Ta peau m&eacute;rite cette douceur</div>
-          <button class="action-prem-btn" onclick="startStripeCheckout()">Prendre soin de moi</button>
+          <div class="action-prem-label">✨ Ta peau mérite cette douceur</div>
+          <button class="action-prem-btn" onclick="startStripeCheckout()">M'offrir cette routine</button>
         </div>
       </div>`;
   }
@@ -3610,7 +3628,7 @@ function renderObjectifsBlurGate() {
         Créé tes propres objectifs personnalisés.
       </div>
       <button onclick="startStripeCheckout()" style="width: 100%; padding: 16px; background: linear-gradient(135deg, #C9A96E, #A87A30); color: #1C1008; border: none; border-radius: 16px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: var(--sans);">
-        Rejoindre Premium 🌸
+        🌱 Grandir avec mes objectifs
       </button>
       <div style="font-size: 12px; color: var(--gris); margin-top: 12px; font-style: italic;">Essai gratuit 20 jours</div>
     </div>
@@ -5608,6 +5626,7 @@ const _stx = {
   breathRaf: null,
   breathStart: null,
   _hiddenAt: null,
+  _stSide: 0, // 0 = premier côté, 1 = deuxième côté pour exercices bilatéraux
 };
 
 const _stSciSeries = [
@@ -5666,6 +5685,7 @@ function _stNormalizeEx(ex, idx) {
     conseil: ex.conseil_cycle || ex.conseil || '',
     mod_easy: ex.modification_facile || '',
     mod_hard: ex.modification_difficile || '',
+    parJambe: ex.parJambe || false,
   };
 }
 
@@ -5781,6 +5801,7 @@ function _stxBuildSteps(spec, overrideRest) {
           seriesTotal: seriesCount,
           exIdx: exIdx,
           exTotal: exList.length,
+          parJambe: ex.parJambe,
         });
         if (s < seriesCount - 1 && repoDur > 0) {
           steps.push({ type: 'rest_series', label: 'Repos série', title: 'Repos — ' + ex.nom, duration: repoDur, serieIdx: s, seriesTotal: seriesCount });
@@ -5833,6 +5854,7 @@ function openSeanceTimer() {
   _stx.total = _stx.steps.reduce(function(sum, s) { return sum + s.duration; }, 0);
   _stx.running = false;
   _stx.paused = false;
+  _stx._stSide = 0;
 
   const overlay = document.getElementById('st-overlay');
   if (!overlay) return;
@@ -5924,13 +5946,14 @@ function _stRenderWarmup(step, desc, sci, count, countUnit, breathWrap, modsEl) 
 }
 
 function _stRenderExercise(step, desc, sci, count, countUnit, breathWrap, modsEl) {
+  const sideLabel = step.parJambe && _stx._stSide === 1 ? ' — Côté droit' : (step.parJambe && _stx._stSide === 0 ? ' — Côté gauche' : '');
   const serieLabel = step.seriesTotal > 1 ? (' — Série ' + (step.serieIdx + 1) + '/' + step.seriesTotal) : '';
   if (desc) desc.textContent = (step.desc || '') + (step.conseil ? (' ' + step.conseil) : '');
   const sciMsg = _stSciExercise[step.exIdx % _stSciExercise.length];
   if (sci) { sci.textContent = sciMsg; sci.style.display = ''; }
   if (count) {
-    if (step.reps) { count.textContent = step.reps; countUnit.textContent = 'rép.' + serieLabel; }
-    else { count.textContent = ''; countUnit.textContent = serieLabel.trim(); }
+    if (step.reps) { count.textContent = step.reps; countUnit.textContent = 'rép.' + sideLabel + serieLabel; }
+    else { count.textContent = ''; countUnit.textContent = (sideLabel + serieLabel).trim(); }
   }
   if (breathWrap) breathWrap.style.display = 'none';
   if (modsEl) {
@@ -6021,6 +6044,19 @@ function _stxTimerEnd() {
 }
 
 function _stxAdvance() {
+  const currentStep = _stx.steps[_stx.idx];
+
+  // Gestion des exercices bilatéraux
+  if (currentStep && currentStep.type === 'exercise' && currentStep.parJambe && _stx._stSide === 0) {
+    // Premier côté terminé d'un exercice bilatéral → message de changement
+    _stx._stSide = 1;
+    _stxShowSideChangeMessage();
+    return;
+  }
+
+  // Reset du côté si on termine un exercice bilatéral deuxième côté ou n'importe quel autre exercice
+  _stx._stSide = 0;
+
   _stx.idx++;
   if (_stx.idx >= _stx.steps.length) { _stxDone(); return; }
   const nextStep = _stx.steps[_stx.idx];
@@ -6031,6 +6067,28 @@ function _stxAdvance() {
   }
   _stxRender();
   _stxStartTimer();
+}
+
+function _stxShowSideChangeMessage() {
+  // Afficher le message "Change de jambe 🔄"
+  const titleEl = document.getElementById('st-exercise-title');
+  const descEl = document.getElementById('st-exercise-desc');
+  const timeEl = document.getElementById('st-time-left');
+  const labelEl = document.getElementById('st-step-label');
+
+  if (titleEl) titleEl.textContent = 'Change de jambe 🔄';
+  if (descEl) descEl.textContent = 'Prépare-toi pour le deuxième côté';
+  if (timeEl) timeEl.textContent = '3s';
+  if (labelEl) labelEl.textContent = 'Transition';
+
+  // Masquer la progression circulaire pendant la transition
+  _stxSetArc(0);
+
+  // Attendre 3 secondes puis continuer avec le même exercice
+  setTimeout(function() {
+    _stxRender();
+    _stxStartTimer();
+  }, 3000);
 }
 
 // ── Actions utilisatrice ─────────────────────────────────────

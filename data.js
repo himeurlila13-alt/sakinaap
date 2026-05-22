@@ -708,7 +708,7 @@ const SEANCES_SPORT = {
             detail: 'Genoux écartés, front au sol, bras étirés devant toi. Respire et laisse le sol te porter.' },
           { nom: 'Rotation de bassin',     duree: '2 min',
             detail: 'À quatre pattes, dessine des cercles lents avec les hanches dans les deux sens.' },
-          { nom: 'Étirement hanches',      duree: '1 min / côté',
+          { nom: 'Étirement hanches',      duree: '1 min / côté', parJambe: true,
             detail: 'Genou avant plié à 90°, hanches vers l\'avant. Reste, respire, change de côté.' },
           { nom: 'Automassage ventre',     duree: '2 min',
             detail: 'Paumes sur le ventre, cercles dans le sens des aiguilles d\'une montre, pression douce.' },
@@ -726,9 +726,9 @@ const SEANCES_SPORT = {
             detail: 'À quatre pattes. Inspire : dos creux, ventre vers le sol. Expire : dos arrondi, nombril vers le plafond. 3 sec par position. Libère les tensions lombaires.' },
           { nom: 'Étirement bas du dos',   duree: '2 min',
             detail: 'Genoux écartés, front au sol. Bras étirés ou le long du corps. Respire dans le bas du dos.' },
-          { nom: 'Étirement psoas-hanches', duree: '2 min / côté',
+          { nom: 'Étirement psoas-hanches', duree: '2 min / côté', parJambe: true,
             detail: 'Genou avant plié à 90°, jambe arrière tendue au sol. Laisse la gravité ouvrir la hanche progressivement. Respire lentement. Change de côté.' },
-          { nom: 'Torsion douce au sol',   duree: '1 min / côté',
+          { nom: 'Torsion douce au sol',   duree: '1 min / côté', parJambe: true,
             detail: 'Allongée sur le dos, genoux pliés, laisse-les tomber doucement d\'un côté, bras en croix. Épaules restent au sol.' },
           { nom: 'Relaxation profonde',    duree: '2 min',
             detail: 'Allongée, yeux fermés. Relâche chaque zone du corps de la tête aux pieds à chaque expiration. Respiration abdominale lente.' },
@@ -742,11 +742,11 @@ const SEANCES_SPORT = {
         exercices: [
           { nom: 'Papillon allongé',        duree: '5 min',
             detail: 'Allongée sur le dos, plantes de pieds jointes, genoux ouverts vers le sol. Mains sur le ventre. Respiration abdominale lente. Ouvre les hanches passivement.' },
-          { nom: 'Étirement profond du psoas', duree: '3 min / côté',
+          { nom: 'Étirement profond du psoas', duree: '3 min / côté', parJambe: true,
             detail: 'Genou avant plié, jambe arrière allongée au sol. Descends progressivement sur les avant-bras. Laisse le poids du corps étirer le psoas. Respire, sans forcer. Change de côté.' },
           { nom: 'Étirement complet du dos', duree: '4 min',
             detail: 'À genoux, penche le buste en avant, front au sol, bras tendus devant. Relâche les épaules et la nuque complètement. Idéale pour les douleurs du bas du dos.' },
-          { nom: 'Torsion libératrice au sol', duree: '2 min / côté',
+          { nom: 'Torsion libératrice au sol', duree: '2 min / côté', parJambe: true,
             detail: 'Allongée, ramène une jambe pliée de l\'autre côté. Épaule opposée reste au sol. Respiration 4-7-8 : inspire 4, retiens 7, souffle 8.' },
           { nom: 'Jambes au mur',           duree: '4 min',
             detail: 'Fesses proches du mur, jambes tendues vers le plafond appuyées sur le mur. Favorise le retour veineux, soulage les lombaires et réduit les gonflements.' },
@@ -765,23 +765,23 @@ const SEANCES_SPORT = {
     bas: {
       1: { nom: 'Essentielle', duree: '~20 min', exercices: [
         { nom: 'Squat',        sets: 3, reps: 5,  detail: 'Pieds largeur d\'épaules, descends lentement, remonte en expirant.' },
-        { nom: 'Chien pipi',   sets: 3, reps: 10, detail: 'À quatre pattes, lève le genou sur le côté à 90°, redescends.' },
-        { nom: 'Kick back',    sets: 3, reps: 10, detail: 'À quatre pattes, pousse le pied vers l\'arrière-haut, contracte les fessiers.' },
+        { nom: 'Chien pipi',   sets: 3, reps: 10, parJambe: true, detail: 'À quatre pattes, lève le genou sur le côté à 90°, redescends.' },
+        { nom: 'Kick back',    sets: 3, reps: 10, parJambe: true, detail: 'À quatre pattes, pousse le pied vers l\'arrière-haut, contracte les fessiers.' },
         { nom: 'Demi-pont',    sets: 3, reps: 10, detail: 'Allongée, pieds à plat, soulève le bassin en serrant les fessiers.' },
         { nom: 'Chaise',       sets: 3, duree: '5 sec', detail: 'Dos au mur, cuisses parallèles au sol, tiens la position.' },
       ]},
       2: { nom: 'À ton rythme', duree: '~25 min', exercices: [
         { nom: 'Squat',         sets: 3, reps: 10, detail: 'Pieds largeur d\'épaules, descends lentement, remonte en expirant.' },
-        { nom: 'Fente arrière', sets: 3, reps: 10, detail: 'Un pied en arrière, genou à 90°, alternance gauche/droite.' },
+        { nom: 'Fente arrière', sets: 3, reps: 10, parJambe: true, detail: 'Un pied en arrière, genou à 90°, alternance gauche/droite.' },
         { nom: 'Squat sumo',    sets: 3, reps: 10, detail: 'Pieds très écartés, orteils ouverts, descends et remonte.' },
         { nom: 'Demi-pont',     sets: 3, reps: 20, detail: 'Allongée, pieds à plat, monte et descends lentement.' },
         { nom: 'Chaise',        sets: 3, duree: '25 sec', detail: 'Dos au mur, cuisses parallèles au sol, tiens la position.' },
       ]},
       3: { nom: 'Vitalité', duree: '~30 min', exercices: [
-        { nom: 'Demi-pont jambe levée', sets: 3, reps: 15, detail: 'Demi-pont avec une jambe tendue levée. Change à mi-série.' },
+        { nom: 'Demi-pont jambe levée', sets: 3, reps: 15, parJambe: true, detail: 'Demi-pont avec une jambe tendue levée. Change à mi-série.' },
         { nom: 'Burpees',               sets: 3, reps: 10, detail: 'Position planche, ramène les pieds, saute vers le haut, recommence.' },
         { nom: 'Squat sauté',           sets: 3, reps: 10, detail: 'Squat puis saut explosif, atterrissage doux fléchi.' },
-        { nom: 'Fente côté',            sets: 3, reps: 10, detail: 'Pas large sur le côté, genou plié, l\'autre jambe tendue. Alterne.' },
+        { nom: 'Fente côté',            sets: 3, reps: 10, parJambe: true, detail: 'Pas large sur le côté, genou plié, l\'autre jambe tendue. Alterne.' },
         { nom: 'Levée de jambe',        sets: 3, reps: 20, detail: 'Allongée, jambes tendues, monte-les à 90° et redescends lentement.' },
       ]},
       // Niveau 4 : 3 séances en rotation sur J6/J9/J12
@@ -789,18 +789,18 @@ const SEANCES_SPORT = {
         rotation: [
           { nom: 'S1 — Force pure', exercices: [
             { nom: 'Squats',          sets: 3, reps: 10, detail: 'Contrôlé, lent à la descente, explosif à la montée.' },
-            { nom: 'Fentes arrières', sets: 3, reps: 10, detail: 'Alternance jambes, genou arrière à 2 cm du sol.' },
+            { nom: 'Fentes arrières', sets: 3, reps: 10, parJambe: true, detail: 'Alternance jambes, genou arrière à 2 cm du sol.' },
             { nom: 'Sumo',            sets: 3, reps: 10, detail: 'Pieds très écartés, poussée depuis les talons.' },
             { nom: 'Élévations',      sets: 3, reps: 12, detail: 'Dos au sol ou sur canapé, bassin qui monte haut, contraction 1 sec.' },
           ]},
           { nom: 'S2 — Chaîne postérieure', exercices: [
             { nom: 'Squats',          sets: 3, reps: 10, detail: 'Pleine amplitude, descente lente 3 secondes.' },
             { nom: 'Soulevé de terre',sets: 3, reps: 10, detail: 'Jambes légèrement fléchies, dos droit, mains glissent le long des jambes.' },
-            { nom: 'Chien pipi',      sets: 3, reps: 12, detail: 'Amplitude maximale, pause 1 sec en haut.' },
-            { nom: 'Kick back',       sets: 3, reps: 12, detail: 'Extension complète, contraction fessiers 1 sec en haut.' },
+            { nom: 'Chien pipi',      sets: 3, reps: 12, parJambe: true, detail: 'Amplitude maximale, pause 1 sec en haut.' },
+            { nom: 'Kick back',       sets: 3, reps: 12, parJambe: true, detail: 'Extension complète, contraction fessiers 1 sec en haut.' },
           ]},
           { nom: 'S3 — Explosif', exercices: [
-            { nom: 'Squats kicks',    sets: 3, reps: 12, detail: 'Squat + coup de pied frontal en remontant, alterne.' },
+            { nom: 'Squats kicks',    sets: 3, reps: 12, parJambe: true, detail: 'Squat + coup de pied frontal en remontant, alterne.' },
             { nom: 'Soulevé de terre',sets: 3, reps: 12, detail: 'Même mécanique que S2, intention plus forte.' },
             { nom: 'Sumo',            sets: 3, reps: 12, detail: 'Pause 1 sec en bas pour activer les adducteurs.' },
             { nom: 'Demi-pont',       sets: 3, reps: 12, detail: 'Pause 2 sec en haut, descente très lente (3 sec).' },
@@ -814,7 +814,7 @@ const SEANCES_SPORT = {
       1: { nom: 'Essentielle', duree: '~15 min', exercices: [
         { nom: 'Pompes sur les genoux', sets: 2, reps: 5,      detail: 'Mains largeur d\'épaules, corps droit des genoux à la tête. Descends lentement.' },
         { nom: 'Gainage',               sets: 2, duree: '15 sec', detail: 'Planche sur les coudes, dos plat, ventre rentré.' },
-        { nom: 'Étirement épaules',     sets: 1, duree: '1 min',  detail: 'Bras croisé devant toi, pression douce avec l\'autre bras. Change.' },
+        { nom: 'Étirement épaules',     sets: 1, duree: '1 min',  parJambe: true, detail: 'Bras croisé devant toi, pression douce avec l\'autre bras. Change.' },
       ]},
       2: { nom: 'À ton rythme', duree: '~20 min', exercices: [
         { nom: 'Pompes classiques', sets: 2, reps: 8,      detail: 'Corps droit, descente lente, pousse fort à la remontée.' },
@@ -830,7 +830,7 @@ const SEANCES_SPORT = {
         { nom: 'Pompes',              sets: 3, reps: 15,    detail: 'Pleine amplitude, rythme soutenu, engagement total.' },
         { nom: 'Dips déclinées',      sets: 3, reps: 10,    detail: 'Pieds surélevés sur la chaise, corps incliné, dips complets.' },
         { nom: 'Superman dos',        sets: 3, reps: 12,    detail: 'Allongée sur le ventre, lève bras et jambes ensemble, tiens 2 sec en haut. Renforce la chaîne postérieure.' },
-        { nom: 'Gainage latéral',     sets: 3, duree: '20 sec', detail: 'Sur le côté, corps droit, hanches dans l\'axe. Change.' },
+        { nom: 'Gainage latéral',     sets: 3, duree: '20 sec', parJambe: true, detail: 'Sur le côté, corps droit, hanches dans l\'axe. Change.' },
       ]},
     },
   },
@@ -842,14 +842,14 @@ const SEANCES_SPORT = {
     niveaux: {
       1: { type: 'emom', duree: 10, label: 'EMOM 10 min', exercice: 'Squat', reps: 5,
            detail: 'Échauffe tes articulations 2-3 min avant de démarrer (cercles de chevilles et de hanches). Au début de chaque minute : 5 squats. Récupère le reste de la minute. 10 rounds.' },
-      2: { type: 'emom', duree: 10, label: 'EMOM 10 min', exercice: 'Fente arrière', reps: 8,
+      2: { type: 'emom', duree: 10, label: 'EMOM 10 min', exercice: 'Fente arrière', reps: 8, parJambe: true,
            detail: 'Échauffe tes articulations 2-3 min avant de démarrer (cercles de chevilles et de hanches). Au début de chaque minute : 8 fentes arrières. Récupère le reste. 10 rounds.' },
       3: { type: 'emom', duree: 10, label: 'EMOM 10 min', exercice: 'Squat sauté', reps: 6,
            detail: 'Échauffe tes genoux 2-3 min avant de démarrer. Au début de chaque minute : 6 squats sautés, atterrissage fléchi et silencieux. Récupère le reste de la minute. 10 rounds.' },
       4: { type: 'amrap', duree: 10, label: 'AMRAP 10 min',
            circuit: [
              { nom: 'Squats sautés',    reps: 5 },
-             { nom: 'Fentes croisées',  reps: 5 },
+             { nom: 'Fentes croisées',  reps: 5, parJambe: true },
              { nom: 'Hips thrust',      reps: 5 },
            ],
            detail: 'Prends 3-5 min pour échauffer tes articulations avant de démarrer le timer. Enchaîne les 3 exercices sans arrêt. Compte le nombre de tours complets en 10 min.',
@@ -861,8 +861,16 @@ const SEANCES_SPORT = {
   automne: {
     // Actif J18-J21 (standard) : reprend Printemps + repos +10s
     actif: {
-      message: 'Ton corps tient encore — honore-le sans te dépasser. Reprends ton niveau de Printemps avec 10 secondes de repos supplémentaires entre chaque exercice. ⚠️ Si tu es au niveau Vitalité ou Pleine puissance, supprime les sauts et exercices explosifs — la progestérone relâche tes ligaments cette semaine. Protège tes genoux et tes chevilles.',
+      message: 'Ton corps tient encore — honore-le sans te dépasser. Reprends ton niveau de Printemps avec 10 secondes de repos supplémentaires entre chaque exercice. En phase Automne, les sauts sont remplacés automatiquement par des alternatives sans impact — la progestérone relâche tes ligaments cette semaine. Protège tes genoux et tes chevilles. 🌿',
       reposExtra: 10,
+      // Substitutions appliquées automatiquement sur les séances Printemps quand on est en Automne
+      remplacements: [
+        { ancien: 'Burpees',       nouveau: 'Burpees sans saut',       detail: 'Position planche, ramène les pieds en position accroupie, redresse-toi debout sans saut, recommence.' },
+        { ancien: 'Squat sauté',   nouveau: 'Squat lent contrôlé',     detail: 'Descente lente sur 4 temps, pause 1 sec en bas, montée contrôlée sur 2 temps.' },
+        { ancien: 'Squats kicks',  nouveau: 'Fentes contrôlées',       parJambe: true, detail: 'Fente avant contrôlée, genou arrière à 2 cm du sol, alterne gauche/droite sans explosion.' },
+        { ancien: 'Squats sautés', nouveau: 'Squats lents contrôlés',  detail: 'Descente lente sur 4 temps, pause 1 sec en bas, montée contrôlée.' },
+        { ancien: 'Squat sauté',   nouveau: 'Squat lent contrôlé',     detail: 'Descente lente sur 4 temps, pause 1 sec en bas, montée contrôlée sur 2 temps.' },
+      ],
     },
     // Doux J22-J24 (standard) : mobilité + 2 exos légers
     doux: {
@@ -872,13 +880,13 @@ const SEANCES_SPORT = {
           detail: 'Mains sur le ventre, respirations profondes et lentes.' },
         { nom: 'Rotation de bassin',     duree: '2 min',
           detail: 'À quatre pattes, cercles lents dans les deux sens.' },
-        { nom: 'Étirement hanches',      duree: '1 min / côté',
+        { nom: 'Étirement hanches',      duree: '1 min / côté', parJambe: true,
           detail: 'Fente basse, tiens et respire sans forcer.' },
         { nom: 'Gainage profond · Pilates', duree: '2 min',
           detail: 'Allongée sur le dos, genoux fléchis. Contracte doucement le plancher pelvien et le ventre en expirant, relâche en inspirant. 3 séries de 10 respirations lentes. Renforce sans fatiguer.' },
       ],
       // N1-N2 : mobilité seule | N3-N4 : mobilité + circuit Découverte (printemps.bas.1)
-      repos: 45,
+      repos: 55,
     },
     // Fin J25-fin (standard) : mobilité douce uniquement
     fin: {
@@ -890,7 +898,7 @@ const SEANCES_SPORT = {
           detail: 'Genoux écartés, front au sol. Lâche prise.' },
         { nom: 'Rotation de bassin',     duree: '2 min',
           detail: 'Cercles lents, sans effort, juste la fluidité.' },
-        { nom: 'Étirement hanches',      duree: '1 min / côté',
+        { nom: 'Étirement hanches',      duree: '1 min / côté', parJambe: true,
           detail: 'Fente basse, sans forcer, juste être là.' },
         { nom: 'Automassage ventre',     duree: '2 min',
           detail: 'Cercles bienveillants, pression très douce.' },

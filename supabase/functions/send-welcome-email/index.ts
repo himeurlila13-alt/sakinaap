@@ -174,7 +174,7 @@ Deno.serve(async (req: Request) => {
       <tr><td style="padding:28px 40px 0;">
         <div style="border-left:3px solid #4A7C59;padding:16px 20px;background:#F8FBF9;border-radius:0 12px 12px 0;">
           <p style="font-family:Georgia,serif;font-size:15px;font-style:italic;color:#2C2018;line-height:1.7;margin:0;">
-            « J'ai créé SakinApp pour partager ce que j'avais appris. Simplement. Au plus grand nombre. Pour avancer. Pour se sentir bien. »
+            « Quand j'ai découvert la beauté de mon cycle, j'ai voulu que chaque sœur puisse vivre cette même révélation. Comprendre son corps, c'est se reconnecter à sa force. C'est un cadeau que nous méritons toutes, insha'Allah. »
           </p>
         </div>
       </td></tr>
@@ -192,7 +192,9 @@ Deno.serve(async (req: Request) => {
 
       <!-- FOOTER -->
       <tr><td style="background:#F0F0EC;padding:20px 32px;text-align:center;border-radius:0 0 20px 20px;">
-        <p style="font-size:12px;color:#8A8078;margin:0;">© 2026 SakinApp · <a href="https://sakinaap.com" style="color:#4A7C59;text-decoration:none;">sakinaap.com</a></p>
+        <p style="font-size:12px;color:#8A8078;margin:0 0 6px;">© 2026 SakinApp · <a href="https://sakinaap.com" style="color:#4A7C59;text-decoration:none;">sakinaap.com</a></p>
+        <p style="font-size:11px;color:#A09088;margin:0 0 6px;">Tes données sont chiffrées · Jamais vendues · Protection RGPD</p>
+        <p style="font-size:11px;color:#A09088;margin:0;"><a href="https://sakinaap.com/unsubscribe?email=${encodeURIComponent(verifiedEmail)}" style="color:#A09088;">Se désabonner des emails</a></p>
       </td></tr>
 
     </table>
