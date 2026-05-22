@@ -2035,6 +2035,31 @@ function renderRepasPhaseTab() {
     ${!premium ? `<button class="modal-cta" style="width:100%;margin-top:14px;padding:14px;" onclick="startStripeCheckout()">✨ Accéder à toutes les recettes</button>` : ''}`;
 }
 
+const MARCHE_CATEGORIES = [
+  { key: 'proteines', label: 'Protéines', icon: '🥩',
+    mots: ['poulet','bœuf','boeuf','veau','agneau','dinde','sardines','saumon','thon','cabillaud','maquereau','crevettes','œufs','oeufs','tofu','pois chiches','lentilles','haricots blancs','haricots rouges','haricots noirs','fèves','feves','pois cassés','edamame'] },
+  { key: 'epices', label: 'Épices & Condiments', icon: '🧂',
+    mots: ['curcuma','gingembre','cumin','paprika','cannelle','coriandre','persil','menthe','aneth','basilic','thym','fleur de sel','poivre','harissa','sauce soja','vinaigre','moutarde','miel','olives','bouillon','piment','épices','herbes','zaatar','fleur d\'oranger','concentré','citron confit','ras el hanout','muscade','sel'] },
+  { key: 'legumes', label: 'Légumes', icon: '🥦',
+    mots: ['épinards','brocoli','tomates','carottes','oignon','ail','courgette','poivron','betterave','kale','chou','champignons','haricots verts','céleri','butternut','potimarron','potiron','concombre','aubergine','roquette','mâche','poireau','artichaut','fenouil','pommes de terre','patate','salade'] },
+  { key: 'fruits', label: 'Fruits', icon: '🍎',
+    mots: ['citron vert','citron','orange','pomme','poire','banane','fraises','myrtilles','framboises','grenade','pastèque','kiwi','mangue','avocat','dattes','raisins secs','raisins','figues','fruits rouges','ananas'] },
+  { key: 'feculents', label: 'Féculents', icon: '🌾',
+    mots: ['riz','pâtes','boulgour','pain','farine','semoule','couscous','quinoa'] },
+  { key: 'laitiers', label: 'Produits laitiers', icon: '🧀',
+    mots: ['fromage blanc','lait de coco','yaourt','fromage','feta','chèvre','crème fraîche','crème','kéfir','beurre','lait'] },
+  { key: 'graines', label: 'Oléagineux & Graines', icon: '🫘',
+    mots: ['amandes','noix','noisettes','graines de courge','graines de sésame','graines de lin','graines de chia','graines','sésame','tahini','huile','chocolat','cacao'] },
+];
+
+function _categorizeIngredient(text) {
+  const lower = text.toLowerCase();
+  for (const cat of MARCHE_CATEGORIES) {
+    if (cat.mots.some(m => lower.includes(m))) return cat.key;
+  }
+  return 'autres';
+}
+
 function _cleanIngr(ing) {
   let s = ing
     .replace(/^[\d.,/½¼¾]+\s*(g|kg|ml|cl|l|cs|cc)?\s*/i, '')
@@ -2100,7 +2125,19 @@ function renderMarcheTab() {
   html += `<div class="marche-section-lbl">${s.emoji} Aliments cl&#233;s &middot; ${s.nom}</div>`;
   html += phaseItems.map(it => _marcheItemHtml(it, !!m.checks[it.id], false)).join('');
   html += `<div class="marche-section-lbl">&#128203; Recettes du moment</div>`;
-  html += recetteItems.map(it => _marcheItemHtml(it, !!m.checks[it.id], false)).join('');
+  const byCategory = {};
+  recetteItems.forEach(item => {
+    const cat = _categorizeIngredient(item.text);
+    if (!byCategory[cat]) byCategory[cat] = [];
+    byCategory[cat].push(item);
+  });
+  const catOrder = ['proteines', 'legumes', 'fruits', 'feculents', 'laitiers', 'graines', 'epices', 'autres'];
+  catOrder.forEach(catKey => {
+    if (!byCategory[catKey]?.length) return;
+    const catInfo = MARCHE_CATEGORIES.find(c => c.key === catKey) || { icon: '🛒', label: 'Autres' };
+    html += `<div class="marche-cat-lbl">${catInfo.icon} ${catInfo.label}</div>`;
+    byCategory[catKey].forEach(item => { html += _marcheItemHtml(item, !!m.checks[item.id], false); });
+  });
   html += `<div class="marche-section-lbl">&#10133; Mes ajouts</div>`;
   (m.custom || []).forEach(c => { html += _marcheItemHtml({ id: c.id, text: c.text, section: 'custom' }, !!m.checks[c.id], true); });
   html += `<div class="marche-input-row">
