@@ -2990,7 +2990,7 @@ function renderSuggestionsEngage(s) {
     const emoji = sg.split(' ')[0];
     const label = sg.slice(sg.indexOf(' ') + 1);
     return `
-      <div class="sugg-engage-item ${isSel ? 'done' : ''}" onclick="toggleSuggestion(this, ${i})" data-idx="${i}">
+      <div class="sugg-engage-item ${isSel ? 'done' : ''}" onclick="toggleHomeSuggestion(this, ${i})" data-idx="${i}">
         <div class="sugg-engage-chk">${isSel ? '✓' : ''}</div>
         <span class="sugg-engage-em">${emoji}</span>
         <span class="sugg-engage-lbl">${label}</span>
@@ -4322,7 +4322,7 @@ function switchTabById(name, section) {
   if (_ac2) _ac2.scrollTop = 0;
 }
 
-function toggleSuggestion(el, idx) {
+function toggleHomeSuggestion(el, idx) {
   if (!ST.selectedSugg) ST.selectedSugg = [];
   const i = ST.selectedSugg.indexOf(idx);
   if (i > -1) ST.selectedSugg.splice(i, 1);
@@ -4332,7 +4332,6 @@ function toggleSuggestion(el, idx) {
   el.classList.toggle('done', isSel);
   const chk = el.querySelector('.sugg-engage-chk');
   if (chk) chk.textContent = isSel ? '✓' : '';
-  // MAJ du compteur
   const countEl = document.getElementById('sugg-engage-count');
   const s = SAISONS[ST.currentSaison];
   if (countEl) countEl.textContent = ST.selectedSugg.length + '/' + (s.suggestions?.length || 0) + ' faits';
