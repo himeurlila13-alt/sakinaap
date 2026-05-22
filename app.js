@@ -2079,21 +2079,25 @@ function _getMarcheItems(saison) {
       items.push({ id: 'alim_' + a.replace(/[\s'']/g, '_'), text: a, section: 'phase', star: (alim.star || []).includes(a) });
     });
   }
-  const seen = new Set();
+  function _keyIngr(raw) {
+    return raw.toLowerCase()
+      .normalize('NFD').replace(/[̀-ͯ]/g, '')     // accents ignorés pour la clé
+      .replace(/^[\d.,/½¼¾]+\s*(g|kg|ml|cl|l|cs|cc)?\s*/i, '')
+      .replace(/^(quelques|une|un|des|du|de la|de l['']?|d[''])\s*/i, '')  // articles (avant mesures)
+      .replace(/^(grosses?|petites?|grandes?)?\s*(poignees?|verres?|tranches?|boites?|carres?|bottes?)\s+d[e']?\s*/i, '')
+      .replace(/[,(].*$/, '')                                // coupure à la virgule/parenthèse
+      .replace(/\s+en\s+\w+s?\s*$/i, '')                    // "en morceaux", "en branches", "en dés"
+      .replace(/\s+(fraich[e]?s?|cuit[e]?s?|emince[e]?s?|hache[e]?s?|rape[e]?s?|congele[e]?s?|en conserve|frais?|bio|nature|cru[e]?s?|entier[e]?s?)\s*$/i, '')
+      .replace(/\s+/g, ' ').trim().slice(0, 25);
+  }
+  const seen = new Map();
   (RECETTES[saison] || []).forEach(r => {
     (r.ingredients || []).forEach(ing => {
-      const norm = ing.toLowerCase()
-        .replace(/^[\d.,/½¼¾]+\s*(g|kg|ml|cl|l|cs|cc)?\s*/i, '')
-        .replace(/^(grosses?|petites?|grandes?)?\s*(poign[ée]+s?|verres?|tranches?|boîtes?|carr[ée]+s?|botte)\s+(d[e']\s*|de\s+l[a']?\s*)?/i, '')
-        .replace(/^(quelques|un|une|des|du|de la|de l')\s+/i, '')
-        .trim().slice(0, 35);
-      const key = 'ingr_' + norm.replace(/[\s''(),]/g, '_');
-      if (!seen.has(key)) {
-        seen.add(key);
-        items.push({ id: key, text: _cleanIngr(ing), section: 'recette' });
-      }
+      const key = 'ingr_' + _keyIngr(ing).replace(/[\s''(),]/g, '_');
+      if (!seen.has(key)) seen.set(key, _cleanIngr(ing));
     });
   });
+  seen.forEach((text, key) => items.push({ id: key, text, section: 'recette' }));
   return items;
 }
 
