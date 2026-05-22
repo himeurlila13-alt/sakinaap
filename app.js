@@ -178,11 +178,11 @@ function _buildWelcomeEmailHtml(prenom, email) {
             </td>
             <td style="width:25%;text-align:center;padding:12px 6px;">
               <div style="font-size:28px;margin-bottom:6px;">☀️</div>
-              <div style="font-size:12px;font-weight:700;color:#E8834A;letter-spacing:1px;">ÉTÉ</div>
+              <div style="font-size:12px;font-weight:700;color:#D4985C;letter-spacing:1px;">ÉTÉ</div>
             </td>
             <td style="width:25%;text-align:center;padding:12px 6px;">
               <div style="font-size:28px;margin-bottom:6px;">🍂</div>
-              <div style="font-size:12px;font-weight:700;color:#C4694A;letter-spacing:1px;">AUTOMNE</div>
+              <div style="font-size:12px;font-weight:700;color:#B88189;letter-spacing:1px;">AUTOMNE</div>
             </td>
           </tr>
         </table>
@@ -805,8 +805,8 @@ const SAISONS = {
   },
   ete: {
     nom: 'Été', foodTeaser: 'Protéines, antioxydants, oméga-3', skinTeaser: 'Protection & légèreté', emoji: '☀️', phase: 'Phase ovulatoire',
-    color: '#E8834A', light: '#F5C040', soft: '#FFF8EE', dark: '#7A3A10', rgb: '232,131,74',
-    grad: 'linear-gradient(145deg, #7A3A10, #E8834A, #F5C040)',
+    color: '#D4985C', light: '#E5B98A', soft: '#FDF6ED', dark: '#8B5A2A', rgb: '212,152,92',
+    grad: 'linear-gradient(145deg, #8B5A2A, #D4985C)',
     jours: [14,17],
     messages: {
       bien: "Tu es à ton pic. C'est le bon moment pour les efforts physiques, les conversations importantes.",
@@ -855,8 +855,8 @@ const SAISONS = {
   },
   automne: {
     nom: 'Automne', foodTeaser: 'Magnésium, complexe B, chocolat noir', skinTeaser: 'Apaisement & barrière cutanée', emoji: '🍂', phase: 'Phase lutéale',
-    color: '#C4694A', light: '#E8A090', soft: '#FDF0EE', dark: '#5A2018', rgb: '196,105,74',
-    grad: 'linear-gradient(145deg, #5A2018, #C4694A)',
+    color: '#B88189', light: '#D4A8B1', soft: '#F9F1F3', dark: '#8A5963', rgb: '184,129,137',
+    grad: 'linear-gradient(145deg, #8A5963, #B88189)',
     jours: [18,28],
     messages: {
       bien: "Des fluctuations arrivent peut-être — maintenant que tu le sais, elles ne te surprendront pas.",

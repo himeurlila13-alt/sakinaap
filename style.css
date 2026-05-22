@@ -1204,8 +1204,8 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
 .cal-day-empty { background: transparent; cursor: default; }
 .cal-day-hiver    { background: #EAE0F5; }
 .cal-day-printemps { background: #D8F0E6; }
-.cal-day-ete      { background: #FCE5C5; }
-.cal-day-automne  { background: #F5DACE; }
+.cal-day-ete      { background: #FDF6ED; }
+.cal-day-automne  { background: #F9F1F3; }
 .cal-today {
   box-shadow: 0 0 0 2px var(--season);
   background: var(--season-soft) !important;
@@ -1315,8 +1315,8 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
 .bilan-phase-chip{font-size:11px;font-weight:600;padding:4px 9px;border-radius:20px;white-space:nowrap}
 .bilan-hiver{background:#EDE0FF;color:#7B5EA7}
 .bilan-printemps{background:#D8F5EC;color:#3DAE8A}
-.bilan-ete{background:#FFF0D8;color:#E8834A}
-.bilan-automne{background:#FFE8DF;color:#C4694A}
+.bilan-ete{background:#FDF6ED;color:#D4985C}
+.bilan-automne{background:#F9F1F3;color:#B88189}
 .bilan-phase-arrow{font-size:11px;color:var(--gris)}
 .bilan-strength-line{text-align:center;font-size:13px;color:var(--gris);margin-bottom:14px}
 .bilan-strength-line strong{color:var(--noir)}
