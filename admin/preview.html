@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SakinApp â€” Preview donnÃ©es quotidiennes</title>
+<title>SakinApp — Preview données quotidiennes</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: system-ui, sans-serif; background: #f5f0eb; color: #1a1a1a; }
@@ -87,7 +87,7 @@
 <body>
 
 <div class="top-bar">
-  <h1>ðŸ“‹ SakinApp â€” Preview donnÃ©es</h1>
+  <h1>📋 SakinApp — Preview données</h1>
   <label>Cycle :
     <select id="cycle-select" onchange="buildTable()">
       <option value="24">24 jours (court)</option>
@@ -106,14 +106,14 @@
       <option value="message">Messages</option>
     </select>
   </label>
-  <button onclick="window.print()">ðŸ–¨ï¸ Imprimer</button>
+  <button onclick="window.print()">🖨️ Imprimer</button>
 </div>
 
 <div class="legend">
-  <span class="leg"><span class="leg-dot" style="background:#7B5EA7"></span> Hiver â€” Phase menstruelle</span>
-  <span class="leg"><span class="leg-dot" style="background:#3DAE8A"></span> Printemps â€” Phase folliculaire</span>
-  <span class="leg"><span class="leg-dot" style="background:#D4985C"></span> Ã‰tÃ© â€” Phase ovulatoire</span>
-  <span class="leg"><span class="leg-dot" style="background:#B88189"></span> Automne â€” Phase lutÃ©ale</span>
+  <span class="leg"><span class="leg-dot" style="background:#7B5EA7"></span> Hiver — Phase menstruelle</span>
+  <span class="leg"><span class="leg-dot" style="background:#3DAE8A"></span> Printemps — Phase folliculaire</span>
+  <span class="leg"><span class="leg-dot" style="background:#D4985C"></span> Été — Phase ovulatoire</span>
+  <span class="leg"><span class="leg-dot" style="background:#B88189"></span> Automne — Phase lutéale</span>
 </div>
 
 <div class="stats-bar" id="stats-bar"></div>
@@ -127,7 +127,7 @@
 
 <script src="../data.js"></script>
 <script>
-// â”€â”€ Calcul phase pour un jour donnÃ© â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Calcul phase pour un jour donné ──────────────────────
 function phaseForDay(i, dur) {
   const ovDay = Math.max(10, dur - 14);
   const eteStart = Math.max(8, ovDay - 2);
@@ -148,8 +148,8 @@ function dayWithinPhase(cycleDay, cycleDur) {
   return cycleDay - (eteEnd + 1);
 }
 
-const PHASE_NAMES = { hiver: 'ðŸŒ™ Hiver', printemps: 'ðŸŒ¸ Printemps', ete: 'â˜€ï¸ Ã‰tÃ©', automne: 'ðŸ‚ Automne' };
-const PHASE_LABELS = { hiver: 'Menstruelle', printemps: 'Folliculaire', ete: 'Ovulatoire', automne: 'LutÃ©ale' };
+const PHASE_NAMES = { hiver: '🌙 Hiver', printemps: '🌸 Printemps', ete: '☀️ Été', automne: '🍂 Automne' };
+const PHASE_LABELS = { hiver: 'Menstruelle', printemps: 'Folliculaire', ete: 'Ovulatoire', automne: 'Lutéale' };
 
 function buildTable() {
   const dur = parseInt(document.getElementById('cycle-select').value);
@@ -168,10 +168,10 @@ function buildTable() {
 
   // Stats bar
   document.getElementById('stats-bar').innerHTML =
-    `Cycle <strong>${dur} jours</strong> â€” ` +
+    `Cycle <strong>${dur} jours</strong> — ` +
     Object.entries(spans).map(([p, [s, e]]) =>
-      `<strong>${PHASE_NAMES[p]}</strong> J${s}â€“J${e} (${e - s + 1}j)`
-    ).join(' Â· ');
+      `<strong>${PHASE_NAMES[p]}</strong> J${s}–J${e} (${e - s + 1}j)`
+    ).join(' · ');
 
   // Build headers
   const showRepas = view === 'all' || view === 'repas';
@@ -181,9 +181,9 @@ function buildTable() {
   const head = document.getElementById('table-head');
   head.innerHTML = '<tr>' +
     '<th style="width:80px">Jour</th>' +
-    (showRepas ? '<th style="width:28%">ðŸ½ï¸ Alimentation</th>' : '') +
-    (showSoin  ? '<th style="width:28%">âœ¨ Skincare</th>' : '') +
-    (showMsg   ? '<th>ðŸ’¬ Messages matin</th>' : '') +
+    (showRepas ? '<th style="width:28%">🍽️ Alimentation</th>' : '') +
+    (showSoin  ? '<th style="width:28%">✨ Skincare</th>' : '') +
+    (showMsg   ? '<th>💬 Messages matin</th>' : '') +
     '</tr>';
 
   // Build rows
@@ -215,10 +215,10 @@ function buildTable() {
     if (showRepas) {
       html += `<td>`;
       if (repas) {
-        html += `<div class="meal-name">ðŸ½ï¸ ${repas.nom}</div>
+        html += `<div class="meal-name">🍽️ ${repas.nom}</div>
                  <div class="meal-benefice">${repas.benefice}</div>`;
       } else {
-        html += `<span style="color:#ccc;font-size:11px;">â€”</span>`;
+        html += `<span style="color:#ccc;font-size:11px;">—</span>`;
       }
       html += `</td>`;
     }
@@ -227,11 +227,11 @@ function buildTable() {
     if (showSoin) {
       html += `<td>`;
       if (soin) {
-        html += `<div class="soin-name">âœ¨ ${soin.nom}<span class="soin-duree">${soin.duree}</span></div>
+        html += `<div class="soin-name">✨ ${soin.nom}<span class="soin-duree">${soin.duree}</span></div>
                  <div class="soin-geste">${soin.geste}</div>
                  <div class="soin-benefice">${soin.benefice}</div>`;
       } else {
-        html += `<span style="color:#ccc;font-size:11px;">â€”</span>`;
+        html += `<span style="color:#ccc;font-size:11px;">—</span>`;
       }
       html += `</td>`;
     }
@@ -241,14 +241,14 @@ function buildTable() {
       html += `<td>`;
       if (msgs) {
         ['bien', 'fatiguee', 'difficile', 'foi'].forEach(mood => {
-          const labels = { bien: 'ðŸ˜Š Bien', fatiguee: 'ðŸ˜´ FatiguÃ©e', difficile: 'ðŸ˜” Difficile', foi: 'ðŸ¤² Foi' };
+          const labels = { bien: '😊 Bien', fatiguee: '😴 Fatiguée', difficile: '😔 Difficile', foi: '🤲 Foi' };
           html += `<div class="msg-item msg-${mood}">
             <div class="msg-mood">${labels[mood]}</div>
             <div class="msg-text">${msgs[mood]}</div>
           </div>`;
         });
       } else {
-        html += `<span style="color:#ccc;font-size:11px;">Pas de message J${d} â€” fallback phase utilisÃ©</span>`;
+        html += `<span style="color:#ccc;font-size:11px;">Pas de message J${d} — fallback phase utilisé</span>`;
       }
       html += `</td>`;
     }
