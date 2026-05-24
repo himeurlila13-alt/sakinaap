@@ -685,11 +685,11 @@ const SEANCES_SPORT = {
       1: {
         nom: 'Soulagement doux',
         duree: '~7 min',
-        message: 'Certains jours, juste respirer et se détendre est la meilleure séance qui soit.',
+        message: 'Certains jours, juste respirer et se détendre est la meilleure séance qui soit. Tes règles entraînent une perte de fer — reposer ton corps l\'aide à récupérer.',
         messageSpirituel: 'La douceur envers soi est aussi une ibada.',
         exercices: [
           { nom: 'Position anti-douleur', duree: '3 min',
-            detail: 'Allongée en boule sur le côté gauche, genoux remontés contre la poitrine. Respire profondément. Cette position réduit la pression utérine et soulage les crampes.' },
+            detail: 'Allongée en boule sur le côté gauche, genoux remontés contre la poitrine. Respire profondément. Cette position réduit la pression utérine et soulage les crampes. Si le côté gauche est inconfortable, essaie le côté droit — l\'important est ton confort.' },
           { nom: 'Respiration 4-4-6', duree: '2 min',
             detail: 'Inspire par le nez 4 temps, retiens 4 temps, souffle par la bouche 6 temps. 6 cycles. Active le système parasympathique et réduit la perception de la douleur.' },
           { nom: 'Détente abdominale', duree: '2 min',
@@ -838,21 +838,21 @@ const SEANCES_SPORT = {
   // ── ÉTÉ — Performance, EMOM/AMRAP, 2 séances intenses + repos ────
   ete: {
     planning: ['intense','repos','intense','repos'],
-    messageApresIntense: 'Ton corps reconstruit sa force aujourd\'hui — c\'est le repos qui crée la progression. 🌿',
+    messageApresIntense: 'Tes œstrogènes et ta testostérone travaillent maintenant à reconstruire tes fibres musculaires — c\'est ce repos qui crée la progression. Hydrate-toi bien. 🌿',
     niveaux: {
       1: { type: 'emom', duree: 10, label: 'EMOM 10 min', exercice: 'Squat', reps: 5,
-           detail: 'Échauffe tes articulations 2-3 min avant de démarrer (cercles de chevilles et de hanches). Au début de chaque minute : 5 squats. Récupère le reste de la minute. 10 rounds.' },
+           detail: 'Échauffe tes articulations 5 min minimum avant de démarrer (cercles de chevilles et de hanches). Au début de chaque minute : 5 squats. Récupère le reste de la minute. 10 rounds.' },
       2: { type: 'emom', duree: 10, label: 'EMOM 10 min', exercice: 'Fente arrière', reps: 8, parJambe: true,
-           detail: 'Échauffe tes articulations 2-3 min avant de démarrer (cercles de chevilles et de hanches). Au début de chaque minute : 8 fentes arrières. Récupère le reste. 10 rounds.' },
+           detail: 'Échauffe tes articulations 5 min minimum avant de démarrer (cercles de chevilles et de hanches). Au début de chaque minute : 8 fentes arrières. Récupère le reste. 10 rounds.' },
       3: { type: 'emom', duree: 10, label: 'EMOM 10 min', exercice: 'Squat sauté', reps: 6,
-           detail: 'Échauffe tes genoux 2-3 min avant de démarrer. Au début de chaque minute : 6 squats sautés, atterrissage fléchi et silencieux. Récupère le reste de la minute. 10 rounds.' },
+           detail: 'Échauffe tes genoux 5 min minimum avant de démarrer. Au début de chaque minute : 6 squats sautés, atterrissage fléchi et silencieux. Récupère le reste de la minute. 10 rounds.' },
       4: { type: 'amrap', duree: 10, label: 'AMRAP 10 min',
            circuit: [
              { nom: 'Squats sautés',    reps: 5 },
              { nom: 'Fentes croisées',  reps: 5, parJambe: true },
              { nom: 'Hips thrust',      reps: 5 },
            ],
-           detail: 'Prends 3-5 min pour échauffer tes articulations avant de démarrer le timer. Enchaîne les 3 exercices sans arrêt. Compte le nombre de tours complets en 10 min.',
+           detail: 'Prends 5 min minimum pour échauffer tes articulations avant de démarrer le timer. Enchaîne les 3 exercices sans arrêt. Compte le nombre de tours complets en 10 min.',
       },
     },
   },
@@ -861,8 +861,8 @@ const SEANCES_SPORT = {
   automne: {
     // Actif J18-J21 (standard) : reprend Printemps + repos +10s
     actif: {
-      message: 'Ton corps tient encore — honore-le sans te dépasser. Reprends ton niveau de Printemps avec 10 secondes de repos supplémentaires entre chaque exercice. En phase Automne, les sauts sont remplacés automatiquement par des alternatives sans impact — la progestérone relâche tes ligaments cette semaine. Protège tes genoux et tes chevilles. 🌿',
-      reposExtra: 10,
+      message: 'Ton corps tient encore — honore-le sans te dépasser. Reprends ton niveau de Printemps avec 20 secondes de repos supplémentaires entre chaque exercice. En phase Automne, les sauts sont remplacés automatiquement par des alternatives sans impact — la progestérone relâche tes ligaments cette semaine. Protège tes genoux et tes chevilles. Hydrate-toi davantage : la progestérone peut favoriser la rétention d\'eau. 🌿',
+      reposExtra: 20,
       // Substitutions appliquées automatiquement sur les séances Printemps quand on est en Automne
       remplacements: [
         { ancien: 'Burpees',       nouveau: 'Burpees sans saut',       detail: 'Position planche, ramène les pieds en position accroupie, redresse-toi debout sans saut, recommence.' },
@@ -882,8 +882,8 @@ const SEANCES_SPORT = {
           detail: 'À quatre pattes, cercles lents dans les deux sens.' },
         { nom: 'Étirement hanches',      duree: '1 min / côté', parJambe: true,
           detail: 'Fente basse, tiens et respire sans forcer.' },
-        { nom: 'Gainage profond · Pilates', duree: '2 min',
-          detail: 'Allongée sur le dos, genoux fléchis. Contracte doucement le plancher pelvien et le ventre en expirant, relâche en inspirant. 3 séries de 10 respirations lentes. Renforce sans fatiguer.' },
+        { nom: 'Gainage profond · Pilates', duree: '1 min',
+          detail: 'Allongée sur le dos, genoux fléchis. Contracte doucement le plancher pelvien et le ventre en expirant, relâche en inspirant. 2 séries de 8 respirations lentes. Si tu ressens de l\'inconfort, réduis encore.' },
       ],
       // N1-N2 : mobilité seule | N3-N4 : mobilité + circuit Découverte (printemps.bas.1)
       repos: 55,
@@ -894,8 +894,8 @@ const SEANCES_SPORT = {
       exercices: [
         { nom: 'Respiration abdominale', duree: '2 min',
           detail: 'Mains sur le ventre. Lente, profonde, bienveillante.' },
-        { nom: 'Étirement bas du dos',   duree: '3 min',
-          detail: 'Genoux écartés, front au sol. Lâche prise.' },
+        { nom: 'Étirement bas du dos',   duree: '2 min',
+          detail: 'Genoux écartés, front au sol. Lâche prise. Si tu ressens des tensions prémenstruelles, raccourcis à 1 min et passe au suivant.' },
         { nom: 'Rotation de bassin',     duree: '2 min',
           detail: 'Cercles lents, sans effort, juste la fluidité.' },
         { nom: 'Étirement hanches',      duree: '1 min / côté', parJambe: true,

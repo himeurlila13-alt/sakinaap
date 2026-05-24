@@ -4642,8 +4642,8 @@ function getTodaySeanceSpec() {
       }
       const niveauData = sport.printemps[dayType][level];
       if (!niveauData) return null;
-      if (dayType === 'bas' && level === 4 && niveauData.rotation) {
-        const rotIdx = (ST.printempsBasCount || 0) % 3;
+      if (dayType === 'bas' && level === 4 && niveauData.rotation && niveauData.rotation.length) {
+        const rotIdx = (ST.printempsBasCount || 0) % niveauData.rotation.length;
         const rot = niveauData.rotation[rotIdx];
         return { type: 'printemps-bas', data: { nom: rot.nom, duree: niveauData.duree, exercices: rot.exercices }, level, rotIdx };
       }
@@ -5627,6 +5627,7 @@ const _stx = {
   breathStart: null,
   _hiddenAt: null,
   _stSide: 0, // 0 = premier côté, 1 = deuxième côté pour exercices bilatéraux
+  _sideChangeTimer: null,
 };
 
 const _stSciSeries = [
@@ -5873,6 +5874,8 @@ function _stxClose() {
   _stx.paused = false;
   if (_stx.rafId) { cancelAnimationFrame(_stx.rafId); _stx.rafId = null; }
   if (_stx.breathRaf) { cancelAnimationFrame(_stx.breathRaf); _stx.breathRaf = null; }
+  if (_stx._sideChangeTimer) { clearTimeout(_stx._sideChangeTimer); _stx._sideChangeTimer = null; }
+  _stx._stSide = 0;
   _stReleaseWL();
   const overlay = document.getElementById('st-overlay');
   if (overlay) overlay.classList.remove('open');
@@ -6085,7 +6088,8 @@ function _stxShowSideChangeMessage() {
   _stxSetArc(0);
 
   // Attendre 3 secondes puis continuer avec le même exercice
-  setTimeout(function() {
+  _stx._sideChangeTimer = setTimeout(function() {
+    _stx._sideChangeTimer = null;
     _stxRender();
     _stxStartTimer();
   }, 3000);
