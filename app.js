@@ -1878,8 +1878,8 @@ function renderDashboard(s) {
   // Message
   updateMessage();
 
-  // ─ Score du jour (cases rapides) ─
-  renderDayScore();
+  // ─ Lecture du jour ─
+  renderLectureDuJour();
 
   // ─ 3 cartes d'action ─
   renderCarteBouger(s);
@@ -1901,43 +1901,6 @@ function renderDashboard(s) {
   }
 }
 
-function renderDayScore() {
-  const today = new Date().toDateString();
-  const prayers = ST.prayers[today] || {};
-  const prayersDone = ['fajr','dohr','asr','maghrib','isha'].filter(p => prayers[p]).length;
-  const dhikrChecks = (ST.dhikrChecks && ST.dhikrChecks[today]) || {};
-  const dhikrDone = Object.values(dhikrChecks).filter(Boolean).length >= 3;
-  const seanceDone = ST.seanceDone && ST.seanceDone[today];
-  const coranDone = ST.coranDone && ST.coranDone[today];
-
-  const container = document.getElementById('day-score-grid');
-  if (!container) return;
-
-  const items = [
-    ...(ST.currentSaison !== 'hiver' ? [{ emoji: '🕌', label: 'Prières', done: prayersDone >= 3, sub: prayersDone + '/5', onclick: "switchTabById('ame')" }] : []),
-    { emoji: '📿', label: 'Dhikr',   done: dhikrDone, onclick: "switchTabById('ame')" },
-    { emoji: '💪', label: 'Séance',  done: !!seanceDone, onclick: '' },
-    { emoji: '📖', label: 'Coran', done: !!coranDone, onclick: "switchTabById('ame')" },
-  ];
-
-  const doneCount = items.filter(it => it.done).length;
-  const total = items.length;
-  const pct = total > 0 ? Math.round(doneCount / total * 100) : 0;
-
-  const dotsEl = document.getElementById('day-score-dots');
-  const barEl  = document.getElementById('day-score-bar-fill');
-  if (dotsEl) dotsEl.innerHTML = items.map((_, i) => `<div class="dsd-dot${i < doneCount ? ' filled' : ''}"></div>`).join('');
-  if (barEl) barEl.style.width = pct + '%';
-
-  container.innerHTML = items.map(it => `
-    <div class="day-score-item ${it.done ? 'done' : ''}" onclick="${it.onclick}">
-      <div class="day-score-ring-wrap">
-        <div class="day-score-ring">${it.emoji}</div>
-      </div>
-      <div class="day-score-label">${it.label}${it.sub ? '<br><span style="color:var(--season);font-weight:700">' + it.sub + '</span>' : ''}</div>
-    </div>
-  `).join('');
-}
 
 function _sportEnrSectionHtml(items, label) {
   if (!items || !items.length) return '';
@@ -2659,7 +2622,6 @@ function validerSeanceDash() {
   const s = SAISONS[ST.currentSaison];
   renderCarteBouger(s);
   restoreSeanceDone();
-  renderDayScore();
   checkEndOfPrintemps();
   burstCelebration();
   showToast('💪 Alhamdulillah — séance accomplie ! 🌸');
@@ -2802,7 +2764,6 @@ function validerSeanceExpress() {
   _updateStreakPhase(0.5);
   saveState();
   renderCarteBouger(SAISONS[ST.currentSaison]);
-  renderDayScore();
   burstCelebration();
   showToast('⚡ 5 minutes accomplies — Alhamdulillah ! 🌸');
   setTimeout(showFeedbackPostSeance, 1000);
@@ -3375,18 +3336,38 @@ const _PHASE_LABELS = { hiver: 'HIVER', printemps: 'PRINTEMPS', ete: 'ÉTÉ', au
 const _PHASE_EMOJIS = { hiver: '🌙', printemps: '🌿', ete: '☀️', automne: '🍂' };
 
 function renderLectureDuJour() {
-  const card = document.getElementById('lecture-card');
-  if (!card) return;
   const phase = ST.currentSaison || 'hiver';
   const lecture = _getLectureForPhase(phase);
-  if (!lecture) { card.style.display = 'none'; return; }
-  card.style.display = '';
   const el = (id) => document.getElementById(id);
-  if (el('lecture-phase-emoji')) el('lecture-phase-emoji').textContent = _PHASE_EMOJIS[phase] || '';
-  if (el('lecture-phase-label')) el('lecture-phase-label').textContent = _PHASE_LABELS[phase] || phase.toUpperCase();
-  if (el('lecture-duree')) el('lecture-duree').textContent = lecture.duree + ' min';
-  if (el('lecture-titre')) el('lecture-titre').textContent = lecture.titre;
-  if (el('lecture-accroche')) el('lecture-accroche').textContent = lecture.accroche;
+
+  // Carte Âme
+  const cardAme = el('lecture-card');
+  if (cardAme) cardAme.style.display = lecture ? '' : 'none';
+
+  // Carte Accueil
+  const cardAcc = el('lecture-card-accueil');
+  if (cardAcc) cardAcc.style.display = lecture ? '' : 'none';
+
+  if (!lecture) return;
+
+  const sets = [
+    ['lecture-phase-emoji', 'lecture-phase-emoji-acc'],
+    ['lecture-phase-label', 'lecture-phase-label-acc'],
+    ['lecture-duree', 'lecture-duree-acc'],
+    ['lecture-titre', 'lecture-titre-acc'],
+    ['lecture-accroche', 'lecture-accroche-acc'],
+  ];
+  const values = [
+    _PHASE_EMOJIS[phase] || '',
+    _PHASE_LABELS[phase] || phase.toUpperCase(),
+    lecture.duree + ' min',
+    lecture.titre,
+    lecture.accroche,
+  ];
+  sets.forEach(([idAme, idAcc], i) => {
+    if (el(idAme)) el(idAme).textContent = values[i];
+    if (el(idAcc)) el(idAcc).textContent = values[i];
+  });
 }
 
 function openLectureModal() {
@@ -3449,7 +3430,6 @@ function toggleDhikrCheck(id, el) {
   const box = el.querySelector('.dhikr-check-box');
   if (box) box.textContent = ST.dhikrChecks[today][id] ? '✓' : '';
   saveState();
-  renderDayScore();
 
   const done = Object.values(ST.dhikrChecks[today]).filter(Boolean).length;
   if (done === DHIKR_CHECKS.length) showToast('📿 Alhamdulillah — tous les adhkar du jour ! 🌸');
@@ -3477,7 +3457,6 @@ function toggleCoranCheck() {
   ST.coranDone[today] = !ST.coranDone[today];
   saveState();
   renderCoranCheck();
-  renderDayScore();
   if (ST.coranDone[today]) showToast('📖 Barak Allahou fik — la lecture du Coran est faite 🌸');
 }
 
@@ -4715,7 +4694,6 @@ function togglePrayer(el, name) {
   if (!ST.prayers[today]) ST.prayers[today] = {};
   ST.prayers[today][name] = !ST.prayers[today][name];
   updatePrayerProgress(); saveState();
-  renderDayScore();
 }
 function updatePrayerProgress() {
   const today = new Date().toDateString();
