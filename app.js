@@ -3361,6 +3361,59 @@ function renderAme(s) {
   const coranNote = document.getElementById('coran-hiver-note');
   if (coranNote) coranNote.style.display = ST.currentSaison === 'hiver' ? 'block' : 'none';
   renderCoranCheck();
+
+  // Lecture du jour
+  renderLectureDuJour();
+}
+
+function _getLectureForPhase(phase) {
+  if (typeof LECTURES === 'undefined') return null;
+  return LECTURES.find(l => l.phase === phase) || null;
+}
+
+const _PHASE_LABELS = { hiver: 'HIVER', printemps: 'PRINTEMPS', ete: 'ÉTÉ', automne: 'AUTOMNE' };
+const _PHASE_EMOJIS = { hiver: '🌙', printemps: '🌿', ete: '☀️', automne: '🍂' };
+
+function renderLectureDuJour() {
+  const card = document.getElementById('lecture-card');
+  if (!card) return;
+  const phase = ST.currentSaison || 'hiver';
+  const lecture = _getLectureForPhase(phase);
+  if (!lecture) { card.style.display = 'none'; return; }
+  card.style.display = '';
+  const el = (id) => document.getElementById(id);
+  if (el('lecture-phase-emoji')) el('lecture-phase-emoji').textContent = _PHASE_EMOJIS[phase] || '';
+  if (el('lecture-phase-label')) el('lecture-phase-label').textContent = _PHASE_LABELS[phase] || phase.toUpperCase();
+  if (el('lecture-duree')) el('lecture-duree').textContent = lecture.duree + ' min';
+  if (el('lecture-titre')) el('lecture-titre').textContent = lecture.titre;
+  if (el('lecture-accroche')) el('lecture-accroche').textContent = lecture.accroche;
+}
+
+function openLectureModal() {
+  const phase = ST.currentSaison || 'hiver';
+  const lecture = _getLectureForPhase(phase);
+  if (!lecture) return;
+  const el = (id) => document.getElementById(id);
+  if (el('lm-emoji')) el('lm-emoji').textContent = _PHASE_EMOJIS[phase] || '';
+  if (el('lm-phase')) el('lm-phase').textContent = _PHASE_LABELS[phase] || phase.toUpperCase();
+  if (el('lm-duree')) el('lm-duree').textContent = lecture.duree + ' min';
+  if (el('lm-titre')) el('lm-titre').textContent = lecture.titre;
+  if (el('lm-accroche')) el('lm-accroche').textContent = lecture.accroche;
+  if (el('lm-arabe')) el('lm-arabe').textContent = lecture.source.arabe;
+  if (el('lm-fr')) el('lm-fr').textContent = '« ' + lecture.source.fr + ' »';
+  if (el('lm-ref')) el('lm-ref').textContent = lecture.source.ref;
+  if (el('lm-corps')) el('lm-corps').innerHTML = lecture.corps.replace(/\n\n/g, '</p><p style="margin-top:12px;">').replace(/^/, '<p>').replace(/$/, '</p>');
+  if (el('lm-pensee')) el('lm-pensee').textContent = '« ' + lecture.aEmporter.pensee + ' »';
+  if (el('lm-geste')) el('lm-geste').innerHTML = '🌿 ' + lecture.aEmporter.geste;
+  if (el('lm-dua-arabe')) el('lm-dua-arabe').textContent = lecture.aEmporter.dua.arabe;
+  if (el('lm-dua-fr')) el('lm-dua-fr').textContent = lecture.aEmporter.dua.fr;
+  const modal = el('lecture-modal');
+  if (modal) { modal.classList.add('open'); document.body.style.overflow = 'hidden'; }
+}
+
+function closeLectureModal() {
+  const modal = document.getElementById('lecture-modal');
+  if (modal) { modal.classList.remove('open'); document.body.style.overflow = ''; }
 }
 
 // ── Dhikr cases à cocher ──

@@ -1106,3 +1106,98 @@ const OBJECTIFS_PAR_PHASE = {
     ],
   },
 };
+
+const LECTURES = [
+  {
+    id: 'hiver-sabr-01',
+    titre: "Le sabr n'est pas du silence",
+    accroche: "Et si patience ne voulait pas dire disparaître ?",
+    phase: 'hiver',
+    theme: 'patience',
+    duree: 4,
+    premium: false,
+    source: {
+      arabe: "إِنَّمَا يُوَفَّى الصَّابِرُونَ أَجْرَهُم بِغَيْرِ حِسَابٍ",
+      fr: "Les patients recevront en vérité leur récompense sans limite.",
+      ref: "Sourate Az-Zumar, 39:10"
+    },
+    corps: "Le sabr, tu l'as peut-être appris comme une injonction à te taire. À sourire malgré la douleur. À ne rien montrer. Mais ce n'est pas ce qu'Allah demande. Le sabr, c'est tenir. C'est rester debout à l'intérieur, même quand le corps se courbe.\n\nPendant tes règles, ton corps parle fort. La fatigue, les crampes, l'envie de tout lâcher — ce n'est pas un manque de foi. C'est une réalité que tu traverses. Le sabr ici, c'est continuer à avancer doucement, sans te forcer à briller. C'est honorer ce que tu vis sans en avoir honte.\n\nAllah n'a pas dit que les patients ne ressentent rien. Il a dit qu'Il est avec eux — présent, attentif, et qu'Il récompense sans calculer. Cette période de repos n'est pas une perte. C'est un espace que tu traverses, et Allah le voit.",
+    aEmporter: {
+      pensee: "Tenir doucement, c'est déjà du sabr.",
+      geste: "Pose une main sur ton ventre, respire lentement, et dis intérieurement : « Je suis là, et c'est suffisant. »",
+      dua: {
+        arabe: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الصَّبْرَ الْجَمِيلَ",
+        fr: "Ô Allah, je Te demande la belle patience."
+      }
+    }
+  },
+  {
+    id: 'printemps-niyya-01',
+    titre: "Recommencer — et que ça compte",
+    accroche: "Chaque matin, tu as le droit de tout reprendre à zéro.",
+    phase: 'printemps',
+    theme: 'niyya',
+    duree: 4,
+    premium: false,
+    source: {
+      arabe: "إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى",
+      fr: "Les actes ne valent que par les intentions, et chacun n'obtient que ce qu'il a eu l'intention de faire.",
+      ref: "Hadith, Sahih Al-Bukhari n°1, Sahih Muslim n°1907"
+    },
+    corps: "La phase folliculaire ressemble à une page blanche. L'énergie revient. Les idées aussi. Et parfois, avec elles, arrive une petite voix qui dit : « Encore un nouveau départ ? Tu n'as pas tenu le dernier. »\n\nMais la niyya — l'intention — n'est pas un contrat que tu signes une fois pour toutes. C'est un souffle que tu renouvelles. Chaque matin qui commence est une invitation à poser ton intention pour aujourd'hui. Pas pour le reste de ta vie. Juste aujourd'hui.\n\nCe hadith est l'un des plus fondateurs de l'islam. Il dit que ce qui compte aux yeux d'Allah, c'est d'abord l'intérieur — ton cœur qui se tourne. Alors si hier tu as lâché, si la semaine dernière tu as oublié, si l'année dernière tu avais promis — ce matin, tu peux recommencer. Et ça comptera entièrement.",
+    aEmporter: {
+      pensee: "Mon intention sincère vaut déjà un acte accompli.",
+      geste: "Avant de te lever, formule une seule intention pour ta journée — une phrase simple, à voix basse ou dans ton cœur.",
+      dua: {
+        arabe: "اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ",
+        fr: "Ô Allah, aide-moi à Te rappeler, à Te remercier et à T'adorer comme il se doit."
+      }
+    }
+  },
+  {
+    id: 'ete-sadaqa-01',
+    titre: "Donner quand tu débordes — c'est le bon moment",
+    accroche: "Et si ton pic d'énergie était fait pour être partagé ?",
+    phase: 'ete',
+    theme: 'générosité',
+    duree: 4,
+    premium: false,
+    source: {
+      arabe: "مَثَلُ الَّذِينَ يُنفِقُونَ أَمْوَالَهُمْ فِي سَبِيلِ اللَّهِ كَمَثَلِ حَبَّةٍ أَنبَتَتْ سَبْعَ سَنَابِلَ فِي كُلِّ سُنبُلَةٍ مِّائَةُ حَبَّةٍ",
+      fr: "Ceux qui dépensent leurs biens dans le chemin d'Allah ressemblent à un grain qui produit sept épis, chaque épi contenant cent grains.",
+      ref: "Sourate Al-Baqara, 2:261"
+    },
+    corps: "En phase ovulatoire, quelque chose s'ouvre. Tu as envie de voir des gens, de parler, d'agir. Cette énergie n'est pas un hasard — c'est ton corps qui t'offre une fenêtre. Et l'islam dit que donner dans cet élan, c'est semer.\n\nLa sadaqa ne se mesure pas qu'en argent. Un sourire sincère est une sadaqa. Écouter vraiment, c'est une sadaqa. Partager une ressource utile, cuisiner pour quelqu'un, envoyer un message de soutien — tout ça compte. Surtout quand tu as l'élan pour le faire.\n\nDonner depuis la plénitude, ce n'est pas se vider. C'est laisser circuler ce qui déborde. Et Allah, le plus Généreux, multiplie ce qu'on donne sans jamais appauvrir celui qui donne. Tu peux donner aujourd'hui sans peur — ce que tu offres revient, toujours, différemment.",
+    aEmporter: {
+      pensee: "Ce que je donne aujourd'hui pousse longtemps après.",
+      geste: "Fais une seule action généreuse intentionnelle aujourd'hui — même petite. Offre-la en sadaqa avec une niyya dans ton cœur.",
+      dua: {
+        arabe: "اللَّهُمَّ اجْعَلْنِي مِنَ الْمُتَصَدِّقِينَ وَبَارِكْ لِي فِيمَا رَزَقْتَنِي",
+        fr: "Ô Allah, fais de moi quelqu'un qui donne, et bénis ce que Tu m'as accordé."
+      }
+    }
+  },
+  {
+    id: 'automne-muhasaba-01',
+    titre: "Se regarder sans se juger — c'est possible",
+    accroche: "La muhasaba n'est pas un tribunal — c'est une conversation avec toi-même.",
+    phase: 'automne',
+    theme: 'muhasaba',
+    duree: 5,
+    premium: false,
+    source: {
+      arabe: "يَا أَيُّهَا الَّذِينَ آمَنُوا اتَّقُوا اللَّهَ وَلْتَنظُرْ نَفْسٌ مَّا قَدَّمَتْ لِغَدٍ",
+      fr: "Ô vous qui croyez, craignez Allah, et que chaque âme regarde ce qu'elle a accompli pour demain.",
+      ref: "Sourate Al-Hashr, 59:18"
+    },
+    corps: "La phase lutéale amène souvent une conscience aiguë de ce qu'on n'a pas fait, de ce qu'on aurait pu mieux faire. Ce regard intérieur peut faire mal. Mais il peut aussi être un cadeau — si on lui laisse la douceur qu'il mérite.\n\nLa muhasaba, c'est l'examen de conscience. Les savants en ont fait une pratique régulière — s'asseoir, regarder sa journée, et se demander : « Où étais-je aujourd'hui ? » Pas pour se condamner, mais pour se connaître. Pour ajuster. Pour revenir.\n\nCe verset ne dit pas « regarde ce que tu n'as pas fait ». Il dit « regarde ce que tu as accompli pour demain ». C'est une invitation à voir aussi ce qui est là — les intentions posées, les efforts discrets, les moments où tu as choisi le bien même en silence. Regarde tout ça, avec honnêteté et avec douceur. Tu te dois les deux.",
+    aEmporter: {
+      pensee: "Me regarder avec douceur, c'est apprendre à me connaître sans me détruire.",
+      geste: "Ce soir, écris trois lignes : une chose que tu as faite avec le cœur aujourd'hui, une chose que tu veux ajuster demain, et une chose dont tu es reconnaissante.",
+      dua: {
+        arabe: "اللَّهُمَّ آتِ نَفْسِي تَقْوَاهَا وَزَكِّهَا أَنْتَ خَيْرُ مَنْ زَكَّاهَا",
+        fr: "Ô Allah, accorde à mon âme sa piété et purifie-la — Tu es le meilleur pour la purifier."
+      }
+    }
+  }
+];
