@@ -1983,7 +1983,8 @@ function renderCarteBouger(s) {
       exContent +
       (spirituelHtml ? `<div class="sport-spiritual">${spirituelHtml}</div>` : '');
   }
-  if (btnWrap) btnWrap.style.display = (isDone || isReported) ? 'none' : 'block';
+  const _noTimerTypes = ['repos', 'ete-repos', 'calme'];
+  if (btnWrap) btnWrap.style.display = (isDone || isReported || (spec && _noTimerTypes.includes(spec.type))) ? 'none' : 'block';
   if (doneWrap) doneWrap.style.display = isDone ? 'flex' : 'none';
   if (reportedWrap) reportedWrap.style.display = isReported ? 'block' : 'none';
 }
@@ -5779,7 +5780,7 @@ function _stxBuildSteps(spec, overrideRest) {
 
   const exList = (spec && spec.exercices) ? spec.exercices : [];
   if (!exList.length) {
-    steps.push({ type: 'exercise', label: 'Exercice', title: 'Séance libre', duration: 300, desc: 'Suis ton programme habituel.', series: 1, serieIdx: 0, exIdx: 0, exTotal: 1 });
+    steps.push({ type: 'exercise', label: 'Mouvement doux', title: 'Respiration & mobilité', duration: 300, desc: 'Respiration abdominale profonde, mobilité articulaire douce. Cercles d\'épaules, hanches, chevilles. Écoute ton corps.', series: 1, serieIdx: 0, seriesTotal: 1, exIdx: 0, exTotal: 1 });
   } else {
     exList.forEach(function(rawEx, exIdx) {
       const ex = _stNormalizeEx(rawEx, exIdx);
@@ -5832,13 +5833,57 @@ function _stxBuildSteps(spec, overrideRest) {
   return steps;
 }
 
+// ── Normalisation EMOM/AMRAP → exercices guidés ──────────────
+function _stxNormalizeEteIntense(niveauData) {
+  const exercices = [];
+  if (niveauData.type === 'emom') {
+    const rounds = niveauData.duree || 10;
+    const reps = niveauData.reps || 5;
+    const exDurSec = reps * 3;
+    const restSec = Math.max(10, 60 - exDurSec);
+    for (let i = 0; i < rounds; i++) {
+      exercices.push({
+        nom: niveauData.exercice + ' — Round ' + (i + 1) + '/' + rounds,
+        reps: reps,
+        repos: restSec,
+        parJambe: niveauData.parJambe || false,
+        detail: 'Effectue ' + reps + ' répétitions' + (niveauData.parJambe ? ' par jambe' : '') + ', puis récupère jusqu\'à la prochaine minute.',
+      });
+    }
+  } else if (niveauData.type === 'amrap') {
+    const circuit = niveauData.circuit || [];
+    const rounds = 8;
+    for (let r = 0; r < rounds; r++) {
+      circuit.forEach(function(ex) {
+        exercices.push({
+          nom: ex.nom + ' — Tour ' + (r + 1) + '/' + rounds,
+          reps: ex.reps,
+          repos: 5,
+          parJambe: ex.parJambe || false,
+          detail: ex.reps + ' rép' + (ex.parJambe ? ' par jambe' : '') + '. Enchaîne sans pause — compte tes tours complets.',
+        });
+      });
+    }
+  }
+  return { exercices: exercices };
+}
+
 // ── Ouvrir le timer ──────────────────────────────────────────
 function openSeanceTimer() {
   const spec = (typeof getTodaySeanceSpec === 'function') ? getTodaySeanceSpec() : null;
   const enriched = (spec && typeof getSeanceEnrichie === 'function')
     ? getSeanceEnrichie(spec.type, spec.level || 1)
     : null;
-  const data = enriched || (spec && spec.data) || null;
+  let data = enriched || (spec && spec.data) || null;
+
+  // automne-doux : mobilite[] → exercices[]
+  if (spec && spec.type === 'automne-doux' && data && data.mobilite && !data.exercices) {
+    data = Object.assign({}, data, { exercices: data.mobilite });
+  }
+  // ete-intense : EMOM/AMRAP → steps guidés
+  if (spec && spec.type === 'ete-intense' && data && !data.exercices) {
+    data = _stxNormalizeEteIntense(data);
+  }
 
   let _stLevelRest = null;
   if (spec && typeof SEANCES_SPORT !== 'undefined') {
