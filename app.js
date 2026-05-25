@@ -89,6 +89,175 @@ let ST = {
   lastObjResetDate: null,
 };
 
+// ═══════════════════════════════════════════════
+// PWA INSTALLATION LOGIC
+// ═══════════════════════════════════════════════
+let _pwaPrompt = null;
+
+function _pwaDetectBrowser() {
+  const ua = navigator.userAgent;
+  const isIos = /iPhone|iPad|iPod/.test(ua);
+  const isAndroid = /Android/.test(ua);
+  const isSafari = /Safari/.test(ua) && !/Chrome/.test(ua);
+  const isChrome = /CriOS|Chrome/.test(ua);
+  const isStandalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches ||
+                       window.navigator.standalone === true;
+
+  let type = 'other';
+  let canNativeInstall = false;
+
+  if (isIos && isSafari) {
+    type = 'ios-safari';
+  } else if (isIos && isChrome) {
+    type = 'ios-chrome';
+  } else if (isAndroid && isChrome) {
+    type = 'android-chrome';
+    canNativeInstall = !!_pwaPrompt;
+  } else if (isAndroid) {
+    type = 'android-other';
+  } else if (!isIos && !isAndroid) {
+    type = 'desktop';
+  }
+
+  return {
+    type,
+    canNativeInstall,
+    isIos,
+    isAndroid,
+    isSafari,
+    isChrome,
+    isStandalone
+  };
+}
+
+function openPwaGuide(browserType) {
+  const modal = document.getElementById('pwa-guide-modal');
+  const overlay = document.getElementById('pwa-overlay');
+  if (!modal) return;
+  modal.setAttribute('data-browser', browserType || _pwaDetectBrowser().type);
+  modal.classList.add('open');
+  if (overlay) overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePwaGuide() {
+  const modal = document.getElementById('pwa-guide-modal');
+  const overlay = document.getElementById('pwa-overlay');
+  if (modal) modal.classList.remove('open');
+  if (overlay) overlay.classList.remove('open');
+  document.body.style.overflow = '';
+  localStorage.setItem('pwa_dismissed_at', Date.now().toString());
+}
+
+function triggerPwaInstall() {
+  if (!_pwaPrompt) return;
+
+  _pwaPrompt.prompt();
+  _pwaPrompt.userChoice.then((choiceResult) => {
+    if (choiceResult.outcome === 'accepted') {
+      localStorage.setItem('pwa_installed', '1');
+      _pwaHideAll();
+    }
+    _pwaPrompt = null;
+  });
+}
+
+function _pwaShowInstallHint() {
+  const banner = document.getElementById('pwa-install-banner');
+  if (!banner) return;
+
+  const browser = _pwaDetectBrowser();
+  if (browser.isStandalone) return;
+  if (localStorage.getItem('pwa_installed') === '1') return;
+
+  const dismissedAt = localStorage.getItem('pwa_dismissed_at');
+  if (dismissedAt) {
+    const daysSince = (Date.now() - parseInt(dismissedAt)) / (1000 * 60 * 60 * 24);
+    if (daysSince < 7) return;
+  }
+
+  banner.style.display = 'flex';
+}
+
+function _pwaHideAll() {
+  const banner = document.getElementById('pwa-install-banner');
+  const modal = document.getElementById('pwa-guide-modal');
+  if (banner) banner.style.display = 'none';
+  if (modal) modal.classList.remove('open');
+}
+
+function _pwaInit() {
+  // Compter les lancements de l'app (pas les vues de landing)
+  const isAppPage = window.location.pathname === '/' || window.location.pathname === '/index.html';
+  if (isAppPage) {
+    const currentCount = parseInt(localStorage.getItem('pwa_launch_count') || '0');
+    localStorage.setItem('pwa_launch_count', (currentCount + 1).toString());
+
+    // Afficher la bannière au 2ème lancement dans l'onglet Moi
+    if (currentCount >= 1) {
+      setTimeout(_pwaShowInstallHintInApp, 2000);
+    }
+  }
+}
+
+function _pwaShowInstallHintInApp() {
+  // Uniquement si on est dans l'onglet Moi et pas encore installé
+  const currentTab = document.querySelector('.nav-item.active');
+  const browser = _pwaDetectBrowser();
+
+  if (!browser.isStandalone &&
+      localStorage.getItem('pwa_installed') !== '1' &&
+      currentTab && currentTab.id === 'nav-moi') {
+    _pwaShowInstallHint();
+  }
+}
+
+function _renderPwaInstallButton() {
+  const browser = _pwaDetectBrowser();
+
+  // Ne pas afficher si déjà en mode standalone ou déjà installé
+  if (browser.isStandalone || localStorage.getItem('pwa_installed') === '1') {
+    return;
+  }
+
+  // Chercher où insérer le bouton (après ps-auth-row)
+  const authRow = document.getElementById('ps-auth-row');
+  if (!authRow) return;
+
+  const existingButton = document.getElementById('ps-pwa-row');
+  if (existingButton) existingButton.remove();
+
+  const pwaRow = document.createElement('div');
+  pwaRow.id = 'ps-pwa-row';
+  pwaRow.className = 'ps-row';
+  pwaRow.style.cursor = 'pointer';
+
+  let buttonText = 'Installer l\'app';
+  let subText = 'Accès rapide depuis ton écran d\'accueil';
+  let onClick = () => openPwaGuide(browser.type);
+
+  // Sur Android Chrome, installation directe possible
+  if (browser.type === 'android-chrome' && _pwaPrompt) {
+    onClick = triggerPwaInstall;
+  }
+
+  pwaRow.innerHTML = `
+    <div class="ps-ico">📱</div>
+    <div>
+      <div class="ps-lbl">${buttonText}</div>
+      <div class="ps-sub">${subText}</div>
+    </div>
+    <div class="ps-arr">⚡</div>
+  `;
+
+  pwaRow.onclick = onClick;
+
+  // Insérer après la ligne d'authentification
+  authRow.parentNode.insertBefore(pwaRow, authRow.nextSibling);
+}
+
+// ═══════════════════════════════════════════════
+
 function saveState() {
   // Ne jamais sauvegarder currentSaison/currentDay — recalculés a chaque lancement
   // Ne jamais persister manualSignOut — flag mémoire uniquement
@@ -3293,6 +3462,10 @@ function renderMoi(s) {
       row.onclick = openReconnectFromNudge;
     }
   }
+
+  // Bouton installation PWA
+  _renderPwaInstallButton();
+
   renderMoiBilan();
   renderCycleHistory();
 }
@@ -4203,6 +4376,22 @@ function initApp() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+  // PWA install prompt capture
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    _pwaPrompt = e;
+    _pwaShowInstallHint();
+  });
+
+  window.addEventListener('appinstalled', () => {
+    _pwaPrompt = null;
+    localStorage.setItem('pwa_installed', '1');
+    _pwaHideAll();
+  });
+
+  // Initialisation PWA
+  _pwaInit();
+
   // Message post-suppression (sessionStorage survit au reload, pas au fermer/rouvrir)
   if (sessionStorage.getItem('sakina_deleted') === '1') {
     sessionStorage.removeItem('sakina_deleted');

@@ -1812,5 +1812,103 @@
 <script src="/data.js" defer></script>
 <script src="/sport-additions.js" defer></script>
 <script src="/app.js" defer></script>
+
+<!-- ── PWA INSTALL GUIDE ─────────────────────────────────────── -->
+<div class="pwa-overlay" id="pwa-overlay" onclick="closePwaGuide()"></div>
+
+<div id="pwa-guide-modal" class="pwa-modal" data-browser="ios-safari">
+  <div class="pwa-modal-header">
+    <h3 class="pwa-modal-title">Installe SakinApp sur ton téléphone 📲</h3>
+    <button class="pwa-modal-close" onclick="closePwaGuide()" aria-label="Fermer">✕</button>
+  </div>
+
+  <!-- iOS Safari -->
+  <div class="pwa-content pwa-ios-safari">
+    <p class="pwa-intro">Le plus courant chez nos sœurs 🍎 — c'est très simple :</p>
+    <div class="pwa-steps">
+      <div class="pwa-step">
+        <div class="pwa-step-number">1</div>
+        <div class="pwa-step-icon">⬆️</div>
+        <div class="pwa-step-text">Appuie sur l'icône <strong>Partager</strong> en bas de ton écran</div>
+      </div>
+      <div class="pwa-step">
+        <div class="pwa-step-number">2</div>
+        <div class="pwa-step-icon">📱</div>
+        <div class="pwa-step-text">Fais défiler et trouve <strong>"Sur l'écran d'accueil"</strong></div>
+      </div>
+      <div class="pwa-step">
+        <div class="pwa-step-number">3</div>
+        <div class="pwa-step-icon">✨</div>
+        <div class="pwa-step-text">Appuie sur <strong>"Ajouter"</strong> — c'est tout ! 🌸</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Android Chrome -->
+  <div class="pwa-content pwa-android-chrome">
+    <p class="pwa-intro">Installation rapide sur Android :</p>
+    <div class="pwa-steps">
+      <div class="pwa-step">
+        <div class="pwa-step-number">1</div>
+        <div class="pwa-step-icon">⋮</div>
+        <div class="pwa-step-text">Appuie sur les 3 points <strong>⋮</strong> en haut à droite</div>
+      </div>
+      <div class="pwa-step">
+        <div class="pwa-step-number">2</div>
+        <div class="pwa-step-icon">📲</div>
+        <div class="pwa-step-text">Sélectionne <strong>"Ajouter à l'écran d'accueil"</strong> ou <strong>"Installer l'application"</strong></div>
+      </div>
+      <div class="pwa-step">
+        <div class="pwa-step-number">3</div>
+        <div class="pwa-step-icon">✅</div>
+        <div class="pwa-step-text">Confirme en appuyant sur <strong>"Installer"</strong></div>
+      </div>
+    </div>
+    <button class="pwa-install-btn" onclick="triggerPwaInstall()">Installer maintenant 🌿</button>
+  </div>
+
+  <!-- iOS Chrome -->
+  <div class="pwa-content pwa-ios-chrome">
+    <div class="pwa-limitation">
+      <div class="pwa-limitation-icon">🌿</div>
+      <p>Sur <strong>iPhone</strong>, ouvre <span class="pwa-url">sakinaap.com</span> dans <strong>Safari</strong> pour installer l'app.</p>
+      <p class="pwa-limitation-note">Chrome iOS ne permet pas encore l'installation d'apps.</p>
+    </div>
+    <button class="pwa-copy-btn" onclick="navigator.clipboard&&navigator.clipboard.writeText('https://sakinaap.com').then(()=>this.textContent='Lien copié ! ✓')">Copier le lien 📋</button>
+  </div>
+
+  <!-- Autre navigateur -->
+  <div class="pwa-content pwa-other">
+    <p class="pwa-intro">Installe l'app depuis ton navigateur :</p>
+    <div class="pwa-steps">
+      <div class="pwa-step">
+        <div class="pwa-step-number">1</div>
+        <div class="pwa-step-icon">🔍</div>
+        <div class="pwa-step-text">Cherche <strong>"Ajouter à l'écran d'accueil"</strong> ou <strong>"Installer"</strong> dans le menu de ton navigateur</div>
+      </div>
+      <div class="pwa-step">
+        <div class="pwa-step-number">2</div>
+        <div class="pwa-step-icon">📱</div>
+        <div class="pwa-step-text">Sur mobile : menu du navigateur · Sur desktop : icône dans la barre d'adresse</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pwa-modal-footer">
+    <button class="pwa-done-btn" onclick="closePwaGuide()">C'est fait ! 🌸</button>
+  </div>
+</div>
+
+<!-- Bannière discrète en bas -->
+<div id="pwa-install-banner" class="pwa-banner" style="display:none;">
+  <div class="pwa-banner-content">
+    <span class="pwa-banner-text">📲 Installe SakinApp sur ton téléphone pour l'avoir toujours avec toi</span>
+    <div class="pwa-banner-actions">
+      <button class="pwa-banner-btn pwa-banner-install" onclick="openPwaGuide(_pwaDetectBrowser().type)">Installer</button>
+      <button class="pwa-banner-btn pwa-banner-later" onclick="this.closest('.pwa-banner').style.display='none';localStorage.setItem('pwa_dismissed_at',Date.now())">Plus tard</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

@@ -1221,6 +1221,185 @@ function toggleFaq(btn) {
   obs.observe(hero);
   obs.observe(pricing);
 })();
+
+// PWA Installation Logic pour Landing Page
+(function() {
+  let _pwaPrompt = null;
+  let _pwaTimerStarted = false;
+
+  function _pwaDetectBrowser() {
+    const ua = navigator.userAgent;
+    const isIos = /iPhone|iPad|iPod/.test(ua);
+    const isAndroid = /Android/.test(ua);
+    const isSafari = /Safari/.test(ua) && !/Chrome/.test(ua);
+    const isChrome = /CriOS|Chrome/.test(ua);
+    const isStandalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches ||
+                         window.navigator.standalone === true;
+
+    let type = 'other';
+    if (isIos && isSafari) type = 'ios-safari';
+    else if (isIos && isChrome) type = 'ios-chrome';
+    else if (isAndroid && isChrome) type = 'android-chrome';
+    else if (isAndroid) type = 'android-other';
+    else if (!isIos && !isAndroid) type = 'desktop';
+
+    return { type, isStandalone };
+  }
+
+  function _pwaCanShow() {
+    const browser = _pwaDetectBrowser();
+    if (browser.isStandalone) return false;
+    if (localStorage.getItem('pwa_installed') === '1') return false;
+
+    const dismissedAt = localStorage.getItem('pwa_dismissed_at');
+    if (dismissedAt) {
+      const daysSince = (Date.now() - parseInt(dismissedAt)) / (1000 * 60 * 60 * 24);
+      if (daysSince < 7) return false;
+    }
+
+    return true;
+  }
+
+  function _pwaShowBanner() {
+    if (!_pwaCanShow()) return;
+
+    const banner = document.getElementById('pwa-install-banner');
+    if (banner) {
+      banner.style.display = 'flex';
+    }
+  }
+
+  function _pwaStartTimer() {
+    if (_pwaTimerStarted) return;
+    _pwaTimerStarted = true;
+
+    // Afficher après 30 secondes
+    setTimeout(() => {
+      _pwaShowBanner();
+    }, 30000);
+  }
+
+  function _pwaOnScroll() {
+    const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+    if (scrollPercent >= 50) {
+      _pwaShowBanner();
+      window.removeEventListener('scroll', _pwaOnScroll);
+    }
+  }
+
+  // Event listeners PWA
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    _pwaPrompt = e;
+  });
+
+  window.addEventListener('appinstalled', () => {
+    _pwaPrompt = null;
+    localStorage.setItem('pwa_installed', '1');
+    const banner = document.getElementById('pwa-install-banner');
+    if (banner) banner.style.display = 'none';
+  });
+
+  // Démarrer le timer et écouter le scroll
+  _pwaStartTimer();
+  window.addEventListener('scroll', _pwaOnScroll, { passive: true });
+
+  // Fonctions globales pour l'interaction avec la bannière
+  window.openPwaGuide = function(browserType) {
+    const modal = document.getElementById('pwa-guide-modal');
+    const overlay = document.getElementById('pwa-overlay');
+    if (!modal) return;
+    modal.setAttribute('data-browser', browserType || _pwaDetectBrowser().type);
+    modal.classList.add('open');
+    if (overlay) overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.closePwaGuide = function() {
+    const modal = document.getElementById('pwa-guide-modal');
+    const overlay = document.getElementById('pwa-overlay');
+    if (modal) modal.classList.remove('open');
+    if (overlay) overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    localStorage.setItem('pwa_dismissed_at', Date.now().toString());
+  };
+
+  window.triggerPwaInstall = function() {
+    if (!_pwaPrompt) return;
+    _pwaPrompt.prompt();
+    _pwaPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        localStorage.setItem('pwa_installed', '1');
+        const banner = document.getElementById('pwa-install-banner');
+        if (banner) banner.style.display = 'none';
+      }
+      _pwaPrompt = null;
+    });
+  };
+
+  window.dismissPwaBanner = function() {
+    const banner = document.getElementById('pwa-install-banner');
+    if (banner) banner.style.display = 'none';
+    localStorage.setItem('pwa_dismissed_at', Date.now().toString());
+  };
+})();
 </script>
+
+<!-- Overlay + Modal PWA -->
+<div class="pwa-overlay" id="pwa-overlay" onclick="closePwaGuide()"></div>
+
+<div id="pwa-guide-modal" class="pwa-modal" data-browser="ios-safari">
+  <div class="pwa-modal-header">
+    <h3 class="pwa-modal-title">Installe SakinApp sur ton téléphone 📲</h3>
+    <button class="pwa-modal-close" onclick="closePwaGuide()" aria-label="Fermer">✕</button>
+  </div>
+  <div class="pwa-content pwa-ios-safari">
+    <p class="pwa-intro">Le plus courant chez nos sœurs 🍎 — c'est très simple :</p>
+    <div class="pwa-steps">
+      <div class="pwa-step"><div class="pwa-step-number">1</div><div class="pwa-step-icon">⬆️</div><div class="pwa-step-text">Appuie sur l'icône <strong>Partager</strong> en bas de ton écran</div></div>
+      <div class="pwa-step"><div class="pwa-step-number">2</div><div class="pwa-step-icon">📱</div><div class="pwa-step-text">Fais défiler et trouve <strong>"Sur l'écran d'accueil"</strong></div></div>
+      <div class="pwa-step"><div class="pwa-step-number">3</div><div class="pwa-step-icon">✨</div><div class="pwa-step-text">Appuie sur <strong>"Ajouter"</strong> — c'est tout ! 🌸</div></div>
+    </div>
+  </div>
+  <div class="pwa-content pwa-android-chrome">
+    <p class="pwa-intro">Installation rapide sur Android :</p>
+    <div class="pwa-steps">
+      <div class="pwa-step"><div class="pwa-step-number">1</div><div class="pwa-step-icon">⋮</div><div class="pwa-step-text">Appuie sur les 3 points <strong>⋮</strong> en haut à droite</div></div>
+      <div class="pwa-step"><div class="pwa-step-number">2</div><div class="pwa-step-icon">📲</div><div class="pwa-step-text">Sélectionne <strong>"Ajouter à l'écran d'accueil"</strong> ou <strong>"Installer l'application"</strong></div></div>
+      <div class="pwa-step"><div class="pwa-step-number">3</div><div class="pwa-step-icon">✅</div><div class="pwa-step-text">Confirme en appuyant sur <strong>"Installer"</strong></div></div>
+    </div>
+    <button class="pwa-install-btn" onclick="triggerPwaInstall()">Installer maintenant 🌿</button>
+  </div>
+  <div class="pwa-content pwa-ios-chrome">
+    <div class="pwa-limitation">
+      <div class="pwa-limitation-icon">🌿</div>
+      <p>Sur <strong>iPhone</strong>, ouvre <span class="pwa-url">sakinaap.com</span> dans <strong>Safari</strong> pour installer l'app.</p>
+      <p class="pwa-limitation-note">Chrome iOS ne permet pas encore l'installation d'apps.</p>
+    </div>
+    <button class="pwa-copy-btn" onclick="navigator.clipboard&&navigator.clipboard.writeText('https://sakinaap.com').then(()=>this.textContent='Lien copié ! ✓')">Copier le lien 📋</button>
+  </div>
+  <div class="pwa-content pwa-other">
+    <p class="pwa-intro">Installe l'app depuis ton navigateur :</p>
+    <div class="pwa-steps">
+      <div class="pwa-step"><div class="pwa-step-number">1</div><div class="pwa-step-icon">🔍</div><div class="pwa-step-text">Cherche <strong>"Ajouter à l'écran d'accueil"</strong> dans le menu de ton navigateur</div></div>
+      <div class="pwa-step"><div class="pwa-step-number">2</div><div class="pwa-step-icon">📱</div><div class="pwa-step-text">Sur mobile : menu du navigateur · Sur desktop : icône dans la barre d'adresse</div></div>
+    </div>
+  </div>
+  <div class="pwa-modal-footer">
+    <button class="pwa-done-btn" onclick="closePwaGuide()">C'est fait ! 🌸</button>
+  </div>
+</div>
+
+<!-- Bannière discrète PWA -->
+<div id="pwa-install-banner" class="pwa-banner" style="display:none;">
+  <div class="pwa-banner-content">
+    <span class="pwa-banner-text">📲 Installe SakinApp sur ton téléphone pour l'avoir toujours avec toi</span>
+    <div class="pwa-banner-actions">
+      <button class="pwa-banner-btn pwa-banner-install" onclick="openPwaGuide(_pwaDetectBrowser().type)">Installer</button>
+      <button class="pwa-banner-btn pwa-banner-later" onclick="dismissPwaBanner()">Plus tard</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

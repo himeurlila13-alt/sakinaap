@@ -1900,3 +1900,68 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
 .st-ov-btn.primary{background:var(--season-grad);color:white}
 .st-ov-btn.secondary{background:var(--sable);color:var(--noir)}
 .st-ov-btn.danger{background:#F9E8E4;color:#C46B50;border:1px solid #F0C4B0}
+
+/* ═══════════════════════════════════════════════
+   PWA INSTALLATION GUIDE
+   ═══════════════════════════════════════════════ */
+
+/* Overlay */
+.pwa-overlay{position:fixed;inset:0;background:rgba(44,32,24,.65);backdrop-filter:blur(4px);z-index:1100;display:none}
+.pwa-overlay.open{display:block;animation:fadeIn .25s ease}
+
+/* Modal */
+.pwa-modal{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:440px;background:#FDF8F2;border-radius:22px 22px 0 0;box-shadow:0 -8px 40px rgba(0,0,0,.18);z-index:1101;display:none;padding-bottom:env(safe-area-inset-bottom,0)}
+.pwa-modal.open{display:block;animation:slideUpModal .35s cubic-bezier(.22,1,.36,1)}
+@keyframes slideUpModal{from{transform:translateX(-50%) translateY(100%)}to{transform:translateX(-50%) translateY(0)}}
+
+/* Header */
+.pwa-modal-header{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 12px;border-bottom:1px solid #EDE5DA}
+.pwa-modal-title{font-family:Georgia,serif;font-size:17px;font-weight:700;color:#2C2018;margin:0;flex:1;line-height:1.3}
+.pwa-modal-close{width:30px;height:30px;border-radius:50%;background:#EDE5DA;border:none;color:#7A6455;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:10px}
+
+/* Contenu conditionnel */
+.pwa-content{display:none;padding:16px 20px}
+.pwa-modal[data-browser="ios-safari"]    .pwa-ios-safari    {display:block}
+.pwa-modal[data-browser="android-chrome"].pwa-android-chrome{display:block}
+.pwa-modal[data-browser="ios-chrome"]    .pwa-ios-chrome    {display:block}
+.pwa-modal[data-browser="android-other"] .pwa-other         {display:block}
+.pwa-modal[data-browser="desktop"]       .pwa-other         {display:block}
+.pwa-modal[data-browser="other"]         .pwa-other         {display:block}
+
+/* Intro */
+.pwa-intro{font-size:14px;color:#7A6455;line-height:1.5;margin:0 0 14px}
+
+/* Steps */
+.pwa-steps{display:flex;flex-direction:column;gap:10px}
+.pwa-step{display:flex;align-items:flex-start;gap:10px;padding:13px 14px;background:#fff;border-radius:14px;border:1px solid #EDE5DA}
+.pwa-step-number{width:26px;height:26px;background:#4A7C59;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.pwa-step-icon{font-size:19px;width:26px;text-align:center;flex-shrink:0}
+.pwa-step-text{font-size:14px;color:#2C2018;line-height:1.5;flex:1}
+.pwa-step-text strong{color:#4A7C59}
+
+/* Limitation iOS Chrome */
+.pwa-limitation{text-align:center;padding:8px 0 4px}
+.pwa-limitation-icon{font-size:38px;margin-bottom:12px}
+.pwa-limitation p{font-size:14px;color:#2C2018;line-height:1.5;margin:0 0 8px}
+.pwa-limitation-note{font-size:12px !important;color:#9A8A7A !important;font-style:italic}
+.pwa-url{font-family:monospace;background:#EDE5DA;padding:2px 6px;border-radius:5px;font-size:13px}
+
+/* Boutons action */
+.pwa-install-btn,.pwa-copy-btn{width:100%;padding:14px;background:var(--season-grad,linear-gradient(135deg,#4A7C59,#3DAE8A));color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;margin-top:14px}
+.pwa-install-btn:active,.pwa-copy-btn:active{opacity:.88}
+
+/* Footer */
+.pwa-modal-footer{padding:12px 20px 20px;border-top:1px solid #EDE5DA}
+.pwa-done-btn{width:100%;padding:13px;background:#4A7C59;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer}
+.pwa-done-btn:active{opacity:.88}
+
+/* ── Bannière discrète ── */
+.pwa-banner{position:fixed;bottom:72px;left:50%;transform:translateX(-50%);width:calc(100% - 24px);max-width:420px;background:rgba(253,248,242,.96);backdrop-filter:blur(10px);border:1px solid #EDE5DA;border-radius:16px;box-shadow:0 6px 28px rgba(0,0,0,.11);z-index:900;animation:slideUpBanner .3s ease;margin-bottom:env(safe-area-inset-bottom,0)}
+@keyframes slideUpBanner{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.pwa-banner-content{display:flex;align-items:center;gap:10px;padding:11px 14px}
+.pwa-banner-text{font-size:12px;color:#2C2018;line-height:1.4;flex:1}
+.pwa-banner-actions{display:flex;gap:7px;flex-shrink:0}
+.pwa-banner-btn{padding:7px 13px;border:none;border-radius:10px;font-size:11px;font-weight:700;cursor:pointer}
+.pwa-banner-install{background:#4A7C59;color:#fff}
+.pwa-banner-later{background:#EDE5DA;color:#7A6455}
+.pwa-banner-btn:active{opacity:.85}
