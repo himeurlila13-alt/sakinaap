@@ -380,7 +380,7 @@ function _buildWelcomeEmailHtml(prenom, email) {
             </td>
             <td style="width:25%;text-align:center;padding:12px 6px;">
               <div style="font-size:28px;margin-bottom:6px;">☀️</div>
-              <div style="font-size:12px;font-weight:700;color:#FFD740;letter-spacing:1px;">ÉTÉ</div>
+              <div style="font-size:12px;font-weight:700;color:#FFC107;letter-spacing:1px;">ÉTÉ</div>
             </td>
             <td style="width:25%;text-align:center;padding:12px 6px;">
               <div style="font-size:28px;margin-bottom:6px;">🍂</div>
@@ -1007,8 +1007,8 @@ const SAISONS = {
   },
   ete: {
     nom: 'Été', foodTeaser: 'Protéines, antioxydants, oméga-3', skinTeaser: 'Protection & légèreté', emoji: '☀️', phase: 'Phase ovulatoire',
-    color: '#FFD740', light: '#FFD740', soft: '#FFFBE6', dark: '#F0A800', rgb: '255,215,64',
-    grad: 'linear-gradient(145deg, #F0A800, #FFD740)',
+    color: '#FFC107', light: '#FFD740', soft: '#FFF8E1', dark: '#FF8F00', rgb: '255,193,7',
+    grad: 'linear-gradient(145deg, #FF8F00, #FFC107)',
     jours: [14,17],
     messages: {
       bien: "Tu es à ton pic. C'est le bon moment pour les efforts physiques, les conversations importantes.",
@@ -1358,7 +1358,7 @@ function computeCycle() {
   ST._lastSaison = ST.currentSaison;
 }
 
-const BG_PHASE = { hiver: '#FAF0FF', printemps: '#F0FAF6', ete: '#FFFBF0', automne: '#FDF5F0' };
+const BG_PHASE = { hiver: '#FAF0FF', printemps: '#F0FAF6', ete: '#FFF8E1', automne: '#FDF5F0' };
 
 function showPhaseToast(emoji, title, sub) {
   const el = document.createElement('div');
@@ -4929,7 +4929,7 @@ function drawCycleRing() {
   const phases = [
     {id:'seg-hiver',     start:1,            end:springStartD-1, color:'#7B5EA7'},
     {id:'seg-printemps', start:springStartD,  end:eteStartD-1,    color:'#3DAE8A'},
-    {id:'seg-ete',       start:eteStartD,     end:eteEndD,        color:'#FFD740'},
+    {id:'seg-ete',       start:eteStartD,     end:eteEndD,        color:'#FFC107'},
     {id:'seg-automne',   start:eteEndD+1,     end:dur,            color:'#C82B4A'},
   ];
   function polarToCart(angle) { const rad=(angle-90)*Math.PI/180; return {x:cx+r*Math.cos(rad),y:cy+r*Math.sin(rad)}; }
