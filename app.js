@@ -4400,13 +4400,13 @@ function openDayModal(dateStr, phase) {
       <div style="font-size:12px;color:var(--gris);margin-top:4px;">${phaseNames[phase] || phase}</div>
     </div>
     <div style="display:flex;flex-direction:column;gap:8px;">
-      <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:${seanceDone?'#E8F8F3':'var(--creme)'};border-radius:12px;">
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:${seanceDone?'var(--season-soft)':'var(--creme)'};border-radius:12px;">
         <span style="font-size:18px;">💪</span><span style="font-size:13px;color:var(--noir);">Séance — ${seanceDone?'Accomplie ✓':'Non faite'}</span>
       </div>
-      <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:${prayers>=3?'#E8F8F3':'var(--creme)'};border-radius:12px;">
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:${prayers>=3?'var(--season-soft)':'var(--creme)'};border-radius:12px;">
         <span style="font-size:18px;">🕌</span><span style="font-size:13px;color:var(--noir);">Prières — ${prayers}/5</span>
       </div>
-      ${coranDone ? '<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:#E8F8F3;border-radius:12px;"><span style="font-size:18px;">📖</span><span style="font-size:13px;color:var(--noir);">Coran — Lu ✓</span></div>' : ''}
+      ${coranDone ? '<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--season-soft);border-radius:12px;"><span style="font-size:18px;">📖</span><span style="font-size:13px;color:var(--noir);">Coran — Lu ✓</span></div>' : ''}
     </div>`;
   document.getElementById('day-modal').classList.add('open');
 }
