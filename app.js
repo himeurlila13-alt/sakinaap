@@ -87,6 +87,7 @@ let ST = {
   consentDate: null,
   consentVersion: null,
   lastObjResetDate: null,
+  lecturesLues: [],
 };
 
 // ═══════════════════════════════════════════════
@@ -3405,12 +3406,30 @@ function renderLectureDuJour() {
     if (el(idAme)) el(idAme).textContent = values[i];
     if (el(idAcc)) el(idAcc).textContent = values[i];
   });
+
+  // Mettre à jour l'état du bouton "J'ai lu" dans l'accueil
+  updateBoutonJaiLu();
+
+  // Afficher les lectures archivées
+  renderMesLectures();
 }
 
-function openLectureModal() {
-  const phase = ST.currentSaison || 'hiver';
-  const lecture = _getLectureForPhase(phase);
-  if (!lecture) return;
+function openLectureModal(lectureId) {
+  let lecture, phase;
+
+  if (lectureId) {
+    // Ouvrir une lecture spécifique par ID
+    if (typeof LECTURES === 'undefined') return;
+    lecture = LECTURES.find(l => l.id === lectureId);
+    if (!lecture) return;
+    phase = lecture.phase;
+  } else {
+    // Ouvrir la lecture du jour (comportement existant)
+    phase = ST.currentSaison || 'hiver';
+    lecture = _getLectureForPhase(phase);
+    if (!lecture) return;
+  }
+
   const el = (id) => document.getElementById(id);
   if (el('lm-emoji')) el('lm-emoji').textContent = _PHASE_EMOJIS[phase] || '';
   if (el('lm-phase')) el('lm-phase').textContent = _PHASE_LABELS[phase] || phase.toUpperCase();
@@ -3432,6 +3451,169 @@ function openLectureModal() {
 function closeLectureModal() {
   const modal = document.getElementById('lecture-modal');
   if (modal) { modal.classList.remove('open'); document.body.style.overflow = ''; }
+}
+
+// ── Nouvelles fonctions Mes Lectures ──
+
+function archiverLectureAccueil(event) {
+  event.stopPropagation(); // Empêcher l'ouverture de la modale
+  const phase = ST.currentSaison || 'hiver';
+  const lecture = _getLectureForPhase(phase);
+  if (!lecture) return;
+
+  archiverLecture(lecture.id, phase);
+}
+
+function archiverLecture(lectureId, phase) {
+  if (!ST.lecturesLues) ST.lecturesLues = [];
+
+  // Vérifier si déjà archivée
+  const dejaArchivee = ST.lecturesLues.find(l => l.id === lectureId);
+  if (dejaArchivee) return;
+
+  const lecture = _getLectureForPhase(phase);
+  if (!lecture) return;
+
+  // Ajouter à la liste
+  ST.lecturesLues.push({
+    id: lectureId,
+    titre: lecture.titre,
+    phase: phase,
+    date: new Date().toISOString()
+  });
+
+  saveState();
+  showToast('Cette lecture t\'attend dans Mes Lectures 📚');
+
+  // Rafraîchir l'affichage
+  updateBoutonJaiLu();
+  renderMesLectures();
+}
+
+function updateBoutonJaiLu() {
+  const btn = document.getElementById('lecture-archive-btn-acc');
+  if (!btn) return;
+
+  const phase = ST.currentSaison || 'hiver';
+  const lecture = _getLectureForPhase(phase);
+  if (!lecture) return;
+
+  const dejaArchivee = ST.lecturesLues && ST.lecturesLues.find(l => l.id === lecture.id);
+
+  if (dejaArchivee) {
+    btn.textContent = 'Lu ✓';
+    btn.style.background = 'var(--season-soft)';
+    btn.style.color = 'var(--season)';
+    btn.disabled = true;
+  } else {
+    btn.textContent = 'J\'ai lu ✓';
+    btn.style.background = 'var(--season)';
+    btn.style.color = 'white';
+    btn.disabled = false;
+  }
+}
+
+function renderMesLectures() {
+  if (!ST.lecturesLues) ST.lecturesLues = [];
+  if (typeof LECTURES === 'undefined') return;
+
+  const phases = ['hiver', 'printemps', 'ete', 'automne'];
+  const emojis = { hiver: '🌙', printemps: '🌿', ete: '☀️', automne: '🍂' };
+  const isPremium = ST.isPremium || (ST.trialDaysLeft && ST.trialDaysLeft > 0);
+
+  phases.forEach(phase => {
+    const lecturesPhase = ST.lecturesLues.filter(l => l.phase === phase);
+    const accordeon = document.getElementById(`lectures-${phase}-accordeon`);
+    const count = document.getElementById(`lectures-${phase}-count`);
+    const list = document.getElementById(`lectures-${phase}-list`);
+
+    if (!accordeon || !count || !list) return;
+
+    // Lectures archivées + lectures supplémentaires flouées pour les non-Premium
+    let itemsHtml = '';
+
+    // 1. Lectures archivées (toujours visibles)
+    if (lecturesPhase.length > 0) {
+      itemsHtml += lecturesPhase.map(lecture => {
+        const dateObj = new Date(lecture.date);
+        const dateStr = dateObj.toLocaleDateString('fr-FR', {
+          day: 'numeric',
+          month: 'short'
+        });
+
+        const canReread = isPremium;
+
+        return `
+          <div class="lecture-archivee-item ${!canReread ? 'lecture-locked' : ''}" ${canReread ? '' : 'style="pointer-events: none;"'}>
+            <div class="lecture-archivee-info">
+              <div class="lecture-archivee-titre">${lecture.titre}</div>
+              <div class="lecture-archivee-date">${dateStr}</div>
+            </div>
+            <button class="lecture-archivee-relire"
+                    onclick="${canReread ? `relireLecture('${lecture.id}')` : `showToast('Retrouve cette lecture avec Premium 🌸')`}"
+                    ${!canReread ? 'disabled' : ''}>
+              ${canReread ? 'Relire' : 'Premium'}
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 2. Lectures supplémentaires non-archivées (flouées si non-Premium)
+    if (!isPremium) {
+      const lecturesDePhase = LECTURES.filter(l => l.phase === phase);
+      const lecturesArchiveesIds = lecturesPhase.map(l => l.id);
+      const lecturesSupplementaires = lecturesDePhase.filter(l => !lecturesArchiveesIds.includes(l.id));
+
+      if (lecturesSupplementaires.length > 0) {
+        itemsHtml += lecturesSupplementaires.map(lecture => `
+          <div class="lecture-archivee-item lecture-locked" style="pointer-events: none;">
+            <div class="lecture-archivee-info">
+              <div class="lecture-archivee-titre">${lecture.titre}</div>
+              <div class="lecture-archivee-date">Non lue</div>
+            </div>
+            <button class="lecture-archivee-relire" disabled>Premium</button>
+          </div>
+        `).join('');
+      }
+    }
+
+    // Afficher l'accordéon si du contenu
+    if (itemsHtml || lecturesPhase.length > 0) {
+      accordeon.style.display = '';
+      count.textContent = `(${lecturesPhase.length})`;
+      list.innerHTML = itemsHtml;
+    } else {
+      accordeon.style.display = 'none';
+    }
+  });
+}
+
+function relireLecture(lectureId) {
+  const isPremium = ST.isPremium || (ST.trialDaysLeft && ST.trialDaysLeft > 0);
+  if (!isPremium) {
+    showToast('Retrouve cette lecture avec Premium 🌸');
+    return;
+  }
+
+  openLectureModal(lectureId);
+}
+
+function toggleLecturesPhase(phase) {
+  const body = document.getElementById(`lectures-${phase}-body`);
+  const arrow = document.getElementById(`lectures-${phase}-arrow`);
+
+  if (!body || !arrow) return;
+
+  const isOpen = body.style.display !== 'none';
+
+  if (isOpen) {
+    body.style.display = 'none';
+    arrow.style.transform = '';
+  } else {
+    body.style.display = '';
+    arrow.style.transform = 'rotate(180deg)';
+  }
 }
 
 // ── Dhikr cases à cocher ──
@@ -4471,6 +4653,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (inp) inp.addEventListener('blur', () => { setTimeout(() => { window.scrollTo(0, 0); }, 100); });
 
   loadState();
+
+  // Initialiser les nouvelles propriétés si elles n'existent pas
+  if (!ST.lecturesLues) ST.lecturesLues = [];
+
   checkDailyObjReset(); // Remise à zéro des coches chaque matin
   // iOS PWA : localStorage isolé de Safari → lire le cookie pour retrouver l'auth
   if (!ST.isAuthenticated && _getCookie('sakina_auth') === '1') {
