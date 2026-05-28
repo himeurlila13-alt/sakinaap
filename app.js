@@ -3374,45 +3374,11 @@ const _PHASE_LABELS = { hiver: 'HIVER', printemps: 'PRINTEMPS', ete: 'ÉTÉ', au
 const _PHASE_EMOJIS = { hiver: '🌙', printemps: '🌿', ete: '☀️', automne: '🍂' };
 
 function renderLectureDuJour() {
-  const phase = ST.currentSaison || 'hiver';
-  const lecture = _getLectureForPhase(phase);
-  const el = (id) => document.getElementById(id);
-
-  // Carte Âme
-  const cardAme = el('lecture-card');
-  if (cardAme) cardAme.style.display = lecture ? '' : 'none';
-
-  // Carte Accueil
-  const cardAcc = el('lecture-card-accueil');
-  if (cardAcc) cardAcc.style.display = lecture ? '' : 'none';
-
-  if (!lecture) return;
-
-  const sets = [
-    ['lecture-phase-emoji', 'lecture-phase-emoji-acc'],
-    ['lecture-phase-label', 'lecture-phase-label-acc'],
-    ['lecture-duree', 'lecture-duree-acc'],
-    ['lecture-titre', 'lecture-titre-acc'],
-    ['lecture-accroche', 'lecture-accroche-acc'],
-  ];
-  const values = [
-    _PHASE_EMOJIS[phase] || '',
-    _PHASE_LABELS[phase] || phase.toUpperCase(),
-    lecture.duree + ' min',
-    lecture.titre,
-    lecture.accroche,
-  ];
-  sets.forEach(([idAme, idAcc], i) => {
-    if (el(idAme)) el(idAme).textContent = values[i];
-    if (el(idAcc)) el(idAcc).textContent = values[i];
-  });
-
-  // Mettre à jour l'état du bouton "J'ai lu" dans l'accueil
-  updateBoutonJaiLu();
-
-  // Afficher les lectures archivées
-  renderMesLectures();
+  // Cette fonction n'est plus utilisée car la lecture du jour n'apparaît plus dans l'interface
+  // Elle est remplacée par la modale "Mes Lectures"
 }
+
+let currentLectureInModal = null;
 
 function openLectureModal(lectureId) {
   let lecture, phase;
@@ -3430,6 +3396,9 @@ function openLectureModal(lectureId) {
     if (!lecture) return;
   }
 
+  // Stocker la lecture actuelle pour le bouton "J'ai lu"
+  currentLectureInModal = lecture;
+
   const el = (id) => document.getElementById(id);
   if (el('lm-emoji')) el('lm-emoji').textContent = _PHASE_EMOJIS[phase] || '';
   if (el('lm-phase')) el('lm-phase').textContent = _PHASE_LABELS[phase] || phase.toUpperCase();
@@ -3444,25 +3413,49 @@ function openLectureModal(lectureId) {
   if (el('lm-geste')) el('lm-geste').innerHTML = '🌿 ' + lecture.aEmporter.geste;
   if (el('lm-dua-arabe')) el('lm-dua-arabe').textContent = lecture.aEmporter.dua.arabe;
   if (el('lm-dua-fr')) el('lm-dua-fr').textContent = lecture.aEmporter.dua.fr;
+
+  // Mettre à jour le bouton "J'ai lu"
+  updateArchiveBtnInModal(lecture);
+
   const modal = el('lecture-modal');
   if (modal) { modal.classList.add('open'); document.body.style.overflow = 'hidden'; }
+}
+
+function updateArchiveBtnInModal(lecture) {
+  const btn = document.getElementById('lm-archive-btn');
+  if (!btn || !lecture) return;
+
+  const dejaLue = ST.lecturesLues && ST.lecturesLues.find(l => l.id === lecture.id);
+
+  if (dejaLue) {
+    btn.textContent = 'Lu ✓';
+    btn.style.background = 'var(--season-soft)';
+    btn.style.color = 'var(--season)';
+    btn.disabled = true;
+  } else {
+    btn.textContent = 'J\'ai lu ✓';
+    btn.style.background = 'var(--season)';
+    btn.style.color = 'white';
+    btn.disabled = false;
+  }
+}
+
+function archiverLectureFromModal() {
+  if (!currentLectureInModal) return;
+
+  archiverLecture(currentLectureInModal.id, currentLectureInModal.phase);
+  updateArchiveBtnInModal(currentLectureInModal);
 }
 
 function closeLectureModal() {
   const modal = document.getElementById('lecture-modal');
   if (modal) { modal.classList.remove('open'); document.body.style.overflow = ''; }
+  currentLectureInModal = null;
 }
 
 // ── Nouvelles fonctions Mes Lectures ──
 
-function archiverLectureAccueil(event) {
-  event.stopPropagation(); // Empêcher l'ouverture de la modale
-  const phase = ST.currentSaison || 'hiver';
-  const lecture = _getLectureForPhase(phase);
-  if (!lecture) return;
-
-  archiverLecture(lecture.id, phase);
-}
+// Fonction supprimée car la carte lecture de l'accueil n'existe plus
 
 function archiverLecture(lectureId, phase) {
   if (!ST.lecturesLues) ST.lecturesLues = [];
@@ -3483,111 +3476,121 @@ function archiverLecture(lectureId, phase) {
   });
 
   saveState();
-  showToast('Cette lecture t\'attend dans Mes Lectures 📚');
-
-  // Rafraîchir l'affichage
-  updateBoutonJaiLu();
-  renderMesLectures();
+  showToast('Retrouve-la dans Mes Lectures 📚', 3000);
 }
 
-function updateBoutonJaiLu() {
-  const btn = document.getElementById('lecture-archive-btn-acc');
-  if (!btn) return;
+// Fonction supprimée car le bouton J'ai lu de l'accueil n'existe plus
 
-  const phase = ST.currentSaison || 'hiver';
-  const lecture = _getLectureForPhase(phase);
-  if (!lecture) return;
+function openMesLecturesModal() {
+  const modal = document.getElementById('mes-lectures-modal');
+  if (modal) { modal.style.display = 'flex'; renderMesLecturesModal(); }
+}
 
-  const dejaArchivee = ST.lecturesLues && ST.lecturesLues.find(l => l.id === lecture.id);
+function closeMesLecturesModal() {
+  const modal = document.getElementById('mes-lectures-modal');
+  if (modal) modal.style.display = 'none';
+}
 
-  if (dejaArchivee) {
-    btn.textContent = 'Lu ✓';
-    btn.style.background = 'var(--season-soft)';
-    btn.style.color = 'var(--season)';
-    btn.disabled = true;
+function openLectureModalById(id) {
+  openLectureModal(id);
+}
+
+function renderMesLecturesModal() {
+  if (typeof LECTURES === 'undefined') return;
+
+  const content = document.getElementById('mes-lectures-modal-content');
+  if (!content) return;
+
+  const canRead = isFullAccess();
+  const phases = ['hiver', 'printemps', 'ete', 'automne'];
+  const emojis = { hiver: '🌙', printemps: '🌿', ete: '☀️', automne: '🍂' };
+  const labels = { hiver: 'Hiver', printemps: 'Printemps', ete: 'Été', automne: 'Automne' };
+  const currentPhase = ST.currentSaison || 'hiver';
+
+  let html = '';
+
+  // Bandeau si pas d'accès complet
+  if (!canRead) {
+    html += `
+      <div style="background:linear-gradient(135deg,rgba(201,169,110,.13),rgba(168,122,48,.07));border:1px solid #D4B87A;border-radius:14px;padding:11px 14px;margin-bottom:16px;">
+        <div style="font-size:12px;color:#5A3A10;line-height:1.6;font-family:var(--serif);font-style:italic;text-align:center;">
+          Ton essai est terminé. Les lectures sont disponibles avec Premium. 🌸
+        </div>
+      </div>
+    `;
+  }
+
+  phases.forEach(phase => {
+    const lecturesPhase = LECTURES.filter(l => l.phase === phase);
+    const lecturesLues = (ST.lecturesLues || []).filter(l => l.phase === phase);
+    const isCurrentPhase = phase === currentPhase;
+
+    html += `
+      <div style="margin-bottom:12px;">
+        <button onclick="toggleMesLecturesPhase('${phase}')"
+                style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:white;border:1.5px solid var(--sable);border-radius:16px;cursor:pointer;font-family:inherit;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:16px;">${emojis[phase]}</span>
+            <span style="font-size:14px;font-weight:600;color:var(--noir);">${labels[phase]}</span>
+            <span style="font-size:10px;color:var(--gris);">(${lecturesLues.length}/${lecturesPhase.length})</span>
+          </div>
+          <span id="phase-arrow-${phase}" style="font-size:12px;color:var(--gris);transition:transform .25s;">${isCurrentPhase ? '▲' : '▼'}</span>
+        </button>
+
+        <div id="phase-body-${phase}" style="display:${isCurrentPhase ? 'block' : 'none'};padding:12px 0;">
+    `;
+
+    lecturesPhase.forEach(lecture => {
+      const estLue = lecturesLues.find(l => l.id === lecture.id);
+      const peutLire = canRead;
+
+      html += `
+        <div style="display:flex;align-items:center;gap:12px;padding:12px;background:${estLue ? 'var(--season-soft)' : 'white'};border-radius:12px;margin-bottom:8px;border:1px solid var(--sable);">
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:13px;font-weight:600;color:var(--noir);margin-bottom:2px;display:flex;align-items:center;gap:6px;">
+              ${lecture.titre}
+              ${estLue ? '<span style="font-size:10px;color:var(--season);font-weight:700;">Lu ✓</span>' : ''}
+            </div>
+            <div style="font-size:11px;color:var(--gris);line-height:1.4;font-style:italic;">${lecture.accroche}</div>
+            <div style="font-size:10px;color:var(--gris);margin-top:4px;">
+              <span style="background:rgba(var(--season-rgb),.1);padding:2px 6px;border-radius:6px;">${lecture.duree} min</span>
+            </div>
+          </div>
+          <button onclick="${peutLire ? `openLectureModalById('${lecture.id}')` : `showToast('Rejoindre Premium pour accéder à toutes les lectures 🌸')`}"
+                  style="background:${peutLire ? 'var(--season)' : 'var(--gris)'};color:white;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:600;cursor:pointer;flex-shrink:0;opacity:${peutLire ? '1' : '.5'};">
+            ${peutLire ? 'Lire →' : 'Premium'}
+          </button>
+        </div>
+      `;
+    });
+
+    html += `
+        </div>
+      </div>
+    `;
+  });
+
+  content.innerHTML = html;
+}
+
+function toggleMesLecturesPhase(phase) {
+  const body = document.getElementById(`phase-body-${phase}`);
+  const arrow = document.getElementById(`phase-arrow-${phase}`);
+
+  if (!body || !arrow) return;
+
+  const isOpen = body.style.display !== 'none';
+
+  if (isOpen) {
+    body.style.display = 'none';
+    arrow.textContent = '▼';
   } else {
-    btn.textContent = 'J\'ai lu ✓';
-    btn.style.background = 'var(--season)';
-    btn.style.color = 'white';
-    btn.disabled = false;
+    body.style.display = 'block';
+    arrow.textContent = '▲';
   }
 }
 
-function renderMesLectures() {
-  if (!ST.lecturesLues) ST.lecturesLues = [];
-  if (typeof LECTURES === 'undefined') return;
-
-  const phases = ['hiver', 'printemps', 'ete', 'automne'];
-  const emojis = { hiver: '🌙', printemps: '🌿', ete: '☀️', automne: '🍂' };
-  const isPremium = ST.isPremium || (ST.trialDaysLeft && ST.trialDaysLeft > 0);
-
-  phases.forEach(phase => {
-    const lecturesPhase = ST.lecturesLues.filter(l => l.phase === phase);
-    const accordeon = document.getElementById(`lectures-${phase}-accordeon`);
-    const count = document.getElementById(`lectures-${phase}-count`);
-    const list = document.getElementById(`lectures-${phase}-list`);
-
-    if (!accordeon || !count || !list) return;
-
-    // Lectures archivées + lectures supplémentaires flouées pour les non-Premium
-    let itemsHtml = '';
-
-    // 1. Lectures archivées (toujours visibles)
-    if (lecturesPhase.length > 0) {
-      itemsHtml += lecturesPhase.map(lecture => {
-        const dateObj = new Date(lecture.date);
-        const dateStr = dateObj.toLocaleDateString('fr-FR', {
-          day: 'numeric',
-          month: 'short'
-        });
-
-        const canReread = isPremium;
-
-        return `
-          <div class="lecture-archivee-item ${!canReread ? 'lecture-locked' : ''}" ${canReread ? '' : 'style="pointer-events: none;"'}>
-            <div class="lecture-archivee-info">
-              <div class="lecture-archivee-titre">${lecture.titre}</div>
-              <div class="lecture-archivee-date">${dateStr}</div>
-            </div>
-            <button class="lecture-archivee-relire"
-                    onclick="${canReread ? `relireLecture('${lecture.id}')` : `showToast('Retrouve cette lecture avec Premium 🌸')`}"
-                    ${!canReread ? 'disabled' : ''}>
-              ${canReread ? 'Relire' : 'Premium'}
-            </button>
-          </div>
-        `;
-      }).join('');
-    }
-
-    // 2. Lectures supplémentaires non-archivées (flouées si non-Premium)
-    if (!isPremium) {
-      const lecturesDePhase = LECTURES.filter(l => l.phase === phase);
-      const lecturesArchiveesIds = lecturesPhase.map(l => l.id);
-      const lecturesSupplementaires = lecturesDePhase.filter(l => !lecturesArchiveesIds.includes(l.id));
-
-      if (lecturesSupplementaires.length > 0) {
-        itemsHtml += lecturesSupplementaires.map(lecture => `
-          <div class="lecture-archivee-item lecture-locked" style="pointer-events: none;">
-            <div class="lecture-archivee-info">
-              <div class="lecture-archivee-titre">${lecture.titre}</div>
-              <div class="lecture-archivee-date">Non lue</div>
-            </div>
-            <button class="lecture-archivee-relire" disabled>Premium</button>
-          </div>
-        `).join('');
-      }
-    }
-
-    // Afficher l'accordéon si du contenu
-    if (itemsHtml || lecturesPhase.length > 0) {
-      accordeon.style.display = '';
-      count.textContent = `(${lecturesPhase.length})`;
-      list.innerHTML = itemsHtml;
-    } else {
-      accordeon.style.display = 'none';
-    }
-  });
-}
+// Ancienne fonction renderMesLectures supprimée - remplacée par renderMesLecturesModal()
 
 function relireLecture(lectureId) {
   const isPremium = ST.isPremium || (ST.trialDaysLeft && ST.trialDaysLeft > 0);
@@ -3599,22 +3602,7 @@ function relireLecture(lectureId) {
   openLectureModal(lectureId);
 }
 
-function toggleLecturesPhase(phase) {
-  const body = document.getElementById(`lectures-${phase}-body`);
-  const arrow = document.getElementById(`lectures-${phase}-arrow`);
-
-  if (!body || !arrow) return;
-
-  const isOpen = body.style.display !== 'none';
-
-  if (isOpen) {
-    body.style.display = 'none';
-    arrow.style.transform = '';
-  } else {
-    body.style.display = '';
-    arrow.style.transform = 'rotate(180deg)';
-  }
-}
+// Ancienne fonction toggleLecturesPhase supprimée - remplacée par toggleMesLecturesPhase()
 
 // ── Dhikr cases à cocher ──
 function renderDhikrChecks() {

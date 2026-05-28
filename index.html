@@ -315,27 +315,6 @@
     </div>
   </div>
 
-  <!-- LECTURE DU JOUR -->
-  <div id="lecture-card-accueil" style="margin:10px 14px 0;border-radius:20px;border:1.5px solid var(--season-light);overflow:hidden;cursor:pointer;" onclick="openLectureModal()">
-    <div style="background:linear-gradient(135deg,var(--season-soft),var(--season-light));padding:14px 16px 12px;">
-      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--season-dark);font-weight:600;margin-bottom:6px;">&#10022; Lecture du jour</div>
-      <div id="lecture-badge-acc" style="display:inline-flex;align-items:center;gap:6px;background:rgba(var(--season-rgb),.12);border-radius:20px;padding:3px 10px;margin-bottom:10px;">
-        <span id="lecture-phase-emoji-acc" style="font-size:13px;">🌙</span>
-        <span id="lecture-phase-label-acc" style="font-size:10px;color:var(--season-dark);font-weight:600;letter-spacing:.5px;">HIVER</span>
-        <span style="width:1px;height:10px;background:rgba(var(--season-rgb),.2);margin:0 2px;"></span>
-        <span id="lecture-duree-acc" style="font-size:10px;color:var(--season);">4 min</span>
-      </div>
-      <div id="lecture-titre-acc" style="font-family:'Playfair Display',serif;font-size:16px;color:var(--season-dark);font-weight:600;line-height:1.4;margin-bottom:6px;"></div>
-      <div id="lecture-accroche-acc" style="font-size:12px;color:var(--season);line-height:1.5;font-style:italic;"></div>
-    </div>
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;">
-      <div style="font-size:12px;color:var(--season);font-weight:500;">Lire l'article</div>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <button id="lecture-archive-btn-acc" onclick="archiverLectureAccueil(event)" style="background:var(--season);color:white;border:none;border-radius:10px;padding:6px 12px;font-size:11px;font-weight:600;cursor:pointer;">J'ai lu ✓</button>
-        <div style="font-size:18px;color:var(--season);opacity:.6;">›</div>
-      </div>
-    </div>
-  </div>
 
   <!-- 3 CARTES DÉTAILLÉES -->
 
@@ -773,86 +752,16 @@
 
   <!-- MES LECTURES -->
   <div style="margin:12px 14px 0;">
-    <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--season);font-weight:600;margin-bottom:12px;text-align:center;">📚 MES LECTURES</div>
-
-    <!-- LECTURE DU JOUR -->
-    <div id="lecture-card" style="border-radius:20px;border:1.5px solid var(--season-light);overflow:hidden;cursor:pointer;margin-bottom:12px;" onclick="openLectureModal()">
-      <div style="background:linear-gradient(135deg,var(--season-soft),var(--season-light));padding:14px 16px 12px;">
-        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--season-dark);font-weight:600;margin-bottom:6px;">&#10022; Lecture du jour</div>
-        <div id="lecture-badge" style="display:inline-flex;align-items:center;gap:6px;background:rgba(var(--season-rgb),.12);border-radius:20px;padding:3px 10px;margin-bottom:10px;">
-          <span id="lecture-phase-emoji" style="font-size:13px;">🌙</span>
-          <span id="lecture-phase-label" style="font-size:10px;color:var(--season-dark);font-weight:600;letter-spacing:.5px;">HIVER</span>
-          <span style="width:1px;height:10px;background:rgba(var(--season-rgb),.2);margin:0 2px;"></span>
-          <span id="lecture-duree" style="font-size:10px;color:var(--season);">4 min</span>
-        </div>
-        <div id="lecture-titre" style="font-family:'Playfair Display',serif;font-size:16px;color:var(--season-dark);font-weight:600;line-height:1.4;margin-bottom:6px;">Le sabr n'est pas du silence</div>
-        <div id="lecture-accroche" style="font-size:12px;color:var(--season);line-height:1.5;font-style:italic;">Et si patience ne voulait pas dire disparaître ?</div>
+    <a id="mes-lectures-entry-card" onclick="openMesLecturesModal()" style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:linear-gradient(135deg,var(--season-soft),var(--season-light));border-radius:16px;text-decoration:none;cursor:pointer;box-shadow:0 3px 14px rgba(var(--season-rgb),.15);border:none;width:100%;box-sizing:border-box;">
+      <div style="width:40px;height:40px;border-radius:12px;background:rgba(var(--season-rgb),.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;">📚</div>
+      <div style="flex:1;min-width:0;">
+        <div id="mes-lectures-entry-title" style="font-family:'Playfair Display',serif;font-size:14px;color:var(--season-dark);font-weight:600;margin-bottom:2px;">Mes Lectures</div>
+        <div id="mes-lectures-entry-sub" style="font-size:11px;color:var(--season);line-height:1.4;">Articles islamiques · 4 phases du cycle</div>
       </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;">
-        <div style="font-size:12px;color:var(--season);font-weight:500;">Lire l'article</div>
-        <div style="font-size:18px;color:var(--season);opacity:.6;">›</div>
+      <div style="flex-shrink:0;">
+        <div style="font-size:18px;color:var(--season);opacity:.7;">›</div>
       </div>
-    </div>
-
-    <!-- MES LECTURES ARCHIVÉES -->
-    <div id="mes-lectures-section">
-      <!-- Accordéons par phase -->
-      <div id="lectures-hiver-accordeon" class="lectures-phase-accordeon" data-phase="hiver" style="display:none;">
-        <button onclick="toggleLecturesPhase('hiver')" class="lectures-phase-header">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span style="font-size:15px;">🌙</span>
-            <span style="font-size:12px;font-weight:600;color:var(--noir);">Hiver</span>
-            <span id="lectures-hiver-count" style="font-size:10px;color:var(--gris);margin-left:4px;">(0)</span>
-          </div>
-          <span id="lectures-hiver-arrow" style="font-size:11px;color:var(--gris);transition:transform .25s;">▼</span>
-        </button>
-        <div id="lectures-hiver-body" class="lectures-phase-body" style="display:none;">
-          <div id="lectures-hiver-list"></div>
-        </div>
-      </div>
-
-      <div id="lectures-printemps-accordeon" class="lectures-phase-accordeon" data-phase="printemps" style="display:none;">
-        <button onclick="toggleLecturesPhase('printemps')" class="lectures-phase-header">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span style="font-size:15px;">🌿</span>
-            <span style="font-size:12px;font-weight:600;color:var(--noir);">Printemps</span>
-            <span id="lectures-printemps-count" style="font-size:10px;color:var(--gris);margin-left:4px;">(0)</span>
-          </div>
-          <span id="lectures-printemps-arrow" style="font-size:11px;color:var(--gris);transition:transform .25s;">▼</span>
-        </button>
-        <div id="lectures-printemps-body" class="lectures-phase-body" style="display:none;">
-          <div id="lectures-printemps-list"></div>
-        </div>
-      </div>
-
-      <div id="lectures-ete-accordeon" class="lectures-phase-accordeon" data-phase="ete" style="display:none;">
-        <button onclick="toggleLecturesPhase('ete')" class="lectures-phase-header">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span style="font-size:15px;">☀️</span>
-            <span style="font-size:12px;font-weight:600;color:var(--noir);">Été</span>
-            <span id="lectures-ete-count" style="font-size:10px;color:var(--gris);margin-left:4px;">(0)</span>
-          </div>
-          <span id="lectures-ete-arrow" style="font-size:11px;color:var(--gris);transition:transform .25s;">▼</span>
-        </button>
-        <div id="lectures-ete-body" class="lectures-phase-body" style="display:none;">
-          <div id="lectures-ete-list"></div>
-        </div>
-      </div>
-
-      <div id="lectures-automne-accordeon" class="lectures-phase-accordeon" data-phase="automne" style="display:none;">
-        <button onclick="toggleLecturesPhase('automne')" class="lectures-phase-header">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span style="font-size:15px;">🍂</span>
-            <span style="font-size:12px;font-weight:600;color:var(--noir);">Automne</span>
-            <span id="lectures-automne-count" style="font-size:10px;color:var(--gris);margin-left:4px;">(0)</span>
-          </div>
-          <span id="lectures-automne-arrow" style="font-size:11px;color:var(--gris);transition:transform .25s;">▼</span>
-        </button>
-        <div id="lectures-automne-body" class="lectures-phase-body" style="display:none;">
-          <div id="lectures-automne-list"></div>
-        </div>
-      </div>
-    </div>
+    </a>
   </div>
 
 </div>
@@ -942,8 +851,23 @@
           <div id="lm-dua-arabe" style="font-size:17px;direction:rtl;color:var(--noir);line-height:2;font-weight:500;margin-bottom:6px;"></div>
           <div id="lm-dua-fr" style="font-size:12px;color:var(--gris);font-style:italic;line-height:1.5;"></div>
         </div>
+        <button id="lm-archive-btn" onclick="archiverLectureFromModal()"
+                style="width:100%;margin-top:16px;background:var(--season);color:white;border:none;border-radius:12px;padding:12px;font-size:14px;font-weight:600;cursor:pointer;">
+          J'ai lu ✓
+        </button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- MODAL MES LECTURES -->
+<div id="mes-lectures-modal" style="display:none;position:fixed;inset:0;z-index:3000;background:#FAF6F0;overflow-y:auto;flex-direction:column;">
+  <div style="position:sticky;top:0;background:#FAF6F0;z-index:10;padding:16px 16px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--sable);">
+    <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--noir);">📚 Mes Lectures</div>
+    <button onclick="closeMesLecturesModal()" style="background:none;border:none;font-size:22px;color:var(--gris);cursor:pointer;padding:4px;">✕</button>
+  </div>
+  <div id="mes-lectures-modal-content" style="padding:16px;">
+    <!-- Rendu dynamique par renderMesLecturesModal() -->
   </div>
 </div>
 
