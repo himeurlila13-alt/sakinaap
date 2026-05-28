@@ -380,11 +380,11 @@ function _buildWelcomeEmailHtml(prenom, email) {
             </td>
             <td style="width:25%;text-align:center;padding:12px 6px;">
               <div style="font-size:28px;margin-bottom:6px;">☀️</div>
-              <div style="font-size:12px;font-weight:700;color:#D4985C;letter-spacing:1px;">ÉTÉ</div>
+              <div style="font-size:12px;font-weight:700;color:#E8B800;letter-spacing:1px;">ÉTÉ</div>
             </td>
             <td style="width:25%;text-align:center;padding:12px 6px;">
               <div style="font-size:28px;margin-bottom:6px;">🍂</div>
-              <div style="font-size:12px;font-weight:700;color:#B88189;letter-spacing:1px;">AUTOMNE</div>
+              <div style="font-size:12px;font-weight:700;color:#D6A2C4;letter-spacing:1px;">AUTOMNE</div>
             </td>
           </tr>
         </table>
@@ -1007,8 +1007,8 @@ const SAISONS = {
   },
   ete: {
     nom: 'Été', foodTeaser: 'Protéines, antioxydants, oméga-3', skinTeaser: 'Protection & légèreté', emoji: '☀️', phase: 'Phase ovulatoire',
-    color: '#D4985C', light: '#E5B98A', soft: '#FDF6ED', dark: '#8B5A2A', rgb: '212,152,92',
-    grad: 'linear-gradient(145deg, #8B5A2A, #D4985C)',
+    color: '#E8B800', light: '#F5D66A', soft: '#FEFBEE', dark: '#B38A00', rgb: '232,184,0',
+    grad: 'linear-gradient(145deg, #B38A00, #E8B800)',
     jours: [14,17],
     messages: {
       bien: "Tu es à ton pic. C'est le bon moment pour les efforts physiques, les conversations importantes.",
@@ -1057,8 +1057,8 @@ const SAISONS = {
   },
   automne: {
     nom: 'Automne', foodTeaser: 'Magnésium, complexe B, chocolat noir', skinTeaser: 'Apaisement & barrière cutanée', emoji: '🍂', phase: 'Phase lutéale',
-    color: '#B88189', light: '#D4A8B1', soft: '#F9F1F3', dark: '#8A5963', rgb: '184,129,137',
-    grad: 'linear-gradient(145deg, #8A5963, #B88189)',
+    color: '#D6A2C4', light: '#E4C3D6', soft: '#FAF6F9', dark: '#C084B0', rgb: '214,162,196',
+    grad: 'linear-gradient(145deg, #C084B0, #D6A2C4)',
     jours: [18,28],
     messages: {
       bien: "Des fluctuations arrivent peut-être — maintenant que tu le sais, elles ne te surprendront pas.",
@@ -4929,8 +4929,8 @@ function drawCycleRing() {
   const phases = [
     {id:'seg-hiver',     start:1,            end:springStartD-1, color:'#7B5EA7'},
     {id:'seg-printemps', start:springStartD,  end:eteStartD-1,    color:'#3DAE8A'},
-    {id:'seg-ete',       start:eteStartD,     end:eteEndD,        color:'#D4985C'},
-    {id:'seg-automne',   start:eteEndD+1,     end:dur,            color:'#B88189'},
+    {id:'seg-ete',       start:eteStartD,     end:eteEndD,        color:'#E8B800'},
+    {id:'seg-automne',   start:eteEndD+1,     end:dur,            color:'#D6A2C4'},
   ];
   function polarToCart(angle) { const rad=(angle-90)*Math.PI/180; return {x:cx+r*Math.cos(rad),y:cy+r*Math.sin(rad)}; }
   function dayToAngle(d) { return ((d-1)/dur)*360; }
