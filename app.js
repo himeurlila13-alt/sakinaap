@@ -1801,6 +1801,36 @@ function applySaisonTheme() {
   if (_sh) _sh.style.background = s.grad;
   const psCycle = document.getElementById('psCycle');
   if (psCycle) psCycle.textContent = s.nom + ' ' + s.emoji + ' · Jour ' + ST.currentDay;
+
+  const softGrad = `linear-gradient(135deg, ${s.soft}, ${s.light})`;
+  const softShadow = `0 3px 14px rgba(${s.rgb},.15)`;
+  const iconBg = `rgba(${s.rgb},.15)`;
+
+  const lc = document.getElementById('asma-livret-card');
+  if (lc) { lc.style.background = softGrad; lc.style.boxShadow = softShadow; }
+  const li = document.getElementById('asma-livret-icon-wrap');
+  if (li) li.style.background = iconBg;
+  const lt = document.getElementById('asma-livret-title');
+  if (lt) lt.style.color = s.dark;
+  const ls = document.getElementById('asma-livret-sub');
+  if (ls) ls.style.color = s.color;
+  const lb = document.getElementById('asma-livret-badge');
+  if (lb) { lb.style.background = iconBg; lb.style.color = s.dark; }
+  const la = document.getElementById('asma-livret-arrow');
+  if (la) la.style.color = s.color;
+
+  const wc = document.getElementById('wb-cta-card-el');
+  if (wc) { wc.style.background = softGrad; wc.style.boxShadow = `0 8px 24px rgba(${s.rgb},.2)`; }
+  const wbd = document.getElementById('wb-badge');
+  if (wbd) { wbd.style.background = iconBg; wbd.style.color = s.dark; }
+  const wt = document.getElementById('wb-title');
+  if (wt) wt.style.color = s.dark;
+  const wd = document.getElementById('wb-desc');
+  if (wd) wd.style.color = s.color;
+  const wm = document.getElementById('wb-meta');
+  if (wm) wm.style.color = s.color;
+  const wb = document.getElementById('wb-btn');
+  if (wb) { wb.style.background = s.dark; wb.style.color = 'white'; }
 }
 
 // ═══════════════════════════════════════════════

@@ -333,8 +333,8 @@ body{font-family:var(--sans);background:var(--bg-phase,var(--creme));max-width:4
 .actif-usage{display:inline-block;background:var(--season);color:white;font-size:9px;font-weight:600;letter-spacing:.5px;border-radius:20px;padding:3px 10px}
 
 /* ═══ WORKBOOK CTA CARD ═══ */
-.wb-cta-card{display:block;margin:0 14px 14px;padding:24px;background:linear-gradient(135deg,#D4A853,#C97B5A);border-radius:20px;box-shadow:0 8px 24px rgba(212,168,83,.35);text-decoration:none;transition:transform .15s ease,box-shadow .15s ease}
-.wb-cta-card:active{transform:scale(.98);box-shadow:0 4px 12px rgba(212,168,83,.25)}
+.wb-cta-card{display:block;margin:0 14px 14px;padding:24px;border-radius:20px;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease}
+.wb-cta-card:active{transform:scale(.98)}
 
 /* ═══ MOI ═══ */
 .moi-hero{padding:52px 22px 0;text-align:center}
