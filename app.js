@@ -1945,6 +1945,11 @@ function _sportExHtml(exercices, reposSec) {
 }
 
 function renderCarteBouger(s) {
+  // Protection : si SAISONS[ST.currentSaison] est undefined (ex: automne pas défini)
+  if (!s) {
+    console.warn('SAISONS[' + ST.currentSaison + '] non défini - skip renderCarteBouger');
+    return;
+  }
   const spec = getTodaySeanceSpec();
   const today = new Date().toDateString();
   const donVal = ST.seanceDone && ST.seanceDone[today];
@@ -2119,6 +2124,8 @@ function renderCarteBouger(s) {
   if (btnWrap) btnWrap.style.display = (isDone || isReported || (spec && _noTimerTypes.includes(spec.type))) ? 'none' : 'block';
   if (doneWrap) doneWrap.style.display = isDone ? 'flex' : 'none';
   if (reportedWrap) reportedWrap.style.display = isReported ? 'block' : 'none';
+  const reporterBtnWrap = document.getElementById('qs-reporter-btn-wrap');
+  if (reporterBtnWrap) reporterBtnWrap.style.display = (isDone || isReported) ? 'none' : 'flex';
 }
 
 // ═══════════════════════════════════════════════
@@ -6114,7 +6121,9 @@ function openSeanceTimer() {
       else if (spec.type === 'automne-actif') _stLevelRest = _baseRest + (spec.reposExtra || 10);
     }
   }
-  _stx.steps = _stxBuildSteps(data, _stLevelRest);
+  // Séances calmes/automne-doux : pas de repos entre exercices ni séries
+  const _stCalmeRest = (spec && spec.type === 'automne-doux') ? 0 : _stLevelRest;
+  _stx.steps = _stxBuildSteps(data, _stCalmeRest);
   _stx.idx = 0;
   _stx.elapsed = 0;
   _stx.total = _stx.steps.reduce(function(sum, s) { return sum + s.duration; }, 0);
@@ -6362,7 +6371,11 @@ function _stxShowSideChangeMessage() {
 
 // ── Actions utilisatrice ─────────────────────────────────────
 function stAction() {
-  if (!_stx.running) _stxStartTimer();
+  if (!_stx.running && !_stx.paused) {
+    _stxStartTimer();
+  } else if (_stx.running) {
+    stTogglePause();
+  }
 }
 
 function stSkip() {

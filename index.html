@@ -362,8 +362,10 @@
       <button class="day-card-btn" onclick="openSeanceTimer()" style="margin-top:8px;background:var(--season-soft);color:var(--season);border:1.5px solid var(--season-light);font-size:13px;">&#9654; Commencer avec le timer</button>
       <div style="display:flex;gap:8px;margin-top:8px;">
         <button id="sport-express-btn" onclick="openSeanceExpress()" class="sport-secondary-btn">&#9889; Version 5 min</button>
-        <button onclick="reporterSeance()" class="sport-secondary-btn">&#128197; Reporter</button>
       </div>
+    </div>
+    <div id="qs-reporter-btn-wrap" style="margin-top:8px;display:none;">
+      <button onclick="reporterSeance()" class="sport-secondary-btn">&#128197; Reporter</button>
     </div>
     <div class="qs-done" id="qs-done-wrap" style="display:none;">
       <div class="qs-done-check">&#10003;</div>
@@ -815,34 +817,6 @@
     <div class="obj-cat-grid" id="obj-categories-grid"></div>
   </div>
 
-  <!-- SECTION 3 : Mes objectifs perso (Premium) -->
-  <div id="trial-lock-objectifs" style="display:none;margin:0 0 10px;">
-    <div class="trial-lock-banner">
-      <span class="trial-lock-banner-icon">&#128274;</span>
-      <div class="trial-lock-banner-text">Objectifs personnalis&#233;s disponibles avec Premium</div>
-      <button class="trial-lock-banner-btn" onclick="startStripeCheckout()">Premium</button>
-    </div>
-  </div>
-  <div class="obj-card">
-    <div class="obj-card-hdr">
-      <span class="obj-card-hdr-icon">&#128204;</span>
-      <span class="obj-card-hdr-title">MES OBJECTIFS PERSO</span>
-      <span class="obj-premium-chip">&#10024; Premium</span>
-    </div>
-    <div id="obj-perso-list"></div>
-    <div class="obj-custom-wrap" id="obj-perso-add-wrap" style="flex-wrap:wrap;align-items:center;">
-      <select id="obj-perso-recurrence" class="obj-rec-select">
-        <option value="permanent">Toujours</option>
-        <option value="cycle">Ce cycle</option>
-        <option value="phase">Cette phase</option>
-        <option value="today">Aujourd'hui</option>
-      </select>
-      <input type="text" id="obj-perso-input" placeholder="Ajouter un objectif..." maxlength="60"
-             onkeydown="if(event.key==='Enter'){addObjPerso();this.blur()}"
-             style="flex:1;min-width:80px;border:1.5px solid var(--sable);border-radius:14px;padding:11px 14px;font-size:13px;font-family:var(--sans);color:var(--noir);background:var(--creme);outline:none;-webkit-appearance:none;appearance:none;">
-      <button onclick="addObjPerso()" class="obj-add-btn">+</button>
-    </div>
-  </div>
 
   <!-- PARCOURS SPORT -->
   <div class="sport-histo-section" id="sport-historique-section"></div>
