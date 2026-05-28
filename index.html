@@ -447,8 +447,8 @@
       <svg viewBox="0 0 200 200" id="cycle-svg">
         <path id="seg-hiver" fill="none" stroke="#7B5EA7" stroke-width="18" stroke-linecap="round"/>
         <path id="seg-printemps" fill="none" stroke="#3DAE8A" stroke-width="18" stroke-linecap="round"/>
-        <path id="seg-ete" fill="none" stroke="#E8B800" stroke-width="18" stroke-linecap="round"/>
-        <path id="seg-automne" fill="none" stroke="#D6A2C4" stroke-width="18" stroke-linecap="round"/>
+        <path id="seg-ete" fill="none" stroke="#FF8F00" stroke-width="18" stroke-linecap="round"/>
+        <path id="seg-automne" fill="none" stroke="#C82B4A" stroke-width="18" stroke-linecap="round"/>
         <circle id="day-dot" r="10" fill="white" stroke-width="3"/>
       </svg>
       <div class="cycle-center-info">
@@ -460,8 +460,8 @@
     <div class="cycle-legend">
       <div class="legend-item"><div class="legend-dot" style="background:#7B5EA7"></div>Hiver</div>
       <div class="legend-item"><div class="legend-dot" style="background:#3DAE8A"></div>Printemps</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#E8B800"></div>Ete</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#D6A2C4"></div>Automne</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#FF8F00"></div>Ete</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#C82B4A"></div>Automne</div>
     </div>
   </div>
 
@@ -516,23 +516,23 @@
         <div class="glaire-option" data-type="regles" onclick="selectGlaire(this,'regles')"><div class="glaire-dot" style="background:#F0EBF8;">&#127769;</div><div><div class="glaire-name">Rien / Regles</div><div class="glaire-desc">Periode de repos - Pas de fertilite</div></div></div>
         <div class="glaire-option" data-type="seche" onclick="selectGlaire(this,'seche')"><div class="glaire-dot" style="background:#F5F5F5;">&#129293;</div><div><div class="glaire-name">Seche ou collante</div><div class="glaire-desc">Debut de cycle - Faible fertilite</div></div></div>
         <div class="glaire-option" data-type="cremeuse" onclick="selectGlaire(this,'cremeuse')"><div class="glaire-dot" style="background:#E8F8F3;">&#127807;</div><div><div class="glaire-name">Cremeuse / Laiteuse</div><div class="glaire-desc">Fertilite possible</div></div></div>
-        <div class="glaire-option" data-type="filante" onclick="selectGlaire(this,'filante')"><div class="glaire-dot" style="background:#FEFBEE;">&#9889;</div><div><div class="glaire-name">Filante / Transparente</div><div class="glaire-desc">Ovulation proche - Pic de fertilite</div></div></div>
-        <div class="glaire-option" data-type="epaisse" onclick="selectGlaire(this,'epaisse')"><div class="glaire-dot" style="background:#FAF6F9;">&#127810;</div><div><div class="glaire-name">Epaisse / Absente</div><div class="glaire-desc">Apres ovulation - Phase luteale</div></div></div>
+        <div class="glaire-option" data-type="filante" onclick="selectGlaire(this,'filante')"><div class="glaire-dot" style="background:#FFF8E1;">&#9889;</div><div><div class="glaire-name">Filante / Transparente</div><div class="glaire-desc">Ovulation proche - Pic de fertilite</div></div></div>
+        <div class="glaire-option" data-type="epaisse" onclick="selectGlaire(this,'epaisse')"><div class="glaire-dot" style="background:#FCF0F3;">&#127810;</div><div><div class="glaire-name">Epaisse / Absente</div><div class="glaire-desc">Apres ovulation - Phase luteale</div></div></div>
       </div>
     </div>
   </div>
 
   <!-- REGLES ET INTIMITE -->
   <div style="margin:0 14px 12px;border-radius:20px;overflow:hidden;border:1.5px solid var(--sable);">
-    <div style="background:#FAF6F9;padding:16px 18px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;" onclick="toggleIntimite()">
-      <div style="font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#D6A2C4;">&#127769; Regles et Intimite en Islam</div>
-      <span id="intimite-arrow" style="font-size:11px;color:#D6A2C4;opacity:.6;">&#9660;</span>
+    <div style="background:#FCF0F3;padding:16px 18px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;" onclick="toggleIntimite()">
+      <div style="font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#C82B4A;">&#127769; Regles et Intimite en Islam</div>
+      <span id="intimite-arrow" style="font-size:11px;color:#C82B4A;opacity:.6;">&#9660;</span>
     </div>
     <div id="intimite-content" style="display:none;">
-      <div style="background:#FAF6F9;padding:0 18px 16px;">
+      <div style="background:#FCF0F3;padding:0 18px 16px;">
         <div style="font-size:13px;color:var(--noir);line-height:1.7;margin-bottom:10px;">Pendant les regles (haidh), le coit est interdit. Les calins et la tendresse restent permis.</div>
         <div style="background:rgba(255,255,255,.7);border-radius:10px;padding:10px 12px;">
-          <div style="font-size:14px;direction:rtl;text-align:right;color:#C084B0;line-height:1.8;margin-bottom:4px;">&#1602;&#1615;&#1604;&#1618; &#1607;&#1615;&#1608;&#1614; &#1575;&#1614;&#1584;&#1611;&#1609; &#1601;&#1614;&#1575;&#1618;&#1593;&#1618;&#1578;&#1614;&#1586;&#1616;&#1604;&#1615;&#1608;&#1575; &#1575;&#1604;&#1606;&#1617;&#1616;&#1587;&#1614;&#1575;&#1569;&#1614; &#1601;&#1616;&#1610; &#1575;&#1604;&#1618;&#1605;&#1614;&#1581;&#1616;&#1610;&#1590;&#1616;</div>
+          <div style="font-size:14px;direction:rtl;text-align:right;color:#961E36;line-height:1.8;margin-bottom:4px;">&#1602;&#1615;&#1604;&#1618; &#1607;&#1615;&#1608;&#1614; &#1575;&#1614;&#1584;&#1611;&#1609; &#1601;&#1614;&#1575;&#1618;&#1593;&#1618;&#1578;&#1614;&#1586;&#1616;&#1604;&#1615;&#1608;&#1575; &#1575;&#1604;&#1606;&#1617;&#1616;&#1587;&#1614;&#1575;&#1569;&#1614; &#1601;&#1616;&#1610; &#1575;&#1604;&#1618;&#1605;&#1614;&#1581;&#1616;&#1610;&#1590;&#1616;</div>
           <div style="font-size:11px;color:var(--gris);font-style:italic;">Coran 2:222</div>
         </div>
         <div style="margin-top:10px;font-size:12px;color:var(--gris);line-height:1.6;">Apres les regles : ghusl obligatoire avant de reprendre les rapports.<br>Le coit interrompu est permis avec l'accord de l'epouse.</div>
@@ -751,8 +751,8 @@
       </div>
 
       <!-- CE QUI REDEVIENT PERMIS -->
-      <div style="background:#FEFBEE;border-radius:14px;padding:14px;">
-        <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#E8B800;margin-bottom:10px;">&#127800; Après le Ghusl — Ce qui redevient permis</div>
+      <div style="background:#FFF8E1;border-radius:14px;padding:14px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#FF8F00;margin-bottom:10px;">&#127800; Après le Ghusl — Ce qui redevient permis</div>
         <div style="display:flex;flex-wrap:wrap;gap:8px;">
           <div style="background:white;border-radius:10px;padding:7px 12px;font-size:12px;color:var(--noir);display:flex;align-items:center;gap:6px;"><span>&#128332;</span> La prière</div>
           <div style="background:white;border-radius:10px;padding:7px 12px;font-size:12px;color:var(--noir);display:flex;align-items:center;gap:6px;"><span>&#127758;</span> Le jeûne</div>
