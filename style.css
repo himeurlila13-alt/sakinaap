@@ -1258,7 +1258,7 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
 .cal-day-empty { background: transparent; cursor: default; }
 .cal-day-hiver    { background: #EAE0F5; }
 .cal-day-printemps { background: #D8F0E6; }
-.cal-day-ete      { background: #FFF8E1; }
+.cal-day-ete      { background: #FFFBE6; }
 .cal-day-automne  { background: #FCF0F3; }
 .cal-today {
   box-shadow: 0 0 0 2px var(--season);
@@ -1369,7 +1369,7 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
 .bilan-phase-chip{font-size:11px;font-weight:600;padding:4px 9px;border-radius:20px;white-space:nowrap}
 .bilan-hiver{background:#EDE0FF;color:#7B5EA7}
 .bilan-printemps{background:#D8F5EC;color:#3DAE8A}
-.bilan-ete{background:#FFF8E1;color:#FF8F00}
+.bilan-ete{background:#FFFBE6;color:#F0A800}
 .bilan-automne{background:#FCF0F3;color:#C82B4A}
 .bilan-phase-arrow{font-size:11px;color:var(--gris)}
 .bilan-strength-line{text-align:center;font-size:13px;color:var(--gris);margin-bottom:14px}
