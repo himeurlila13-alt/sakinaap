@@ -43,7 +43,6 @@ let ST = {
   cycleHistory: [],
   historiqueCycles: [],
   isPremium: false,
-  seanceValidatedCount: 0,
   seanceLevel: 1,
   amrapRecord: null,
   printempsUpgradeDone: false,
@@ -802,7 +801,6 @@ async function loadFromSupabase(sb, userId) {
           ? remote.historiqueCycles : ST.historiqueCycles) || [],
         // Niveaux : garder le plus élevé
         seanceLevel: Math.max(ST.seanceLevel || 1, remote.seanceLevel || 1),
-        seanceValidatedCount: Math.max(ST.seanceValidatedCount || 0, remote.seanceValidatedCount || 0),
         // Données vitales du cycle : Supabase si local absent
         cycleStart: ST.cycleStart || remote.cycleStart,
         cycleDuration: ST.cycleDuration || remote.cycleDuration || 28,
@@ -1347,6 +1345,10 @@ function computeCycle() {
   else ST.currentSaison = 'automne';
 
   if (ST._lastSaison && ST._lastSaison !== ST.currentSaison) {
+    // Reset du compteur Été lors d'un nouveau cycle Été
+    if (ST.currentSaison === 'ete' && ST._lastSaison !== 'ete') {
+      ST.eteSessionIdx = 0;
+    }
     const phaseToasts = {
       hiver:     ['❄️', 'Ton Hiver est là', 'Prends soin de toi, doucement.'],
       printemps: ['🌱', 'Bienvenue au Printemps !', 'L\'énergie revient — savoure-la.'],
@@ -2009,6 +2011,13 @@ function renderCarteBouger(s) {
   const _LEVEL_NAMES = ['Essentielle', 'À ton rythme', 'Vitalité', 'Pleine puissance'];
   const _lvlName = (n) => `Niveau ${n}/4 · ${_LEVEL_NAMES[(n||1)-1] || ''}`;
 
+  // Progression inter-cycles (déplacé avant le switch pour éviter les cas où SEANCES_SPORT n'est pas encore chargé)
+  const cycleCount = (ST.cycleHistory && ST.cycleHistory.length) || 0;
+  const cycleLevel = (typeof SEANCES_SPORT !== 'undefined' && SEANCES_SPORT.progressionInterCycles)
+    ? SEANCES_SPORT.progressionInterCycles.getCycleLevel(cycleCount)
+    : null;
+  const cycleConseils = cycleLevel ? SEANCES_SPORT.progressionInterCycles[cycleLevel] : null;
+
   switch (spec.type) {
     case 'hiver': {
       const d = spec.data;
@@ -2171,13 +2180,6 @@ function renderCarteBouger(s) {
   if (metaEl) metaEl.textContent = metaText;
   if (durEl) durEl.textContent = durText;
 
-  // Progression inter-cycles
-  const cycleCount = (ST.cycleHistory && ST.cycleHistory.length) || 0;
-  const cycleLevel = (typeof SEANCES_SPORT !== 'undefined' && SEANCES_SPORT.progressionInterCycles)
-    ? SEANCES_SPORT.progressionInterCycles.getCycleLevel(cycleCount)
-    : null;
-  const cycleConseils = cycleLevel ? SEANCES_SPORT.progressionInterCycles[cycleLevel] : null;
-
   // Options fullBody et cardioDoux
   let optionsHtml = '';
   if (!isDone && !isReported && !_fullBodyOverride) {
@@ -2228,6 +2230,7 @@ function renderCarteBouger(s) {
 // FULLBODY & CARDIO DOUX
 // ═══════════════════════════════════════════════
 function choisirFullBody() {
+  // N1 intentionnellement exclu du Full Body — niveau débutant, pas encore adapté
   const phase = ST.currentSaison;
   const level = ST.seanceLevel || 1;
   const micro = (phase === 'automne') ? getAutomneMicroPhase(ST.currentDay, effectiveCycleDur()) : null;
@@ -2241,12 +2244,20 @@ function choisirFullBody() {
 
   if (fullBodyData) {
     _fullBodyOverride = { type: 'fullbody', data: fullBodyData, level };
+    // Persister l'override pour survivre au reload
+    ST.fullBodyOverrideDate = new Date().toDateString();
+    ST.fullBodyOverrideData = { phase: phase, level: level };
+    saveState();
     renderCarteBouger(SAISONS[ST.currentSaison]);
   }
 }
 
 function annulerFullBody() {
   _fullBodyOverride = null;
+  // Nettoyer ST
+  ST.fullBodyOverrideDate = null;
+  ST.fullBodyOverrideData = null;
+  saveState();
   renderCarteBouger(SAISONS[ST.currentSaison]);
 }
 
@@ -2780,6 +2791,10 @@ function validerSeanceDash() {
   ST.reportConsecutif = 0;
 
   const spec = getTodaySeanceSpec();
+  // Incrémenter le compteur Été pour l'alternance bas/haut
+  if (spec && (spec.type === 'ete-intense' || spec.type === 'ete-intense-haut')) {
+    ST.eteSessionIdx = (ST.eteSessionIdx || 0) + 1;
+  }
   if (spec && spec.type === 'ete-intense' && spec.data?.type === 'amrap') {
     const inp = document.getElementById('amrap-score-input');
     const score = inp ? parseInt(inp.value, 10) : NaN;
@@ -4786,6 +4801,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Initialiser les nouvelles propriétés si elles n'existent pas
   if (!ST.lecturesLues) ST.lecturesLues = [];
 
+  // Restaurer fullBodyOverride si la date est aujourd'hui
+  if (ST.fullBodyOverrideDate === new Date().toDateString() && ST.fullBodyOverrideData) {
+    const fb = ST.fullBodyOverrideData;
+    const sport = (typeof SEANCES_SPORT !== 'undefined') ? SEANCES_SPORT : null;
+    if (sport) {
+      let fbData = null;
+      if (fb.phase === 'printemps') fbData = sport.printemps?.fullBody?.[fb.level];
+      else if (fb.phase === 'automne') fbData = sport.automne?.actif?.fullBody?.[fb.level];
+      if (fbData) _fullBodyOverride = { type: 'fullbody', data: fbData, level: fb.level };
+    }
+  }
+
   checkDailyObjReset(); // Remise à zéro des coches chaque matin
   // iOS PWA : localStorage isolé de Safari → lire le cookie pour retrouver l'auth
   if (!ST.isAuthenticated && _getCookie('sakina_auth') === '1') {
@@ -5231,8 +5258,9 @@ function getTodaySeanceSpec() {
         return { type: 'ete-repos', message: sport.ete.messageApresIntense };
       }
 
-      // Alternance bas/haut : dayIdx % 4 === 0 (bas) / dayIdx % 4 === 2 (haut)
-      if (dayIdx % 4 === 2 && sport.ete.rotationHaut?.[level]) {
+      // Alternance bas/haut : version simplifiée plus fiable
+      const eteIdx = ST.eteSessionIdx || 0;
+      if (eteIdx % 2 === 1 && sport.ete.rotationHaut?.[level]) {
         const niveauData = sport.ete.rotationHaut[level];
         return { type: 'ete-intense-haut', data: niveauData, level };
       }
