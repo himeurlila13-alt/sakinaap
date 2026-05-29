@@ -87,6 +87,102 @@ let ST = {
   consentVersion: null,
   lastObjResetDate: null,
   lecturesLues: [],
+  eteSessionIdx: 0,
+  fullBodyOverrideDate: null,
+  sportStreak: 0,
+  j1ModalShownCycle: null,
+};
+
+// ═══════════════════════════════════════════════
+// MESSAGES DE PROGRESSION SPORTIVE
+// ═══════════════════════════════════════════════
+const SPORT_PROGRESSION_MESSAGES = {
+  // BILAN FIN DE CYCLE
+  bilan_montee: {
+    titre: "Tu as grandi ce cycle 🌱",
+    corps: "Ton corps s'est transformé — d'Essentielle à À ton rythme. Chaque séance était un pas vers la meilleure version de toi.",
+    islamique: "Alhamdulillahi rabbi al-alameen. Allah a béni ton effort. 💜"
+  },
+  bilan_montee_grande: {
+    titre: "Transformation puissante ce cycle ⚡",
+    corps: "Un saut remarquable — ton niveau a explosé ! Ton corps a dit 'oui' à chaque défi que tu lui as proposé.",
+    islamique: "SubhanAllah, quelle évolution ! Ton corps est une amana qu'Allah t'a confiée. 🔥"
+  },
+  bilan_maintien: {
+    titre: "Constance précieuse ce cycle 🌿",
+    corps: "Tu as consolidé ton niveau — c'est de la sagesse. Ton corps maîtrise maintenant chaque mouvement.",
+    islamique: "La constance dans l'effort, c'est ce qu'Allah aime. Masha'Allah pour ta régularité. ✨"
+  },
+  bilan_descente: {
+    titre: "Tu t'es écoutée ce cycle 💜",
+    corps: "Ralentir, c'est de l'intelligence corporelle. Tu as choisi la douceur — ton corps t'en remercie.",
+    islamique: "L'écoute de soi est une forme de gratitude envers Allah. Baarak Allahu fiki. 🌙"
+  },
+  bilan_premier: {
+    titre: "Ton premier cycle sportif ✨",
+    corps: "Tu as posé les bases — marche après marche, séance après séance. Quel courage de commencer !",
+    islamique: "Khayr al-umur awsatuha — le meilleur des actes est celui fait avec constance. 🌱"
+  },
+
+  // MOMENT FORT J1 NOUVEAU CYCLE
+  j1_decouverte: {
+    titre: "As-salamu alaykum, nouvelle cycleuse ! 🌟",
+    corps: "Ton premier cycle sportif commence. Chaque jour où tu bouges sera une victoire. Pas de pression — juste de la bienveillance.",
+    cta: "Je commence en douceur 🌱"
+  },
+  j1_construction: {
+    titre: "Masha'Allah pour ta constance ! 💚",
+    corps: "Cycle 2 — ton corps commence à reconnaître le rythme. Ce cycle, on construit ensemble une routine qui te ressemble.",
+    cta: "Je continue ma progression 🌿"
+  },
+  j1_construction_avancee: {
+    titre: "Ton rythme se dessine ! 🔥",
+    corps: "Cycle 3 — tes habitudes deviennent naturelles. Ce cycle, on pousse un peu plus loin. Tu es prête.",
+    cta: "Je relève le défi 💪"
+  },
+  j1_performance: {
+    titre: "Athlète du quotidien ! ⚡",
+    corps: "Cycle 4 et plus — tu maîtrises maintenant l'art de bouger selon tes phases. Ce cycle, on vise l'excellence dans la douceur.",
+    cta: "Je perfectionne mon art ✨"
+  },
+
+  // MONTÉES DE NIVEAU
+  toast_montee_N1_N2: "Tu passes À ton rythme 🌿 — Masha'Allah, chaque séance t'a menée ici !",
+  toast_montee_N1_N3: "Bond incroyable vers Vitalité 🔥 — SubhanAllah, quelle progression !",
+  toast_montee_N1_N4: "Direct en Pleine puissance ⚡ — Allah a béni ta détermination !",
+  toast_montee_N2_N3: "Vitalité débloquée 🔥 — ton corps était prêt depuis longtemps !",
+  toast_montee_N2_N4: "Saut vers Pleine puissance ⚡ — Alhamdulillah pour cette force !",
+  toast_montee_N3_N4: "Pleine puissance atteinte ⚡ — le summum de ta forme, Masha'Allah !",
+
+  // DESCENTES DE NIVEAU
+  toast_descente_N2_N1: "Retour à Essentielle 🌱 — l'écoute de soi est une sagesse. 💜",
+  toast_descente_N3_N2: "À ton rythme retrouvé 🌿 — parfait pour cette période.",
+  toast_descente_N4_N3: "Vitalité ajustée 🔥 — ton corps demandait de la douceur.",
+  toast_descente_N3_N1: "Essentielle choisie 🌱 — quelques fois, revenir aux bases est ce qu'il faut.",
+  toast_descente_N4_N2: "À ton rythme sélectionné 🌿 — l'intelligence du corps qui s'exprime.",
+  toast_descente_N4_N1: "Essentielle privilégiée 🌱 — le repos actif, c'est aussi du courage.",
+
+  // RECORDS AMRAP ÉTÉ
+  record_affiche: "Ton record : {nb} tours ⚡",
+  record_nouveau: "Nouveau record ⚡ — Alhamdulillah, tu t'es surpassée !",
+  record_egal: "Record égalé ⚡ — constance au sommet, Masha'Allah !",
+  record_aucun: "Pose ton premier record aujourd'hui ☀️",
+  record_encouragement: "Ton record t'attend — donne ce que tu peux ! 🔥",
+
+  // STREAKS
+  streak_3: "3 séances d'affilée ! 🌿 L'habitude germe...",
+  streak_5: "5 séances consécutives ! 🔥 Ton corps s'habitue à cette belle routine.",
+  streak_7: "Une semaine complète ! ⚡ Masha'Allah, quelle constance !",
+  streak_10: "10 séances — tu es maintenant une habituée ! 🌟 Allah a béni cette persévérance.",
+  streak_15: "15 séances — SubhanAllah ! Tu incarnes la régularité dans l'effort. 💎",
+  streak_21: "21 jours — l'habitude est ancrée ! 🌱 Cette constance est un cadeau d'Allah.",
+  streak_30: "Un mois complet ! 🏆 Alhamdulillahi rabbi al-alameen pour cette force intérieure.",
+
+  // TRANSITIONS INTER-CYCLES
+  transition_cycle1_vers_2: "Cycle 1 terminé ! 🎉 Tu entres en phase Construction — ton corps a compris le message.",
+  transition_cycle3_vers_4: "3 cycles accomplis ! ⚡ Bienvenue en mode Performance — tu es une vraie athlète maintenant.",
+  transition_construction: "Construction continue 🌿 — chaque cycle te rend plus forte, Masha'Allah.",
+  transition_performance: "Performance maintenue ⚡ — tu es dans l'excellence, Alhamdulillah pour cette constance !"
 };
 
 // ═══════════════════════════════════════════════
@@ -1624,6 +1720,8 @@ function showBilanModal() {
     </div>
     <div class="bilan-note">${sportMsg}${symptomDays > 0 ? ' · ' + symptomDays + ' jour' + (symptomDays>1?'s':'') + ' d\'écoute de ton corps 🌸' : ''}</div>
 
+    ${renderBilanSport()}
+
     <div class="bilan-section-lbl">🕌 Âme</div>
     <div class="bilan-grid-2">
       <div class="bilan-stat"><span class="bilan-stat-num">${prayerDays}</span><span class="bilan-stat-lbl">jours 3+ prières</span></div>
@@ -1676,6 +1774,245 @@ function closeBilanModal() {
   if (el) el.classList.remove('open');
   applyTrialLocks();
 }
+
+// ═══════════════════════════════════════════════
+// BILAN SPORT FIN DE CYCLE
+// ═══════════════════════════════════════════════
+function renderBilanSport() {
+  const _LEVEL_NAMES = ['Essentielle', 'À ton rythme', 'Vitalité', 'Pleine puissance'];
+  const _lvlName = (n) => `${_LEVEL_NAMES[(n||1)-1] || ''}`;
+
+  // Calculer les séances ce cycle
+  const { seanceCount, seanceLevel } = _bilanStats();
+
+  // Calculer la phase la plus active
+  const phaseCounts = { hiver: 0, printemps: 0, ete: 0, automne: 0 };
+  if (ST.seanceDone && ST.cycleStart) {
+    const cycleStartDate = new Date(ST.cycleStart);
+    const dur = ST.cycleDuration || 28;
+    const hiverEnd = ST.hiverEnd || 5;
+    const springEnd = Math.round(dur * 0.46);
+    const summerEnd = Math.round(dur * 0.61);
+    Object.keys(ST.seanceDone).forEach(dateStr => {
+      if (ST.seanceDone[dateStr] === true || ST.seanceDone[dateStr] === 'express' || ST.seanceDone[dateStr] === 'repos-actif') {
+        const date = new Date(dateStr);
+        if (!isNaN(date) && date >= cycleStartDate) {
+          const cycleDay = Math.floor((date - cycleStartDate) / 86400000) + 1;
+          if (cycleDay <= hiverEnd) phaseCounts.hiver++;
+          else if (cycleDay <= springEnd) phaseCounts.printemps++;
+          else if (cycleDay <= summerEnd) phaseCounts.ete++;
+          else phaseCounts.automne++;
+        }
+      }
+    });
+  }
+
+  const phaseActive = Object.entries(phaseCounts).reduce((a, b) =>
+    phaseCounts[a[0]] >= phaseCounts[b[0]] ? a : b
+  )[0];
+  const phaseEmoji = { hiver: '🌙', printemps: '🌿', ete: '☀️', automne: '🍂' };
+  const phaseNom = { hiver: 'Hiver', printemps: 'Printemps', ete: 'Été', automne: 'Automne' };
+
+  // Message selon progression depuis le cycle précédent
+  const histCycles = ST.cycleHistory || [];
+  const previousLevel = histCycles.length > 0 ? histCycles[histCycles.length - 1].finalSeanceLevel || 1 : 1;
+  const currentLevel = seanceLevel || 1;
+
+  let bilanMessage, quote;
+
+  if (histCycles.length === 0) {
+    // Premier cycle
+    bilanMessage = SPORT_PROGRESSION_MESSAGES.bilan_premier;
+  } else if (currentLevel > previousLevel) {
+    // Montée de niveau
+    if (currentLevel - previousLevel >= 2) {
+      bilanMessage = SPORT_PROGRESSION_MESSAGES.bilan_montee_grande;
+    } else {
+      bilanMessage = SPORT_PROGRESSION_MESSAGES.bilan_montee;
+    }
+  } else if (currentLevel === previousLevel) {
+    // Maintien
+    bilanMessage = SPORT_PROGRESSION_MESSAGES.bilan_maintien;
+  } else {
+    // Descente
+    bilanMessage = SPORT_PROGRESSION_MESSAGES.bilan_descente;
+  }
+
+  return `
+    <div class="bilan-section-lbl">💪 Bilan sportif</div>
+    <div class="bilan-sport-summary">
+      <div class="bilan-sport-header">
+        <div class="bilan-sport-niveau">${_lvlName(currentLevel)}</div>
+        <div class="bilan-sport-seances">${seanceCount} séance${seanceCount > 1 ? 's' : ''} ce cycle</div>
+      </div>
+
+      ${phaseCounts[phaseActive] > 0 ? `
+      <div class="bilan-sport-phase">
+        Phase la plus active : <strong>${phaseEmoji[phaseActive]} ${phaseNom[phaseActive]}</strong>
+      </div>
+      ` : ''}
+
+      <div class="bilan-sport-message">
+        <div class="bilan-sport-titre">${bilanMessage.titre}</div>
+        <div class="bilan-sport-corps">${bilanMessage.corps}</div>
+        <div class="bilan-sport-islamique">${bilanMessage.islamique}</div>
+      </div>
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════
+// MOMENT FORT J1 NOUVEAU CYCLE
+// ═══════════════════════════════════════════════
+function showJ1SportModal() {
+  if (ST.currentSaison !== 'hiver' || ST.currentDay !== 1) return;
+  if (document.getElementById('j1-sport-modal')) return;
+
+  // Vérifier si déjà affiché ce cycle
+  const currentCycleNum = (ST.cycleHistory || []).length + 1;
+  if (ST.j1ModalShownCycle === currentCycleNum) return;
+
+  // Déterminer le niveau inter-cycles
+  const cycleCount = currentCycleNum;
+  let messageKey;
+
+  if (cycleCount <= 1) {
+    messageKey = 'j1_decouverte';
+  } else if (cycleCount === 2) {
+    messageKey = 'j1_construction';
+  } else if (cycleCount === 3) {
+    messageKey = 'j1_construction_avancee';
+  } else {
+    messageKey = 'j1_performance';
+  }
+
+  const message = SPORT_PROGRESSION_MESSAGES[messageKey];
+
+  // Créer et afficher la modal
+  const modalHtml = `
+    <div id="j1-sport-modal" class="modal" style="z-index: 1000;">
+      <div class="modal-content" style="max-width: 340px;">
+        <div class="modal-header">
+          <h3 style="margin:0;color:var(--season-color);font-family:var(--serif);">${message.titre}</h3>
+        </div>
+        <div class="modal-body" style="padding:20px 0;">
+          <p style="line-height:1.6;margin:0 0 20px 0;">${message.corps}</p>
+        </div>
+        <div class="modal-footer">
+          <button onclick="closeJ1SportModal()" class="btn-primary" style="width:100%;">
+            ${message.cta}
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Ajouter la modal au DOM si elle n'existe pas
+  let modal = document.getElementById('j1-sport-modal');
+  if (!modal) {
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    modal = document.getElementById('j1-sport-modal');
+  }
+
+  // Marquer comme affiché pour ce cycle
+  ST.j1ModalShownCycle = currentCycleNum;
+  saveState();
+
+  // Afficher la modal avec délai
+  setTimeout(() => {
+    if (modal) modal.classList.add('open');
+  }, 800);
+}
+
+function closeJ1SportModal() {
+  const modal = document.getElementById('j1-sport-modal');
+  if (modal) modal.classList.remove('open');
+}
+
+// ═══════════════════════════════════════════════
+// HELPERS POUR MESSAGES DE PROGRESSION
+// ═══════════════════════════════════════════════
+function getProgressionToast(oldLevel, newLevel, isUpgrade = true) {
+  if (isUpgrade) {
+    // Messages de montée
+    if (oldLevel === 1 && newLevel === 2) return SPORT_PROGRESSION_MESSAGES.toast_montee_N1_N2;
+    if (oldLevel === 1 && newLevel === 3) return SPORT_PROGRESSION_MESSAGES.toast_montee_N1_N3;
+    if (oldLevel === 1 && newLevel === 4) return SPORT_PROGRESSION_MESSAGES.toast_montee_N1_N4;
+    if (oldLevel === 2 && newLevel === 3) return SPORT_PROGRESSION_MESSAGES.toast_montee_N2_N3;
+    if (oldLevel === 2 && newLevel === 4) return SPORT_PROGRESSION_MESSAGES.toast_montee_N2_N4;
+    if (oldLevel === 3 && newLevel === 4) return SPORT_PROGRESSION_MESSAGES.toast_montee_N3_N4;
+  } else {
+    // Messages de descente
+    if (oldLevel === 2 && newLevel === 1) return SPORT_PROGRESSION_MESSAGES.toast_descente_N2_N1;
+    if (oldLevel === 3 && newLevel === 2) return SPORT_PROGRESSION_MESSAGES.toast_descente_N3_N2;
+    if (oldLevel === 3 && newLevel === 1) return SPORT_PROGRESSION_MESSAGES.toast_descente_N3_N1;
+    if (oldLevel === 4 && newLevel === 3) return SPORT_PROGRESSION_MESSAGES.toast_descente_N4_N3;
+    if (oldLevel === 4 && newLevel === 2) return SPORT_PROGRESSION_MESSAGES.toast_descente_N4_N2;
+    if (oldLevel === 4 && newLevel === 1) return SPORT_PROGRESSION_MESSAGES.toast_descente_N4_N1;
+  }
+
+  // Fallback si message spécifique pas trouvé
+  if (isUpgrade) {
+    return `✨ Niveau ${newLevel} — tu avances à ton rythme. Alhamdulillah 🌿`;
+  } else {
+    return `💛 Niveau ${newLevel} — écouter son corps, c'est de la sagesse.`;
+  }
+}
+
+// ═══════════════════════════════════════════════
+// CALCUL DU STREAK SPORTIF
+// ═══════════════════════════════════════════════
+function calculateSportStreak() {
+  if (!ST.seanceDone) return 0;
+
+  const today = new Date();
+  let streak = 0;
+  let currentDate = new Date(today);
+
+  // Remonter jour par jour en partant d'aujourd'hui
+  while (true) {
+    const dateStr = currentDate.toDateString();
+    const seanceStatus = ST.seanceDone[dateStr];
+
+    // Si séance faite ce jour (true, 'express', ou 'repos-actif')
+    if (seanceStatus === true || seanceStatus === 'express' || seanceStatus === 'repos-actif') {
+      streak++;
+    } else if (seanceStatus === 'reportee') {
+      // Reporter casse le streak, on s'arrête
+      break;
+    } else if (!seanceStatus) {
+      // Pas d'entrée pour ce jour, on s'arrête
+      break;
+    }
+
+    // Reculer d'un jour
+    currentDate.setDate(currentDate.getDate() - 1);
+
+    // Protection contre boucle infinie
+    if (streak > 100) break;
+  }
+
+  return streak;
+}
+
+function showStreakToast(streak) {
+  let message = null;
+
+  switch (streak) {
+    case 3: message = SPORT_PROGRESSION_MESSAGES.streak_3; break;
+    case 5: message = SPORT_PROGRESSION_MESSAGES.streak_5; break;
+    case 7: message = SPORT_PROGRESSION_MESSAGES.streak_7; break;
+    case 10: message = SPORT_PROGRESSION_MESSAGES.streak_10; break;
+    case 15: message = SPORT_PROGRESSION_MESSAGES.streak_15; break;
+    case 21: message = SPORT_PROGRESSION_MESSAGES.streak_21; break;
+    case 30: message = SPORT_PROGRESSION_MESSAGES.streak_30; break;
+  }
+
+  if (message) {
+    showToast(message);
+  }
+}
+
 function bilanUpgrade() {
   closeBilanModal();
   switchTabById('moi');
@@ -2083,7 +2420,9 @@ function renderCarteBouger(s) {
           <div class="sport-emom-label">AMRAP ${d.duree} min</div>
           ${(d.circuit || []).map(ex => `<div class="sport-amrap-exo">${ex.nom} — ${ex.reps} reps</div>`).join('')}
           ${d.detail ? `<div class="sport-ex-detail">${d.detail}</div>` : ''}
-          ${record ? `<div class="sport-amrap-record">🏆 Ton record : <strong>${record} tours</strong></div>` : ''}
+          <div class="sport-amrap-record">
+            ${record ? SPORT_PROGRESSION_MESSAGES.record_affiche.replace('{nb}', record) : SPORT_PROGRESSION_MESSAGES.record_aucun}
+          </div>
           <div class="sport-amrap-input-wrap" id="amrap-input-wrap" ${isDone ? 'style="display:none"' : ''}>
             <label class="sport-amrap-input-label">Combien de tours as-tu complétés ?</label>
             <input type="number" id="amrap-score-input" min="1" max="99" placeholder="Nb de tours" class="sport-amrap-input">
@@ -2224,6 +2563,9 @@ function renderCarteBouger(s) {
   if (reportedWrap) reportedWrap.style.display = isReported ? 'block' : 'none';
   const reporterBtnWrap = document.getElementById('qs-reporter-btn-wrap');
   if (reporterBtnWrap) reporterBtnWrap.style.display = (isDone || isReported) ? 'none' : 'flex';
+
+  // Afficher modal J1 nouveau cycle si conditions remplies
+  setTimeout(showJ1SportModal, 600);
 }
 
 // ═══════════════════════════════════════════════
@@ -2727,13 +3069,20 @@ function closeSkinModal() { document.getElementById('skin-modal').classList.remo
 
 function handleProgressionAnswer(ans) {
   document.getElementById('progression-modal').classList.remove('open');
-  const level = ST.seanceLevel || 1;
-  if (ans === 'facile' && level < 4) {
-    ST.seanceLevel = level + 1;
-    showToast(`✨ Niveau ${ST.seanceLevel} — tu avances à ton rythme. Alhamdulillah 🌿`);
-  } else if (ans === 'dur_trop' && level > 1) {
-    ST.seanceLevel = level - 1;
-    showToast(`💛 Descendre d'un niveau, c'est écouter son corps — c'est de la sagesse.`);
+  const oldLevel = ST.seanceLevel || 1;
+  if (ans === 'facile' && oldLevel < 4) {
+    const newLevel = oldLevel + 1;
+    ST.seanceLevel = newLevel;
+    const toastMsg = getProgressionToast(oldLevel, newLevel, true);
+    showToast(toastMsg);
+    if (typeof burstCelebration === 'function') {
+      setTimeout(burstCelebration, 300);
+    }
+  } else if (ans === 'dur_trop' && oldLevel > 1) {
+    const newLevel = oldLevel - 1;
+    ST.seanceLevel = newLevel;
+    const toastMsg = getProgressionToast(oldLevel, newLevel, false);
+    showToast(toastMsg);
   } else if (ans === 'dur') {
     showToast('💪 Tu tiens — c\'est de la force. Continue à ton rythme.');
   } else {
@@ -2799,7 +3148,22 @@ function validerSeanceDash() {
     const inp = document.getElementById('amrap-score-input');
     const score = inp ? parseInt(inp.value, 10) : NaN;
     if (!isNaN(score) && score > 0) {
-      if (!ST.amrapRecord || score > ST.amrapRecord) ST.amrapRecord = score;
+      const previousRecord = ST.amrapRecord || 0;
+      if (score > previousRecord) {
+        ST.amrapRecord = score;
+        // Nouveau record !
+        setTimeout(() => {
+          showToast(SPORT_PROGRESSION_MESSAGES.record_nouveau);
+          if (typeof burstCelebration === 'function') {
+            setTimeout(burstCelebration, 300);
+          }
+        }, 1500);
+      } else if (score === previousRecord && previousRecord > 0) {
+        // Record égalé
+        setTimeout(() => {
+          showToast(SPORT_PROGRESSION_MESSAGES.record_egal);
+        }, 1500);
+      }
     }
   }
   if (spec && spec.type === 'printemps-bas') {
@@ -2811,6 +3175,11 @@ function validerSeanceDash() {
   if (typeof updateNiveauStreak === 'function') updateNiveauStreak(true);
   if (typeof checkNiveauProgression === 'function') checkNiveauProgression();
 
+  // Calculer et afficher le streak
+  const newStreak = calculateSportStreak();
+  const previousStreak = ST.sportStreak || 0;
+  ST.sportStreak = newStreak;
+
   saveState();
   const s = SAISONS[ST.currentSaison];
   renderCarteBouger(s);
@@ -2818,6 +3187,14 @@ function validerSeanceDash() {
   checkEndOfPrintemps();
   burstCelebration();
   showToast('💪 Alhamdulillah — séance accomplie ! 🌸');
+
+  // Afficher le toast de streak si milestone atteint
+  setTimeout(() => {
+    if (newStreak > previousStreak && [3, 5, 7, 10, 15, 21, 30].includes(newStreak)) {
+      showStreakToast(newStreak);
+    }
+  }, 2500);
+
   setTimeout(showFeedbackPostSeance, 1000);
   if (ST.checkpointProgress >= 5) setTimeout(_triggerCheckpoint, 3500);
   checkPropositionsAmelioration();
@@ -2868,19 +3245,26 @@ function showPrintempsUpgrade() {
 function handlePrintempsUpgrade(ans) {
   const el = document.getElementById('printemps-upgrade-modal');
   if (el) el.classList.remove('open');
-  const level = ST.seanceLevel || 1;
-  if (ans === 'facile' && level < 4) {
-    ST.seanceLevel = level + 1;
+  const oldLevel = ST.seanceLevel || 1;
+  if (ans === 'facile' && oldLevel < 4) {
+    const newLevel = oldLevel + 1;
+    ST.seanceLevel = newLevel;
     if (ST.seanceLevel >= 4) {
       ST.levelMaxShown = true;
       saveState();
       setTimeout(showLevelMax, 600);
       return;
     }
-    showToast(`✨ Niveau ${ST.seanceLevel} — tu avances à ton rythme. Alhamdulillah 🌿`);
-  } else if (ans === 'dur' && level > 1) {
-    ST.seanceLevel = level - 1;
-    showToast(`💛 Niveau ${ST.seanceLevel} — on avance à ton rythme.`);
+    const toastMsg = getProgressionToast(oldLevel, newLevel, true);
+    showToast(toastMsg);
+    if (typeof burstCelebration === 'function') {
+      setTimeout(burstCelebration, 300);
+    }
+  } else if (ans === 'dur' && oldLevel > 1) {
+    const newLevel = oldLevel - 1;
+    ST.seanceLevel = newLevel;
+    const toastMsg = getProgressionToast(oldLevel, newLevel, false);
+    showToast(toastMsg);
   } else {
     showToast('✨ Parfait — on continue au même rythme.');
   }
@@ -2915,8 +3299,13 @@ function handleReportQuestion(ans) {
     showToast('💛 La version 5 min est juste en dessous — tu peux la faire maintenant !');
     setTimeout(() => { const b = document.getElementById('sport-express-btn'); if (b) { b.style.transform='scale(1.1)'; setTimeout(()=>b.style.transform='',500); } }, 200);
   } else if (ans === 'difficile') {
-    const level = ST.seanceLevel || 1;
-    if (level > 1) { ST.seanceLevel = level - 1; showToast(`💛 Niveau ${ST.seanceLevel} — on avance à ton rythme.`); }
+    const oldLevel = ST.seanceLevel || 1;
+    if (oldLevel > 1) {
+      const newLevel = oldLevel - 1;
+      ST.seanceLevel = newLevel;
+      const toastMsg = getProgressionToast(oldLevel, newLevel, false);
+      showToast(toastMsg);
+    }
     else { showToast('💛 La version 5 min est là pour toi 🌸'); }
   } else {
     showToast('🌸 C\'est noté, à demain 🌸');
@@ -2955,10 +3344,23 @@ function validerSeanceExpress() {
   ST.reportConsecutif = 0;
   ST.checkpointProgress = (ST.checkpointProgress || 0) + 0.5;
   _updateStreakPhase(0.5);
+
+  // Calculer et mettre à jour le streak
+  const newStreak = calculateSportStreak();
+  const previousStreak = ST.sportStreak || 0;
+  ST.sportStreak = newStreak;
+
   saveState();
   renderCarteBouger(SAISONS[ST.currentSaison]);
   burstCelebration();
   showToast('⚡ 5 minutes accomplies — Alhamdulillah ! 🌸');
+
+  // Afficher le toast de streak si milestone atteint
+  setTimeout(() => {
+    if (newStreak > previousStreak && [3, 5, 7, 10, 15, 21, 30].includes(newStreak)) {
+      showStreakToast(newStreak);
+    }
+  }, 2500);
   setTimeout(showFeedbackPostSeance, 1000);
   if (ST.checkpointProgress >= 5) setTimeout(_triggerCheckpoint, 3500);
 }
@@ -2969,9 +3371,22 @@ function validerReposActif() {
   ST.seanceDone[today] = 'repos-actif';
   ST.checkpointProgress = (ST.checkpointProgress || 0) + 0.5;
   _updateStreakPhase(0.5);
+
+  // Calculer et mettre à jour le streak
+  const newStreak = calculateSportStreak();
+  const previousStreak = ST.sportStreak || 0;
+  ST.sportStreak = newStreak;
+
   saveState();
   renderCarteBouger(SAISONS[ST.currentSaison]);
   showToast('🧘‍♀️ Repos actif accompli — ton corps te remercie 🌸');
+
+  // Afficher le toast de streak si milestone atteint
+  setTimeout(() => {
+    if (newStreak > previousStreak && [3, 5, 7, 10, 15, 21, 30].includes(newStreak)) {
+      showStreakToast(newStreak);
+    }
+  }, 2500);
 }
 
 function choisirReposComplet() {
@@ -2985,6 +3400,13 @@ function _updateStreakPhase(count) {
 }
 
 function _getStreakLabel() {
+  // Afficher le streak global en priorité s'il est > 0
+  const globalStreak = ST.sportStreak || calculateSportStreak();
+  if (globalStreak > 0) {
+    return `🔥 ${globalStreak} jour${globalStreak > 1 ? 's' : ''} d'affilée`;
+  }
+
+  // Fallback : streak de phase
   const n = Math.floor(ST.streakPhaseSeances || 0);
   if (n === 0) return null;
   const emoji = { hiver:'❄️', printemps:'🌸', ete:'☀️', automne:'🍂' }[ST.streakPhaseNom] || '✨';
@@ -3051,13 +3473,32 @@ function handleProposition(ans) {
   if (ans === 'oui') {
     const type = el?.dataset.propType;
     if (type === 'fatigue3') {
-      const level = ST.seanceLevel || 1;
-      if (level > 1) { ST.seanceLevel = level - 1; saveState(); renderCarteBouger(SAISONS[ST.currentSaison]); }
-      showToast('💛 Mode douceur activé — prends soin de toi.');
+      const oldLevel = ST.seanceLevel || 1;
+      if (oldLevel > 1) {
+        const newLevel = oldLevel - 1;
+        ST.seanceLevel = newLevel;
+        saveState();
+        renderCarteBouger(SAISONS[ST.currentSaison]);
+        const toastMsg = getProgressionToast(oldLevel, newLevel, false);
+        showToast(toastMsg);
+      } else {
+        showToast('💛 Mode douceur activé — prends soin de toi.');
+      }
     } else if (type === 'niveau_up') {
-      const level = ST.seanceLevel || 1;
-      if (level < 4) { ST.seanceLevel = level + 1; saveState(); renderCarteBouger(SAISONS[ST.currentSaison]); }
-      showToast('🔥 Niveau monté — Alhamdulillah 💪');
+      const oldLevel = ST.seanceLevel || 1;
+      if (oldLevel < 4) {
+        const newLevel = oldLevel + 1;
+        ST.seanceLevel = newLevel;
+        saveState();
+        renderCarteBouger(SAISONS[ST.currentSaison]);
+        const toastMsg = getProgressionToast(oldLevel, newLevel, true);
+        showToast(toastMsg);
+        if (typeof burstCelebration === 'function') {
+          setTimeout(burstCelebration, 300);
+        }
+      } else {
+        showToast('🔥 Niveau monté — Alhamdulillah 💪');
+      }
     } else {
       showToast('🌟 Nouvelle séance en route pour toi !');
     }
@@ -3393,17 +3834,40 @@ function startNewCycleToday() {
       seanceCount: snap.seanceCount,
       prayerDays: snap.prayerDays,
       symptomDays: snap.symptomDays,
+      finalSeanceLevel: ST.seanceLevel || 1,
     });
     if (ST.cycleHistory.length > 6) ST.cycleHistory = ST.cycleHistory.slice(0, 6);
   }
   ST.cycleStart = todayStr;
   ST.hiverEnd = null;
   ST._lastCycleNum = -1;
+
+  // Gestion progression inter-cycles
+  const newCycleCount = (ST.cycleHistory || []).length + 1;
+  let transitionMessage = null;
+
+  if (newCycleCount === 2) {
+    transitionMessage = SPORT_PROGRESSION_MESSAGES.transition_cycle1_vers_2;
+  } else if (newCycleCount === 4) {
+    transitionMessage = SPORT_PROGRESSION_MESSAGES.transition_cycle3_vers_4;
+  } else if (newCycleCount === 3) {
+    transitionMessage = SPORT_PROGRESSION_MESSAGES.transition_construction;
+  } else if (newCycleCount > 4) {
+    transitionMessage = SPORT_PROGRESSION_MESSAGES.transition_performance;
+  }
+
   saveState();
   computeCycle();
   applySaisonTheme();
   populateAll();
   showPhaseToast('🌙', 'Hiver déclaré', 'Prends soin de toi 🌙');
+
+  // Afficher le message de transition avec délai
+  if (transitionMessage) {
+    setTimeout(() => {
+      showToast(transitionMessage);
+    }, 1500);
+  }
 }
 
 function declarerPrintemps() {
