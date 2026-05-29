@@ -785,28 +785,94 @@ const SEANCES_SPORT = {
         { nom: 'Levée de jambe',        sets: 3, reps: 20, detail: 'Allongée, jambes tendues, monte-les à 90° et redescends lentement.' },
       ]},
       // Niveau 4 : 3 séances en rotation sur J6/J9/J12
-      4: { nom: 'Pleine puissance', duree: '~40 min',
+      4: { nom: 'Pleine puissance', duree: '~35-40 min',
         rotation: [
-          { nom: 'S1 — Force pure', exercices: [
-            { nom: 'Squats',          sets: 3, reps: 10, detail: 'Contrôlé, lent à la descente, explosif à la montée.' },
-            { nom: 'Fentes arrières', sets: 3, reps: 10, parJambe: true, detail: 'Alternance jambes, genou arrière à 2 cm du sol.' },
-            { nom: 'Sumo',            sets: 3, reps: 10, detail: 'Pieds très écartés, poussée depuis les talons.' },
-            { nom: 'Élévations',      sets: 3, reps: 12, detail: 'Dos au sol ou sur canapé, bassin qui monte haut, contraction 1 sec.' },
+          { nom: 'S1 — Cardio-Endurance', exercices: [
+            { nom: 'Marche rapide ou step maison', sets: 1, duree: '8 min', detail: 'Rythme soutenu mais contrôlable. Si pas de step : monte/descends les escaliers ou marche rapide sur place avec montées de genoux.' },
+            { nom: 'Jumping jacks légers',     sets: 3, reps: 15, detail: 'Sauts écartés-serrés, bras qui montent et descendent. Atterrissage doux, rythme fluide.' },
+            { nom: 'Fentes en marche',         sets: 3, reps: 12, parJambe: true, detail: 'Alterne jambe droite/gauche en avançant. Genou arrière frôle le sol, remonte et change.' },
+            { nom: 'Pompes rapides',           sets: 3, reps: 8, detail: 'Rythme plus rapide que d\'habitude mais technique parfaite. Genoux au sol si nécessaire.' },
+            { nom: 'Mountain climbers',        sets: 3, reps: 20, detail: 'Position planche, ramène genoux vers poitrine en alternance. Garde les hanches stables.' },
+            { nom: 'Retour au calme',          sets: 1, duree: '5 min', detail: 'Marche lente, étirements des mollets, cuisses, bras. Respiration qui revient au calme.' },
           ]},
-          { nom: 'S2 — Chaîne postérieure', exercices: [
-            { nom: 'Squats',          sets: 3, reps: 10, detail: 'Pleine amplitude, descente lente 3 secondes.' },
-            { nom: 'Soulevé de terre',sets: 3, reps: 10, detail: 'Jambes légèrement fléchies, dos droit, mains glissent le long des jambes.' },
-            { nom: 'Chien pipi',      sets: 3, reps: 12, parJambe: true, detail: 'Amplitude maximale, pause 1 sec en haut.' },
-            { nom: 'Kick back',       sets: 3, reps: 12, parJambe: true, detail: 'Extension complète, contraction fessiers 1 sec en haut.' },
+          { nom: 'S2 — Renforcement Unilatéral', exercices: [
+            { nom: 'Échauffement mobilité',    sets: 1, duree: '5 min', detail: 'Cercles de chevilles, hanches, épaules. Quelques squats libres pour réveiller le corps.' },
+            { nom: 'Fentes arrières lestées', sets: 3, reps: 10, parJambe: true, detail: 'Une jambe à la fois. Tiens bouteilles d\'eau ou poids. Complète une jambe avant de changer.' },
+            { nom: 'Pistol squat assisté',     sets: 3, reps: 5, parJambe: true, detail: 'Une jambe, l\'autre tendue devant. Aide-toi d\'une chaise pour descendre et remonter.' },
+            { nom: 'Hip thrust unilatéral',    sets: 3, reps: 8, parJambe: true, detail: 'Dos contre canapé, une jambe au sol, l\'autre tendue. Monte le bassin, tiens 2 sec.' },
+            { nom: 'Planche toucher épaule',   sets: 3, reps: 10, parJambe: true, detail: 'Position planche, touche épaule droite avec main gauche, puis inverse. Hanches stables.' },
+            { nom: 'Bird dog contrôlé',        sets: 3, reps: 6, parJambe: true, detail: 'Bras et jambe opposés, tiens 5 sec. Sens l\'équilibre avant de changer de côté.' },
           ]},
-          { nom: 'S3 — Explosif', exercices: [
-            { nom: 'Squats kicks',    sets: 3, reps: 12, parJambe: true, detail: 'Squat + coup de pied frontal en remontant, alterne.' },
-            { nom: 'Soulevé de terre',sets: 3, reps: 12, detail: 'Même mécanique que S2, intention plus forte.' },
-            { nom: 'Sumo',            sets: 3, reps: 12, detail: 'Pause 1 sec en bas pour activer les adducteurs.' },
-            { nom: 'Demi-pont',       sets: 3, reps: 12, detail: 'Pause 2 sec en haut, descente très lente (3 sec).' },
+          { nom: 'S3 — Circuit Fonctionnel Full Body', exercices: [
+            { nom: 'Échauffement dynamique',   sets: 1, duree: '5 min', detail: 'Marche rapide, bras qui tournent, squats libres, fentes dynamiques pour préparer le corps.' },
+            { nom: 'Circuit 1 (3 tours)',      sets: 3, duree: '45 sec repos', detail: 'Inchworm → Reverse lunge rotation buste → Pompes rotation planche → Hip hinge contrôlé. 45 sec de repos entre tours.' },
+            { nom: 'Inchworm',                 reps: 6, detail: 'Debout, descends mains au sol, marche vers position planche, remonte en marchant. Corps entier engagé.' },
+            { nom: 'Reverse lunge + rotation', reps: 8, parJambe: true, detail: 'Fente arrière + rotation du buste vers la jambe avant. Coordination et stabilité.' },
+            { nom: 'Pompes + rotation planche', reps: 6, detail: 'Pompe classique, puis rotation sur le côté bras tendu vers le plafond. Alterne les côtés.' },
+            { nom: 'Hip hinge contrôlé',       reps: 10, detail: 'Penche le buste en arrière, hanches qui reculent, dos droit. Simule soulevé de terre sans poids.' },
+            { nom: 'Bear crawl',               reps: 8, detail: '4 pas en avant, 4 pas en arrière. À quatre pattes, genoux à 2 cm du sol.' },
+            { nom: 'Squat + bras levés',       reps: 8, detail: 'Squat classique, en remontant lève les bras vers le plafond. Engagement total.' },
           ]},
         ],
       },
+    },
+
+    // ─ Full Body (nouveaux ajouts) ─
+    // NOTE DÉVELOPPEMENT : Câblage à faire dans app.js pour intégrer dans l'interface
+    fullBody: {
+      2: { nom: 'Corps entier Découverte', duree: '~25 min',
+        message: 'Première approche du corps entier — chaque mouvement compte. En Printemps, ton corps est prêt à apprendre.',
+        messageSpirituel: 'Ton corps est une amânah. L\'entraîner avec gratitude est une forme d\'adoration.',
+        exercices: [
+          { nom: 'Squats',         sets: 3, reps: 8, detail: 'Descente lente, remontée contrôlée. Pieds largeur d\'épaules.' },
+          { nom: 'Pompes genoux',  sets: 3, reps: 6, detail: 'Corps droit des genoux à la tête. Descente en 3 secondes.' },
+          { nom: 'Fentes statiques', sets: 3, reps: 6, parJambe: true, detail: 'Position tenue, monte et descends sans changer de jambe. 6 reps par côté.' },
+          { nom: 'Gainage genoux', sets: 3, duree: '20 sec', detail: 'Planche sur les genoux, dos droit, ventre rentré. Respiration libre.' },
+          { nom: 'Étirements actifs', sets: 1, duree: '5 min', detail: 'Bras, jambes, dos. Garde le mouvement, ne force pas les positions.' },
+        ],
+      },
+      3: { nom: 'Corps entier Dynamique', duree: '~30 min',
+        message: 'Enchaîne les groupes musculaires avec fluidité. Ton énergie de Printemps permet cette coordination.',
+        messageSpirituel: 'Dans le mouvement coordonné, il y a de l\'harmonie. Dans l\'harmonie, une forme de sagesse.',
+        exercices: [
+          { nom: 'Circuit 1 (3 tours)', sets: 3, duree: '1 min repos', detail: 'Enchaîne tous les exercices, 1 min de repos entre tours.' },
+          { nom: 'Burpees sans saut',  reps: 6, detail: 'Descends en position planche, remonte debout sans saut final. Fluidité.' },
+          { nom: 'Pompes',             reps: 8, detail: 'Complètes ou sur genoux selon ton niveau. Technique parfaite.' },
+          { nom: 'Fentes avec rotation', reps: 8, parJambe: true, detail: 'Fente avant + rotation du buste vers la jambe avant. Coordination et équilibre.' },
+          { nom: 'Gainage latéral modifié', duree: '20 sec', parJambe: true, detail: 'Sur le côté, genoux fléchis. 20 sec par côté.' },
+          { nom: 'Demi-pont',          reps: 12, detail: 'Monte en 2 temps, descends en 3 temps. Contrôle et force.' },
+          { nom: 'Étirements dynamiques', sets: 1, duree: '5 min', detail: 'Mouvements amples, garde la fluidité. Corps entier qui se relâche.' },
+        ],
+      },
+      4: { nom: 'Corps entier Performance', duree: '~40 min',
+        message: 'Séance complète alliant force, coordination et endurance. L\'énergie de Printemps est à son maximum.',
+        messageSpirituel: 'Utilise tes forces pour servir. Un corps fort peut porter plus que soi-même.',
+        exercices: [
+          { nom: 'Échauffement dynamique', sets: 1, duree: '7 min', detail: 'Marche rapide, cercles articulaires, quelques mouvements de chaque exercice à venir.' },
+          { nom: 'Circuit 1 (4 tours)', sets: 4, duree: '90 sec repos', detail: 'Enchaîne 6 exercices, 90 sec de repos entre tours.' },
+          { nom: 'Inchworm',           reps: 5, detail: 'Debout, descends mains au sol, marche vers planche, reviens. Corps entier.' },
+          { nom: 'Pompes déclinées',   reps: 8, detail: 'Pieds surélevés (canapé, lit). Si trop difficile : pompes classiques.' },
+          { nom: 'Fentes sautées OU statiques', reps: 10, parJambe: true, detail: 'Fentes avec saut en alternance. Si fatigue : fentes statiques contrôlées.' },
+          { nom: 'Mountain climbers',  reps: 16, detail: 'Position planche stable, genoux vers poitrine en alternance rapide.' },
+          { nom: 'Superman',           reps: 10, detail: 'Sur le ventre, lève bras et jambes ensemble, tiens 2 sec en haut.' },
+          { nom: 'Burpees complets',   reps: 6, detail: 'Descente planche, remontée avec saut final. Si fatigue : sans saut.' },
+          { nom: 'Retour au calme',    sets: 1, duree: '8 min', detail: 'Étirements longs, respiration profonde. Félicite-toi pour cette séance complète.' },
+        ],
+      },
+    },
+
+    // ─ Cardio doux (nouveau) ─
+    // NOTE DÉVELOPPEMENT : Câblage à faire dans app.js pour intégrer dans l'interface
+    cardioDoux: {
+      nom: 'Cardio doux',
+      duree: '20-30 min',
+      message: 'Élève ton cœur sans t\'épuiser. En Printemps, construis ton endurance de base.',
+      messageSpirituel: 'Chaque battement de cœur est un rappel de la vie qu\'Allah t\'a donnée. Prends-en soin.',
+      options: [
+        { nom: 'Marche rapide', duree: '25 min', detail: 'Rythme soutenu mais tu peux tenir une conversation. Dehors si possible, sinon sur place avec montées de genoux.' },
+        { nom: 'Vélo léger', duree: '20 min', detail: 'Vélo d\'appartement ou extérieur. Résistance modérée, pédalage fluide. Écoute de la musique ou du Coran.' },
+        { nom: 'Step maison', duree: '20 min', detail: 'Monte/descends escaliers ou marche/livre épais. Rythme régulier, 2 pas par marche. Alterne montée et descente.' },
+      ],
     },
 
     // ─ Séances Haut du corps (jamais ajoutées en fin de séance bas) ─
@@ -853,6 +919,24 @@ const SEANCES_SPORT = {
              { nom: 'Hips thrust',      reps: 5 },
            ],
            detail: 'Prends 5 min minimum pour échauffer tes articulations avant de démarrer le timer. Enchaîne les 3 exercices sans arrêt. Compte le nombre de tours complets en 10 min.',
+      },
+    },
+    // NOTE DÉVELOPPEMENT : rotationHaut ajoutée pour alterner avec bas du corps
+    // Câblage à faire dans app.js : quand dayIdx % 4 === 2 (2e séance intense), utiliser rotationHaut
+    rotationHaut: {
+      1: { type: 'emom', duree: 10, label: 'EMOM 10 min', exercice: 'Pompes sur genoux', reps: 5,
+           detail: 'Échauffe épaules et poignets 5 min minimum. Au début de chaque minute : 5 pompes sur genoux, corps droit. Technique parfaite. Récupère le reste. 10 rounds.' },
+      2: { type: 'emom', duree: 10, label: 'EMOM 10 min', exercice: 'Pompes classiques', reps: 6,
+           detail: 'Échauffe épaules et poignets 5 min minimum. Au début de chaque minute : 6 pompes complètes, descente lente. Qualité > vitesse. 10 rounds.' },
+      3: { type: 'emom', duree: 10, label: 'EMOM 10 min', exercice: 'Pompes + rotation planche', reps: 5,
+           detail: 'Échauffe tout le haut du corps 5 min minimum. Au début de chaque minute : 5 pompes avec rotation sur le côté (bras vers plafond) en alternance. 10 rounds.' },
+      4: { type: 'amrap', duree: 10, label: 'AMRAP 10 min',
+           circuit: [
+             { nom: 'Pompes explosives', reps: 5 },
+             { nom: 'Dips chaise',       reps: 8 },
+             { nom: 'Superman dos',      reps: 8 },
+           ],
+           detail: 'Échauffement haut du corps 5 min minimum. Enchaîne les 3 exercices sans arrêt. Pompes avec intention explosive, dips complets, superman tenu 2 sec. Compte les tours en 10 min.',
       },
     },
   },
@@ -1051,44 +1135,81 @@ const SEANCES_SPORT = {
           ],
         },
         3: {
-          nom: 'Ritual de Transition',
-          duree: '~15 min',
-          message: 'Honore le cycle qui se termine et prépare celui qui vient. Ton corps mérite cette reconnaissance et cette douceur.',
-          messageSpirituel: 'Chaque fin est un commencement. Alhamdulillahi rabbil alamin.',
+          nom: 'Marche Méditative',
+          duree: '~18 min',
+          message: 'Les derniers jours de ton cycle appellent la simplicité. Une marche douce avec présence spirituelle apaise l\'agitation prémenstruelle.',
+          messageSpirituel: 'Chaque pas peut être un dhikr silencieux. SubhanAllah, Alhamdulillah, Allahu Akbar.',
           exercices: [
-            { nom: 'Gratitude corporelle', duree: '3 min',
-              detail: 'Allongée, respiration lente. Remercie mentalement chaque partie de ton corps pour ce qu\'il a porté ce mois-ci.' },
-            { nom: 'Torsions douces au sol', duree: '4 min',
-              detail: 'Allongée, genoux d\'un côté puis de l\'autre. Reste 2 min de chaque côté. Libère les dernières tensions.' },
-            { nom: 'Position de l\'enfant modifiée', duree: '4 min',
-              detail: 'Genoux écartés, front au sol ou sur un coussin. Bras le long du corps ou étendus devant. Laisse-toi aller complètement.' },
-            { nom: 'Intention pour le nouveau cycle', duree: '4 min',
-              detail: 'Allongée, mains sur le cœur. Respire et formule silencieusement une intention sincère pour le cycle qui vient.' },
+            { nom: 'Marche douce avec dhikr', duree: '12 min',
+              detail: 'Marche lente dehors ou dans ton espace. À chaque pas, récite silencieusement SubhanAllah (droite), Alhamdulillah (gauche), Allahu Akbar (droite). Rythme naturel, sans forcer.' },
+            { nom: 'Étirements debout', duree: '3 min',
+              detail: 'Bras vers le ciel, penche-toi doucement d\'un côté puis de l\'autre. Mollets contre un mur. Reste debout pour garder la circulation active.' },
+            { nom: 'Respiration finale', duree: '3 min',
+              detail: 'Debout ou assise, mains sur le cœur. Respiration 4-4-6 : inspire 4, retiens 4, souffle 6. Calme le système nerveux avant la transition vers l\'Hiver.' },
           ],
         },
         4: {
-          nom: 'Ritual & Lâcher-prise',
-          duree: '~18 min',
-          message: 'Programme complet de fin de cycle. Libère physiquement et émotionnellement ce mois-ci. Prépare ton corps et ton cœur pour le renouveau.',
-          messageSpirituel: 'Ce qui se termine libère la place pour ce qui commence. Aie confiance dans le cycle d\'Allah.',
+          nom: 'Pilates Respiration Avancé',
+          duree: '~20 min',
+          message: 'Pour les sportives habituées : un travail respiratoire profond et mobilité ciblée pour préparer le corps à l\'Hiver en douceur.',
+          messageSpirituel: 'La respiration est le pont entre le corps et l\'âme. Prendre soin de ce pont, c\'est honorer les deux.',
           exercices: [
-            { nom: 'Gratitude corporelle', duree: '3 min',
-              detail: 'Allongée, respiration lente. Remercie chaque partie de ton corps pour ce qu\'il a traversé ce cycle.' },
-            { nom: 'Respiration abdominale', duree: '2 min',
-              detail: 'Mains sur le ventre. Lente, profonde, bienveillante. Connecte-toi à toi-même.' },
-            { nom: 'Étirement bas du dos', duree: '2 min',
-              detail: 'Genoux écartés, front au sol. Lâche prise complètement. Raccourcis si SPM intense.' },
-            { nom: 'Torsions douces', duree: '3 min',
-              detail: 'Allongée, genoux d\'un côté puis de l\'autre. 90 sec par côté. Libère les tensions du bas du dos.' },
-            { nom: 'Position de l\'enfant', duree: '3 min',
-              detail: 'Front au sol ou sur un coussin. Bras étendus devant. Lâche prise total.' },
-            { nom: 'Automassage ventre', duree: '2 min',
-              detail: 'Cercles bienveillants, pression très douce. Honore ce que ton corps prépare.' },
-            { nom: 'Intention de renouveau', duree: '3 min',
-              detail: 'Allongée, yeux fermés, mains sur le cœur. Formule ton intention pour le nouveau cycle. Gratitude et confiance.' },
+            { nom: 'Cat-vache avec respiration 4-4-6', duree: '3 min',
+              detail: 'À quatre pattes. Inspire 4 temps en creusant le dos, retiens 4 temps, expire 6 temps en arrondissant. Synchronise mouvement et souffle.' },
+            { nom: 'Mobilité thoracique rotation', duree: '4 min / côté', parJambe: true,
+              detail: 'À quatre pattes, une main derrière la tête. Rotation lente d\'ouverture vers le plafond, puis fermeture. Libère les tensions des épaules et du haut du dos.' },
+            { nom: 'Étirement piriforme', duree: '3 min / côté', parJambe: true,
+              detail: 'Allongée, cheville sur genou opposé, tire la cuisse vers toi. Libère les tensions profondes des hanches qui s\'accumulent en fin de cycle.' },
+            { nom: 'Gainage hypopressif simple', duree: '4 min',
+              detail: 'Allongée, genoux pliés. Expire complètement, rentre le ventre "vers l\'intérieur et vers le haut", tiens 10 sec sans respirer, relâche. 8 répétitions. Tonifie en douceur.' },
+            { nom: 'Relaxation guidée', duree: '3 min',
+              detail: 'Allongée, yeux fermés. Relâche consciemment chaque zone : front, mâchoire, épaules, bras, ventre, jambes. Chaque expiration = lâcher prise total.' },
           ],
         },
       },
+    },
+
+    // ─ Full Body Automne (nouveau) ─
+    // NOTE DÉVELOPPEMENT : Câblage à faire dans app.js pour intégrer dans l'interface
+    fullBody: {
+      2: { nom: 'Corps entier Doux', duree: '~25 min',
+        message: 'Corps entier en version Automne — lent, contrôlé, aucun saut. La progestérone demande de la prudence.',
+        messageSpirituel: 'La sagesse, c\'est aussi savoir ralentir au bon moment.',
+        exercices: [
+          { nom: 'Squats lents',       sets: 3, reps: 8, detail: 'Descente 4 temps, pause 1 sec en bas, remontée 2 temps. Contrôle total, aucune précipitation.' },
+          { nom: 'Pompes sur genoux',  sets: 3, reps: 6, detail: 'Corps droit des genoux à la tête. Descente très lente en 4 temps, remontée contrôlée.' },
+          { nom: 'Bird dog',           sets: 3, reps: 6, parJambe: true, detail: 'Bras et jambe opposés, tiens 5 secondes. Sens l\'équilibre, ne précipite rien.' },
+          { nom: 'Planche genoux',     sets: 3, duree: '25 sec', detail: 'Corps parfaitement aligné, respiration libre. Si facile, monte sur les pieds.' },
+          { nom: 'Étirements longs',   sets: 1, duree: '8 min', detail: 'Tiens chaque position 45 sec minimum. Position de l\'enfant, torsions, ouverture hanches.' },
+        ],
+      },
+      3: { nom: 'Corps entier Automnal', duree: '~30 min',
+        message: 'Renforcement global sans explosivité. En Automne, privilégie la qualité et la stabilité.',
+        messageSpirituel: 'La constance douce vaut mieux que l\'intensité sporadique.',
+        exercices: [
+          { nom: 'Échauffement doux',  sets: 1, duree: '5 min', detail: 'Cercles articulaires lents, étirements légers. Prépare le corps sans le brusquer.' },
+          { nom: 'Dead bug',           sets: 3, reps: 8, parJambe: true, detail: 'Allongée, genoux à 90°. Étends bras et jambe opposés très lentement. Stabilité du tronc.' },
+          { nom: 'Squats lents',       sets: 3, reps: 10, detail: 'Descente 4 temps, pause en bas, remontée contrôlée. Aucun saut.' },
+          { nom: 'Pompes classiques',  sets: 3, reps: 8, detail: 'Complètes si possible, sinon genoux. Technique parfaite, tempo lent.' },
+          { nom: 'Fentes statiques',   sets: 3, reps: 8, parJambe: true, detail: 'Position tenue, monte et descends sans changer de jambe. Lent et contrôlé.' },
+          { nom: 'Gainage central',    sets: 3, duree: '30 sec', detail: 'Planche classique, corps droit, respiration régulière. Engage abdos et fessiers.' },
+          { nom: 'Torsions douces',    sets: 2, reps: 10, parJambe: true, detail: 'Assise ou debout, rotation lente du buste. Libère les tensions du dos.' },
+          { nom: 'Étirements profonds', sets: 1, duree: '7 min', detail: 'Étirements longs et passifs. Laisse la gravité travailler, ne force pas.' },
+        ],
+      },
+    },
+
+    // ─ Cardio doux Automne (nouveau) ─
+    cardioDoux: {
+      nom: 'Cardio doux automnal',
+      duree: '15-25 min',
+      message: 'Cardio adapté à l\'Automne — doux, sans à-coups, respectueux de tes ligaments.',
+      messageSpirituel: 'En Automne, même le mouvement se fait plus sage.',
+      options: [
+        { nom: 'Marche contemplative', duree: '20 min', detail: 'Rythme naturel et doux. Dehors si possible, observe la nature. Respire profondément, reste présente.' },
+        { nom: 'Vélo tranquille', duree: '15 min', detail: 'Pédalage très fluide, résistance faible. L\'objectif est la circulation, pas la performance.' },
+        { nom: 'Montée d\'escaliers douce', duree: '10-15 min', detail: 'Si tu as des escaliers, monte et descends lentement. 2 marches à la fois si trop facile, sinon une par une.' },
+      ],
     },
   },
 
@@ -1099,6 +1220,42 @@ const SEANCES_SPORT = {
     message: 'Pas de chrono. Pas de performance. Juste toi, l\'air, et le dhikr.',
     messageSpirituel: 'SubhanAllah à chaque pas. Laisse ton cœur se poser.',
     detail: 'Marche 10 minutes dehors à ton rythme. À chaque pas, dis SubhanAllah dans ton cœur. Aucune pression. Juste la présence.',
+  },
+
+  // ── PROGRESSION INTER-CYCLES ──
+  progressionInterCycles: {
+    getCycleLevel: function(cycleCount) {
+      if (cycleCount <= 1) return 'decouverte';
+      if (cycleCount <= 3) return 'construction';
+      return 'performance';
+    },
+    decouverte: {
+      label: 'Découverte (Cycle 1)',
+      conseil: 'Concentre-toi sur la technique. Aucune charge, mouvements parfaits.',
+      conseils: [
+        'Privilégie la qualité sur la quantité — mieux vaut 8 reps parfaites que 15 bâclées',
+        'Note comment ton corps réagit à chaque phase — c\'est tes données les plus précieuses',
+        'L\'objectif ce cycle : apprendre le mouvement, pas performer',
+      ],
+    },
+    construction: {
+      label: 'Construction (Cycles 2-3)',
+      conseil: 'Ajoute de la résistance douce : bouteilles d\'eau 1.5L en guise de poids légers.',
+      conseils: [
+        'Tu peux ajouter 2 reps ou 5 sec à chaque exercice par rapport au cycle précédent',
+        'Essaie d\'ajouter des bouteilles d\'eau (1-1.5 kg) pour squats et fentes',
+        'Observe si tes douleurs de règles diminuent — signe que l\'app fonctionne',
+      ],
+    },
+    performance: {
+      label: 'Performance (Cycle 4+)',
+      conseil: 'Augmente les charges (2-3 kg), réduis les temps de repos, ajoute des séries.',
+      conseils: [
+        'Tente de monter d\'un niveau N si tu termines les séances sans fatigue excessive',
+        'Intègre des variations plus complexes si proposées',
+        'Ton cycle est ton coach — écoute les signaux de ton corps avant tout',
+      ],
+    },
   },
 };
 
