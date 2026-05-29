@@ -857,12 +857,55 @@ const SEANCES_SPORT = {
     },
   },
 
-  // ── AUTOMNE — 3 micro-phases, pas de niveaux propres ─────────────
+  // ── AUTOMNE — 6 séances distinctes + 3 micro-phases ─────────────
   automne: {
-    // Actif J18-J21 (standard) : reprend Printemps + repos +10s
+    // Actif J18-J21 (standard) : reprend Printemps + repos +10s + nouvelles séances
     actif: {
       message: 'Ton corps tient encore — honore-le sans te dépasser. Reprends ton niveau de Printemps avec 20 secondes de repos supplémentaires entre chaque exercice. En phase Automne, les sauts sont remplacés automatiquement par des alternatives sans impact — la progestérone relâche tes ligaments cette semaine. Protège tes genoux et tes chevilles. Hydrate-toi davantage : la progestérone peut favoriser la rétention d\'eau. 🌿',
       reposExtra: 20,
+      // Nouvelles séances spécifiques Automne actif
+      seances: [
+        {
+          nom: 'Pilates Automnal',
+          duree: '~25 min',
+          message: 'Stabilité profonde et ancrage — ce dont ton corps a besoin en début d\'Automne.',
+          messageSpirituel: 'L\'équilibre intérieur se cultive dans le mouvement conscient.',
+          exercices: [
+            { nom: 'Respiration abdominale profonde', duree: '3 min',
+              detail: 'Allongée, mains sur le ventre. Inspire en gonflant le ventre, expire en rentrant doucement le nombril. Prépare ton corps et ton esprit.' },
+            { nom: 'Dead Bug', sets: 3, reps: 8, parJambe: true,
+              detail: 'Allongée, genoux pliés à 90°. Étends bras et jambe opposés lentement, reviens au centre. Contrôle et stabilité du tronc.' },
+            { nom: 'Pont fessier lent', sets: 3, reps: 12,
+              detail: 'Monte en 3 temps, tiens 2 secondes en haut, descends en 3 temps. Qualité > quantité.' },
+            { nom: 'Bird Dog', sets: 3, reps: 6, parJambe: true,
+              detail: 'À quatre pattes, étends bras et jambe opposés. Tiens 5 secondes, sens l\'équilibre. Change de côté.' },
+            { nom: 'Gainage latéral modifié', sets: 2, duree: '20 sec', parJambe: true,
+              detail: 'Sur le côté, genoux fléchis. Corps droit, hanches alignées. Version douce mais efficace.' },
+            { nom: 'Étirements Pilates', duree: '5 min',
+              detail: 'Torsion douce au sol, étirement du chat, ouverture des hanches. Fluidité et relâchement.' },
+          ],
+        },
+        {
+          nom: 'Renforcement Terre-à-Terre',
+          duree: '~30 min',
+          message: 'Force tranquille — construis sans t\'épuiser. Ton énergie est précieuse en Automne.',
+          messageSpirituel: 'La constance dans l\'effort, même modéré, porte plus de fruits que l\'intensité sporadique.',
+          exercices: [
+            { nom: 'Échauffement articulaire', duree: '5 min',
+              detail: 'Cercles de chevilles, genoux, hanches, épaules. Réveille chaque articulation avec douceur.' },
+            { nom: 'Squats lents contrôlés', sets: 3, reps: 12,
+              detail: 'Descente 4 temps, pause 1 sec en bas, montée 2 temps. Sensation dans les cuisses et fessiers.' },
+            { nom: 'Pompes sur genoux', sets: 3, reps: 8,
+              detail: 'Corps droit des genoux à la tête. Descente lente, pousse avec intention. Qualité parfaite.' },
+            { nom: 'Fentes statiques', sets: 3, reps: 10, parJambe: true,
+              detail: 'Position de fente tenue, monte et descends sans changer de jambe. Stabilité et contrôle.' },
+            { nom: 'Planche sur genoux', sets: 3, duree: '30 sec',
+              detail: 'Corps droit, engage les abdos sans retenir ta respiration. Force tranquille.' },
+            { nom: 'Étirements actifs', duree: '7 min',
+              detail: 'Étirement des cuisses, mollets, bras. Garde le mouvement, ne force pas les positions.' },
+          ],
+        },
+      ],
       // Substitutions appliquées automatiquement sur les séances Printemps quand on est en Automne
       remplacements: [
         { ancien: 'Burpees',       nouveau: 'Burpees sans saut',       detail: 'Position planche, ramène les pieds en position accroupie, redresse-toi debout sans saut, recommence.' },
@@ -872,9 +915,41 @@ const SEANCES_SPORT = {
         { ancien: 'Squat sauté',   nouveau: 'Squat lent contrôlé',     detail: 'Descente lente sur 4 temps, pause 1 sec en bas, montée contrôlée sur 2 temps.' },
       ],
     },
-    // Doux J22-J24 (standard) : mobilité + 2 exos légers
+    // Doux J22-J24 (standard) : mobilité + nouvelles séances variées
     doux: {
       message: 'Écoute ton corps — un soin doux aujourd\'hui.',
+      seances: [
+        {
+          nom: 'Marche Consciente',
+          duree: '~20 min',
+          message: 'Le mouvement le plus simple peut être le plus profond. Laisse ton corps se poser dans le rythme.',
+          messageSpirituel: 'À chaque pas, un dhikr silencieux. SubhanAllah, Alhamdulillah, Allahu Akbar.',
+          exercices: [
+            { nom: 'Marche lente dehors', duree: '15 min',
+              detail: 'Rythme naturel, sans forcer. Si le temps ne permet pas de sortir, marche dans ton salon ou monte et descends les escaliers lentement. L\'important est le mouvement doux et régulier.' },
+            { nom: 'Étirements debout', duree: '5 min',
+              detail: 'Bras vers le ciel, penche-toi doucement d\'un côté puis de l\'autre. Étire les mollets contre un mur. Reste debout, garde la circulation active.' },
+          ],
+        },
+        {
+          nom: 'Étirements Profonds',
+          duree: '~25 min',
+          message: 'Ton corps stocke les tensions de la semaine. Offre-lui de la longueur et de l\'espace.',
+          messageSpirituel: 'Dans l\'étirement, il y a de la patience. Dans la patience, il y a de la sagesse.',
+          exercices: [
+            { nom: 'Papillon allongé', duree: '4 min',
+              detail: 'Allongée sur le dos, plantes des pieds jointes, genoux ouverts. Laisse la gravité faire le travail. Respiration abdominale lente.' },
+            { nom: 'Étirement psoas profond', duree: '3 min / côté', parJambe: true,
+              detail: 'Position de fente basse, genou arrière au sol. Descends progressivement sur les avant-bras. Libère les tensions du bassin.' },
+            { nom: 'Torsion allongée', duree: '2 min / côté', parJambe: true,
+              detail: 'Allongée, ramène une jambe pliée de l\'autre côté. Épaules restent au sol. Respire dans la torsion.' },
+            { nom: 'Étirement complet du dos', duree: '5 min',
+              detail: 'Position de l\'enfant, bras étendus devant. Si inconfortable, mets un coussin sous les genoux. Relâche complètement.' },
+            { nom: 'Jambes au mur', duree: '6 min',
+              detail: 'Fesses près du mur, jambes tendues vers le haut. Favorise la circulation, apaise le système nerveux. Ferme les yeux.' },
+          ],
+        },
+      ],
       mobilite: [
         { nom: 'Respiration abdominale', duree: '2 min',
           detail: 'Mains sur le ventre, respirations profondes et lentes.' },
@@ -885,12 +960,46 @@ const SEANCES_SPORT = {
         { nom: 'Gainage profond · Pilates', duree: '1 min',
           detail: 'Allongée sur le dos, genoux fléchis. Contracte doucement le plancher pelvien et le ventre en expirant, relâche en inspirant. 2 séries de 8 respirations lentes. Si tu ressens de l\'inconfort, réduis encore.' },
       ],
-      // N1-N2 : mobilité seule | N3-N4 : mobilité + circuit Découverte (printemps.bas.1)
+      // N1-N2 : mobilité seule | N3-N4 : mobilité + nouvelles séances ou circuit Découverte
       repos: 55,
     },
-    // Fin J25-fin (standard) : mobilité douce uniquement
+    // Fin J25-fin (standard) : mobilité douce + nouvelles séances très douces
     fin: {
       message: 'Ton corps se prépare à se renouveler. L\'accueillir avec douceur, c\'est déjà prendre soin de toi.',
+      seances: [
+        {
+          nom: 'Ritual de Transition',
+          duree: '~15 min',
+          message: 'Honore le cycle qui se termine et prépare celui qui vient. Ton corps mérite cette reconnaissance.',
+          messageSpirituel: 'Chaque fin est un commencement. Alhamdulillahi rabbil alamin.',
+          exercices: [
+            { nom: 'Gratitude corporelle', duree: '3 min',
+              detail: 'Allongée, respiration lente. Remercie mentalement chaque partie de ton corps : pieds, jambes, ventre, cœur, bras, tête. Ce qu\'il a porté ce mois-ci.' },
+            { nom: 'Torsions douces au sol', duree: '4 min',
+              detail: 'Allongée, genoux d\'un côté puis de l\'autre. Reste 2 min de chaque côté. Libère les dernières tensions.' },
+            { nom: 'Position de l\'enfant modifiée', duree: '4 min',
+              detail: 'Genoux écartés, front au sol ou sur un coussin. Bras le long du corps ou étendus devant. Laisse-toi aller complètement.' },
+            { nom: 'Intention pour le nouveau cycle', duree: '4 min',
+              detail: 'Allongée sur le dos, mains sur le cœur. Respire et formule silencieusement une intention pour le cycle qui vient. Simple, sincère, du cœur.' },
+          ],
+        },
+        {
+          nom: 'Douceur Absolue',
+          duree: '~12 min',
+          message: 'Quand même bouger semble trop. Ce n\'est pas rien — c\'est suffisant.',
+          messageSpirituel: 'Allah ne charge aucune âme au-delà de sa capacité. Ni ne charge aucun corps.',
+          exercices: [
+            { nom: 'Respiration réparatrice', duree: '4 min',
+              detail: 'Allongée ou assise confortablement. Inspire 4 temps par le nez, expire 6 temps par la bouche. Laisse ton système nerveux se calmer.' },
+            { nom: 'Micromovements', duree: '3 min',
+              detail: 'Cercles très lents des chevilles, poignets, épaules. Bascules douces de la tête droite/gauche. Garde tes articulations vivantes sans effort.' },
+            { nom: 'Automassage ventre et bas du dos', duree: '3 min',
+              detail: 'Mains chaudes sur le ventre, cercles très doux. Si tu peux, masse le bas du dos avec une balle de tennis contre le mur.' },
+            { nom: 'Présence silencieuse', duree: '2 min',
+              detail: 'Allongée, yeux fermés. Ne fais rien. Sens juste ton corps respirer, ton cœur battre. Tu es vivante. C\'est immense.' },
+          ],
+        },
+      ],
       exercices: [
         { nom: 'Respiration abdominale', duree: '2 min',
           detail: 'Mains sur le ventre. Lente, profonde, bienveillante.' },
