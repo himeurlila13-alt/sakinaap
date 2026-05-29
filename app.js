@@ -2006,12 +2006,14 @@ function renderCarteBouger(s) {
   const reposSec = (typeof SEANCES_SPORT !== 'undefined') ? (SEANCES_SPORT.printemps.niveauxRepos[level] || 45) : 45;
 
   let titleText = '', metaText = '', durText = '', exContent = '', msgHtml = '', spirituelHtml = '', levelLabel = '';
+  const _LEVEL_NAMES = ['Essentielle', 'À ton rythme', 'Vitalité', 'Pleine puissance'];
+  const _lvlName = (n) => `Niveau ${n}/4 · ${_LEVEL_NAMES[(n||1)-1] || ''}`;
 
   switch (spec.type) {
     case 'hiver': {
       const d = spec.data;
       titleText = d.nom; metaText = 'Douceur menstruelle'; durText = d.duree;
-      levelLabel = `Niveau ${spec.level || level}/4`;
+      levelLabel = _lvlName(spec.level || level);
       const enrichieH = (typeof getSeanceEnrichie === 'function') ? getSeanceEnrichie('hiver', spec.level || level) : null;
       exContent = _sportEnrSectionHtml(enrichieH && enrichieH.echauffement, '🔥 Échauffement')
                + _sportExHtml(d.exercices)
@@ -2045,7 +2047,7 @@ function renderCarteBouger(s) {
       titleText = d.nom;
       metaText = spec.type === 'printemps-bas' ? '🦵 Bas du corps' : '💪 Haut du corps';
       durText = d.duree || '~25 min';
-      levelLabel = `Niveau ${level}/4 · ${['Essentielle','À ton rythme','Vitalité','Pleine puissance'][level-1] || ''}`;
+      levelLabel = _lvlName(level);
       const enrichieP = (typeof getSeanceEnrichie === 'function') ? getSeanceEnrichie('printemps', level) : null;
       exContent = _sportEnrSectionHtml(enrichieP && enrichieP.echauffement, '🔥 Échauffement')
                + _sportExHtml(d.exercices, reposSec)
@@ -2057,7 +2059,7 @@ function renderCarteBouger(s) {
     case 'ete-intense': {
       const d = spec.data;
       titleText = d.label; durText = `${d.duree} min`;
-      levelLabel = `Niveau ${level}/4`;
+      levelLabel = _lvlName(level);
       if (d.type === 'emom') {
         metaText = `${d.exercice} · ${d.reps} reps/min`;
         exContent = `<div class="sport-emom-block">
@@ -2087,7 +2089,7 @@ function renderCarteBouger(s) {
       const d = spec.data;
       titleText = d.exercice || d.label; durText = `${d.duree} min`;
       metaText = '☀️ Haut du corps';
-      levelLabel = `Niveau ${level}/4`;
+      levelLabel = _lvlName(level);
       if (d.type === 'emom') {
         exContent = `<div class="sport-emom-block">
           <div class="sport-emom-label">EMOM ${d.duree} min</div>
@@ -2114,7 +2116,7 @@ function renderCarteBouger(s) {
       const d = spec.data;
       titleText = d.nom; metaText = '🍂 Phase active';
       durText = d.duree || '~25 min';
-      levelLabel = `Niveau ${level}/4`;
+      levelLabel = _lvlName(level);
       const enrichieAA = (typeof getSeanceEnrichie === 'function') ? getSeanceEnrichie('automne', level) : null;
       exContent = _sportEnrSectionHtml(enrichieAA && enrichieAA.echauffement, '🔥 Échauffement')
                + _sportExHtml(d.exercices, reposSec)
@@ -2126,6 +2128,7 @@ function renderCarteBouger(s) {
     case 'automne-doux': {
       const d = spec.data;
       titleText = d.nom || 'Mobilité douce'; metaText = '🍂 Phase de transition'; durText = d.duree || '~15 min';
+      levelLabel = _lvlName(level);
       const enrichieAD = (typeof getSeanceEnrichie === 'function') ? getSeanceEnrichie('automne', level) : null;
       exContent = _sportEnrSectionHtml(enrichieAD && enrichieAD.echauffement, '🔥 Échauffement')
                + _sportExHtml(d.exercices)
@@ -2137,6 +2140,7 @@ function renderCarteBouger(s) {
     case 'automne-fin': {
       const d = spec.data;
       titleText = d.nom || 'Douceur profonde'; metaText = '🍂 Fin de cycle'; durText = d.duree || '~10 min';
+      levelLabel = _lvlName(level);
       const enrichieAF = (typeof getSeanceEnrichie === 'function') ? getSeanceEnrichie('automne', level) : null;
       exContent = _sportExHtml(d.exercices)
                + _sportEnrSectionHtml(enrichieAF && enrichieAF.retour_au_calme, '🌿 Retour au calme');
@@ -2155,7 +2159,7 @@ function renderCarteBouger(s) {
     case 'fullbody': {
       const d = spec.data;
       titleText = d.nom; metaText = '💪 Corps entier'; durText = d.duree;
-      levelLabel = `Niveau ${spec.level || level}/4`;
+      levelLabel = _lvlName(spec.level || level);
       exContent = _sportExHtml(d.exercices);
       msgHtml = d.message;
       spirituelHtml = d.messageSpirituel;
