@@ -2093,39 +2093,31 @@ function renderCarteBouger(s) {
       levelLabel = `Niveau ${level}/4`;
       const enrichieAA = (typeof getSeanceEnrichie === 'function') ? getSeanceEnrichie('automne', level) : null;
       exContent = _sportEnrSectionHtml(enrichieAA && enrichieAA.echauffement, '🔥 Échauffement')
-               + _sportExHtml(d.exercices, reposSec + (spec.reposExtra || 10))
+               + _sportExHtml(d.exercices, reposSec)
                + _sportEnrSectionHtml(enrichieAA && enrichieAA.retour_au_calme, '🌿 Retour au calme');
-      msgHtml = spec.message || '';
-      spirituelHtml = (enrichieAA && enrichieAA.message_fin) || '';
+      msgHtml = d.message || '';
+      spirituelHtml = d.messageSpirituel || (enrichieAA && enrichieAA.message_fin) || '';
       break;
     }
     case 'automne-doux': {
       const d = spec.data;
-      titleText = 'Mobilité douce'; metaText = '🍂 Phase de transition'; durText = '~15 min';
+      titleText = d.nom || 'Mobilité douce'; metaText = '🍂 Phase de transition'; durText = d.duree || '~15 min';
       const enrichieAD = (typeof getSeanceEnrichie === 'function') ? getSeanceEnrichie('automne', level) : null;
       exContent = _sportEnrSectionHtml(enrichieAD && enrichieAD.echauffement, '🔥 Échauffement')
-               + _sportExHtml(d.mobilite);
-      if (level >= 3 && typeof SEANCES_SPORT !== 'undefined') {
-        const _rempl = (SEANCES_SPORT.automne?.actif?.remplacements) || [];
-        const _exBase = (SEANCES_SPORT.printemps.bas[level]?.exercices || []).map(ex => {
-          const sub = _rempl.find(r => r.ancien === ex.nom);
-          return sub ? Object.assign({}, ex, { nom: sub.nouveau, detail: sub.detail }) : ex;
-        });
-        exContent += _sportExHtml(_exBase, d.repos);
-      }
-      exContent += _sportEnrSectionHtml(enrichieAD && enrichieAD.retour_au_calme, '🌿 Retour au calme');
-      msgHtml = d.message;
-      spirituelHtml = (enrichieAD && enrichieAD.message_fin) || '';
+               + _sportExHtml(d.exercices)
+               + _sportEnrSectionHtml(enrichieAD && enrichieAD.retour_au_calme, '🌿 Retour au calme');
+      msgHtml = d.message || '';
+      spirituelHtml = d.messageSpirituel || (enrichieAD && enrichieAD.message_fin) || '';
       break;
     }
     case 'automne-fin': {
       const d = spec.data;
-      titleText = 'Douceur profonde'; metaText = '🍂 Fin de cycle'; durText = '~10 min';
+      titleText = d.nom || 'Douceur profonde'; metaText = '🍂 Fin de cycle'; durText = d.duree || '~10 min';
       const enrichieAF = (typeof getSeanceEnrichie === 'function') ? getSeanceEnrichie('automne', level) : null;
       exContent = _sportExHtml(d.exercices)
                + _sportEnrSectionHtml(enrichieAF && enrichieAF.retour_au_calme, '🌿 Retour au calme');
-      msgHtml = d.message;
-      spirituelHtml = (enrichieAF && enrichieAF.message_fin) || '';
+      msgHtml = d.message || '';
+      spirituelHtml = d.messageSpirituel || (enrichieAF && enrichieAF.message_fin) || '';
       break;
     }
     case 'calme': {
@@ -5096,20 +5088,10 @@ function getTodaySeanceSpec() {
 
     case 'automne': {
       const micro = getAutomneMicroPhase(day, dur);
-      if (micro === 'actif') {
-        const effectiveLevel = Math.min(level, 2); // ligaments relâchés par progestérone — cap N3/N4
-        const dayIdx = dayWithinPhase(day, dur);
-        const planning = sport.printemps.planning;
-        const dayType = planning[dayIdx % planning.length];
-        if (dayType === 'repos') {
-          return { type: 'repos', reposSec: (sport.printemps.niveauxRepos[effectiveLevel] || 45) + sport.automne.actif.reposExtra, level: effectiveLevel, message: sport.automne.actif.message };
-        }
-        const niveauData = sport.printemps[dayType]?.[effectiveLevel];
-        if (!niveauData) return null;
-        return { type: 'automne-actif', data: niveauData, level: effectiveLevel, message: sport.automne.actif.message, reposExtra: sport.automne.actif.reposExtra };
-      }
-      if (micro === 'doux') return { type: 'automne-doux', data: sport.automne.doux, level };
-      return { type: 'automne-fin', data: sport.automne.fin };
+      const microData = sport.automne[micro];
+      const niveauData = microData?.niveaux?.[level];
+      if (!niveauData) return null;
+      return { type: `automne-${micro}`, data: niveauData, level };
     }
 
     default:
@@ -6307,10 +6289,6 @@ function openSeanceTimer() {
     : null;
   let data = enriched || (spec && spec.data) || null;
 
-  // automne-doux : mobilite[] → exercices[]
-  if (spec && spec.type === 'automne-doux' && data && data.mobilite && !data.exercices) {
-    data = Object.assign({}, data, { exercices: data.mobilite });
-  }
   // ete-intense : EMOM/AMRAP → steps guidés
   if (spec && spec.type === 'ete-intense' && data && !data.exercices) {
     data = _stxNormalizeEteIntense(data);
@@ -6322,7 +6300,6 @@ function openSeanceTimer() {
     const _baseRest = _nrMap ? (_nrMap[spec.level || 1] || null) : null;
     if (_baseRest != null) {
       if (spec.type && spec.type.startsWith('printemps-')) _stLevelRest = _baseRest;
-      else if (spec.type === 'automne-actif') _stLevelRest = _baseRest + (spec.reposExtra || 10);
     }
   }
   // Séances calmes/automne-doux : pas de repos entre exercices ni séries
