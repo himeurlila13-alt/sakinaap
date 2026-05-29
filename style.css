@@ -1706,6 +1706,8 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
 .feedback-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .feedback-btn{background:var(--creme);border:1.5px solid var(--sable);border-radius:14px;padding:16px 8px;font-size:13px;font-weight:600;color:var(--noir);cursor:pointer;font-family:var(--sans);line-height:1.4}
 .feedback-btn:active{transform:scale(.97)}
+.sport-option-link{display:block;padding:10px 14px;margin-top:12px;background:rgba(var(--season-rgb),.04);border:1px solid rgba(var(--season-rgb),.15);border-radius:12px;font-size:13px;color:var(--season);cursor:pointer;transition:all .2s;text-align:center}
+.sport-option-link:active{transform:scale(.98);background:rgba(var(--season-rgb),.08)}
 
 /* ═══════════════════════════════════════════════
    SEANCE TIMER — overlay plein écran

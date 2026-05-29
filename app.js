@@ -1981,7 +1981,9 @@ function renderCarteBouger(s) {
     console.warn('SAISONS[' + ST.currentSaison + '] non défini - skip renderCarteBouger');
     return;
   }
-  const spec = getTodaySeanceSpec();
+
+  // Override fullBody si défini
+  const spec = _fullBodyOverride || getTodaySeanceSpec();
   const today = new Date().toDateString();
   const donVal = ST.seanceDone && ST.seanceDone[today];
   const isDone = donVal === true || donVal === 'express' || donVal === 'repos-actif';
@@ -2081,6 +2083,28 @@ function renderCarteBouger(s) {
       spirituelHtml = 'Allahou Akbar — rappelle-toi de Sa grandeur à chaque effort.';
       break;
     }
+    case 'ete-intense-haut': {
+      const d = spec.data;
+      titleText = d.exercice || d.label; durText = `${d.duree} min`;
+      metaText = '☀️ Haut du corps';
+      levelLabel = `Niveau ${level}/4`;
+      if (d.type === 'emom') {
+        exContent = `<div class="sport-emom-block">
+          <div class="sport-emom-label">EMOM ${d.duree} min</div>
+          <div class="sport-emom-exo">${d.exercice} — <strong>${d.reps} reps</strong> au début de chaque minute</div>
+          ${d.detail ? `<div class="sport-ex-detail">${d.detail}</div>` : ''}
+        </div>`;
+      } else {
+        exContent = `<div class="sport-emom-block">
+          <div class="sport-emom-label">AMRAP ${d.duree} min</div>
+          ${(d.circuit || []).map(ex => `<div class="sport-amrap-exo">${ex.nom} — ${ex.reps} reps</div>`).join('')}
+          ${d.detail ? `<div class="sport-ex-detail">${d.detail}</div>` : ''}
+        </div>`;
+      }
+      msgHtml = 'Pousse fort — sculpte le haut de ton corps au pic de ta force.';
+      spirituelHtml = 'Allahou Akbar — rappelle-toi de Sa grandeur à chaque effort.';
+      break;
+    }
     case 'ete-repos': {
       titleText = 'Récupération'; metaText = 'Repos actif'; durText = '—';
       exContent = `<div class="sport-repos-block"><div class="sport-repos-msg">${spec.message || ''}</div></div>`;
@@ -2128,20 +2152,65 @@ function renderCarteBouger(s) {
       msgHtml = d.message; spirituelHtml = d.messageSpirituel;
       break;
     }
+    case 'fullbody': {
+      const d = spec.data;
+      titleText = d.nom; metaText = '💪 Corps entier'; durText = d.duree;
+      levelLabel = `Niveau ${spec.level || level}/4`;
+      exContent = _sportExHtml(d.exercices);
+      msgHtml = d.message;
+      spirituelHtml = d.messageSpirituel;
+      break;
+    }
   }
 
   if (nameEl) nameEl.textContent = titleText;
   if (metaEl) metaEl.textContent = metaText;
   if (durEl) durEl.textContent = durText;
 
+  // Progression inter-cycles
+  const cycleCount = (ST.cycleHistory && ST.cycleHistory.length) || 0;
+  const cycleLevel = (typeof SEANCES_SPORT !== 'undefined' && SEANCES_SPORT.progressionInterCycles)
+    ? SEANCES_SPORT.progressionInterCycles.getCycleLevel(cycleCount)
+    : null;
+  const cycleConseils = cycleLevel ? SEANCES_SPORT.progressionInterCycles[cycleLevel] : null;
+
+  // Options fullBody et cardioDoux
+  let optionsHtml = '';
+  if (!isDone && !isReported && !_fullBodyOverride) {
+    const phase = ST.currentSaison;
+    const level = ST.seanceLevel || 1;
+    const micro = (phase === 'automne') ? getAutomneMicroPhase(ST.currentDay, effectiveCycleDur()) : null;
+
+    // Full Body
+    const hasFullBody = (phase === 'printemps' && SEANCES_SPORT.printemps?.fullBody?.[level]) ||
+                       (phase === 'automne' && micro === 'actif' && SEANCES_SPORT.automne?.actif?.fullBody?.[level]);
+    if (hasFullBody) {
+      optionsHtml += `<div class="sport-option-link" onclick="choisirFullBody()">💪 Envie d'un full body aujourd'hui ? →</div>`;
+    }
+
+    // Cardio doux
+    const hasCardioDoux = (phase === 'printemps' && SEANCES_SPORT.printemps?.cardioDoux) ||
+                         (phase === 'automne' && micro === 'actif' && SEANCES_SPORT.automne?.actif?.cardioDoux);
+    if (hasCardioDoux) {
+      optionsHtml += `<div class="sport-option-link" onclick="ouvrirCardioDoux()">🚶‍♀️ Préfère une séance cardio doux ? →</div>`;
+    }
+  }
+
+  // Lien retour si fullBody override actif
+  if (_fullBodyOverride) {
+    optionsHtml += `<div class="sport-option-link" onclick="annulerFullBody()">← Reprendre ma séance du jour</div>`;
+  }
+
   const streakLabel = _getStreakLabel();
   if (exEl) {
     exEl.innerHTML =
+      (cycleConseils ? `<div style="background:rgba(var(--season-rgb),.08);border-radius:10px;padding:8px 12px;margin-bottom:10px;font-size:11px;color:var(--season-dark);line-height:1.5;"><b>${cycleConseils.label}</b> · ${cycleConseils.conseil}</div>` : '') +
       (streakLabel && !isDone ? `<div class="sport-streak-badge">${streakLabel}</div>` : '') +
       (levelLabel ? `<div class="sport-level-badge">${levelLabel}</div>` : '') +
       (msgHtml ? `<div class="sport-amanah">${msgHtml}</div>` : '') +
       exContent +
-      (spirituelHtml ? `<div class="sport-spiritual">${spirituelHtml}</div>` : '');
+      (spirituelHtml ? `<div class="sport-spiritual">${spirituelHtml}</div>` : '') +
+      optionsHtml;
   }
   const _noTimerTypes = ['repos', 'ete-repos', 'calme'];
   if (btnWrap) btnWrap.style.display = (isDone || isReported || (spec && _noTimerTypes.includes(spec.type))) ? 'none' : 'block';
@@ -2149,6 +2218,81 @@ function renderCarteBouger(s) {
   if (reportedWrap) reportedWrap.style.display = isReported ? 'block' : 'none';
   const reporterBtnWrap = document.getElementById('qs-reporter-btn-wrap');
   if (reporterBtnWrap) reporterBtnWrap.style.display = (isDone || isReported) ? 'none' : 'flex';
+}
+
+// ═══════════════════════════════════════════════
+// FULLBODY & CARDIO DOUX
+// ═══════════════════════════════════════════════
+function choisirFullBody() {
+  const phase = ST.currentSaison;
+  const level = ST.seanceLevel || 1;
+  const micro = (phase === 'automne') ? getAutomneMicroPhase(ST.currentDay, effectiveCycleDur()) : null;
+
+  let fullBodyData = null;
+  if (phase === 'printemps' && SEANCES_SPORT.printemps?.fullBody?.[level]) {
+    fullBodyData = SEANCES_SPORT.printemps.fullBody[level];
+  } else if (phase === 'automne' && micro === 'actif' && SEANCES_SPORT.automne?.actif?.fullBody?.[level]) {
+    fullBodyData = SEANCES_SPORT.automne.actif.fullBody[level];
+  }
+
+  if (fullBodyData) {
+    _fullBodyOverride = { type: 'fullbody', data: fullBodyData, level };
+    renderCarteBouger(SAISONS[ST.currentSaison]);
+  }
+}
+
+function annulerFullBody() {
+  _fullBodyOverride = null;
+  renderCarteBouger(SAISONS[ST.currentSaison]);
+}
+
+function ouvrirCardioDoux() {
+  const phase = ST.currentSaison;
+  const micro = (phase === 'automne') ? getAutomneMicroPhase(ST.currentDay, effectiveCycleDur()) : null;
+
+  let cardioDoux = null;
+  if (phase === 'printemps' && SEANCES_SPORT.printemps?.cardioDoux) {
+    cardioDoux = SEANCES_SPORT.printemps.cardioDoux;
+  } else if (phase === 'automne' && micro === 'actif' && SEANCES_SPORT.automne?.actif?.cardioDoux) {
+    cardioDoux = SEANCES_SPORT.automne.actif.cardioDoux;
+  }
+
+  if (!cardioDoux) return;
+
+  // Créer ou mettre à jour la modale
+  let modal = document.getElementById('cardio-doux-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'cardio-doux-modal';
+    modal.style.cssText = 'display:none; position:fixed; bottom:0; left:0; right:0; background:white; border-radius:20px 20px 0 0; padding:20px 16px; box-shadow:0 -4px 20px rgba(0,0,0,.1); z-index:200; max-height:70vh; overflow-y:auto;';
+    modal.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--noir);">Cardio doux</div>
+        <button onclick="fermerCardioDoux()" style="background:none;border:none;font-size:20px;cursor:pointer;">×</button>
+      </div>
+      <div id="cardio-doux-options"></div>
+    `;
+    document.body.appendChild(modal);
+  }
+
+  // Remplir les options
+  const optionsContainer = document.getElementById('cardio-doux-options');
+  if (optionsContainer) {
+    optionsContainer.innerHTML = (cardioDoux.options || []).map(option => `
+      <div style="background:var(--creme);border:1px solid var(--sable);border-radius:12px;padding:12px;margin-bottom:8px;">
+        <div style="font-weight:600;color:var(--noir);margin-bottom:4px;">${option.nom}</div>
+        <div style="font-size:13px;color:var(--season);margin-bottom:4px;">${option.duree}</div>
+        <div style="font-size:12px;color:var(--gris);line-height:1.4;">${option.detail}</div>
+      </div>
+    `).join('');
+  }
+
+  modal.style.display = 'block';
+}
+
+function fermerCardioDoux() {
+  const modal = document.getElementById('cardio-doux-modal');
+  if (modal) modal.style.display = 'none';
 }
 
 // ═══════════════════════════════════════════════
@@ -2934,6 +3078,7 @@ let _currentExIdx = 0;
 let _timerExercices = [];
 let _repCount = 0;
 let _currentSetNum = 0;
+let _fullBodyOverride = null;
 
 function _parseSetsFromEx(ex) {
   if (ex.sets && Number.isFinite(ex.sets) && ex.sets > 1) return ex.sets;
@@ -5081,6 +5226,13 @@ function getTodaySeanceSpec() {
       if (dayType === 'repos') {
         return { type: 'ete-repos', message: sport.ete.messageApresIntense };
       }
+
+      // Alternance bas/haut : dayIdx % 4 === 0 (bas) / dayIdx % 4 === 2 (haut)
+      if (dayIdx % 4 === 2 && sport.ete.rotationHaut?.[level]) {
+        const niveauData = sport.ete.rotationHaut[level];
+        return { type: 'ete-intense-haut', data: niveauData, level };
+      }
+
       const niveauData = sport.ete.niveaux[level];
       if (!niveauData) return null;
       return { type: 'ete-intense', data: niveauData, level };
