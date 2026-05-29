@@ -3201,20 +3201,155 @@ function validerSeanceDash() {
 }
 
 function burstCelebration() {
-  const stars = ['🌸','✨','⭐','🌟','💫','🌺'];
-  const wrap = document.createElement('div');
-  wrap.className = 'burst-wrap';
-  for (let i = 0; i < 9; i++) {
-    const el = document.createElement('div');
-    el.className = 'celebrate-star';
-    el.textContent = stars[i % stars.length];
-    el.style.left = ((Math.random() - 0.5) * 220) + 'px';
-    el.style.top  = ((Math.random() - 0.5) * 260) + 'px';
-    el.style.animationDelay = (i * 0.07) + 's';
-    wrap.appendChild(el);
+  const canvas = document.createElement('canvas');
+  canvas.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:9999;';
+
+  // Configuration canvas pour haute résolution
+  const dpr = window.devicePixelRatio || 1;
+  const rect = {width: window.innerWidth, height: window.innerHeight};
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  canvas.style.width = rect.width + 'px';
+  canvas.style.height = rect.height + 'px';
+
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  // Récupérer les couleurs dynamiques
+  const seasonColor = getComputedStyle(document.documentElement).getPropertyValue('--season').trim() || '#7B5EA7';
+  const orColor = '#C9A84C';
+
+  const particles = [];
+  const particleCount = 60;
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 3;
+  const gravity = 400; // px/s²
+
+  // Créer les particules
+  for (let i = 0; i < particleCount; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const velocity = 200 + Math.random() * 300; // 200-500 px/s
+    const particle = {
+      x: centerX,
+      y: centerY,
+      vx: Math.cos(angle) * velocity,
+      vy: Math.sin(angle) * velocity - Math.random() * 200, // Biais vers le haut
+      size: 6 + Math.random() * 8, // 6-14px
+      color: Math.random() < 0.5 ? seasonColor : orColor,
+      type: Math.random() < 0.4 ? 'circle' : (Math.random() < 0.5 ? 'star' : 'diamond'),
+      rotation: 0,
+      rotationSpeed: (Math.random() - 0.5) * 8, // Vitesse de rotation aléatoire
+      opacity: 1,
+      startTime: performance.now()
+    };
+    particles.push(particle);
   }
-  document.body.appendChild(wrap);
-  setTimeout(() => { if (wrap.parentNode) wrap.parentNode.removeChild(wrap); }, 1400);
+
+  document.body.appendChild(canvas);
+
+  let animationId;
+  let lastTime = performance.now();
+
+  function drawStar(ctx, x, y, size, rotation) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rotation);
+    ctx.beginPath();
+    // Étoile à 4 branches
+    const outerRadius = size / 2;
+    const innerRadius = size / 4;
+    ctx.moveTo(0, -outerRadius);
+    ctx.lineTo(innerRadius * 0.3, -innerRadius * 0.3);
+    ctx.lineTo(outerRadius, 0);
+    ctx.lineTo(innerRadius * 0.3, innerRadius * 0.3);
+    ctx.lineTo(0, outerRadius);
+    ctx.lineTo(-innerRadius * 0.3, innerRadius * 0.3);
+    ctx.lineTo(-outerRadius, 0);
+    ctx.lineTo(-innerRadius * 0.3, -innerRadius * 0.3);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawDiamond(ctx, x, y, size, rotation) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rotation);
+    ctx.beginPath();
+    const half = size / 2;
+    ctx.moveTo(0, -half);
+    ctx.lineTo(half, 0);
+    ctx.lineTo(0, half);
+    ctx.lineTo(-half, 0);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function animate(currentTime) {
+    const deltaTime = (currentTime - lastTime) / 1000; // Conversion en secondes
+    const elapsedTime = currentTime - particles[0].startTime;
+
+    // Nettoyer le canvas
+    ctx.clearRect(0, 0, rect.width, rect.height);
+
+    // Arrêter l'animation après 2.5s
+    if (elapsedTime >= 2500) {
+      cancelAnimationFrame(animationId);
+      if (canvas.parentNode) {
+        document.body.removeChild(canvas);
+      }
+      return;
+    }
+
+    // Calculer l'opacité (fade à partir de 1.5s)
+    let globalOpacity = 1;
+    if (elapsedTime >= 1500) {
+      globalOpacity = 1 - ((elapsedTime - 1500) / 1000); // Fade sur 1s
+      globalOpacity = Math.max(0, globalOpacity);
+    }
+
+    particles.forEach(particle => {
+      // Appliquer la gravité
+      particle.vy += gravity * deltaTime;
+
+      // Appliquer la résistance de l'air
+      particle.vx *= 0.99;
+      particle.vy *= 0.99;
+
+      // Mettre à jour la position
+      particle.x += particle.vx * deltaTime;
+      particle.y += particle.vy * deltaTime;
+
+      // Mettre à jour la rotation
+      particle.rotation += particle.rotationSpeed * deltaTime;
+
+      // Définir la couleur avec opacité
+      ctx.globalAlpha = globalOpacity;
+      ctx.fillStyle = particle.color;
+
+      // Dessiner selon le type
+      switch (particle.type) {
+        case 'circle':
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.size / 2, 0, Math.PI * 2);
+          ctx.fill();
+          break;
+        case 'star':
+          drawStar(ctx, particle.x, particle.y, particle.size, particle.rotation);
+          break;
+        case 'diamond':
+          drawDiamond(ctx, particle.x, particle.y, particle.size, particle.rotation);
+          break;
+      }
+    });
+
+    ctx.globalAlpha = 1; // Restaurer l'opacité
+    lastTime = currentTime;
+    animationId = requestAnimationFrame(animate);
+  }
+
+  animationId = requestAnimationFrame(animate);
 }
 
 function checkEndOfPrintemps() {
