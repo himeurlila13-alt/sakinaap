@@ -4137,13 +4137,41 @@ function renderLectureDuJour() {
 
   if (!lecture) { card.style.display = 'none'; return; }
 
+  // Éléments existants
   const titreEl = document.getElementById('ldu-titre');
   const accrocheEl = document.getElementById('ldu-accroche');
   const dureeEl = document.getElementById('ldu-duree');
 
+  // Nouveaux éléments
+  const phaseEmojiEl = document.getElementById('ldu-phase-emoji');
+  const statusIndicatorEl = document.getElementById('ldu-status-indicator');
+  const checkEl = document.getElementById('ldu-check');
+  const btnTextEl = document.getElementById('ldu-btn-text');
+
+  // Remplir les données
   if (titreEl) titreEl.textContent = lecture.titre;
   if (accrocheEl) accrocheEl.textContent = lecture.accroche;
   if (dureeEl) dureeEl.textContent = lecture.duree + ' min';
+
+  // Emoji de phase
+  if (phaseEmojiEl) phaseEmojiEl.textContent = _PHASE_EMOJIS[phase] || '🌸';
+
+  // État de lecture (déjà lue ou non)
+  const isRead = ST.lecturesLues && ST.lecturesLues.some(l => l.id === lecture.id);
+  if (statusIndicatorEl && checkEl) {
+    if (isRead) {
+      statusIndicatorEl.style.background = 'var(--season)';
+      checkEl.style.color = 'white';
+    } else {
+      statusIndicatorEl.style.background = 'var(--sable)';
+      checkEl.style.color = 'transparent';
+    }
+  }
+
+  // Texte du bouton adapté
+  if (btnTextEl) {
+    btnTextEl.textContent = isRead ? '📖 Relire cette lecture' : '✨ Découvrir cette lecture';
+  }
 
   card.style.display = 'block';
 }
