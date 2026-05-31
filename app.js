@@ -2159,6 +2159,9 @@ function applySaisonTheme() {
   const la = document.getElementById('asma-livret-arrow');
   if (la) la.style.color = s.color;
 
+  const lectureCard = document.getElementById('day-card-lecture');
+  if (lectureCard) { lectureCard.style.background = softGrad; lectureCard.style.boxShadow = softShadow; }
+
   const wc = document.getElementById('wb-cta-card-el');
   if (wc) { wc.style.background = softGrad; wc.style.boxShadow = `0 8px 24px rgba(${s.rgb},.2)`; }
   const wbd = document.getElementById('wb-badge');
