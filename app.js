@@ -4129,8 +4129,23 @@ const _PHASE_LABELS = { hiver: 'HIVER', printemps: 'PRINTEMPS', ete: 'ÉTÉ', au
 const _PHASE_EMOJIS = { hiver: '🌙', printemps: '🌿', ete: '☀️', automne: '🍂' };
 
 function renderLectureDuJour() {
-  // Cette fonction n'est plus utilisée car la lecture du jour n'apparaît plus dans l'interface
-  // Elle est remplacée par la modale "Mes Lectures"
+  const card = document.getElementById('day-card-lecture');
+  if (!card) return;
+
+  const phase = ST.currentSaison || 'hiver';
+  const lecture = _getLectureForPhase(phase);
+
+  if (!lecture) { card.style.display = 'none'; return; }
+
+  const titreEl = document.getElementById('ldu-titre');
+  const accrocheEl = document.getElementById('ldu-accroche');
+  const dureeEl = document.getElementById('ldu-duree');
+
+  if (titreEl) titreEl.textContent = lecture.titre;
+  if (accrocheEl) accrocheEl.textContent = lecture.accroche;
+  if (dureeEl) dureeEl.textContent = lecture.duree + ' min';
+
+  card.style.display = 'block';
 }
 
 let currentLectureInModal = null;
