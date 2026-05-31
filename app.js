@@ -4160,14 +4160,36 @@ function openLectureModal(lectureId) {
   if (el('lm-duree')) el('lm-duree').textContent = lecture.duree + ' min';
   if (el('lm-titre')) el('lm-titre').textContent = lecture.titre;
   if (el('lm-accroche')) el('lm-accroche').textContent = lecture.accroche;
-  if (el('lm-arabe')) el('lm-arabe').textContent = lecture.source.arabe;
-  if (el('lm-fr')) el('lm-fr').textContent = '« ' + lecture.source.fr + ' »';
-  if (el('lm-ref')) el('lm-ref').textContent = lecture.source.ref;
   if (el('lm-corps')) el('lm-corps').innerHTML = lecture.corps.replace(/\n\n/g, '</p><p style="margin-top:12px;">').replace(/^/, '<p>').replace(/$/, '</p>');
   if (el('lm-pensee')) el('lm-pensee').textContent = '« ' + lecture.aEmporter.pensee + ' »';
   if (el('lm-geste')) el('lm-geste').innerHTML = '🌿 ' + lecture.aEmporter.geste;
-  if (el('lm-dua-arabe')) el('lm-dua-arabe').textContent = lecture.aEmporter.dua.arabe;
-  if (el('lm-dua-fr')) el('lm-dua-fr').textContent = lecture.aEmporter.dua.fr;
+
+  const isSoi = lecture.type === 'soi';
+
+  // Bloc source islamique (type ame) vs idée centrale (type soi)
+  if (el('lm-source-block')) el('lm-source-block').style.display = isSoi ? 'none' : 'block';
+  if (el('lm-idee-block'))   el('lm-idee-block').style.display   = isSoi ? 'block' : 'none';
+
+  if (!isSoi && lecture.source) {
+    if (el('lm-arabe')) el('lm-arabe').textContent = lecture.source.arabe || '';
+    if (el('lm-fr'))    el('lm-fr').textContent    = lecture.source.fr ? '« ' + lecture.source.fr + ' »' : '';
+    if (el('lm-ref'))   el('lm-ref').textContent   = lecture.source.ref || '';
+  }
+  if (isSoi) {
+    if (el('lm-idee')) el('lm-idee').textContent = lecture.idee || '';
+  }
+
+  // Bloc du'a (type ame) vs question (type soi)
+  if (el('lm-dua-block'))      el('lm-dua-block').style.display      = isSoi ? 'none' : 'block';
+  if (el('lm-question-block')) el('lm-question-block').style.display = isSoi ? 'block' : 'none';
+
+  if (!isSoi && lecture.aEmporter.dua) {
+    if (el('lm-dua-arabe')) el('lm-dua-arabe').textContent = lecture.aEmporter.dua.arabe || '';
+    if (el('lm-dua-fr'))    el('lm-dua-fr').textContent    = lecture.aEmporter.dua.fr    || '';
+  }
+  if (isSoi) {
+    if (el('lm-question')) el('lm-question').textContent = lecture.aEmporter.question || '';
+  }
 
   // Mettre à jour le bouton "J'ai lu"
   updateArchiveBtnInModal(lecture);
@@ -4219,14 +4241,13 @@ function archiverLecture(lectureId, phase) {
   const dejaArchivee = ST.lecturesLues.find(l => l.id === lectureId);
   if (dejaArchivee) return;
 
-  const lecture = _getLectureForPhase(phase);
+  const lecture = (typeof LECTURES !== 'undefined') ? LECTURES.find(l => l.id === lectureId) : null;
   if (!lecture) return;
 
-  // Ajouter à la liste
   ST.lecturesLues.push({
     id: lectureId,
     titre: lecture.titre,
-    phase: phase,
+    phase: lecture.phase,
     date: new Date().toISOString()
   });
 
