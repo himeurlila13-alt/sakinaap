@@ -4159,22 +4159,9 @@ function renderLectureDuJour() {
   // Emoji de phase
   if (phaseEmojiEl) phaseEmojiEl.textContent = _PHASE_EMOJIS[phase] || '🌸';
 
-  // État de lecture (déjà lue ou non)
+  // Masquer la carte si déjà lue
   const isRead = ST.lecturesLues && ST.lecturesLues.some(l => l.id === lecture.id);
-  if (statusIndicatorEl && checkEl) {
-    if (isRead) {
-      statusIndicatorEl.style.background = 'var(--season)';
-      checkEl.style.color = 'white';
-    } else {
-      statusIndicatorEl.style.background = 'var(--sable)';
-      checkEl.style.color = 'transparent';
-    }
-  }
-
-  // Texte du bouton adapté
-  if (btnTextEl) {
-    btnTextEl.textContent = isRead ? '📖 Relire cette lecture' : '✨ Découvrir cette lecture';
-  }
+  if (isRead) { card.style.display = 'none'; return; }
 
   card.style.display = 'block';
 }
@@ -4299,6 +4286,7 @@ function archiverLecture(lectureId, phase) {
 
   saveState();
   showToast('Retrouve-la dans Mes Lectures 📚', 3000);
+  renderLectureDuJour();
 }
 
 // Fonction supprimée car le bouton J'ai lu de l'accueil n'existe plus
