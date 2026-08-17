@@ -31,6 +31,43 @@ Les entrées ci-dessous mentionnant Stripe, premium, essai ou le moteur sport st
 du code aujourd'hui supprimé — elles restent comme historique mais ne correspondent plus
 à l'état du produit.
 
+### Suite du reset — Phases 6 à 8 (2026-08-17)
+
+| Phase | Contenu |
+|---|---|
+| 6 | Module Cycle : correction d'un cycle déclaré par erreur — bouton "Annuler" (fenêtre 48h, restaure l'état pré-déclaration) et édition directe de la date de début du cycle en cours dans la modale d'édition, avec garde-fous (pas de date future, pas de chevauchement avec le cycle précédent) |
+| 7 | Fiabilisation du Bilan : "Jours de Coran" vérifié conforme (compte bien la case Coran, pas la Lecture du jour — aucun bug trouvé) ; dhikr et Coran séparés en deux lignes distinctes dans le Portrait (onglet Moi), au lieu d'être fusionnés ; fenêtre du "Symptôme le plus fréquent" du Portrait alignée sur le cycle en cours (au lieu de tout l'historique), pour rester cohérente avec le reste du Portrait |
+| 8 | **Suppression de la synchronisation Supabase des données** — voir architecture ci-dessous |
+
+#### Phase 8 — Fin de la synchronisation cloud (`user_data`)
+
+**Avant :** chaque `saveState()` déclenchait un envoi différé (800ms) du state complet vers
+la table Supabase `user_data` (`syncToSupabase` / `_doSyncToSupabase`), et chaque connexion
+(magic link ou reprise de session) tentait de rapatrier et fusionner ce state distant
+(`loadFromSupabase`).
+
+**Après :** ces trois fonctions ont été supprimées, ainsi que leurs 4 points d'appel
+(`saveState()`, `setupAuthListener()`, le bootstrap `DOMContentLoaded`, le flush au
+passage en arrière-plan). **Le téléphone (localStorage) est désormais la seule source de
+vérité.** L'authentification (magic link, reconnexion, cookie iOS) reste inchangée — seule
+la synchronisation du *contenu* (cycle, prières, symptômes, objectifs, réglages) a été
+retirée.
+
+- La table `user_data` **n'est plus ni lue ni écrite** par le code applicatif. Elle n'a pas
+  été supprimée (migration destructive non souhaitée) ; les lignes existantes créées avant
+  le 2026-08-17 seront purgées par le job `pg_cron` déjà en place (`003_retention_policy.sql`,
+  inactivité 3 ans) — comportement inchangé et volontairement laissé tel quel.
+- `supabase/functions/delete-account/index.ts` ne lit/supprime plus `user_data` (il n'y a
+  plus rien à y lire) ; l'email de confirmation ne prétend plus supprimer des données "sur
+  nos serveurs" mais confirme la fermeture du compte et rappelle que les données vivent
+  uniquement sur l'appareil.
+- Textes utilisateur (mentions légales, politique de confidentialité, bandeau de reconnexion)
+  mis à jour pour ne plus prétendre à une sauvegarde cloud ou multi-appareils des données
+  d'usage.
+- Filet de sécurité : `exportData()`/`importData()` restent la seule sauvegarde possible
+  (déjà 100% indépendants de Supabase, vérifié). Ajout d'un rappel discret (`checkExportReminder()`)
+  — un toast au plus une fois toutes les 2 semaines si aucun export depuis 30 jours.
+
 ---
 
 ## 🔴 SÉCURITÉ CRITIQUE

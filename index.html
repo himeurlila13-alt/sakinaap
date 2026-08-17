@@ -89,8 +89,8 @@
   <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
     <span style="font-size:18px;flex-shrink:0;">&#128274;</span>
     <div style="min-width:0;">
-      <div style="font-size:12px;font-weight:600;color:white;line-height:1.3;">Connecte-toi pour sauvegarder</div>
-      <div style="font-size:11px;color:rgba(255,255,255,.75);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Tes données seront sync&eacute;es sur tous tes appareils</div>
+      <div style="font-size:12px;font-weight:600;color:white;line-height:1.3;">Reste connectée à ton compte</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.75);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Garde l'accès à ton espace sur cet email</div>
     </div>
   </div>
   <div style="display:flex;gap:6px;flex-shrink:0;">
@@ -1104,7 +1104,7 @@
 
     <div class="ml-section">
       <div class="ml-titre">Données personnelles</div>
-      <p class="ml-txt">SakinApp collecte ton adresse e-mail (pour l'authentification) et tes données d'utilisation (cycle, prières, humeurs, objectifs, sport), stockées sur les serveurs de <strong>Supabase</strong> (sous-traitant), ainsi qu'en local sur ton appareil (localStorage).</p>
+      <p class="ml-txt">SakinApp collecte ton adresse e-mail (pour l'authentification, stockée sur les serveurs de <strong>Supabase</strong>, sous-traitant). Tes données d'utilisation (cycle, prières, humeurs, objectifs) sont stockées uniquement en local sur ton appareil (localStorage) — elles ne sont pas envoyées sur nos serveurs.</p>
       <p class="ml-txt" style="margin-top:8px;">Conformément au RGPD, tu peux exporter ou supprimer tes données à tout moment.</p>
       <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
         <button onclick="closeMentionsLegales();exportData();" style="flex:1;min-width:120px;padding:10px;background:var(--sable);color:var(--noir);border:none;border-radius:12px;font-size:13px;cursor:pointer;">&#128229; Exporter mes données</button>
@@ -1115,7 +1115,7 @@
     <div class="ml-section">
       <div class="ml-titre">Sous-traitants</div>
       <div class="ml-ligne"><span class="ml-lbl">Vercel Inc.</span> H&eacute;bergement de l&rsquo;application &mdash; USA</div>
-      <div class="ml-ligne"><span class="ml-lbl">Supabase Inc.</span> Base de donn&eacute;es &amp; authentification &mdash; USA</div>
+      <div class="ml-ligne"><span class="ml-lbl">Supabase Inc.</span> Authentification (compte e-mail) &mdash; USA</div>
       <p class="ml-txt" style="margin-top:8px;">Les transferts vers les &Eacute;tats-Unis sont encadr&eacute;s par les clauses contractuelles types de la Commission europ&eacute;enne.</p>
     </div>
 
@@ -1153,13 +1153,13 @@
     <div class="ml-section">
       <div class="ml-titre">Données collectées et finalités</div>
       <p class="ml-txt" style="margin-bottom:10px;"><strong>1. Adresse e-mail</strong> — collect&eacute;e lors de la cr&eacute;ation du compte. Finalit&eacute; : authentification et s&eacute;curit&eacute; du compte. Base l&eacute;gale : ex&eacute;cution du contrat (art.&nbsp;6.1.b RGPD).</p>
-      <p class="ml-txt"><strong>2. Donn&eacute;es de sant&eacute; et de conviction religieuse</strong> — cycle menstruel, date de d&eacute;but, dur&eacute;e des r&egrave;gles, sympt&ocirc;mes, historique de cycles, glaire cervicale. <strong>Pratique religieuse</strong> : prières quotidiennes (fajr, dohr, asr, maghrib, isha), dhikr, lecture du Coran. Ces donn&eacute;es rel&egrave;vent de l&rsquo;article 9.1 du RGPD (donn&eacute;es de sant&eacute; et convictions religieuses). Finalit&eacute; : personnalisation de l&rsquo;exp&eacute;rience et sauvegarde multi-appareils. Base l&eacute;gale : <strong>consentement explicite</strong> (art.&nbsp;9.2.a RGPD), recueilli lors de la configuration initiale de l&rsquo;application.</p>
+      <p class="ml-txt"><strong>2. Donn&eacute;es de sant&eacute; et de conviction religieuse</strong> — cycle menstruel, date de d&eacute;but, dur&eacute;e des r&egrave;gles, sympt&ocirc;mes, historique de cycles, glaire cervicale. <strong>Pratique religieuse</strong> : prières quotidiennes (fajr, dohr, asr, maghrib, isha), dhikr, lecture du Coran. Ces donn&eacute;es rel&egrave;vent de l&rsquo;article 9.1 du RGPD (donn&eacute;es de sant&eacute; et convictions religieuses). Finalit&eacute; : personnalisation de l&rsquo;exp&eacute;rience. Ces donn&eacute;es restent stock&eacute;es uniquement sur ton appareil, elles ne transitent jamais par nos serveurs. Base l&eacute;gale : <strong>consentement explicite</strong> (art.&nbsp;9.2.a RGPD), recueilli lors de la configuration initiale de l&rsquo;application.</p>
     </div>
 
     <div class="ml-section">
       <div class="ml-titre">Stockage et sous-traitants</div>
-      <p class="ml-txt" style="margin-bottom:10px;">Tes donn&eacute;es sont stock&eacute;es sur ton appareil (localStorage) <strong>et</strong> sur les serveurs de nos sous-traitants :</p>
-      <div class="ml-ligne"><span class="ml-lbl">Supabase Inc.</span> Auth + base de donn&eacute;es &mdash; <strong>Irlande (UE)</strong> &mdash; serveurs h&eacute;berg&eacute;s dans l&rsquo;Union europ&eacute;enne</div>
+      <p class="ml-txt" style="margin-bottom:10px;">Tes donn&eacute;es de cycle, de pri&egrave;res et de pratique religieuse sont stock&eacute;es uniquement sur ton appareil (localStorage) — elles ne sont jamais envoy&eacute;es sur nos serveurs. Seule ton adresse e-mail transite par un sous-traitant, pour l&rsquo;authentification :</p>
+      <div class="ml-ligne"><span class="ml-lbl">Supabase Inc.</span> Authentification (compte e-mail) &mdash; <strong>Irlande (UE)</strong> &mdash; serveurs h&eacute;berg&eacute;s dans l&rsquo;Union europ&eacute;enne</div>
       <div class="ml-ligne"><span class="ml-lbl">Vercel Inc.</span> H&eacute;bergement app &mdash; Walnut, CA, USA</div>
       <div class="ml-ligne"><span class="ml-lbl">Formspree Inc.</span> Formulaire de contact &mdash; San Francisco, USA</div>
       <p class="ml-txt" style="margin-top:10px;">Les transferts hors UE sont encadr&eacute;s par les <strong>clauses contractuelles types</strong> de la Commission europ&eacute;enne (d&eacute;cision 2021/914).</p>
@@ -1169,7 +1169,7 @@
       <div class="ml-titre">Dur&eacute;e de conservation</div>
       <div class="ml-ligne"><span class="ml-lbl">Compte actif</span> Pendant toute la dur&eacute;e d&rsquo;utilisation du compte</div>
       <div class="ml-ligne"><span class="ml-lbl">Apr&egrave;s suppression du compte</span> 3 ans (obligations comptables et l&eacute;gales)</div>
-      <div class="ml-ligne"><span class="ml-lbl">Inactivit&eacute;</span> Les donn&eacute;es de sant&eacute; et de pratique religieuse sont supprim&eacute;es automatiquement apr&egrave;s 3 ans sans connexion</div>
+      <div class="ml-ligne"><span class="ml-lbl">Inactivit&eacute;</span> Tes donn&eacute;es de sant&eacute; et de pratique religieuse restent uniquement sur ton appareil et n&rsquo;expirent pas automatiquement. Elles disparaissent si tu d&eacute;sinstalles l&rsquo;application ou effaces les donn&eacute;es de ton navigateur</div>
       <div class="ml-ligne"><span class="ml-lbl">Sur demande</span> Suppression imm&eacute;diate possible via Param&egrave;tres → R&eacute;initialiser</div>
     </div>
 
@@ -1194,7 +1194,7 @@
     <div class="ml-section">
       <div class="ml-titre">S&eacute;curit&eacute;</div>
       <p class="ml-txt">Connexion HTTPS chiffr&eacute;e, authentification s&eacute;curis&eacute;e via Supabase. Aucun mot de passe requis &mdash; connexion par lien magique uniquement.</p>
-      <p class="ml-txt" style="margin-top:8px;">Les donn&eacute;es d&rsquo;utilisation (cycle, pri&egrave;res, humeurs) sont &eacute;galement stock&eacute;es en clair dans le stockage local (<em>localStorage</em>) de ton navigateur. Ces donn&eacute;es ne sont pas chiffr&eacute;es sur l&rsquo;appareil : elles restent inaccessibles depuis l&rsquo;ext&eacute;rieur, mais sont lisibles par quiconque a acc&egrave;s physique &agrave; ton appareil et &agrave; ton navigateur. Nous te recommandons d&rsquo;utiliser le verrouillage d&rsquo;&eacute;cran de ton appareil.</p>
+      <p class="ml-txt" style="margin-top:8px;">Les donn&eacute;es d&rsquo;utilisation (cycle, pri&egrave;res, humeurs) sont stock&eacute;es en clair dans le stockage local (<em>localStorage</em>) de ton navigateur, uniquement sur ton appareil. Ces donn&eacute;es ne sont pas chiffr&eacute;es sur l&rsquo;appareil : elles restent inaccessibles depuis l&rsquo;ext&eacute;rieur, mais sont lisibles par quiconque a acc&egrave;s physique &agrave; ton appareil et &agrave; ton navigateur. Nous te recommandons d&rsquo;utiliser le verrouillage d&rsquo;&eacute;cran de ton appareil, et d&rsquo;exporter r&eacute;guli&egrave;rement tes donn&eacute;es (Param&egrave;tres → Exporter) puisqu&rsquo;elles ne sont sauvegard&eacute;es nulle part ailleurs.</p>
     </div>
 
     <div style="text-align:center;font-size:11px;color:var(--gris);margin-top:20px;padding-top:16px;border-top:1px solid var(--sable);">

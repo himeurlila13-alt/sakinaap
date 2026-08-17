@@ -31,13 +31,15 @@ module.exports = async (req, res) => {
       <tr><td style="padding:40px 40px 0;">
         <p style="font-family:Georgia,serif;font-size:22px;color:#2C2018;margin:0 0 16px;">As-salamu alaykum ${p} 🌸</p>
         <p style="font-size:15px;color:#5A4A3A;line-height:1.8;margin:0 0 20px;">
-          Nous te confirmons que ta demande de suppression de données a bien été traitée le <strong>${date}</strong>.
+          Nous te confirmons que ta demande de suppression de compte a bien été traitée le <strong>${date}</strong>.
         </p>
         <div style="background:#F0F7F3;border-radius:14px;padding:20px 24px;margin-bottom:20px;">
-          <p style="font-size:14px;color:#2C2018;margin:0 0 8px;">✅ &nbsp;Tes données ont été supprimées de nos serveurs</p>
-          <p style="font-size:14px;color:#2C2018;margin:0 0 8px;">✅ &nbsp;Ton compte a été fermé</p>
-          <p style="font-size:14px;color:#2C2018;margin:0;">✅ &nbsp;Aucune donnée te concernant n'est conservée</p>
+          <p style="font-size:14px;color:#2C2018;margin:0 0 8px;">✅ &nbsp;Ton compte a été fermé, tu n'as plus accès à ton espace SakinApp</p>
+          <p style="font-size:14px;color:#2C2018;margin:0;">✅ &nbsp;Ton adresse e-mail a été supprimée de nos serveurs</p>
         </div>
+        <p style="font-size:13px;color:#5A4A3A;line-height:1.8;margin:0 0 20px;background:#FDF8F2;border-radius:12px;padding:14px 18px;">
+          ℹ️ Tes données de cycle et de pratique spirituelle n'ont jamais transité par nos serveurs — elles étaient stockées uniquement sur ton téléphone. Elles y restent tant que tu ne désinstalles pas l'application ni n'effaces les données de ton navigateur.
+        </p>
         <p style="font-size:14px;color:#5A4A3A;line-height:1.8;margin:0 0 20px;">
           Jazakillah khayran d'avoir utilisé SakinApp. Si tu souhaites revenir un jour, tu seras toujours la bienvenue. 🤍
         </p>
@@ -66,7 +68,7 @@ module.exports = async (req, res) => {
       body: JSON.stringify({
         from: 'SakinApp <noreply@sakinaap.com>',
         to: [email],
-        subject: '✅ Tes données SakinApp ont été supprimées',
+        subject: '✅ Ton compte SakinApp a été supprimé',
         html,
       }),
     });

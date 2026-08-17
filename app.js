@@ -49,6 +49,7 @@ let ST = {
   _lastSaison: null,
   hiverEnd: null,
   _undoNouveauCycle: null, // snapshot pour annuler un "Mon Hiver commence aujourd'hui" déclenché par erreur (<48h)
+  _rolloverSuppressUntil: null, // empêche l'avancement automatique de cycle de se redéclencher juste après un "Annuler"
   supabaseUserId: null,
   supabaseEmail: null,
   isAuthenticated: false,
@@ -241,7 +242,6 @@ function saveState() {
   try { localStorage.setItem('sakinapp_v1', JSON.stringify(toSave)); } catch(e) {
     if (e && e.name === 'QuotaExceededError') showToast('Stockage presque plein — exporte tes données dans Paramètres.');
   }
-  syncToSupabase();
 }
 function loadState() {
   try {
@@ -626,7 +626,7 @@ async function verifyReconnectCode() {
     const sb = await initSupabase();
     const { error } = await sb.auth.verifyOtp({ email, token: code, type: 'email' });
     if (error) throw error;
-    if (msg) { msg.style.display = 'block'; msg.textContent = '✅ Reconnectée ! Tes données sont synchronisées.'; msg.style.color = '#3DAE8A'; msg.style.background = '#F0FAF6'; }
+    if (msg) { msg.style.display = 'block'; msg.textContent = '✅ Reconnectée !'; msg.style.color = '#3DAE8A'; msg.style.background = '#F0FAF6'; }
     setTimeout(() => document.getElementById('reconnect-modal')?.classList.remove('open'), 2000);
   } catch(e) {
     if (btn) { btn.disabled = false; btn.textContent = 'Valider ✓'; }
@@ -723,10 +723,10 @@ function setupAuthListener(sb) {
       ST.userEmail = ST.userEmail || session.user.email;
       setAuthCookie(ST.userEmail);
       document.getElementById('auth-screen').style.display = 'none';
-      await loadFromSupabase(sb, session.user.id);
       ST.isAuthenticated = true;
       checkDailyReset();
       checkWeeklyReset();
+      checkExportReminder();
       if (ST.prenom && ST.cycleStart) {
         document.getElementById('onboarding').style.display = 'none';
         const _appEl = document.getElementById('app');
@@ -743,60 +743,6 @@ function setupAuthListener(sb) {
       if (!ST.isAuthenticated) showAuthScreen();
     }
   });
-}
-
-async function loadFromSupabase(sb, userId) {
-  try {
-    const { data } = await sb.from('user_data').select('data').eq('user_id', userId).single();
-    if (!data || !data.data) return;
-    const remote = data.data;
-    delete remote.currentSaison;
-    delete remote.currentDay;
-    delete remote.isAuthenticated;
-    delete remote.userEmail;
-    delete remote.authDate;
-
-    if (!ST.prenom || !ST.cycleStart) {
-      // Réinstallation ou premier appareil : Supabase fait foi
-      ST = { ...ST, ...remote };
-    } else {
-      // Les deux ont des données → fusionner en gardant l'historique le plus riche
-      ST = {
-        ...remote,
-        ...ST,
-        // Historiques : garder le plus long
-        cycleHistory: ((remote.cycleHistory?.length || 0) > (ST.cycleHistory?.length || 0)
-          ? remote.cycleHistory : ST.cycleHistory) || [],
-        historiqueCycles: ((remote.historiqueCycles?.length || 0) > (ST.historiqueCycles?.length || 0)
-          ? remote.historiqueCycles : ST.historiqueCycles) || [],
-        // Données vitales du cycle : Supabase si local absent
-        cycleStart: ST.cycleStart || remote.cycleStart,
-        cycleDuration: ST.cycleDuration || remote.cycleDuration || 28,
-        prenom: ST.prenom || remote.prenom,
-      };
-    }
-    saveState();
-  } catch(e) {}
-}
-
-let _syncTimer = null;
-async function _doSyncToSupabase() {
-  if (!ST.supabaseUserId || !_supabase) return;
-  try {
-    const toSave = { ...ST };
-    delete toSave.currentSaison;
-    delete toSave.currentDay;
-    await _supabase.from('user_data').upsert({
-      user_id: ST.supabaseUserId,
-      data: toSave,
-      updated_at: new Date().toISOString(),
-    });
-  } catch(e) {}
-}
-function syncToSupabase() {
-  if (!ST.supabaseUserId || !_supabase) return;
-  clearTimeout(_syncTimer);
-  _syncTimer = setTimeout(_doSyncToSupabase, 800);
 }
 
 // ═══════════════════════════════════════════════
@@ -1089,9 +1035,23 @@ function computeCycle() {
   const cycleNum = Math.floor(diff / dur);
   const day = (diff % dur) + 1;
   // Cycle écoulé sans clic "Premier jour" : archiver et avancer cycleStart
+  // (sauf si l'utilisatrice vient d'annuler ce même avancement automatique via
+  // "Annuler ce début de cycle" — sans ce garde-fou, restaurer l'ancienne date
+  // via annulerNouveauCycle() ferait immédiatement re-déclencher ce même bloc,
+  // puisque la durée déclarée est, par définition, encore dépassée à l'instant T).
+  const rolloverSuppressed = ST._rolloverSuppressUntil && Date.now() < ST._rolloverSuppressUntil;
   let effectiveCycleNum = cycleNum;
-  if (cycleNum > 0 && ST.cycleStart) {
+  if (cycleNum > 0 && ST.cycleStart && !rolloverSuppressed) {
     if (!ST.cycleHistory) ST.cycleHistory = [];
+    // Snapshot du cycle précédent avant de l'écraser — cet avancement est automatique
+    // (pas un clic explicite de l'utilisatrice), donc tout aussi susceptible d'être
+    // "faux" qu'un déclenchement manuel de startNewCycleToday() si son cycle réel ne
+    // correspond pas à la durée déclarée. Même filet de sécurité 48h.
+    const prevCycleStart = ST.cycleStart;
+    const prevHiverEnd = ST.hiverEnd;
+    const prevLastCycleNum = ST._lastCycleNum;
+    const prevLastSaison = ST._lastSaison;
+    let historyEntryAdded = false;
     // Archiver tous les cycles écoulés (stats réelles pour le 1er, vides pour les intermédiaires)
     for (let i = 0; i < cycleNum; i++) {
       const cStart = new Date(sy, sm - 1, sd + i * dur);
@@ -1103,13 +1063,25 @@ function computeCycle() {
         ST.cycleHistory.unshift({ start: cStr, duration: dur,
           prayerDays: snap.prayerDays, symptomDays: snap.symptomDays });
         if (ST.cycleHistory.length > 6) ST.cycleHistory = ST.cycleHistory.slice(0, 6);
+        if (i === 0) historyEntryAdded = true;
       }
     }
     const ns = new Date(sy, sm - 1, sd + cycleNum * dur);
     ST.cycleStart = ns.getFullYear() + '-' + String(ns.getMonth()+1).padStart(2,'0') + '-' + String(ns.getDate()).padStart(2,'0');
     ST.hiverEnd = null;
     ST._lastCycleNum = -1;
+    ST._rolloverSuppressUntil = null;
     effectiveCycleNum = 0;
+
+    ST._undoNouveauCycle = {
+      cycleStart: prevCycleStart,
+      hiverEnd: prevHiverEnd,
+      lastCycleNum: prevLastCycleNum,
+      lastSaison: prevLastSaison,
+      historyEntryAdded,
+      declaredAt: Date.now(),
+    };
+
     saveState();
   }
   // Detect new cycle
@@ -1670,6 +1642,7 @@ function startNewCycleToday() {
   ST.cycleStart = todayStr;
   ST.hiverEnd = null;
   ST._lastCycleNum = -1;
+  ST._rolloverSuppressUntil = null; // une déclaration explicite prime sur toute suppression en attente
 
   ST._undoNouveauCycle = {
     cycleStart: prevCycleStart,
@@ -1711,6 +1684,9 @@ function annulerNouveauCycle() {
   ST._lastCycleNum = undo.lastCycleNum;
   ST._lastSaison = undo.lastSaison;
   ST._undoNouveauCycle = null;
+  // Empêche computeCycle() de re-déclencher immédiatement le même avancement
+  // automatique — la durée déclarée est encore dépassée à l'instant T par définition.
+  ST._rolloverSuppressUntil = Date.now() + 48 * 3600000;
 
   saveState();
   computeCycle();
@@ -2323,13 +2299,24 @@ function renderMoiBilan() {
   const joursSuivis = ST.currentDay || 1;
   const dur = ST.cycleDuration || 28;
 
-  // Top symptôme
+  // Top symptôme — limité au cycle en cours, comme le reste du Portrait
   const sympCount = {};
   const sympMeta = {};
   Object.values(SYMPTOMES_PAR_PHASE || {}).flat().forEach(s => { if (s && s.id) sympMeta[s.id] = s; });
-  Object.values(ST.symptomes || {}).forEach(arr => (arr || []).forEach(id => {
-    if (id !== 'autre') sympCount[id] = (sympCount[id] || 0) + 1;
-  }));
+  let _cycleStartDay = 0;
+  if (ST.cycleStart) {
+    const [csy, csm, csd] = ST.cycleStart.split('-').map(Number);
+    _cycleStartDay = csy * 10000 + csm * 100 + csd;
+  }
+  Object.entries(ST.symptomes || {}).forEach(([dateKey, arr]) => {
+    const d = new Date(dateKey);
+    if (isNaN(d)) return;
+    const keyDay = d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
+    if (keyDay < _cycleStartDay) return;
+    (arr || []).forEach(id => {
+      if (id !== 'autre') sympCount[id] = (sympCount[id] || 0) + 1;
+    });
+  });
   const topEntry = Object.entries(sympCount).sort((a, b) => b[1] - a[1])[0];
   const topMeta = topEntry ? sympMeta[topEntry[0]] : null;
 
@@ -2347,14 +2334,18 @@ function renderMoiBilan() {
         <div style="height:100%;width:${pct}%;background:var(--season-grad);border-radius:4px;transition:width .4s;"></div>
       </div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:10px;">
       <div style="background:var(--creme);border-radius:12px;padding:10px 6px;text-align:center;">
         <div style="font-size:20px;font-weight:700;color:var(--noir);font-family:var(--serif);">${prayerDays}</div>
         <div style="font-size:8px;color:var(--gris);margin-top:2px;line-height:1.3;">jours<br>3+ prières</div>
       </div>
       <div style="background:var(--creme);border-radius:12px;padding:10px 6px;text-align:center;">
-        <div style="font-size:20px;font-weight:700;color:var(--noir);font-family:var(--serif);">${dhikrDays + coranDays}</div>
-        <div style="font-size:8px;color:var(--gris);margin-top:2px;line-height:1.3;">jours<br>dhikr/Coran</div>
+        <div style="font-size:20px;font-weight:700;color:var(--noir);font-family:var(--serif);">${dhikrDays}</div>
+        <div style="font-size:8px;color:var(--gris);margin-top:2px;line-height:1.3;">jours<br>de dhikr</div>
+      </div>
+      <div style="background:var(--creme);border-radius:12px;padding:10px 6px;text-align:center;">
+        <div style="font-size:20px;font-weight:700;color:var(--noir);font-family:var(--serif);">${coranDays}</div>
+        <div style="font-size:8px;color:var(--gris);margin-top:2px;line-height:1.3;">jours<br>de Coran</div>
       </div>
       <div style="background:var(--creme);border-radius:12px;padding:10px 6px;text-align:center;">
         <div style="font-size:20px;font-weight:700;color:var(--noir);font-family:var(--serif);">${objCheckCount}</div>
@@ -3101,7 +3092,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         ST.supabaseEmail = session.user.email;
         ST.isAuthenticated = true;
         ST.userEmail = ST.userEmail || session.user.email;
-        await loadFromSupabase(sb, session.user.id);
         ST.isAuthenticated = true;
         setupAuthListener(sb);
         if (_hasAccount) initApp();
@@ -3136,12 +3126,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   checkDailyReset();
   checkWeeklyReset();
+  checkExportReminder();
 
-  // Sync immédiat quand l'app passe en arrière-plan (évite la perte de données à la fermeture)
+  // Sauvegarde immédiate quand l'app passe en arrière-plan (évite la perte de données à la fermeture)
   const _onAppHide = () => {
     try { saveState(); } catch(e) {}
-    clearTimeout(_syncTimer);
-    _doSyncToSupabase();
   };
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') _onAppHide();
@@ -3835,6 +3824,31 @@ function exportData() {
     a.download = filename;
     a.click();
   }
+  ST.lastExportDate = new Date().toISOString().split('T')[0];
+  saveState();
+}
+
+// Tes données vivent uniquement sur cet appareil (plus de sauvegarde cloud) —
+// rappel discret d'exporter, au plus une fois toutes les 2 semaines, après 30 jours sans export.
+function checkExportReminder() {
+  if (!ST.cycleStart) return;
+  const now = new Date();
+  const todayKey = now.toISOString().split('T')[0];
+  if (!ST.lastExportDate && !ST._exportReminderAnchor) {
+    ST._exportReminderAnchor = todayKey;
+    saveState();
+    return;
+  }
+  const refDate = new Date(ST.lastExportDate || ST._exportReminderAnchor);
+  const daysSince = Math.floor((now - refDate) / 86400000);
+  if (daysSince < 30) return;
+  if (ST.lastExportNudge) {
+    const daysSinceNudge = Math.floor((now - new Date(ST.lastExportNudge)) / 86400000);
+    if (daysSinceNudge < 14) return;
+  }
+  ST.lastExportNudge = todayKey;
+  saveState();
+  setTimeout(() => showToast('💡 Pense à exporter tes données dans Paramètres — c\'est ta seule sauvegarde.'), 2500);
 }
 function importData() {
   const input = document.createElement('input');
