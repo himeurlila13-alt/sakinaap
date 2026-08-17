@@ -205,6 +205,12 @@
       <div class="ob-option selected" onclick="selectDuration(this,28)"><span class="ob-option-emoji">&#127800;</span><div><div class="ob-option-text">Moyen - 27 a 30 jours</div></div><div class="ob-option-chk">&#10003;</div></div>
       <div class="ob-option" onclick="selectDuration(this,33)"><span class="ob-option-emoji">&#9728;&#65039;</span><div><div class="ob-option-text">Long - 31 a 35 jours</div></div><div class="ob-option-chk">&#10003;</div></div>
     </div>
+    <div class="ob-fl" style="margin-top:18px;">Duree habituelle de tes regles</div>
+    <div class="ob-options" id="duree-regles-options">
+      <div class="ob-option" onclick="selectDureeRegles(this,4)"><span class="ob-option-emoji">&#127772;</span><div><div class="ob-option-text">Courtes - 3 a 4 jours</div></div><div class="ob-option-chk">&#10003;</div></div>
+      <div class="ob-option selected" onclick="selectDureeRegles(this,5)"><span class="ob-option-emoji">&#127800;</span><div><div class="ob-option-text">Moyennes - 5 a 6 jours</div></div><div class="ob-option-chk">&#10003;</div></div>
+      <div class="ob-option" onclick="selectDureeRegles(this,7)"><span class="ob-option-emoji">&#127807;</span><div><div class="ob-option-text">Longues - 7 jours ou plus</div></div><div class="ob-option-chk">&#10003;</div></div>
+    </div>
     <button class="ob-btn" onclick="nextStep(2)" style="margin-top:24px">Révéler ma saison</button>
   </div>
 </div>
@@ -439,7 +445,7 @@
   <!-- BOUTONS GESTION PHASES -->
   <div style="margin:0 14px 14px;display:flex;flex-direction:column;gap:8px;">
     <button onclick="startNewCycleToday()" id="btn-nouveau-hiver" class="cycle-phase-btn" style="display:none;">🌙 Mon Hiver commence aujourd'hui</button>
-    <button onclick="declarerPrintemps()" id="btn-fin-hiver" class="cycle-phase-btn" style="display:none;">🌸 Mon Hiver est termin&#233;</button>
+    <button onclick="openFinHiverModal()" id="btn-fin-hiver" class="cycle-phase-btn" style="display:none;">🌸 Mon Hiver est termin&#233;</button>
   </div>
 
   <!-- SYMPTOMES DU JOUR -->
@@ -1034,11 +1040,31 @@
     <input id="edit-cycle-date" type="date" class="ob-input" style="margin-bottom:16px;">
     <div style="font-size:12px;color:var(--gris);margin-bottom:8px;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Duree habituelle du cycle</div>
     <div style="display:flex;gap:8px;margin-bottom:24px;" id="edit-duration-options">
-      <div class="ob-option" onclick="selectEditDuration(this,26)" style="flex:1;padding:12px;flex-direction:column;align-items:center;text-align:center;"><span class="ob-option-emoji">&#127769;</span><div class="ob-option-text" style="font-size:12px;margin-top:4px;">24-26 j</div></div>
-      <div class="ob-option selected" id="edit-dur-28" onclick="selectEditDuration(this,28)" style="flex:1;padding:12px;flex-direction:column;align-items:center;text-align:center;"><span class="ob-option-emoji">&#127800;</span><div class="ob-option-text" style="font-size:12px;margin-top:4px;">27-30 j</div></div>
-      <div class="ob-option" onclick="selectEditDuration(this,33)" style="flex:1;padding:12px;flex-direction:column;align-items:center;text-align:center;"><span class="ob-option-emoji">&#9728;&#65039;</span><div class="ob-option-text" style="font-size:12px;margin-top:4px;">31-35 j</div></div>
+      <div class="ob-option" data-val="26" onclick="selectEditDuration(this,26)" style="flex:1;padding:12px;flex-direction:column;align-items:center;text-align:center;"><span class="ob-option-emoji">&#127769;</span><div class="ob-option-text" style="font-size:12px;margin-top:4px;">24-26 j</div></div>
+      <div class="ob-option selected" data-val="28" onclick="selectEditDuration(this,28)" style="flex:1;padding:12px;flex-direction:column;align-items:center;text-align:center;"><span class="ob-option-emoji">&#127800;</span><div class="ob-option-text" style="font-size:12px;margin-top:4px;">27-30 j</div></div>
+      <div class="ob-option" data-val="33" onclick="selectEditDuration(this,33)" style="flex:1;padding:12px;flex-direction:column;align-items:center;text-align:center;"><span class="ob-option-emoji">&#9728;&#65039;</span><div class="ob-option-text" style="font-size:12px;margin-top:4px;">31-35 j</div></div>
+    </div>
+    <div style="font-size:12px;color:var(--gris);margin-bottom:8px;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Duree habituelle de tes regles</div>
+    <div style="display:flex;gap:8px;margin-bottom:24px;" id="edit-regles-options">
+      <div class="ob-option" data-val="4" onclick="selectEditDureeRegles(this,4)" style="flex:1;padding:12px;flex-direction:column;align-items:center;text-align:center;"><span class="ob-option-emoji">&#127772;</span><div class="ob-option-text" style="font-size:12px;margin-top:4px;">3-4 j</div></div>
+      <div class="ob-option selected" data-val="5" onclick="selectEditDureeRegles(this,5)" style="flex:1;padding:12px;flex-direction:column;align-items:center;text-align:center;"><span class="ob-option-emoji">&#127800;</span><div class="ob-option-text" style="font-size:12px;margin-top:4px;">5-6 j</div></div>
+      <div class="ob-option" data-val="7" onclick="selectEditDureeRegles(this,7)" style="flex:1;padding:12px;flex-direction:column;align-items:center;text-align:center;"><span class="ob-option-emoji">&#127807;</span><div class="ob-option-text" style="font-size:12px;margin-top:4px;">7+ j</div></div>
     </div>
     <button onclick="saveEditCycle()" class="ob-btn" style="margin-top:0;">Enregistrer</button>
+  </div>
+</div>
+
+<!-- MODAL FIN D'HIVER (déclaration rétroactive) -->
+<div class="modal-overlay" id="fin-hiver-modal" onclick="if(event.target.id==='fin-hiver-modal')closeFinHiverModal()">
+  <div class="modal-sheet">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--noir);">🌸 Mon Hiver est termin&eacute;</div>
+      <button onclick="closeFinHiverModal()" style="background:var(--sable);border:none;border-radius:50%;width:32px;height:32px;font-size:18px;cursor:pointer;">&#215;</button>
+    </div>
+    <div style="font-size:13px;color:var(--gris);line-height:1.6;margin-bottom:16px;">Tes r&egrave;gles se sont termin&eacute;es aujourd&rsquo;hui&nbsp;? Ou il y a quelques jours&nbsp;? Choisis la date r&eacute;elle &mdash; le calcul de ta phase repartira de l&agrave;.</div>
+    <div style="font-size:12px;color:var(--gris);margin-bottom:8px;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Mes r&egrave;gles se sont termin&eacute;es le</div>
+    <input id="fin-hiver-date" type="date" class="ob-input" style="margin-bottom:20px;">
+    <button onclick="confirmFinHiver()" class="ob-btn" style="margin-top:0;">Confirmer</button>
   </div>
 </div>
 

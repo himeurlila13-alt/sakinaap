@@ -15,6 +15,7 @@ let ST = {
   prenom: '',
   cycleStart: null,
   cycleDuration: 28,
+  dureeRegles: null, // durée habituelle des règles déclarée par l'utilisatrice (jours) — null = non déclarée, fallback proportionnel dans phaseThresholds()
   checkin: null,
   checkinDate: null,
   prayers: {},
@@ -859,7 +860,6 @@ const SAISONS = {
     nom: 'Hiver', foodTeaser: 'Bouillons chauds, épices, fer', skinTeaser: 'Hydratation intense & réparation', emoji: '🌙', phase: 'Phase menstruelle',
     color: '#7B5EA7', light: '#B89FD4', soft: '#F0EBF8', dark: '#3D2060', rgb: '123,94,167',
     grad: 'linear-gradient(145deg, #3D2060, #7B5EA7)',
-    jours: [1,5],
     messages: {
       bien: "Tu vas bien en Hiver — c'est précieux. Repose-toi vraiment, sans culpabilité. Ton corps travaille même quand tu ne le sens pas.",
       fatiguee: "Tu n'es pas paresseuse. Ton corps est en mode économie d'énergie — c'est biologique. Faire peu aujourd'hui, c'est déjà beaucoup.",
@@ -898,7 +898,6 @@ const SAISONS = {
     nom: 'Printemps', foodTeaser: 'Légumes verts, probiotiques, zinc', skinTeaser: 'Exfoliation douce & éclat', emoji: '🌸', phase: 'Phase folliculaire',
     color: '#3DAE8A', light: '#80D4B8', soft: '#E8F8F3', dark: '#1A6B52', rgb: '61,174,138',
     grad: 'linear-gradient(145deg, #1A6B52, #3DAE8A)',
-    jours: [6,13],
     messages: {
       bien: "Tu remarques peut-être plus d'élan — profites-en pour avancer sur ce qui attend depuis un moment.",
       fatiguee: "La fatigue en Printemps mérite attention. Écoute ce que ton corps demande.",
@@ -937,7 +936,6 @@ const SAISONS = {
     nom: 'Été', foodTeaser: 'Protéines, antioxydants, oméga-3', skinTeaser: 'Protection & légèreté', emoji: '☀️', phase: 'Phase ovulatoire',
     color: '#FF8A65', light: '#FFB4A0', soft: '#FFF3F0', dark: '#D85832', rgb: '255,138,101',
     grad: 'linear-gradient(145deg, #D85832, #FF8A65)',
-    jours: [14,17],
     messages: {
       bien: "Tu es à ton pic. C'est le bon moment pour les efforts physiques, les conversations importantes.",
       fatiguee: "Si tu te sens fatiguée alors que ton cycle dit Été — c'est un signal. Le corps parle toujours juste.",
@@ -976,7 +974,6 @@ const SAISONS = {
     nom: 'Automne', foodTeaser: 'Magnésium, complexe B, chocolat noir', skinTeaser: 'Apaisement & barrière cutanée', emoji: '🍂', phase: 'Phase lutéale',
     color: '#C82B4A', light: '#E87090', soft: '#FCF0F3', dark: '#961E36', rgb: '200,43,74',
     grad: 'linear-gradient(145deg, #961E36, #C82B4A)',
-    jours: [18,28],
     messages: {
       bien: "Des fluctuations arrivent peut-être — maintenant que tu le sais, elles ne te surprendront pas.",
       fatiguee: "Peut-être que tout te semble plus lourd — c'est ton Automne. Une chose. La plus petite. Juste une.",
@@ -1178,8 +1175,18 @@ function effectiveCycleDur() {
   return Math.max(20, Math.min(60, Math.round(past.reduce((a, b) => a + b, 0) / past.length)));
 }
 
+// Source unique de vérité pour les seuils de phase (Hiver/Printemps/Été/Automne).
+// Utilisée par computeCycle(), renderCycle(), phaseForDay(), drawCycleRing(),
+// dayWithinPhase(), getAutomneMicroPhase() et _bilanStats() — aucune de ces
+// fonctions ne doit recalculer ses propres seuils (RISQUE-01).
 function phaseThresholds(dur) {
-  const hiverDays  = Math.floor(dur * 0.20);
+  // Durée d'Hiver (règles) : priorité à la durée habituelle déclarée par
+  // l'utilisatrice (onboarding ou Moi > Modifier mon cycle). Si elle n'a rien
+  // déclaré, on retombe sur une estimation proportionnelle de 20% du cycle —
+  // un fallback par défaut explicite, pas la règle générale (FIQH-ROUGE3).
+  const hiverDays  = (ST.dureeRegles && ST.dureeRegles >= 1 && ST.dureeRegles <= 15)
+    ? ST.dureeRegles
+    : Math.floor(dur * 0.20);
   const springDays = Math.floor(dur * 0.30);
   const eteDays    = Math.floor(dur * 0.15);
   let springStartD = hiverDays + 1;
@@ -2023,19 +2030,52 @@ function startNewCycleToday() {
   showPhaseToast('🌙', 'Hiver déclaré', 'Prends soin de toi 🌙');
 }
 
-function declarerPrintemps() {
+// dateStr optionnel (YYYY-MM-DD) : déclaration rétroactive de fin de règles.
+// Sans argument, utilise la date du jour (comportement historique).
+function declarerPrintemps(dateStr) {
   if (ST.currentSaison !== 'hiver') return;
   if (!ST.cycleStart) return;
   const today = new Date();
   const todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
-  if (ST.hiverEnd === todayStr) { showToast('Printemps déjà déclaré aujourd\'hui ✓'); return; }
-  if (todayStr === ST.cycleStart) { showToast('Les règles ne peuvent pas durer 0 jour.'); return; }
-  ST.hiverEnd = todayStr;
+  const finStr = dateStr || todayStr;
+  if (finStr > todayStr) { showToast('Cette date ne peut pas être dans le futur 🌙'); return; }
+  if (finStr < ST.cycleStart) { showToast('Cette date précède le début de tes règles 🌙'); return; }
+  if (finStr === ST.cycleStart) { showToast('Les règles ne peuvent pas durer 0 jour.'); return; }
+  if (ST.hiverEnd === finStr) { showToast('Printemps déjà déclaré à cette date ✓'); return; }
+  ST.hiverEnd = finStr;
   saveState();
   computeCycle();
   applySaisonTheme();
   populateAll();
   showPhaseToast('🌸', 'Printemps déclaré', 'L\'énergie revient 🌸');
+}
+
+// Modale de sélection de date pour "Mon Hiver est terminé" — permet une
+// déclaration rétroactive (règles terminées il y a X jours), pas seulement
+// aujourd'hui.
+function openFinHiverModal() {
+  if (ST.currentSaison !== 'hiver') return;
+  const today = new Date();
+  const todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
+  const dateInput = document.getElementById('fin-hiver-date');
+  if (dateInput) {
+    dateInput.value = todayStr;
+    dateInput.max = todayStr;
+    dateInput.min = ST.cycleStart || '';
+  }
+  const modal = document.getElementById('fin-hiver-modal');
+  if (modal) modal.classList.add('open');
+}
+function closeFinHiverModal() {
+  const modal = document.getElementById('fin-hiver-modal');
+  if (modal) modal.classList.remove('open');
+}
+function confirmFinHiver() {
+  const dateInput = document.getElementById('fin-hiver-date');
+  const dateVal = dateInput ? dateInput.value : '';
+  if (!dateVal) { showToast('Indique une date 🌙'); return; }
+  closeFinHiverModal();
+  declarerPrintemps(dateVal);
 }
 
 // ═══════════════════════════════════════════════
@@ -2652,6 +2692,13 @@ function selectDuration(el, val) {
   document.querySelectorAll('#duration-options .ob-option').forEach(o => { o.classList.remove('selected'); });
   el.classList.add('selected');
   selectedDuration = val;
+}
+
+let selectedDureeRegles = 5;
+function selectDureeRegles(el, val) {
+  document.querySelectorAll('#duree-regles-options .ob-option').forEach(o => { o.classList.remove('selected'); });
+  el.classList.add('selected');
+  selectedDureeRegles = val;
 }
 
 function checkDailyReset() {
@@ -3439,6 +3486,7 @@ function nextStep(step) {
     if (!dateVal) { showToast('Indique la date de début de ton dernier cycle 🌙'); return; }
     ST.cycleStart = dateVal;
     ST.cycleDuration = selectedDuration;
+    ST.dureeRegles = selectedDureeRegles;
     if (!ST.consentDate) {
       ST.consentDate = new Date().toISOString();
       ST.consentVersion = '1.0';
@@ -3786,11 +3834,23 @@ function checkNotificationReturn() {
 // CYCLE EDIT
 // ═══════════════════════════════════════════════
 let editDuration = 28;
+let editDureeRegles = 5;
+function _syncEditChips(containerId, val) {
+  document.querySelectorAll('#' + containerId + ' .ob-option').forEach(o => {
+    const match = Number(o.dataset.val) === val;
+    o.classList.toggle('selected', match);
+    o.style.background = match ? 'var(--season-soft)' : 'white';
+    o.style.borderColor = match ? 'var(--season)' : 'var(--sable)';
+  });
+}
 function openEditCycle() {
   const _n=new Date(); const today=_n.getFullYear()+'-'+String(_n.getMonth()+1).padStart(2,'0')+'-'+String(_n.getDate()).padStart(2,'0');
   document.getElementById('edit-cycle-date').value=ST.cycleStart||today;
   document.getElementById('edit-cycle-date').max=today;
   editDuration=ST.cycleDuration||28;
+  editDureeRegles=ST.dureeRegles||5;
+  _syncEditChips('edit-duration-options', editDuration);
+  _syncEditChips('edit-regles-options', editDureeRegles);
   document.getElementById('edit-cycle-modal').classList.add('open');
 }
 function closeEditCycle() { document.getElementById('edit-cycle-modal').classList.remove('open'); }
@@ -3798,6 +3858,11 @@ function selectEditDuration(el, val) {
   document.querySelectorAll('#edit-duration-options .ob-option').forEach(o => { o.classList.remove('selected'); o.style.background='white'; o.style.borderColor='var(--sable)'; });
   el.classList.add('selected'); el.style.background='var(--season-soft)'; el.style.borderColor='var(--season)';
   editDuration=val;
+}
+function selectEditDureeRegles(el, val) {
+  document.querySelectorAll('#edit-regles-options .ob-option').forEach(o => { o.classList.remove('selected'); o.style.background='white'; o.style.borderColor='var(--sable)'; });
+  el.classList.add('selected'); el.style.background='var(--season-soft)'; el.style.borderColor='var(--season)';
+  editDureeRegles=val;
 }
 function saveEditCycle() {
   const dateVal=document.getElementById('edit-cycle-date').value;
@@ -3810,7 +3875,7 @@ function saveEditCycle() {
     if (ST.cycleHistory.length > 6) ST.cycleHistory = ST.cycleHistory.slice(0, 6);
   }
   if (ST.cycleStart !== dateVal) ST.hiverEnd = null; // nouvelle date → hiverEnd caduc
-  ST.cycleStart=dateVal; ST.cycleDuration=editDuration; saveState(); closeEditCycle();
+  ST.cycleStart=dateVal; ST.cycleDuration=editDuration; ST.dureeRegles=editDureeRegles; saveState(); closeEditCycle();
   computeCycle(); applySaisonTheme(); populateAll();
   showToast('✓ Cycle mis à jour — ' + SAISONS[ST.currentSaison].emoji + ' ' + SAISONS[ST.currentSaison].nom + ' · Jour ' + ST.currentDay);
 }
