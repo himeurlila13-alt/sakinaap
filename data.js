@@ -527,7 +527,6 @@ const LECTURES = [
     phase: 'hiver',
     theme: 'patience',
     duree: 4,
-    premium: false,
     source: {
       arabe: "إِنَّمَا يُوَفَّى الصَّابِرُونَ أَجْرَهُم بِغَيْرِ حِسَابٍ",
       fr: "Les patients recevront en vérité leur récompense sans limite.",
@@ -550,7 +549,6 @@ const LECTURES = [
     phase: 'printemps',
     theme: 'niyya',
     duree: 4,
-    premium: false,
     source: {
       arabe: "إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى",
       fr: "Les actes ne valent que par les intentions, et chacun n'obtient que ce qu'il a eu l'intention de faire.",
@@ -573,7 +571,6 @@ const LECTURES = [
     phase: 'ete',
     theme: 'générosité',
     duree: 4,
-    premium: false,
     source: {
       arabe: "مَثَلُ الَّذِينَ يُنفِقُونَ أَمْوَالَهُمْ فِي سَبِيلِ اللَّهِ كَمَثَلِ حَبَّةٍ أَنبَتَتْ سَبْعَ سَنَابِلَ فِي كُلِّ سُنبُلَةٍ مِّائَةُ حَبَّةٍ",
       fr: "Ceux qui dépensent leurs biens dans le chemin d'Allah ressemblent à un grain qui produit sept épis, chaque épi contenant cent grains.",
@@ -596,7 +593,6 @@ const LECTURES = [
     phase: 'automne',
     theme: 'muhasaba',
     duree: 5,
-    premium: false,
     source: {
       arabe: "يَا أَيُّهَا الَّذِينَ آمَنُوا اتَّقُوا اللَّهَ وَلْتَنظُرْ نَفْسٌ مَّا قَدَّمَتْ لِغَدٍ",
       fr: "Ô vous qui croyez, craignez Allah, et que chaque âme regarde ce qu'elle a préparé pour demain (l'au-delà).",

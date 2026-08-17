@@ -1,3 +1,8 @@
+> **⚠️ ARCHIVÉ (2026-08-17)** — Ce document décrit les textes de progression du moteur
+> de séance sport structuré (niveaux, streaks, feedback) supprimé du MVP lors de la
+> Phase 2 du reset produit. Conservé pour référence éditoriale si cette fonctionnalité
+> est réintroduite un jour. Ne reflète plus l'état actuel du code.
+
 # Messages de Progression Sportive — SakinApp
 
 Tous les textes pour l'expérience de progression sportive. Ton bienveillant, islamique, émotionnel. Constantes JS prêtes à intégrer.

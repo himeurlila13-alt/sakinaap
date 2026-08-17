@@ -32,7 +32,6 @@ let ST = {
   currentDay: 1,
   selectedSugg: [],
   notifFreq: 2,
-  waitlistEmail: null,
   feedbackSent: false,
   installBannerDismissed: false,
   lastDailyReset: null,
@@ -1476,10 +1475,10 @@ function renderCarteRepas(s) {
       : '';
   }
 
-  const premEl = document.getElementById('action-manger-premium');
+  const premEl = document.getElementById('action-manger-info');
   if (!premEl || !idee) return;
   premEl.innerHTML = `
-    <div class="action-premium-unlocked" onclick="openRecipeModal('${ST.currentSaison}',${ideeIdx})">
+    <div class="action-unlocked" onclick="openRecipeModal('${ST.currentSaison}',${ideeIdx})">
       <span class="action-prem-unlocked-emoji">${idee.emoji}</span>
       <div class="action-prem-unlocked-text">
         <div class="action-prem-unlocked-name">En savoir plus</div>
@@ -1544,11 +1543,11 @@ function renderCarteSkincare(s) {
     }
   }
 
-  const premEl = document.getElementById('action-soin-premium');
+  const premEl = document.getElementById('action-soin-info');
   if (!premEl || !soinJour) return;
   const phaseEmoji = { hiver: '🌙', printemps: '🌿', ete: '☀️', automne: '🍂' }[ST.currentSaison] || '🌿';
   premEl.innerHTML = `
-    <div class="action-premium-unlocked" onclick="openSkinModal('${ST.currentSaison}')">
+    <div class="action-unlocked" onclick="openSkinModal('${ST.currentSaison}')">
       <span class="action-prem-unlocked-emoji">${phaseEmoji}</span>
       <div class="action-prem-unlocked-text">
         <div class="action-prem-unlocked-name">En savoir plus</div>
@@ -2072,13 +2071,6 @@ function toggleMesLecturesPhase(phase) {
   }
 }
 
-// Ancienne fonction renderMesLectures supprimée - remplacée par renderMesLecturesModal()
-
-function relireLecture(lectureId) {
-  openLectureModal(lectureId);
-}
-
-// Ancienne fonction toggleLecturesPhase supprimée - remplacée par toggleMesLecturesPhase()
 
 // ── Dhikr cases à cocher ──
 function renderDhikrChecks() {
@@ -3606,22 +3598,6 @@ function saveNotifSettings() {
 }
 
 // ═══════════════════════════════════════════════
-// PREMIUM / WAITLIST
-// ═══════════════════════════════════════════════
-async function joinWaitlist() {
-  const emailInput=document.getElementById('waitlist-email');
-  const btn=document.querySelector('[onclick="joinWaitlist()"]');
-  const msg=document.getElementById('waitlist-msg');
-  const email=emailInput.value.trim();
-  if (!email||!email.includes('@')) { msg.style.color='#C4694A'; msg.textContent='Entre une adresse email valide 🌸'; return; }
-  btn.disabled=true; btn.textContent='…';
-  try {
-    const res=await fetch('https://formspree.io/f/xojpknkq',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({email,saison:ST.currentSaison,jour:ST.currentDay})});
-    if (res.ok) { ST.waitlistEmail=email; saveState(); msg.style.color='#3DAE8A'; msg.textContent='Alhamdulillah — tu seras la première informée ! 🌸'; emailInput.value=''; emailInput.disabled=true; btn.textContent='✓'; }
-    else throw new Error();
-  } catch(e) { msg.style.color='#C4694A'; msg.textContent="Une erreur est survenue."; btn.disabled=false; btn.textContent='Rejoindre ✦'; }
-}
-// ═══════════════════════════════════════════════
 // FEEDBACK
 // ═══════════════════════════════════════════════
 let selectedRating=0;
@@ -3769,84 +3745,6 @@ function renderCycleHistory() {
 
   list.innerHTML = summaryHtml + barsHtml + axisHtml;
 }
-function renderPatterns() {
-  const card = document.getElementById('patterns-card');
-  if (!card) return;
-  if (!ST.cycleStart) { card.style.display = 'none'; return; }
-  card.style.display = 'block';
-
-  const history = ST.cycleHistory || [];
-  const manualCycles = (ST.historiqueCycles || [])
-    .filter(c => c.dateDebut && c.dateDebut !== ST.cycleStart)
-    .map(c => ({ start: c.dateDebut, duration: Number(c.dureeCycle) || 28 }));
-  const pastCycles = [...history, ...manualCycles];
-  const allCycles = [{ start: ST.cycleStart, duration: ST.cycleDuration || 28 }, ...pastCycles];
-  const durations = allCycles.map(c => Number(c.duration) || 28);
-  const pastDurations = pastCycles.map(c => Number(c.duration) || 28);
-  // Moyenne sur les cycles passés uniquement (pas le cycle actuel en cours)
-  const avg = pastDurations.length > 0
-    ? Math.round(pastDurations.reduce((a, b) => a + b, 0) / pastDurations.length)
-    : ST.cycleDuration || 28;
-  const minD = pastDurations.length > 0 ? Math.min(...pastDurations) : (ST.cycleDuration || 28);
-  const maxD = pastDurations.length > 0 ? Math.max(...pastDurations) : (ST.cycleDuration || 28);
-  const isRegular = pastDurations.length > 1 ? (maxD - minD) <= 3 : true;
-
-  // Compter les symptômes sur toutes les dates
-  const sympCount = {};
-  const sympMeta = {};
-  Object.values(SYMPTOMES_PAR_PHASE).flat().forEach(s => { sympMeta[s.id] = s; });
-  Object.values(ST.symptomes || {}).forEach(arr => {
-    arr.forEach(id => {
-      if (id === 'autre') return;
-      sympCount[id] = (sympCount[id] || 0) + 1;
-    });
-  });
-  const topSymp = Object.entries(sympCount)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 4)
-    .map(([id, cnt]) => ({ ...sympMeta[id], cnt }))
-    .filter(s => s && s.emoji);
-
-  const totalJoursSuivis = Object.keys(ST.symptomes || {}).length;
-
-  // Section gratuite
-  document.getElementById('patterns-free').innerHTML = `
-    <div style="display:flex;gap:8px;margin-bottom:12px;">
-      <div style="flex:1;background:var(--creme);border-radius:14px;padding:12px;text-align:center;">
-        <div style="font-size:24px;font-weight:700;color:var(--noir);font-family:var(--serif);">${avg}</div>
-        <div style="font-size:10px;color:var(--gris);margin-top:2px;">jours en moy.</div>
-      </div>
-      <div style="flex:1;background:var(--creme);border-radius:14px;padding:12px;text-align:center;">
-        <div style="font-size:24px;font-weight:700;color:var(--noir);font-family:var(--serif);">${allCycles.length}</div>
-        <div style="font-size:10px;color:var(--gris);margin-top:2px;">cycles suivis</div>
-      </div>
-      <div style="flex:1;background:var(--creme);border-radius:14px;padding:12px;text-align:center;">
-        <div style="font-size:20px;">${isRegular ? '🌿' : '〰️'}</div>
-        <div style="font-size:10px;color:var(--gris);margin-top:2px;">${isRegular ? 'Régulier' : 'Variable'}</div>
-      </div>
-    </div>
-    ${minD !== maxD ? `<div style="font-size:11px;color:var(--gris);margin-bottom:14px;line-height:1.5;">Tes cycles varient entre <b style="color:var(--noir);">${minD}</b> et <b style="color:var(--noir);">${maxD}</b> jours — ${isRegular ? 'une belle régularité.' : 'des variations normales.'}</div>` : `<div style="font-size:11px;color:var(--gris);margin-bottom:14px;">Tes cycles sont très stables ✨</div>`}
-  `;
-
-  const premEl = document.getElementById('patterns-premium');
-  if (topSymp.length === 0) {
-    premEl.innerHTML = `
-      <div style="border-radius:14px;padding:14px 16px;background:var(--creme);margin-top:4px;">
-        <div style="font-size:12px;color:var(--gris);line-height:1.6;">Note tes symptômes chaque jour depuis l'onglet Cycle — tes patterns apparaîtront ici au fil des semaines.</div>
-      </div>`;
-  } else {
-    const daysUntilNext = Math.max(0, (ST.cycleDuration || 28) - (ST.currentDay - 1));
-    premEl.innerHTML = `
-      <div style="border-radius:14px;padding:14px 16px;background:var(--creme);margin-top:4px;">
-        <div style="font-size:10px;font-weight:600;color:var(--gris);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">Tes symptômes les plus fréquents</div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;">
-          ${topSymp.map(s => `<div style="background:white;border-radius:10px;padding:6px 12px;font-size:12px;display:flex;align-items:center;gap:6px;">${s.emoji} <span>${s.label}</span> <span style="color:var(--gris);">·</span> <b>${s.cnt}×</b></div>`).join('')}
-        </div>
-        <div style="font-size:11px;color:var(--gris);">🔮 Prochaines règles prévues dans <b style="color:var(--noir);">≈ ${daysUntilNext} jour${daysUntilNext > 1 ? 's' : ''}</b></div>
-      </div>`;
-  }
-}
-
 function exportData() {
   const data = localStorage.getItem('sakinapp_v1');
   if (!data) { showToast('Aucune donnée à sauvegarder.'); return; }

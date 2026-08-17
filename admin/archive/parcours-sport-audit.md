@@ -1,3 +1,8 @@
+> **⚠️ ARCHIVÉ (2026-08-17)** — Ce document décrit le moteur de séance sport structuré
+> (niveaux progressifs, timer guidé, feedback post-séance) supprimé du MVP lors de la
+> Phase 2 du reset produit. Conservé pour référence éditoriale/technique si cette
+> fonctionnalité est réintroduite un jour. Ne reflète plus l'état actuel du code.
+
 # Parcours Sport SakinApp — Audit Complet
 
 ## Résumé exécutif

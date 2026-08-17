@@ -1,6 +1,35 @@
 # Dette Technique — SakinApp
-**Dernière mise à jour :** 2026-05-21
+**Dernière mise à jour :** 2026-08-17
 **Sources :** admin/cycle-calculations.md · admin/logic-validation-report.md · admin/bugs.md · admin/security-audit-report.md · admin/design-audit.md · admin/fiqh-audit.md · admin/copywriter-audit.md
+
+---
+
+## 🔄 RESET PRODUIT — MVP simplifié (2026-08-17)
+
+SakinApp est passée d'un positionnement multi-piliers (paiement/essai, sport structuré,
+nutrition/skincare détaillés) à un MVP resserré sur deux piliers réels : **spiritualité**
+(prières, dhikr, Coran, 99 Noms, hygiène islamique) et **suivi de cycle**. Sport, repas et
+skincare restent en conseils ponctuels très légers, sans programme. Fait en 5 phases :
+
+| Phase | Contenu | Lignes retirées (approx.) |
+|---|---|---|
+| 1 | Suppression système paiement/essai/premium (Stripe, trial, API, migration) | ~1250 |
+| 2 | Suppression moteur de séance sport structuré (niveaux, timer, feedback) | ~4577 |
+| 3 | Module Cycle : seuils de phase unifiés (confirmé, voir RISQUE-01 ci-dessous), durée d'Hiver dynamique (voir FIQH-ROUGE3), déclaration rétroactive | +105 (nouvelles fonctionnalités) |
+| 4 | Cartes Repas/Skincare réduites à un conseil ponctuel (suppression Mon Marché, routines complètes) | ~835 |
+| 5 | Finitions : joinWaitlist, landing.html (pricing, témoignages, positionnement), nettoyage résiduel Stripe/premium/trial dans CSS et data, archivage docs sport | ~350 |
+
+**Bilan global (git diff contre l'état pré-reset, commit `b12b888`) :** 22 fichiers modifiés,
++347 / **-7251 lignes** (net -6904). 9 fichiers supprimés (6 API Stripe, `sport-additions.js`,
+`sport-progression-logic.js`, migration `002_redeemed_codes.sql`), 1 fichier ajouté
+(migration `004_deprecate_subscriptions.sql`, documentaire), 3 fichiers archivés dans
+`admin/archive/` (`parcours-sport-audit.md`, `sport-progression-audit.md`,
+`sport-messages-progression.md`).
+
+Les entrées ci-dessous mentionnant Stripe, premium, essai ou le moteur sport structuré
+(SEC-C2, SEC-M1, SEC-M2, SEC-M3, BUG-01, DETTE-D3, CW-4, CW-6, CW-7, ARCHI-02) décrivent
+du code aujourd'hui supprimé — elles restent comme historique mais ne correspondent plus
+à l'état du produit.
 
 ---
 
@@ -130,9 +159,13 @@
 ## 🟠 RISQUES LOGIQUE
 
 ### RISQUE-01 — 4 copies indépendantes des seuils de phase
-**Fonctions :** `computeCycle()` · `renderCycle()` · `phaseForDay()` · `drawCycleRing()` · `checkEndOfPrintemps()`
+**Fonctions :** `computeCycle()` · `renderCycle()` · `phaseForDay()` · `drawCycleRing()` · ~~`checkEndOfPrintemps()`~~ (supprimée, Phase 2 — moteur sport)
 **Correction :** Finaliser l'extraction de `phaseThresholds(dur)` comme source unique de vérité
-**Effort :** ~2h · **Statut :** ❌ Non corrigé (phaseThresholds partiellement mutualisé, drawCycleRing/renderCycle à vérifier)
+**Statut :** ✅ Résolu (confirmé Phase 3 du reset, 2026-08-17) — `computeCycle`, `renderCycle`,
+`phaseForDay`, `drawCycleRing`, `dayWithinPhase`, `getAutomneMicroPhase` et `_bilanStats`
+appellent tous `phaseThresholds(dur)` ; vérifié par grep qu'aucun ne recalcule de seuils
+indépendamment (`dur * 0.20` etc. n'apparaît que dans `phaseThresholds`). Un commentaire a
+été ajouté en tête de la fonction pour documenter ce contrat.
 
 ### RISQUE-02 — `objCheckCount` cumulatif depuis l'installation
 **Fonction :** `_bilanStats()` — `_countObjChecks()`
@@ -167,10 +200,20 @@
 ## 🔵 FIQH — Vérification en attente
 
 ### FIQH-ROUGE3 — Phase "Hiver" : durée personnalisée des règles prise en compte ?
-**Fichier :** `app.js` l.704 (`jours: [1,5]`) + l.3147
-**Problème :** `SAISONS.hiver` hardcode `jours: [1,5]`. Si règles de 7 jours, la carte de prières peut réapparaître alors que l'utilisatrice est encore en haidh.
-**Action requise :** Test manuel — déclarer un cycle avec hiverEnd au J7, vérifier que la carte reste masquée jusqu'au J7 et réapparaît au J8.
-**Statut :** ❌ Non vérifié
+**Fichier :** `app.js` (`phaseThresholds()`)
+**Problème :** `SAISONS.hiver` hardcodait `jours: [1,5]` — en réalité cette valeur n'était
+jamais lue ; la durée d'Hiver était calculée via un fallback proportionnel (20% du cycle),
+sans lien avec la durée réelle des règles déclarée par l'utilisatrice. Si règles de 7 jours
+sur un cycle de 28j (fallback = 5j), la carte de prières réapparaissait dès J6.
+**Statut :** ✅ Résolu (Phase 3 du reset, 2026-08-17) — `phaseThresholds()` utilise désormais
+`ST.dureeRegles` (déclarée à l'onboarding, modifiable dans Moi → Modifier mon cycle) comme
+durée d'Hiver ; fallback 20% documenté explicitement comme tel si non déclarée, pas comme
+règle générale. Le bouton "Mon Hiver est terminé" permet en plus une déclaration rétroactive
+(date picker, `declarerPrintemps(dateStr)`) pour corriger la phase du cycle en cours plutôt
+que d'ancrer toujours sur la date du jour. Les 4 `SAISONS.*.jours` hardcodés (jamais lus) ont
+été supprimés. Validé par un harnais de test Node isolé reproduisant exactement la logique de
+`phaseThresholds`/`computeCycle` (4 scénarios : cycle standard, règles longues 7j, déclaration
+rétroactive J-3, fallback sans déclaration).
 
 ---
 
@@ -262,7 +305,7 @@ Les clés de `seancesDone` utilisent `toDateString()` (ex: "Mon May 06 2026"). F
 | BUG-05 | Bug logique | 🔴 Critique | ✅ Corrigé 2026-05-19 |
 | BUG-06 | Bug logique | 🟠 Important | ✅ Corrigé 2026-05-21 |
 | BUG-07 | Bug logique | 🟠 Important | ✅ Corrigé 2026-05-19 |
-| RISQUE-01 | Architecture | 🟠 Important | ❌ Non corrigé |
+| RISQUE-01 | Architecture | 🟠 Important | ✅ Résolu 2026-08-17 |
 | RISQUE-02 | Logique | 🟠 Important | ✅ Corrigé 2026-05-21 |
 | RISQUE-04 | Bug | 🟠 Important | ✅ Corrigé 2026-05-19 |
 | RISQUE-03 | Fonctionnalité | 🟡 Utile | ❌ Non corrigé |
@@ -271,7 +314,7 @@ Les clés de `seancesDone` utilisent `toDateString()` (ex: "Mon May 06 2026"). F
 | RISQUE-07 | Code | 🟢 Mineur | ❌ Non corrigé |
 | RISQUE-08 | Architecture | 🟢 Mineur | ❌ Non documenté |
 | ARCHI-03 | Architecture | 🟡 Utile | ✅ Corrigé |
-| FIQH-ROUGE3 | Fiqh | 🔴 À vérifier | ❌ Non vérifié |
+| FIQH-ROUGE3 | Fiqh | 🔴 À vérifier | ✅ Résolu 2026-08-17 |
 | DESIGN-A5 | Design/UX | 🟡 Moyen | ✅ Corrigé 2026-05-21 |
 | DESIGN-A7 | Design/UX | 🟡 Moyen | ✅ Corrigé 2026-05-21 |
 | DESIGN-QA | Typographie | 🟢 Mineur | ✅ Corrigé 2026-05-21 |
@@ -288,16 +331,14 @@ Les clés de `seancesDone` utilisent `toDateString()` (ex: "Mon May 06 2026"). F
 
 **Priorité immédiate**
 - SEC-F1 : cookie `sakina_email` → stocker uniquement `sakina_auth=1` (~1h)
-- FIQH-ROUGE3 : test manuel masquage carte prières (~30 min)
 
 **Sprint Design (~4h)**
 - DETTE-D1 : `@property` CSS transitions `--season`
 - DETTE-D2 : dark mode `background:white` audit
 
 **Sprint Architecture (~3h)**
-- RISQUE-01 : finaliser mutualisation `phaseThresholds()`
 - RISQUE-03 : snapshot stats dans `cycleHistory`
-- ARCHI-01/ARCHI-02 : nettoyages
+- ARCHI-01 : nettoyage (ARCHI-02 caduc — `seancesDone`/moteur sport supprimés Phase 2)
 
 **Sprint Mineur (~1h)**
 - RISQUE-06 : `dayOfYear` guard + fallback

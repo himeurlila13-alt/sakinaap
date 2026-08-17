@@ -1,7 +1,7 @@
 {
   "name": "SakinApp",
   "short_name": "SakinApp",
-  "description": "Suis ton cycle menstruel avec ta foi. Sport, nutrition, prières et bien-être adaptés à chaque phase.",
+  "description": "Suis ton cycle menstruel avec ta foi. Prières, dhikr et suivi de cycle adaptés à chaque phase.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#FAF6F0",
