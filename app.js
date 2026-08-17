@@ -30,8 +30,6 @@ let ST = {
   currentSaison: 'printemps',
   currentDay: 1,
   selectedSugg: [],
-  mouvDone: {},
-  seanceDone: {},
   notifFreq: 2,
   waitlistEmail: null,
   feedbackSent: false,
@@ -42,42 +40,16 @@ let ST = {
   eveningCheckinMood: null,
   cycleHistory: [],
   historiqueCycles: [],
-  isPremium: false,
-  seanceLevel: 1,
-  amrapRecord: null,
-  printempsUpgradeDone: false,
-  levelMaxShown: false,
-  printempsBasCount: 0,
   _lastCycleNum: null,
   weeklyObjChecks: {},
   customObjectifs: [],
   customObjChecks: {},
   marche: { phase: null, checks: {}, custom: [] },
   calmeOverride: null,
-  trialEnded: false,
-  bilanShown: false,
   _lastSaison: null,
   hiverEnd: null,
-  premiumPlan: null,
-  premiumSince: null,
-  installDate: null,
-  trialBannerDismissed: false,
   supabaseUserId: null,
   supabaseEmail: null,
-  reportConsecutif: 0,
-  lastReportDate: null,
-  feedbackSport: {},
-  streakPhaseSeances: 0,
-  streakPhaseNom: null,
-  seanceSurpriseShownCycle: false,
-  totalSeancesAll: 0,
-  totalReportsAll: 0,
-  checkpointProgress: 0,
-  niveauStreak: 0,
-  _lastNiveauStreak: null,
-  _lastNiveauPhase: null,
-  _proposeNewEx5: false,
-  _proposeFatigue3: false,
   isAuthenticated: false,
   userEmail: null,
   authDate: null,
@@ -87,102 +59,6 @@ let ST = {
   consentVersion: null,
   lastObjResetDate: null,
   lecturesLues: [],
-  eteSessionIdx: 0,
-  fullBodyOverrideDate: null,
-  sportStreak: 0,
-  j1ModalShownCycle: null,
-};
-
-// ═══════════════════════════════════════════════
-// MESSAGES DE PROGRESSION SPORTIVE
-// ═══════════════════════════════════════════════
-const SPORT_PROGRESSION_MESSAGES = {
-  // BILAN FIN DE CYCLE
-  bilan_montee: {
-    titre: "Tu as grandi ce cycle 🌱",
-    corps: "Ton corps s'est transformé — d'Essentielle à À ton rythme. Chaque séance était un pas vers la meilleure version de toi.",
-    islamique: "Alhamdulillahi rabbi al-alameen. Allah a béni ton effort. 💜"
-  },
-  bilan_montee_grande: {
-    titre: "Transformation puissante ce cycle ⚡",
-    corps: "Un saut remarquable — ton niveau a explosé ! Ton corps a dit 'oui' à chaque défi que tu lui as proposé.",
-    islamique: "SubhanAllah, quelle évolution ! Ton corps est une amana qu'Allah t'a confiée. 🔥"
-  },
-  bilan_maintien: {
-    titre: "Constance précieuse ce cycle 🌿",
-    corps: "Tu as consolidé ton niveau — c'est de la sagesse. Ton corps maîtrise maintenant chaque mouvement.",
-    islamique: "La constance dans l'effort, c'est ce qu'Allah aime. Masha'Allah pour ta régularité. ✨"
-  },
-  bilan_descente: {
-    titre: "Tu t'es écoutée ce cycle 💜",
-    corps: "Ralentir, c'est de l'intelligence corporelle. Tu as choisi la douceur — ton corps t'en remercie.",
-    islamique: "L'écoute de soi est une forme de gratitude envers Allah. Baarak Allahu fiki. 🌙"
-  },
-  bilan_premier: {
-    titre: "Ton premier cycle sportif ✨",
-    corps: "Tu as posé les bases — marche après marche, séance après séance. Quel courage de commencer !",
-    islamique: "Khayr al-umur awsatuha — le meilleur des actes est celui fait avec constance. 🌱"
-  },
-
-  // MOMENT FORT J1 NOUVEAU CYCLE
-  j1_decouverte: {
-    titre: "As-salamu alaykum, nouvelle cycleuse ! 🌟",
-    corps: "Ton premier cycle sportif commence. Chaque jour où tu bouges sera une victoire. Pas de pression — juste de la bienveillance.",
-    cta: "Je commence en douceur 🌱"
-  },
-  j1_construction: {
-    titre: "Masha'Allah pour ta constance ! 💚",
-    corps: "Cycle 2 — ton corps commence à reconnaître le rythme. Ce cycle, on construit ensemble une routine qui te ressemble.",
-    cta: "Je continue ma progression 🌿"
-  },
-  j1_construction_avancee: {
-    titre: "Ton rythme se dessine ! 🔥",
-    corps: "Cycle 3 — tes habitudes deviennent naturelles. Ce cycle, on pousse un peu plus loin. Tu es prête.",
-    cta: "Je relève le défi 💪"
-  },
-  j1_performance: {
-    titre: "Athlète du quotidien ! ⚡",
-    corps: "Cycle 4 et plus — tu maîtrises maintenant l'art de bouger selon tes phases. Ce cycle, on vise l'excellence dans la douceur.",
-    cta: "Je perfectionne mon art ✨"
-  },
-
-  // MONTÉES DE NIVEAU
-  toast_montee_N1_N2: "Tu passes À ton rythme 🌿 — Masha'Allah, chaque séance t'a menée ici !",
-  toast_montee_N1_N3: "Bond incroyable vers Vitalité 🔥 — SubhanAllah, quelle progression !",
-  toast_montee_N1_N4: "Direct en Pleine puissance ⚡ — Allah a béni ta détermination !",
-  toast_montee_N2_N3: "Vitalité débloquée 🔥 — ton corps était prêt depuis longtemps !",
-  toast_montee_N2_N4: "Saut vers Pleine puissance ⚡ — Alhamdulillah pour cette force !",
-  toast_montee_N3_N4: "Pleine puissance atteinte ⚡ — le summum de ta forme, Masha'Allah !",
-
-  // DESCENTES DE NIVEAU
-  toast_descente_N2_N1: "Retour à Essentielle 🌱 — l'écoute de soi est une sagesse. 💜",
-  toast_descente_N3_N2: "À ton rythme retrouvé 🌿 — parfait pour cette période.",
-  toast_descente_N4_N3: "Vitalité ajustée 🔥 — ton corps demandait de la douceur.",
-  toast_descente_N3_N1: "Essentielle choisie 🌱 — quelques fois, revenir aux bases est ce qu'il faut.",
-  toast_descente_N4_N2: "À ton rythme sélectionné 🌿 — l'intelligence du corps qui s'exprime.",
-  toast_descente_N4_N1: "Essentielle privilégiée 🌱 — le repos actif, c'est aussi du courage.",
-
-  // RECORDS AMRAP ÉTÉ
-  record_affiche: "Ton record : {nb} tours ⚡",
-  record_nouveau: "Nouveau record ⚡ — Alhamdulillah, tu t'es surpassée !",
-  record_egal: "Record égalé ⚡ — constance au sommet, Masha'Allah !",
-  record_aucun: "Pose ton premier record aujourd'hui ☀️",
-  record_encouragement: "Ton record t'attend — donne ce que tu peux ! 🔥",
-
-  // STREAKS
-  streak_3: "3 séances d'affilée ! 🌿 L'habitude germe...",
-  streak_5: "5 séances consécutives ! 🔥 Ton corps s'habitue à cette belle routine.",
-  streak_7: "Une semaine complète ! ⚡ Masha'Allah, quelle constance !",
-  streak_10: "10 séances — tu es maintenant une habituée ! 🌟 Allah a béni cette persévérance.",
-  streak_15: "15 séances — SubhanAllah ! Tu incarnes la régularité dans l'effort. 💎",
-  streak_21: "21 jours — l'habitude est ancrée ! 🌱 Cette constance est un cadeau d'Allah.",
-  streak_30: "Un mois complet ! 🏆 Alhamdulillahi rabbi al-alameen pour cette force intérieure.",
-
-  // TRANSITIONS INTER-CYCLES
-  transition_cycle1_vers_2: "Cycle 1 terminé ! 🎉 Tu entres en phase Construction — ton corps a compris le message.",
-  transition_cycle3_vers_4: "3 cycles accomplis ! ⚡ Bienvenue en mode Performance — tu es une vraie athlète maintenant.",
-  transition_construction: "Construction continue 🌿 — chaque cycle te rend plus forte, Masha'Allah.",
-  transition_performance: "Performance maintenue ⚡ — tu es dans l'excellence, Alhamdulillah pour cette constance !"
 };
 
 // ═══════════════════════════════════════════════
@@ -494,7 +370,7 @@ function _buildWelcomeEmailHtml(prenom, email) {
         <div style="background:#F0F7F3;border-radius:14px;padding:24px 28px;">
           <p style="font-family:Georgia,serif;font-size:17px;font-weight:700;color:#4A7C59;margin:0 0 16px;">Chaque jour tu trouveras</p>
           <table width="100%" cellpadding="0" cellspacing="6" border="0">
-            <tr><td style="padding:5px 0;font-size:15px;color:#2C2018;">✦ &nbsp;Une séance adaptée à ton énergie</td></tr>
+            <tr><td style="padding:5px 0;font-size:15px;color:#2C2018;">✦ &nbsp;Un conseil mouvement adapté à ton énergie</td></tr>
             <tr><td style="padding:5px 0;font-size:15px;color:#2C2018;">✦ &nbsp;Des recettes pour tes hormones</td></tr>
             <tr><td style="padding:5px 0;font-size:15px;color:#2C2018;">✦ &nbsp;Une routine beauté de saison</td></tr>
             <tr><td style="padding:5px 0;font-size:15px;color:#2C2018;">✦ &nbsp;Tes prières et ton dhikr</td></tr>
@@ -531,13 +407,13 @@ function _buildWelcomeEmailHtml(prenom, email) {
         </table>
       </td></tr>
 
-      <!-- ESSAI GRATUIT -->
+      <!-- APP GRATUITE -->
       <tr><td style="padding:28px 40px 0;">
         <div style="background:linear-gradient(135deg,#4A7C59,#3DAE8A);border-radius:14px;padding:24px 28px;text-align:center;">
-          <p style="font-family:Georgia,serif;font-size:20px;color:#ffffff;margin:0 0 10px;font-weight:700;">Ton essai gratuit · 20 jours</p>
+          <p style="font-family:Georgia,serif;font-size:20px;color:#ffffff;margin:0 0 10px;font-weight:700;">SakinApp est gratuite</p>
           <p style="font-size:14px;color:rgba(255,255,255,0.88);margin:0 0 18px;line-height:1.6;">
             Sans carte bancaire. Sans engagement.<br>
-            Explore toutes les fonctionnalités Premium.
+            Toutes les fonctionnalités t'accompagnent dès aujourd'hui.
           </p>
           <a href="https://sakinaap.com" style="display:inline-block;background:#ffffff;color:#4A7C59;text-decoration:none;font-size:15px;font-weight:700;padding:13px 32px;border-radius:50px;">Ouvrir SakinApp →</a>
         </div>
@@ -848,9 +724,6 @@ function setupAuthListener(sb) {
       document.getElementById('auth-screen').style.display = 'none';
       await loadFromSupabase(sb, session.user.id);
       ST.isAuthenticated = true;
-      await verifyPremiumFromDB(sb, session.user.id);
-      checkPaymentSuccess();
-      checkTrialEnd();
       checkDailyReset();
       checkWeeklyReset();
       if (ST.prenom && ST.cycleStart) {
@@ -895,8 +768,6 @@ async function loadFromSupabase(sb, userId) {
           ? remote.cycleHistory : ST.cycleHistory) || [],
         historiqueCycles: ((remote.historiqueCycles?.length || 0) > (ST.historiqueCycles?.length || 0)
           ? remote.historiqueCycles : ST.historiqueCycles) || [],
-        // Niveaux : garder le plus élevé
-        seanceLevel: Math.max(ST.seanceLevel || 1, remote.seanceLevel || 1),
         // Données vitales du cycle : Supabase si local absent
         cycleStart: ST.cycleStart || remote.cycleStart,
         cycleDuration: ST.cycleDuration || remote.cycleDuration || 28,
@@ -914,9 +785,6 @@ async function _doSyncToSupabase() {
     const toSave = { ...ST };
     delete toSave.currentSaison;
     delete toSave.currentDay;
-    delete toSave.isPremium;      // toujours recalculé depuis subscriptions
-    delete toSave.premiumPlan;
-    delete toSave.premiumSince;
     await _supabase.from('user_data').upsert({
       user_id: ST.supabaseUserId,
       data: toSave,
@@ -928,19 +796,6 @@ function syncToSupabase() {
   if (!ST.supabaseUserId || !_supabase) return;
   clearTimeout(_syncTimer);
   _syncTimer = setTimeout(_doSyncToSupabase, 800);
-}
-
-async function verifyPremiumFromDB(sb, userId) {
-  try {
-    const { data } = await sb.from('subscriptions').select('status,plan,current_period_end').eq('user_id', userId).single();
-    if (!data) { ST.isPremium = false; ST.premiumPlan = null; saveState(); return; }
-    const now = new Date().toISOString();
-    ST.isPremium = data.status === 'active' || data.status === 'past_due' ||
-      (data.status === 'canceled' && data.current_period_end && data.current_period_end > now);
-    ST.premiumPlan = ST.isPremium ? data.plan : null;
-    if (!ST.isPremium) ST.trialEnded = false;
-    saveState();
-  } catch(e) {}
 }
 
 // ═══════════════════════════════════════════════
@@ -1027,17 +882,6 @@ const SAISONS = {
       star: ['Lentilles','Épinards','Dattes'],
       eviter: ['Café en excès','Sel en excès','Sucre raffiné'],
     },
-    sport: {
-      seance: { name:'Douceur profonde', duration:'7 min', meta:'Sol · Tapis · Zéro impact',
-        exercices:[
-          {num:'01', name:'Respiration abdominale', detail:'Allongée, mains sur le ventre. 10 respirations.'},
-          {num:'02', name:'Étirement bas du dos', detail:'Genoux écartés, front au sol. 2 minutes.'},
-          {num:'03', name:'Rotation douce dos', detail:'Genoux pliés, tomber à droite/gauche. 5×.'},
-          {num:'04', name:'Étirement hanches', detail:'Genou sur la poitrine. 30 sec chaque côté.'},
-        ]
-      },
-      mouvements: ['Étirements doux','Mobilité du bassin','Étirement bas du dos','Respiration profonde','Marche contemplative']
-    },
     skincare: {
       whatHappens: 'Les hormones sont au plus bas — ta peau est plus sèche, plus sensible et la barrière cutanée est affaiblie.',
       actifs: [
@@ -1076,17 +920,6 @@ const SAISONS = {
       aliments: ['Graines de lin','Avocat','Œufs','Brocoli','Quinoa','Fruits rouges','Yaourt','Poulet','Noix','Pois chiches'],
       star: ['Graines de lin','Avocat','Quinoa'],
       eviter: ['Aliments trop lourds','Friture en excès','Sucre raffiné'],
-    },
-    sport: {
-      seance: { name:'Réveil en douceur', duration:'12 min', meta:'Mix sol + debout',
-        exercices:[
-          {num:'01', name:'Rotations d\'échauffement', detail:'Chevilles, épaules, cou. 2 minutes.'},
-          {num:'02', name:'10 squats lents', detail:'Descendre lentement, remonter en expirant.'},
-          {num:'03', name:'Gainage genoux', detail:'Planche sur les genoux. Tenir 20 sec. 3×.'},
-          {num:'04', name:'10 fentes alternées', detail:'Genou à 90°. 8 par jambe.'},
-        ]
-      },
-      mouvements: ['Pilates doux','Marche rapide','Squats doux','Fentes légères','Vélo tranquille']
     },
     skincare: {
       whatHappens: 'Les œstrogènes montent — ta peau devient plus lumineuse. C\'est la meilleure phase pour les soins actifs.',
@@ -1127,17 +960,6 @@ const SAISONS = {
       star: ['Pastèque','Concombre','Graines de courge'],
       eviter: ['Plats trop lourds','Excès de caféine','Pro-inflammatoires'],
     },
-    sport: {
-      seance: { name:'Circuit énergie', duration:'18 min', meta:'Mix debout + sol',
-        exercices:[
-          {num:'01', name:'Marche sur place', detail:'2 minutes en montant progressivement.'},
-          {num:'02', name:'12 squats', detail:'3 séries. Descendre lentement, remonter fort.'},
-          {num:'03', name:'10 pompes modifiées', detail:'Sur les genoux ou contre le mur.'},
-          {num:'04', name:'30 sec gainage', detail:'Planche complète ou genoux. 3 fois.'},
-        ]
-      },
-      mouvements: ['HIIT doux','Cardio léger','Renforcement','Danse','Pompes','Squats sautés doux']
-    },
     skincare: {
       whatHappens: 'Pic d\'œstrogènes — ta peau est au meilleur d\'elle-même. Mais le pic hormonal peut stimuler les glandes sébacées.',
       actifs: [
@@ -1176,17 +998,6 @@ const SAISONS = {
       aliments: ['Chocolat noir 70%+','Amandes','Banane','Patate douce','Lentilles','Dattes','Avoine','Courge'],
       star: ['Chocolat noir','Amandes','Banane'],
       eviter: ['Café en excès','Sel (rétention)','Sucre raffiné'],
-    },
-    sport: {
-      seance: { name:'Libération SPM', duration:'12 min', meta:'Mix sol + mur',
-        exercices:[
-          {num:'01', name:'Respiration libératrice', detail:'Inspirer 4, retenir 4, expirer 8. 5 cycles.'},
-          {num:'02', name:'Ouverture hanches au mur', detail:'Plantes des pieds ensemble. 2 minutes.'},
-          {num:'03', name:'Pont fessier lent', detail:'Mouvement fluide. 10 fois.'},
-          {num:'04', name:'Legs up the wall', detail:'Jambes à la verticale. 3 minutes. Yeux fermés.'},
-        ]
-      },
-      mouvements: ['Marche en plein air','Circuit léger','Yoga doux','Étirements profonds','Respiration libératrice']
     },
     skincare: {
       whatHappens: 'La chute des œstrogènes et la dominance de la progestérone augmentent la sensibilité des glandes sébacées — d\'où les poussées d\'acné hormonale fréquentes en fin de cycle.',
@@ -1409,9 +1220,9 @@ function computeCycle() {
       const nextStart = new Date(sy, sm - 1, sd + (i + 1) * dur);
       const nextStr = nextStart.getFullYear() + '-' + String(nextStart.getMonth()+1).padStart(2,'0') + '-' + String(nextStart.getDate()).padStart(2,'0');
       if (!ST.cycleHistory.find(c => c.start === cStr)) {
-        const snap = (i === 0) ? _bilanStats(cStr, nextStr) : { seanceCount: 0, prayerDays: 0, symptomDays: 0 };
+        const snap = (i === 0) ? _bilanStats(cStr, nextStr) : { prayerDays: 0, symptomDays: 0 };
         ST.cycleHistory.unshift({ start: cStr, duration: dur,
-          seanceCount: snap.seanceCount, prayerDays: snap.prayerDays, symptomDays: snap.symptomDays });
+          prayerDays: snap.prayerDays, symptomDays: snap.symptomDays });
         if (ST.cycleHistory.length > 6) ST.cycleHistory = ST.cycleHistory.slice(0, 6);
       }
     }
@@ -1422,13 +1233,9 @@ function computeCycle() {
     effectiveCycleNum = 0;
     saveState();
   }
-  // Detect new cycle — reset per-cycle flags
+  // Detect new cycle
   if (ST._lastCycleNum !== effectiveCycleNum) {
     ST._lastCycleNum = effectiveCycleNum;
-    ST.printempsUpgradeDone = false;
-    ST.printempsBasCount = 0;
-    ST._proposeNewEx5 = false;
-    ST.seanceSurpriseShownCycle = false;
   }
   ST.currentDay = Math.max(1, Math.min(day, dur));
 
@@ -1441,10 +1248,6 @@ function computeCycle() {
   else ST.currentSaison = 'automne';
 
   if (ST._lastSaison && ST._lastSaison !== ST.currentSaison) {
-    // Reset du compteur Été lors d'un nouveau cycle Été
-    if (ST.currentSaison === 'ete' && ST._lastSaison !== 'ete') {
-      ST.eteSessionIdx = 0;
-    }
     const phaseToasts = {
       hiver:     ['❄️', 'Ton Hiver est là', 'Prends soin de toi, doucement.'],
       printemps: ['🌱', 'Bienvenue au Printemps !', 'L\'énergie revient — savoure-la.'],
@@ -1469,134 +1272,6 @@ function showPhaseToast(emoji, title, sub) {
     el.classList.remove('visible');
     setTimeout(() => el.remove(), 500);
   }, 4500);
-}
-
-// ═══════════════════════════════════════════════
-// PAIEMENT STRIPE — DÉTECTION RETOUR SUCCESS URL
-// ═══════════════════════════════════════════════
-function _activatePremium(plan) {
-  ST.isPremium = true;
-  ST.trialEnded = false;
-  ST.premiumPlan = plan;
-  ST.premiumSince = new Date().toISOString().split('T')[0];
-  saveState();
-  window.history.replaceState({}, '', '/');
-  setTimeout(() => {
-    applyTrialLocks();
-    showPhaseToast('🌸', 'Bienvenue en Premium !', 'Toutes les fonctionnalités sont débloquées.');
-  }, 1200);
-}
-
-async function checkPaymentSuccess() {
-  const params = new URLSearchParams(window.location.search);
-  // Seul chemin valide : session_id Stripe vérifié côté serveur
-  const sessionId = params.get('session_id');
-  if (sessionId && sessionId.startsWith('cs_')) {
-    showToast('Vérification du paiement… 🌙');
-    window.history.replaceState({}, '', '/');
-    try {
-      const sb = await initSupabase();
-      const { data: { session } } = await sb?.auth.getSession() || { data: { session: null } };
-      const jwt = session?.access_token;
-      if (!jwt) return;
-      const r = await fetch('/api/verify-session?id=' + encodeURIComponent(sessionId), {
-        headers: { Authorization: 'Bearer ' + jwt }
-      });
-      const data = r.ok ? await r.json() : null;
-      if (data && data.valid) _activatePremium(data.plan || 'monthly');
-    } catch (_) {}
-  } else if (params.has('success') || params.has('payment')) {
-    window.history.replaceState({}, '', '/');
-  }
-}
-
-// ═══════════════════════════════════════════════
-// TRIAL
-// ═══════════════════════════════════════════════
-function getTrialDays() {
-  if (!ST.installDate) return 0;
-  const days = Math.floor((Date.now() - ST.installDate) / 86400000);
-  if (days < 0) { ST.installDate = Date.now(); saveState(); return 0; }
-  return days;
-}
-function isFullAccess() { return ST.isPremium || getTrialDays() < 20; }
-
-function checkTrialEnd() {
-  if (ST.isPremium || ST.trialEnded) return;
-  if (getTrialDays() >= 20) {
-    ST.trialEnded = true;
-    if (!ST.bilanShown) {
-      ST.bilanShown = true;
-      saveState();
-      setTimeout(showBilanModal, 1200);
-    } else {
-      saveState();
-    }
-  }
-}
-
-function renderTrialCard() {
-  const el = document.getElementById('trial-status-card');
-  const upsell = document.getElementById('premium-upsell-card');
-  if (!el) return;
-  const days = getTrialDays();
-  const remaining = Math.max(0, 20 - days);
-  if (upsell) upsell.style.display = ST.isPremium ? 'none' : '';
-  const codeCard = document.getElementById('premium-code-card');
-  if (codeCard) codeCard.style.display = ST.isPremium ? 'none' : '';
-  const manageRow = document.getElementById('manage-sub-row');
-  if (manageRow) manageRow.style.display = ST.supabaseUserId ? '' : 'none';
-  if (ST.isPremium) {
-    const planLabel = ST.premiumPlan === 'monthly' ? 'mensuel' : ST.premiumPlan === 'annual' ? 'annuel' : '';
-    el.innerHTML = `
-      <div style="display:flex;align-items:center;gap:12px;background:var(--season-grad);border-radius:16px;padding:14px 16px;">
-        <span style="font-size:22px;">✨</span>
-        <div>
-          <div style="font-size:14px;font-weight:700;color:white;font-family:var(--sans);">Membre Premium 🌸</div>
-          ${planLabel ? `<div style="font-size:11px;color:rgba(255,255,255,.78);margin-top:2px;">Abonnement ${planLabel}</div>` : ''}
-        </div>
-      </div>`;
-  } else if (remaining > 0) {
-    const pct = Math.round((days / 20) * 100);
-    el.innerHTML = `
-      <div style="background:white;border:1.5px solid var(--sable);border-radius:16px;padding:14px 16px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-          <div style="font-size:13px;font-weight:700;color:var(--noir);font-family:var(--sans);">✨ Essai gratuit</div>
-          <div style="font-size:11px;color:var(--gris);font-weight:600;">Jour ${days} / 20</div>
-        </div>
-        <div style="background:var(--sable);border-radius:6px;height:6px;margin-bottom:8px;overflow:hidden;">
-          <div style="height:100%;width:${pct}%;background:var(--season-grad);border-radius:6px;"></div>
-        </div>
-        <div style="font-size:11px;color:var(--gris);">Il te reste <strong>${remaining} jour${remaining > 1 ? 's' : ''}</strong> pour tout explorer</div>
-      </div>`;
-  } else {
-    el.innerHTML = `
-      <div style="background:var(--creme);border:1.5px solid var(--sable);border-radius:16px;padding:14px 16px;text-align:center;">
-        <div style="font-size:13px;font-weight:700;color:var(--noir);margin-bottom:10px;font-family:var(--sans);">Ton essai est terminé 🌸</div>
-        <button onclick="showBilanModal()" style="background:var(--season-grad);color:white;border:none;border-radius:12px;padding:10px 20px;font-size:13px;font-weight:700;font-family:var(--sans);cursor:pointer;">Voir les offres Premium</button>
-      </div>`;
-  }
-}
-
-function checkJ17Banner() {
-  const el = document.getElementById('trial-banner-j17');
-  if (!el) return;
-  const days = getTrialDays();
-  if (ST.isPremium || ST.trialBannerDismissed || days < 17 || days >= 20) {
-    el.style.display = 'none';
-    return;
-  }
-  const remaining = 20 - days;
-  const textEl = document.getElementById('trial-banner-text');
-  if (textEl) textEl.textContent = `🌸 Plus que ${remaining} jour${remaining > 1 ? 's' : ''} pour profiter de tout SakinApp. L'onglet Âme reste toujours gratuit ✨`;
-  el.style.display = 'block';
-}
-
-function dismissTrialBanner() {
-  ST.trialBannerDismissed = true;
-  saveState();
-  const el = document.getElementById('trial-banner-j17');
-  if (el) el.style.display = 'none';
 }
 
 function _bilanStats(startStr, endStr) {
@@ -1629,8 +1304,6 @@ function _bilanStats(startStr, endStr) {
     return cycleDay >= 1 && cycleDay < springStartD;
   };
 
-  const seanceCount = Object.keys(ST.seanceDone || {}).filter(inCycle).length;
-  const seanceLevel = ST.seanceLevel || 1;
   const symptomDays = Object.keys(ST.symptomes || {}).filter(d => inCycle(d) && (ST.symptomes[d]||[]).length > 0).length;
   const prayerDays = Object.keys(ST.prayers || {}).filter(d => {
     if (!inCycle(d) || isHaidhDay(d)) return false;
@@ -1676,29 +1349,18 @@ function _bilanStats(startStr, endStr) {
   // Prendre le maximum entre historique et fallback
   const objCheckCount = Math.max(objHistory.length, objCheckCountFallback);
 
-  return { seanceCount, seanceLevel, symptomDays, prayerDays, allPrayersDays, dhikrDays, coranDays, objCheckCount, cycleDuration };
+  return { symptomDays, prayerDays, allPrayersDays, dhikrDays, coranDays, objCheckCount, cycleDuration };
 }
 
 function showBilanModal() {
   const el = document.getElementById('bilan-modal');
   const body = document.getElementById('bilan-body');
   if (!el) return;
-  const { seanceCount, seanceLevel, symptomDays, prayerDays, allPrayersDays, dhikrDays, coranDays, objCheckCount, cycleDuration } = _bilanStats();
+  const { symptomDays, prayerDays, allPrayersDays, dhikrDays, coranDays, objCheckCount, cycleDuration } = _bilanStats();
 
-  const joursSuivis = ST.cycleStart
-    ? Math.min(ST.currentDay || 1, ST.cycleDuration || 28)
-    : Math.min(getTrialDays() || 0, 20);
+  const joursSuivis = Math.min(ST.currentDay || 1, ST.cycleDuration || 28);
   const headerDays = document.getElementById('bilan-header-days');
   if (headerDays) headerDays.textContent = `tu as traversé ${joursSuivis} jour${joursSuivis > 1 ? 's' : ''}`;
-
-  const spiritualScore = prayerDays + dhikrDays + coranDays;
-  const corpsScore = seanceCount * 2;
-  const mainStrength = spiritualScore >= corpsScore ? '🕌 Âme' : '💪 Corps';
-
-  const sportMsg = seanceCount === 0 ? 'Prête à démarrer le prochain cycle 💪'
-    : seanceCount < 4 ? 'Tu as fait tes premiers pas — continue !'
-    : seanceCount < 8 ? 'Tu as bâti une vraie habitude 🌱'
-    : 'Tu es une guerrière du mouvement 🔥';
 
   if (body) body.innerHTML = `
     <div class="bilan-journey">
@@ -1710,17 +1372,7 @@ function showBilanModal() {
       <span class="bilan-phase-arrow">→</span>
       <span class="bilan-phase-chip bilan-automne">🍂 Automne</span>
     </div>
-    <div class="bilan-strength-line">Ta force ce cycle&nbsp;: <strong>${mainStrength}</strong> · ${joursSuivis} jour${joursSuivis > 1 ? 's' : ''} traversé${joursSuivis > 1 ? 's' : ''}</div>
-
-    <div class="bilan-section-lbl">💪 Corps</div>
-    <div class="bilan-grid-3">
-      <div class="bilan-stat"><span class="bilan-stat-num">${seanceCount}</span><span class="bilan-stat-lbl">séances sport</span></div>
-      <div class="bilan-stat"><span class="bilan-stat-num bilan-level">Niv.${seanceLevel}</span><span class="bilan-stat-lbl">niveau atteint</span></div>
-      <div class="bilan-stat"><span class="bilan-stat-num">${symptomDays}</span><span class="bilan-stat-lbl">jours de symptômes</span></div>
-    </div>
-    <div class="bilan-note">${sportMsg}${symptomDays > 0 ? ' · ' + symptomDays + ' jour' + (symptomDays>1?'s':'') + ' d\'écoute de ton corps 🌸' : ''}</div>
-
-    ${renderBilanSport()}
+    <div class="bilan-strength-line">${joursSuivis} jour${joursSuivis > 1 ? 's' : ''} traversé${joursSuivis > 1 ? 's' : ''} ce cycle</div>
 
     <div class="bilan-section-lbl">🕌 Âme</div>
     <div class="bilan-grid-2">
@@ -1729,6 +1381,10 @@ function showBilanModal() {
       <div class="bilan-stat"><span class="bilan-stat-num">${dhikrDays}</span><span class="bilan-stat-lbl">jours de dhikr</span></div>
       <div class="bilan-stat"><span class="bilan-stat-num">${coranDays}</span><span class="bilan-stat-lbl">jours de Coran</span></div>
     </div>
+
+    ${symptomDays > 0 ? `
+    <div class="bilan-note">${symptomDays} jour${symptomDays > 1 ? 's' : ''} d'écoute de ton corps 🌸</div>
+    ` : ''}
 
     ${objCheckCount > 0 ? `
     <div class="bilan-section-lbl">🎯 Objectifs</div>
@@ -1765,363 +1421,11 @@ function showBilanModal() {
     </div>
     <div class="bilan-ame-note">L&apos;onglet &#194;me reste toujours accessible gratuitement.<br>Tes pri&#232;res, ton dhikr et le Coran t&apos;appartiennent.</div>
   `;
-  const footer = document.getElementById('bilan-footer');
-  if (footer) footer.style.display = (ST.isPremium || getTrialDays() < 20) ? 'none' : '';
   el.classList.add('open');
 }
 function closeBilanModal() {
   const el = document.getElementById('bilan-modal');
   if (el) el.classList.remove('open');
-  applyTrialLocks();
-}
-
-// ═══════════════════════════════════════════════
-// BILAN SPORT FIN DE CYCLE
-// ═══════════════════════════════════════════════
-function renderBilanSport() {
-  const _LEVEL_NAMES = ['Essentielle', 'À ton rythme', 'Vitalité', 'Pleine puissance'];
-  const _lvlName = (n) => `${_LEVEL_NAMES[(n||1)-1] || ''}`;
-
-  // Calculer les séances ce cycle
-  const { seanceCount, seanceLevel } = _bilanStats();
-
-  // Calculer la phase la plus active
-  const phaseCounts = { hiver: 0, printemps: 0, ete: 0, automne: 0 };
-  if (ST.seanceDone && ST.cycleStart) {
-    const cycleStartDate = new Date(ST.cycleStart);
-    const dur = ST.cycleDuration || 28;
-    const hiverEnd = ST.hiverEnd || 5;
-    const springEnd = Math.round(dur * 0.46);
-    const summerEnd = Math.round(dur * 0.61);
-    Object.keys(ST.seanceDone).forEach(dateStr => {
-      if (ST.seanceDone[dateStr] === true || ST.seanceDone[dateStr] === 'express' || ST.seanceDone[dateStr] === 'repos-actif') {
-        const date = new Date(dateStr);
-        if (!isNaN(date) && date >= cycleStartDate) {
-          const cycleDay = Math.floor((date - cycleStartDate) / 86400000) + 1;
-          if (cycleDay <= hiverEnd) phaseCounts.hiver++;
-          else if (cycleDay <= springEnd) phaseCounts.printemps++;
-          else if (cycleDay <= summerEnd) phaseCounts.ete++;
-          else phaseCounts.automne++;
-        }
-      }
-    });
-  }
-
-  const phaseActive = Object.entries(phaseCounts).reduce((a, b) =>
-    phaseCounts[a[0]] >= phaseCounts[b[0]] ? a : b
-  )[0];
-  const phaseEmoji = { hiver: '🌙', printemps: '🌿', ete: '☀️', automne: '🍂' };
-  const phaseNom = { hiver: 'Hiver', printemps: 'Printemps', ete: 'Été', automne: 'Automne' };
-
-  // Message selon progression depuis le cycle précédent
-  const histCycles = ST.cycleHistory || [];
-  const previousLevel = histCycles.length > 0 ? histCycles[histCycles.length - 1].finalSeanceLevel || 1 : 1;
-  const currentLevel = seanceLevel || 1;
-
-  let bilanMessage, quote;
-
-  if (histCycles.length === 0) {
-    // Premier cycle
-    bilanMessage = SPORT_PROGRESSION_MESSAGES.bilan_premier;
-  } else if (currentLevel > previousLevel) {
-    // Montée de niveau
-    if (currentLevel - previousLevel >= 2) {
-      bilanMessage = SPORT_PROGRESSION_MESSAGES.bilan_montee_grande;
-    } else {
-      bilanMessage = SPORT_PROGRESSION_MESSAGES.bilan_montee;
-    }
-  } else if (currentLevel === previousLevel) {
-    // Maintien
-    bilanMessage = SPORT_PROGRESSION_MESSAGES.bilan_maintien;
-  } else {
-    // Descente
-    bilanMessage = SPORT_PROGRESSION_MESSAGES.bilan_descente;
-  }
-
-  return `
-    <div class="bilan-section-lbl">💪 Bilan sportif</div>
-    <div class="bilan-sport-summary">
-      <div class="bilan-sport-header">
-        <div class="bilan-sport-niveau">${_lvlName(currentLevel)}</div>
-        <div class="bilan-sport-seances">${seanceCount} séance${seanceCount > 1 ? 's' : ''} ce cycle</div>
-      </div>
-
-      ${phaseCounts[phaseActive] > 0 ? `
-      <div class="bilan-sport-phase">
-        Phase la plus active : <strong>${phaseEmoji[phaseActive]} ${phaseNom[phaseActive]}</strong>
-      </div>
-      ` : ''}
-
-      <div class="bilan-sport-message">
-        <div class="bilan-sport-titre">${bilanMessage.titre}</div>
-        <div class="bilan-sport-corps">${bilanMessage.corps}</div>
-        <div class="bilan-sport-islamique">${bilanMessage.islamique}</div>
-      </div>
-    </div>
-  `;
-}
-
-// ═══════════════════════════════════════════════
-// MOMENT FORT J1 NOUVEAU CYCLE
-// ═══════════════════════════════════════════════
-function showJ1SportModal() {
-  if (ST.currentSaison !== 'hiver' || ST.currentDay !== 1) return;
-  if (document.getElementById('j1-sport-modal')) return;
-
-  // Vérifier si déjà affiché ce cycle
-  const currentCycleNum = (ST.cycleHistory || []).length + 1;
-  if (ST.j1ModalShownCycle === currentCycleNum) return;
-
-  // Déterminer le niveau inter-cycles
-  const cycleCount = currentCycleNum;
-  let messageKey;
-
-  if (cycleCount <= 1) {
-    messageKey = 'j1_decouverte';
-  } else if (cycleCount === 2) {
-    messageKey = 'j1_construction';
-  } else if (cycleCount === 3) {
-    messageKey = 'j1_construction_avancee';
-  } else {
-    messageKey = 'j1_performance';
-  }
-
-  const message = SPORT_PROGRESSION_MESSAGES[messageKey];
-
-  // Créer et afficher la modal
-  const modalHtml = `
-    <div id="j1-sport-modal" class="modal" style="z-index: 1000;">
-      <div class="modal-content" style="max-width: 340px;">
-        <div class="modal-header">
-          <h3 style="margin:0;color:var(--season-color);font-family:var(--serif);">${message.titre}</h3>
-        </div>
-        <div class="modal-body" style="padding:20px 0;">
-          <p style="line-height:1.6;margin:0 0 20px 0;">${message.corps}</p>
-        </div>
-        <div class="modal-footer">
-          <button onclick="closeJ1SportModal()" class="btn-primary" style="width:100%;">
-            ${message.cta}
-          </button>
-        </div>
-      </div>
-    </div>
-  `;
-
-  // Ajouter la modal au DOM si elle n'existe pas
-  let modal = document.getElementById('j1-sport-modal');
-  if (!modal) {
-    document.body.insertAdjacentHTML('beforeend', modalHtml);
-    modal = document.getElementById('j1-sport-modal');
-  }
-
-  // Marquer comme affiché pour ce cycle
-  ST.j1ModalShownCycle = currentCycleNum;
-  saveState();
-
-  // Afficher la modal avec délai
-  setTimeout(() => {
-    if (modal) modal.classList.add('open');
-  }, 800);
-}
-
-function closeJ1SportModal() {
-  const modal = document.getElementById('j1-sport-modal');
-  if (modal) modal.classList.remove('open');
-}
-
-// ═══════════════════════════════════════════════
-// HELPERS POUR MESSAGES DE PROGRESSION
-// ═══════════════════════════════════════════════
-function getProgressionToast(oldLevel, newLevel, isUpgrade = true) {
-  if (isUpgrade) {
-    // Messages de montée
-    if (oldLevel === 1 && newLevel === 2) return SPORT_PROGRESSION_MESSAGES.toast_montee_N1_N2;
-    if (oldLevel === 1 && newLevel === 3) return SPORT_PROGRESSION_MESSAGES.toast_montee_N1_N3;
-    if (oldLevel === 1 && newLevel === 4) return SPORT_PROGRESSION_MESSAGES.toast_montee_N1_N4;
-    if (oldLevel === 2 && newLevel === 3) return SPORT_PROGRESSION_MESSAGES.toast_montee_N2_N3;
-    if (oldLevel === 2 && newLevel === 4) return SPORT_PROGRESSION_MESSAGES.toast_montee_N2_N4;
-    if (oldLevel === 3 && newLevel === 4) return SPORT_PROGRESSION_MESSAGES.toast_montee_N3_N4;
-  } else {
-    // Messages de descente
-    if (oldLevel === 2 && newLevel === 1) return SPORT_PROGRESSION_MESSAGES.toast_descente_N2_N1;
-    if (oldLevel === 3 && newLevel === 2) return SPORT_PROGRESSION_MESSAGES.toast_descente_N3_N2;
-    if (oldLevel === 3 && newLevel === 1) return SPORT_PROGRESSION_MESSAGES.toast_descente_N3_N1;
-    if (oldLevel === 4 && newLevel === 3) return SPORT_PROGRESSION_MESSAGES.toast_descente_N4_N3;
-    if (oldLevel === 4 && newLevel === 2) return SPORT_PROGRESSION_MESSAGES.toast_descente_N4_N2;
-    if (oldLevel === 4 && newLevel === 1) return SPORT_PROGRESSION_MESSAGES.toast_descente_N4_N1;
-  }
-
-  // Fallback si message spécifique pas trouvé
-  if (isUpgrade) {
-    return `✨ Niveau ${newLevel} — tu avances à ton rythme. Alhamdulillah 🌿`;
-  } else {
-    return `💛 Niveau ${newLevel} — écouter son corps, c'est de la sagesse.`;
-  }
-}
-
-// ═══════════════════════════════════════════════
-// CALCUL DU STREAK SPORTIF
-// ═══════════════════════════════════════════════
-function calculateSportStreak() {
-  if (!ST.seanceDone) return 0;
-
-  const today = new Date();
-  let streak = 0;
-  let currentDate = new Date(today);
-
-  // Remonter jour par jour en partant d'aujourd'hui
-  while (true) {
-    const dateStr = currentDate.toDateString();
-    const seanceStatus = ST.seanceDone[dateStr];
-
-    // Si séance faite ce jour (true, 'express', ou 'repos-actif')
-    if (seanceStatus === true || seanceStatus === 'express' || seanceStatus === 'repos-actif') {
-      streak++;
-    } else if (seanceStatus === 'reportee') {
-      // Reporter casse le streak, on s'arrête
-      break;
-    } else if (!seanceStatus) {
-      // Pas d'entrée pour ce jour, on s'arrête
-      break;
-    }
-
-    // Reculer d'un jour
-    currentDate.setDate(currentDate.getDate() - 1);
-
-    // Protection contre boucle infinie
-    if (streak > 100) break;
-  }
-
-  return streak;
-}
-
-function showStreakToast(streak) {
-  let message = null;
-
-  switch (streak) {
-    case 3: message = SPORT_PROGRESSION_MESSAGES.streak_3; break;
-    case 5: message = SPORT_PROGRESSION_MESSAGES.streak_5; break;
-    case 7: message = SPORT_PROGRESSION_MESSAGES.streak_7; break;
-    case 10: message = SPORT_PROGRESSION_MESSAGES.streak_10; break;
-    case 15: message = SPORT_PROGRESSION_MESSAGES.streak_15; break;
-    case 21: message = SPORT_PROGRESSION_MESSAGES.streak_21; break;
-    case 30: message = SPORT_PROGRESSION_MESSAGES.streak_30; break;
-  }
-
-  if (message) {
-    showToast(message);
-  }
-}
-
-function bilanUpgrade() {
-  closeBilanModal();
-  switchTabById('moi');
-}
-
-// ── STRIPE ────────────────────────────────────────
-let _selectedBilanPlan = 'annual'; // 'monthly' | 'annual'
-
-function selectBilanPlan(plan) {
-  _selectedBilanPlan = plan;
-  document.querySelectorAll('.bilan-plan-card').forEach(c => c.classList.remove('selected'));
-  const card = document.getElementById('plan-' + plan);
-  if (card) card.classList.add('selected');
-}
-
-function selectPlan(plan) {
-  _selectedBilanPlan = plan;
-  // Sync bilan modal cards
-  document.querySelectorAll('.bilan-plan-card').forEach(c => c.classList.remove('selected'));
-  const modalCard = document.getElementById('plan-' + plan);
-  if (modalCard) modalCard.classList.add('selected');
-  // Sync Moi tab cards
-  ['monthly','annual'].forEach(p => {
-    const el = document.getElementById('moi-plan-' + p);
-    if (!el) return;
-    if (p === plan) {
-      el.style.borderColor = '#C9A96E';
-      el.style.boxShadow = '0 0 0 2px #C9A96E';
-    } else {
-      el.style.borderColor = '#D4B87A';
-      el.style.boxShadow = 'none';
-    }
-  });
-}
-
-const STRIPE_LINKS = {
-  monthly: 'https://buy.stripe.com/bJe8wO69R2HTcUbgys8Ra01',
-  annual:  'https://buy.stripe.com/8x26oG55NfuF5rJbe88Ra02',
-};
-
-async function startStripeCheckout() {
-  const plan = _selectedBilanPlan || 'annual';
-  if (!ST.supabaseUserId) {
-    showToast('Connecte-toi pour souscrire. 🌙');
-    return;
-  }
-  const btn = (document.activeElement?.tagName === 'BUTTON') ? document.activeElement : null;
-  const origText = btn?.textContent;
-  if (btn) { btn.disabled = true; btn.textContent = 'Chargement…'; }
-  const params = new URLSearchParams({ plan });
-  try {
-    const sb = await initSupabase();
-    let session = (await sb?.auth.getSession().catch(() => null))?.data?.session;
-    if (!session?.access_token) {
-      // Token absent ou expiré — tentative de refresh silencieux
-      session = (await sb?.auth.refreshSession().catch(() => null))?.data?.session || null;
-    }
-    const jwt = session?.access_token;
-    if (!jwt) {
-      // Refresh échoué — repli sur le lien Stripe direct plutôt que bloquer
-      window.location.href = STRIPE_LINKS[plan] || STRIPE_LINKS.annual;
-      return;
-    }
-    const r = await fetch('/api/create-checkout?' + params.toString(), {
-      headers: { Authorization: 'Bearer ' + jwt }
-    });
-    const data = await r.json().catch(() => ({}));
-    if (data && data.url) { window.location.href = data.url; return; }
-    // Repli sur le lien Stripe direct si l'API échoue
-    console.error('create-checkout error:', data);
-    window.location.href = STRIPE_LINKS[plan] || STRIPE_LINKS.annual;
-  } catch (e) {
-    console.error('startStripeCheckout error:', e);
-    window.location.href = STRIPE_LINKS[plan] || STRIPE_LINKS.annual;
-  } finally {
-    if (btn) { btn.disabled = false; btn.textContent = origText; }
-  }
-}
-
-const STRIPE_PORTAL_URL = 'https://billing.stripe.com/p/login/8x2aEW8hZ4Q1cUbdmg8Ra00';
-
-async function openCustomerPortal() {
-  if (!ST.supabaseUserId) { window.location.href = STRIPE_PORTAL_URL; return; }
-  showToast('Redirection vers Stripe…');
-  try {
-    const sb = await initSupabase();
-    const { data: { session } } = await sb?.auth.getSession() || { data: { session: null } };
-    const jwt = session?.access_token;
-    const r = await fetch('/api/customer-portal?user_id=' + encodeURIComponent(ST.supabaseUserId), {
-      headers: jwt ? { Authorization: 'Bearer ' + jwt } : {}
-    });
-    const data = await r.json();
-    window.location.href = (data && data.url) ? data.url : STRIPE_PORTAL_URL;
-  } catch { window.location.href = STRIPE_PORTAL_URL; }
-}
-
-function applyTrialLocks() {
-  const active = isFullAccess();
-  ['day-card-skin','day-card-seance','day-card-repas'].forEach(id => {
-    const el = document.getElementById(id); if (el) el.style.display = active ? '' : 'none';
-  });
-  const sugg = document.querySelector('.sugg-engage-card');
-  if (sugg) sugg.style.display = active ? '' : 'none';
-  const la = document.getElementById('trial-lock-accueil'); if (la) la.style.display = active ? 'none' : 'block';
-  const lc = document.getElementById('trial-lock-cycle'); if (lc) lc.style.display = active ? 'none' : 'block';
-  const lo = document.getElementById('trial-lock-objectifs'); if (lo) lo.style.display = active ? 'none' : 'block';
-  const addWrap = document.getElementById('obj-perso-add-wrap'); if (addWrap) addWrap.style.display = active ? '' : 'none';
-  const sc = document.getElementById('symptomes-content'); if (sc) sc.style.display = active ? '' : 'none';
-  const gc = document.getElementById('glaire-content'); if (gc) gc.style.display = active ? '' : 'none';
 }
 
 function applySaisonTheme() {
@@ -2137,8 +1441,6 @@ function applySaisonTheme() {
   const av = document.querySelector('.av-btn');
   if (av) { av.style.background = s.grad; av.textContent = s.emoji; }
 
-  const _sh = document.getElementById('sport-header');
-  if (_sh) _sh.style.background = s.grad;
   const psCycle = document.getElementById('psCycle');
   if (psCycle) psCycle.textContent = s.nom + ' ' + s.emoji + ' · Jour ' + ST.currentDay;
 
@@ -2197,11 +1499,9 @@ function populateAll() {
 
   // ── MOI ──
   renderMoi(s);
-  renderTrialCard();
   renderCycleHistory();
   renderHistoriqueCycles();
   restoreFeedback();
-  checkJ17Banner();
 
   // RESTORE
   restorePrayers();
@@ -2209,20 +1509,7 @@ function populateAll() {
   restoreCoranCheck();
   restoreGlaire();
   restoreSymptomes();
-  restoreSeanceDone();
   setTimeout(showInstallBanner, 1500);
-  // Rattrapage : si l'upgrade Printemps n'a pas été montré et qu'on est en début d'Été
-  if (ST.currentSaison === 'ete' && !ST.printempsUpgradeDone) {
-    const dur2 = effectiveCycleDur();
-    const { eteStartD: eteStart2 } = phaseThresholds(dur2);
-    if (ST.currentDay <= eteStart2 + 1) {
-      ST.printempsUpgradeDone = true;
-      saveState();
-      const lv = ST.seanceLevel || 1;
-      if (lv >= 4 && !ST.levelMaxShown) { ST.levelMaxShown = true; saveState(); setTimeout(showLevelMax, 2000); }
-      else if (lv < 4) setTimeout(showPrintempsUpgrade, 2000);
-    }
-  }
 }
 
 // ═══════════════════════════════════════════════
@@ -2255,404 +1542,20 @@ function renderDashboard(s) {
   renderLectureDuJour();
 
   // ─ 3 cartes d'action ─
-  renderCarteBouger(s);
+  renderCarteMouvement(s);
   renderCarteRepas(s);
   renderCarteSkincare(s);
 
   // ─ Suggestions engageantes ─
   renderSuggestionsEngage(s);
-
-  // Trial locks
-  applyTrialLocks();
-
-  // Toggle Premium btn state
-  const pBtn = document.getElementById('premium-toggle-btn');
-  if (pBtn) {
-    pBtn.textContent = ST.isPremium ? '✦ Actif' : 'Inactif';
-    pBtn.style.background = ST.isPremium ? 'var(--season-grad)' : 'var(--sable)';
-    pBtn.style.color = ST.isPremium ? 'white' : 'var(--gris)';
-  }
-}
-
-
-function _sportEnrSectionHtml(items, label) {
-  if (!items || !items.length) return '';
-  const rows = items.map(item => {
-    const nom = item.exercice || item.nom || '';
-    const dur = item.duree || '';
-    const desc = item.description || '';
-    return `<div class="sport-ex-row sport-enr-row">
-      <div class="sport-ex-name-reps"><span class="sport-ex-name">${nom}</span><span class="sport-ex-reps">${dur}</span></div>
-      ${desc ? `<div class="sport-ex-detail">${desc}</div>` : ''}
-    </div>`;
-  }).join('');
-  return `<div class="sport-enr-section"><div class="sport-enr-label">${label}</div>${rows}</div>`;
-}
-
-function _sportExHtml(exercices, reposSec) {
-  if (!exercices || !exercices.length) return '';
-  const rows = exercices.map(ex => {
-    let repsStr = '';
-    if (ex.reps) {
-      repsStr = ex.parJambe
-        ? `${ex.sets || 1}×${ex.reps} / côté`
-        : `${ex.sets || 1}×${ex.reps}`;
-    } else if (ex.duree) {
-      if (ex.sets) {
-        repsStr = ex.parJambe
-          ? `${ex.sets}×${ex.duree} × 2 côtés`
-          : `${ex.sets}×${ex.duree}`;
-      } else {
-        repsStr = ex.parJambe
-          ? `${ex.duree} × 2 côtés`
-          : ex.duree;
-      }
-    }
-    return `<div class="sport-ex-row">
-      <div class="sport-ex-name-reps"><span class="sport-ex-name">${ex.nom}</span><span class="sport-ex-reps">${repsStr}</span></div>
-      ${ex.detail ? `<div class="sport-ex-detail">${ex.detail}</div>` : ''}
-    </div>`;
-  }).join('');
-  const reposHtml = reposSec ? `<div class="sport-repos-info">⏱ Repos : ${reposSec}s entre séries</div>` : '';
-  return rows + reposHtml;
-}
-
-function renderCarteBouger(s) {
-  // Protection : si SAISONS[ST.currentSaison] est undefined (ex: automne pas défini)
-  if (!s) {
-    console.warn('SAISONS[' + ST.currentSaison + '] non défini - skip renderCarteBouger');
-    return;
-  }
-
-  // Override fullBody si défini
-  const spec = _fullBodyOverride || getTodaySeanceSpec();
-  const today = new Date().toDateString();
-  const donVal = ST.seanceDone && ST.seanceDone[today];
-  const isDone = donVal === true || donVal === 'express' || donVal === 'repos-actif';
-  const isReported = donVal === 'reportee';
-
-  const nameEl = document.getElementById('qs-name');
-  const metaEl = document.getElementById('qs-meta');
-  const durEl = document.getElementById('qs-duration');
-  const exEl = document.getElementById('qs-exercises');
-  const btnWrap = document.getElementById('qs-btn-wrap');
-  const doneWrap = document.getElementById('qs-done-wrap');
-  const reportedWrap = document.getElementById('qs-reported-wrap');
-
-  if (!spec) {
-    if (nameEl) nameEl.textContent = '—';
-    return;
-  }
-
-  const level = ST.seanceLevel || 1;
-  const reposSec = (typeof SEANCES_SPORT !== 'undefined') ? (SEANCES_SPORT.printemps.niveauxRepos[level] || 45) : 45;
-
-  let titleText = '', metaText = '', durText = '', exContent = '', msgHtml = '', spirituelHtml = '', levelLabel = '';
-  const _LEVEL_NAMES = ['Essentielle', 'À ton rythme', 'Vitalité', 'Pleine puissance'];
-  const _lvlName = (n) => `Niveau ${n}/4 · ${_LEVEL_NAMES[(n||1)-1] || ''}`;
-
-  // Progression inter-cycles (déplacé avant le switch pour éviter les cas où SEANCES_SPORT n'est pas encore chargé)
-  const cycleCount = (ST.cycleHistory && ST.cycleHistory.length) || 0;
-  const cycleLevel = (typeof SEANCES_SPORT !== 'undefined' && SEANCES_SPORT.progressionInterCycles)
-    ? SEANCES_SPORT.progressionInterCycles.getCycleLevel(cycleCount)
-    : null;
-  const cycleConseils = cycleLevel ? SEANCES_SPORT.progressionInterCycles[cycleLevel] : null;
-
-  switch (spec.type) {
-    case 'hiver': {
-      const d = spec.data;
-      titleText = d.nom; metaText = 'Douceur menstruelle'; durText = d.duree;
-      levelLabel = _lvlName(spec.level || level);
-      const enrichieH = (typeof getSeanceEnrichie === 'function') ? getSeanceEnrichie('hiver', spec.level || level) : null;
-      exContent = _sportEnrSectionHtml(enrichieH && enrichieH.echauffement, '🔥 Échauffement')
-               + _sportExHtml(d.exercices)
-               + _sportEnrSectionHtml(enrichieH && enrichieH.retour_au_calme, '🌿 Retour au calme');
-      msgHtml = d.message;
-      spirituelHtml = (enrichieH && enrichieH.message_fin) || d.messageSpirituel;
-      break;
-    }
-    case 'repos': {
-      titleText = 'Jour de repos'; metaText = 'Choisis ton repos'; durText = '—';
-      const reposDone = ST.seanceDone && ST.seanceDone[today];
-      exContent = `<div class="sport-repos-options">
-        <div class="sport-repos-option" onclick="validerReposActif()">
-          <div class="sport-repos-opt-icon">🏃‍♀️</div>
-          <div><div class="sport-repos-opt-title">Repos actif</div>
-          <div class="sport-repos-opt-desc">Étirements 2 min + respiration</div>
-          <div class="sport-repos-opt-badge">Compte dans le streak</div></div>
-        </div>
-        <div class="sport-repos-option" onclick="choisirReposComplet()">
-          <div class="sport-repos-opt-icon">💤</div>
-          <div><div class="sport-repos-opt-title">Repos complet</div>
-          <div class="sport-repos-opt-desc">Ton corps construit pendant la récupération</div></div>
-        </div>
-      </div>`;
-      if (spec.message) msgHtml = spec.message;
-      break;
-    }
-    case 'printemps-bas':
-    case 'printemps-haut': {
-      const d = spec.data;
-      titleText = d.nom;
-      metaText = spec.type === 'printemps-bas' ? '🦵 Bas du corps' : '💪 Haut du corps';
-      durText = d.duree || '~25 min';
-      levelLabel = _lvlName(level);
-      const enrichieP = (typeof getSeanceEnrichie === 'function') ? getSeanceEnrichie('printemps', level) : null;
-      exContent = _sportEnrSectionHtml(enrichieP && enrichieP.echauffement, '🔥 Échauffement')
-               + _sportExHtml(d.exercices, reposSec)
-               + _sportEnrSectionHtml(enrichieP && enrichieP.retour_au_calme, '🌿 Retour au calme');
-      msgHtml = 'Bismillah — chaque mouvement est une ibada.';
-      spirituelHtml = (enrichieP && enrichieP.message_fin) || 'Ton corps est une amânah. Prends-en soin avec intention.';
-      break;
-    }
-    case 'ete-intense': {
-      const d = spec.data;
-      titleText = d.label; durText = `${d.duree} min`;
-      levelLabel = _lvlName(level);
-      if (d.type === 'emom') {
-        metaText = `${d.exercice} · ${d.reps} reps/min`;
-        exContent = `<div class="sport-emom-block">
-          <div class="sport-emom-label">EMOM ${d.duree} min</div>
-          <div class="sport-emom-exo">${d.exercice} — <strong>${d.reps} reps</strong> au début de chaque minute</div>
-          ${d.detail ? `<div class="sport-ex-detail">${d.detail}</div>` : ''}
-        </div>`;
-      } else {
-        metaText = 'Circuit AMRAP';
-        const record = ST.amrapRecord;
-        exContent = `<div class="sport-emom-block">
-          <div class="sport-emom-label">AMRAP ${d.duree} min</div>
-          ${(d.circuit || []).map(ex => `<div class="sport-amrap-exo">${ex.nom} — ${ex.reps} reps</div>`).join('')}
-          ${d.detail ? `<div class="sport-ex-detail">${d.detail}</div>` : ''}
-          <div class="sport-amrap-record">
-            ${record ? SPORT_PROGRESSION_MESSAGES.record_affiche.replace('{nb}', record) : SPORT_PROGRESSION_MESSAGES.record_aucun}
-          </div>
-          <div class="sport-amrap-input-wrap" id="amrap-input-wrap" ${isDone ? 'style="display:none"' : ''}>
-            <label class="sport-amrap-input-label">Combien de tours as-tu complétés ?</label>
-            <input type="number" id="amrap-score-input" min="1" max="99" placeholder="Nb de tours" class="sport-amrap-input">
-          </div>
-        </div>`;
-      }
-      msgHtml = 'Pousse fort — ton corps est à son pic de force.';
-      spirituelHtml = 'Allahou Akbar — rappelle-toi de Sa grandeur à chaque effort.';
-      break;
-    }
-    case 'ete-intense-haut': {
-      const d = spec.data;
-      titleText = d.exercice || d.label; durText = `${d.duree} min`;
-      metaText = '☀️ Haut du corps';
-      levelLabel = _lvlName(level);
-      if (d.type === 'emom') {
-        exContent = `<div class="sport-emom-block">
-          <div class="sport-emom-label">EMOM ${d.duree} min</div>
-          <div class="sport-emom-exo">${d.exercice} — <strong>${d.reps} reps</strong> au début de chaque minute</div>
-          ${d.detail ? `<div class="sport-ex-detail">${d.detail}</div>` : ''}
-        </div>`;
-      } else {
-        exContent = `<div class="sport-emom-block">
-          <div class="sport-emom-label">AMRAP ${d.duree} min</div>
-          ${(d.circuit || []).map(ex => `<div class="sport-amrap-exo">${ex.nom} — ${ex.reps} reps</div>`).join('')}
-          ${d.detail ? `<div class="sport-ex-detail">${d.detail}</div>` : ''}
-        </div>`;
-      }
-      msgHtml = 'Pousse fort — sculpte le haut de ton corps au pic de ta force.';
-      spirituelHtml = 'Allahou Akbar — rappelle-toi de Sa grandeur à chaque effort.';
-      break;
-    }
-    case 'ete-repos': {
-      titleText = 'Récupération'; metaText = 'Repos actif'; durText = '—';
-      exContent = `<div class="sport-repos-block"><div class="sport-repos-msg">${spec.message || ''}</div></div>`;
-      break;
-    }
-    case 'automne-actif': {
-      const d = spec.data;
-      titleText = d.nom; metaText = '🍂 Phase active';
-      durText = d.duree || '~25 min';
-      levelLabel = _lvlName(level);
-      const enrichieAA = (typeof getSeanceEnrichie === 'function') ? getSeanceEnrichie('automne', level) : null;
-      exContent = _sportEnrSectionHtml(enrichieAA && enrichieAA.echauffement, '🔥 Échauffement')
-               + _sportExHtml(d.exercices, reposSec)
-               + _sportEnrSectionHtml(enrichieAA && enrichieAA.retour_au_calme, '🌿 Retour au calme');
-      msgHtml = d.message || '';
-      spirituelHtml = d.messageSpirituel || (enrichieAA && enrichieAA.message_fin) || '';
-      break;
-    }
-    case 'automne-doux': {
-      const d = spec.data;
-      titleText = d.nom || 'Mobilité douce'; metaText = '🍂 Phase de transition'; durText = d.duree || '~15 min';
-      levelLabel = _lvlName(level);
-      const enrichieAD = (typeof getSeanceEnrichie === 'function') ? getSeanceEnrichie('automne', level) : null;
-      exContent = _sportEnrSectionHtml(enrichieAD && enrichieAD.echauffement, '🔥 Échauffement')
-               + _sportExHtml(d.exercices)
-               + _sportEnrSectionHtml(enrichieAD && enrichieAD.retour_au_calme, '🌿 Retour au calme');
-      msgHtml = d.message || '';
-      spirituelHtml = d.messageSpirituel || (enrichieAD && enrichieAD.message_fin) || '';
-      break;
-    }
-    case 'automne-fin': {
-      const d = spec.data;
-      titleText = d.nom || 'Douceur profonde'; metaText = '🍂 Fin de cycle'; durText = d.duree || '~10 min';
-      levelLabel = _lvlName(level);
-      const enrichieAF = (typeof getSeanceEnrichie === 'function') ? getSeanceEnrichie('automne', level) : null;
-      exContent = _sportExHtml(d.exercices)
-               + _sportEnrSectionHtml(enrichieAF && enrichieAF.retour_au_calme, '🌿 Retour au calme');
-      msgHtml = d.message || '';
-      spirituelHtml = d.messageSpirituel || (enrichieAF && enrichieAF.message_fin) || '';
-      break;
-    }
-    case 'calme': {
-      const d = spec.data;
-      titleText = d.nom; metaText = 'Ton cœur a besoin de calme'; durText = d.duree;
-      exContent = `<div class="sport-calme-detail">${d.detail}</div>
-        <button class="sport-calme-override-btn" onclick="choisirSeanceMalgreCalme()">Faire quand même ma séance →</button>`;
-      msgHtml = d.message; spirituelHtml = d.messageSpirituel;
-      break;
-    }
-    case 'fullbody': {
-      const d = spec.data;
-      titleText = d.nom; metaText = '💪 Corps entier'; durText = d.duree;
-      levelLabel = _lvlName(spec.level || level);
-      exContent = _sportExHtml(d.exercices);
-      msgHtml = d.message;
-      spirituelHtml = d.messageSpirituel;
-      break;
-    }
-  }
-
-  if (nameEl) nameEl.textContent = titleText;
-  if (metaEl) metaEl.textContent = metaText;
-  if (durEl) durEl.textContent = durText;
-
-  // Options fullBody et cardioDoux
-  let optionsHtml = '';
-  if (!isDone && !isReported && !_fullBodyOverride) {
-    const phase = ST.currentSaison;
-    const level = ST.seanceLevel || 1;
-    const micro = (phase === 'automne') ? getAutomneMicroPhase(ST.currentDay, effectiveCycleDur()) : null;
-
-    // Full Body
-    const hasFullBody = (phase === 'printemps' && SEANCES_SPORT.printemps?.fullBody?.[level]) ||
-                       (phase === 'automne' && micro === 'actif' && SEANCES_SPORT.automne?.actif?.fullBody?.[level]);
-    if (hasFullBody) {
-      optionsHtml += `<div class="sport-option-link" onclick="choisirFullBody()">💪 Envie d'un full body aujourd'hui ? →</div>`;
-    }
-
-    // Cardio doux
-    const hasCardioDoux = (phase === 'printemps' && SEANCES_SPORT.printemps?.cardioDoux) ||
-                         (phase === 'automne' && micro === 'actif' && SEANCES_SPORT.automne?.actif?.cardioDoux);
-    if (hasCardioDoux) {
-      optionsHtml += `<div class="sport-option-link" onclick="ouvrirCardioDoux()">🚶‍♀️ Préfère une séance cardio doux ? →</div>`;
-    }
-  }
-
-  // Lien retour si fullBody override actif
-  if (_fullBodyOverride) {
-    optionsHtml += `<div class="sport-option-link" onclick="annulerFullBody()">← Reprendre ma séance du jour</div>`;
-  }
-
-  const streakLabel = _getStreakLabel();
-  if (exEl) {
-    exEl.innerHTML =
-      (cycleConseils ? `<div style="background:rgba(var(--season-rgb),.08);border-radius:10px;padding:8px 12px;margin-bottom:10px;font-size:11px;color:var(--season-dark);line-height:1.5;"><b>${cycleConseils.label}</b> · ${cycleConseils.conseil}</div>` : '') +
-      (streakLabel && !isDone ? `<div class="sport-streak-badge">${streakLabel}</div>` : '') +
-      (levelLabel ? `<div class="sport-level-badge">${levelLabel}</div>` : '') +
-      (msgHtml ? `<div class="sport-amanah">${msgHtml}</div>` : '') +
-      exContent +
-      (spirituelHtml ? `<div class="sport-spiritual">${spirituelHtml}</div>` : '') +
-      optionsHtml;
-  }
-  const _noTimerTypes = ['repos', 'ete-repos', 'calme'];
-  if (btnWrap) btnWrap.style.display = (isDone || isReported || (spec && _noTimerTypes.includes(spec.type))) ? 'none' : 'block';
-  if (doneWrap) doneWrap.style.display = isDone ? 'flex' : 'none';
-  if (reportedWrap) reportedWrap.style.display = isReported ? 'block' : 'none';
-  const reporterBtnWrap = document.getElementById('qs-reporter-btn-wrap');
-  if (reporterBtnWrap) reporterBtnWrap.style.display = (isDone || isReported) ? 'none' : 'flex';
-
-  // Afficher modal J1 nouveau cycle si conditions remplies
-  setTimeout(showJ1SportModal, 600);
 }
 
 // ═══════════════════════════════════════════════
-// FULLBODY & CARDIO DOUX
+// CARTE MOUVEMENT — conseil ponctuel, pas de programme
 // ═══════════════════════════════════════════════
-function choisirFullBody() {
-  // N1 intentionnellement exclu du Full Body — niveau débutant, pas encore adapté
-  const phase = ST.currentSaison;
-  const level = ST.seanceLevel || 1;
-  const micro = (phase === 'automne') ? getAutomneMicroPhase(ST.currentDay, effectiveCycleDur()) : null;
-
-  let fullBodyData = null;
-  if (phase === 'printemps' && SEANCES_SPORT.printemps?.fullBody?.[level]) {
-    fullBodyData = SEANCES_SPORT.printemps.fullBody[level];
-  } else if (phase === 'automne' && micro === 'actif' && SEANCES_SPORT.automne?.actif?.fullBody?.[level]) {
-    fullBodyData = SEANCES_SPORT.automne.actif.fullBody[level];
-  }
-
-  if (fullBodyData) {
-    _fullBodyOverride = { type: 'fullbody', data: fullBodyData, level };
-    // Persister l'override pour survivre au reload
-    ST.fullBodyOverrideDate = new Date().toDateString();
-    ST.fullBodyOverrideData = { phase: phase, level: level };
-    saveState();
-    renderCarteBouger(SAISONS[ST.currentSaison]);
-  }
-}
-
-function annulerFullBody() {
-  _fullBodyOverride = null;
-  // Nettoyer ST
-  ST.fullBodyOverrideDate = null;
-  ST.fullBodyOverrideData = null;
-  saveState();
-  renderCarteBouger(SAISONS[ST.currentSaison]);
-}
-
-function ouvrirCardioDoux() {
-  const phase = ST.currentSaison;
-  const micro = (phase === 'automne') ? getAutomneMicroPhase(ST.currentDay, effectiveCycleDur()) : null;
-
-  let cardioDoux = null;
-  if (phase === 'printemps' && SEANCES_SPORT.printemps?.cardioDoux) {
-    cardioDoux = SEANCES_SPORT.printemps.cardioDoux;
-  } else if (phase === 'automne' && micro === 'actif' && SEANCES_SPORT.automne?.actif?.cardioDoux) {
-    cardioDoux = SEANCES_SPORT.automne.actif.cardioDoux;
-  }
-
-  if (!cardioDoux) return;
-
-  // Créer ou mettre à jour la modale
-  let modal = document.getElementById('cardio-doux-modal');
-  if (!modal) {
-    modal = document.createElement('div');
-    modal.id = 'cardio-doux-modal';
-    modal.style.cssText = 'display:none; position:fixed; bottom:0; left:0; right:0; background:white; border-radius:20px 20px 0 0; padding:20px 16px; box-shadow:0 -4px 20px rgba(0,0,0,.1); z-index:200; max-height:70vh; overflow-y:auto;';
-    modal.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-        <div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--noir);">Cardio doux</div>
-        <button onclick="fermerCardioDoux()" style="background:none;border:none;font-size:20px;cursor:pointer;">×</button>
-      </div>
-      <div id="cardio-doux-options"></div>
-    `;
-    document.body.appendChild(modal);
-  }
-
-  // Remplir les options
-  const optionsContainer = document.getElementById('cardio-doux-options');
-  if (optionsContainer) {
-    optionsContainer.innerHTML = (cardioDoux.options || []).map(option => `
-      <div style="background:var(--creme);border:1px solid var(--sable);border-radius:12px;padding:12px;margin-bottom:8px;">
-        <div style="font-weight:600;color:var(--noir);margin-bottom:4px;">${option.nom}</div>
-        <div style="font-size:13px;color:var(--season);margin-bottom:4px;">${option.duree}</div>
-        <div style="font-size:12px;color:var(--gris);line-height:1.4;">${option.detail}</div>
-      </div>
-    `).join('');
-  }
-
-  modal.style.display = 'block';
-}
-
-function fermerCardioDoux() {
-  const modal = document.getElementById('cardio-doux-modal');
-  if (modal) modal.style.display = 'none';
+function renderCarteMouvement(s) {
+  const el = document.getElementById('mouv-conseil-text');
+  if (el) el.textContent = (typeof MOUVEMENT_DU_JOUR !== 'undefined' && MOUVEMENT_DU_JOUR[ST.currentSaison]) || '';
 }
 
 // ═══════════════════════════════════════════════
@@ -2705,32 +1608,16 @@ function renderCarteRepas(s) {
   }
 
   const premEl = document.getElementById('action-manger-premium');
-  if (!premEl) return;
-  if (isFullAccess()) {
-    if (!r) return;
-    premEl.innerHTML = `
-      <div class="action-premium-unlocked" onclick="openRecipeModal('${ST.currentSaison}',${idx})">
-        <span class="action-prem-unlocked-emoji">${r.emoji}</span>
-        <div class="action-prem-unlocked-text">
-          <div class="action-prem-unlocked-name">Voir la recette complète</div>
-          <div class="action-prem-unlocked-sub">Ingrédients · étapes détaillées →</div>
-        </div>
-        <span class="action-prem-unlocked-arrow">›</span>
-      </div>`;
-  } else {
-    const previewIngr = r ? (r.ingredients || []).slice(0, 2).join(' · ') + '...' : 'Ingrédients de saison';
-    premEl.innerHTML = `
-      <div class="action-premium-locked">
-        <div class="action-prem-blur">
-          <div class="action-prem-recipe-preview">${r ? r.nom : 'Recette de saison'}</div>
-          <div class="action-prem-steps-preview">${previewIngr}</div>
-        </div>
-        <div class="action-prem-cta">
-          <div class="action-prem-label">🍯 Nourrir ton corps avec sagesse</div>
-          <button class="action-prem-btn" onclick="startStripeCheckout()">Prendre soin de moi</button>
-        </div>
-      </div>`;
-  }
+  if (!premEl || !r) return;
+  premEl.innerHTML = `
+    <div class="action-premium-unlocked" onclick="openRecipeModal('${ST.currentSaison}',${idx})">
+      <span class="action-prem-unlocked-emoji">${r.emoji}</span>
+      <div class="action-prem-unlocked-text">
+        <div class="action-prem-unlocked-name">Voir la recette complète</div>
+        <div class="action-prem-unlocked-sub">Ingrédients · étapes détaillées →</div>
+      </div>
+      <span class="action-prem-unlocked-arrow">›</span>
+    </div>`;
 }
 
 // ═══════════════════════════════════════════════
@@ -2750,22 +1637,20 @@ function switchRepasTab(tab) {
 function renderRepasPhaseTab() {
   const saison = ST.currentSaison;
   const recettes = RECETTES[saison] || [];
-  const premium = isFullAccess();
   const container = document.getElementById('repas-phase-content');
   if (!container) return;
   const phaseLabel = { hiver: '🌙 Hiver', printemps: '🌿 Printemps', ete: '☀️ Été', automne: '🍂 Automne' }[saison] || '';
   container.innerHTML = `
     <div class="repas-phase-header">${phaseLabel} · ${recettes.length} recettes</div>
     ${recettes.map((r, i) => `
-      <div class="repas-phase-item" onclick="${premium ? `openRecipeModal('${saison}',${i})` : 'startStripeCheckout()'}">
+      <div class="repas-phase-item" onclick="openRecipeModal('${saison}',${i})">
         <span class="repas-phase-emoji">${r.emoji}</span>
         <div class="repas-phase-info">
           <div class="repas-phase-nom">${r.nom}</div>
           <div class="repas-phase-why">${r.pourquoi.length > 65 ? r.pourquoi.slice(0, 65) + '…' : r.pourquoi}</div>
         </div>
-        <span class="repas-phase-arrow">${premium ? '›' : '🔒'}</span>
-      </div>`).join('')}
-    ${!premium ? `<button class="modal-cta" style="width:100%;margin-top:14px;padding:14px;" onclick="startStripeCheckout()">🍯 M'accompagner dans ma nutrition cyclique</button>` : ''}`;
+        <span class="repas-phase-arrow">›</span>
+      </div>`).join('')}`;
 }
 
 const MARCHE_CATEGORIES = [
@@ -2994,32 +1879,18 @@ function renderCarteSkincare(s) {
 
   const premEl = document.getElementById('action-soin-premium');
   if (!premEl) return;
-  if (isFullAccess()) {
-    const routine = ROUTINES_PREMIUM[ST.currentSaison];
-    const steps = routine ? routine.matin.length + routine.soir.length : 0;
-    const phaseEmoji = { hiver: '🌙', printemps: '🌿', ete: '☀️', automne: '🍂' }[ST.currentSaison] || '🌿';
-    premEl.innerHTML = `
-      <div class="action-premium-unlocked" onclick="openSkinModal('${ST.currentSaison}')">
-        <span class="action-prem-unlocked-emoji">${phaseEmoji}</span>
-        <div class="action-prem-unlocked-text">
-          <div class="action-prem-unlocked-name">Ta routine · matin &amp; soir</div>
-          <div class="action-prem-unlocked-sub">${steps} gestes naturels pens&eacute;s pour toi →</div>
-        </div>
-        <span class="action-prem-unlocked-arrow">›</span>
-      </div>`;
-  } else {
-    premEl.innerHTML = `
-      <div class="action-premium-locked">
-        <div class="action-prem-blur">
-          <div class="action-prem-recipe-preview">Matin · Soir · M&eacute;decine proph&eacute;tique</div>
-          <div class="action-prem-steps-preview">Nigelle · Miel · Huile d&rsquo;olive · Eau de rose</div>
-        </div>
-        <div class="action-prem-cta">
-          <div class="action-prem-label">✨ Ta peau mérite cette douceur</div>
-          <button class="action-prem-btn" onclick="startStripeCheckout()">M'offrir cette routine</button>
-        </div>
-      </div>`;
-  }
+  const routine = ROUTINES_PREMIUM[ST.currentSaison];
+  const steps = routine ? routine.matin.length + routine.soir.length : 0;
+  const phaseEmoji = { hiver: '🌙', printemps: '🌿', ete: '☀️', automne: '🍂' }[ST.currentSaison] || '🌿';
+  premEl.innerHTML = `
+    <div class="action-premium-unlocked" onclick="openSkinModal('${ST.currentSaison}')">
+      <span class="action-prem-unlocked-emoji">${phaseEmoji}</span>
+      <div class="action-prem-unlocked-text">
+        <div class="action-prem-unlocked-name">Ta routine · matin &amp; soir</div>
+        <div class="action-prem-unlocked-sub">${steps} gestes naturels pens&eacute;s pour toi →</div>
+      </div>
+      <span class="action-prem-unlocked-arrow">›</span>
+    </div>`;
 }
 
 // ═══════════════════════════════════════════════
@@ -3067,836 +1938,6 @@ function openSkinModal(phase) {
 }
 function closeSkinModal() { document.getElementById('skin-modal').classList.remove('open'); }
 
-
-
-
-function handleProgressionAnswer(ans) {
-  document.getElementById('progression-modal').classList.remove('open');
-  const oldLevel = ST.seanceLevel || 1;
-  if (ans === 'facile' && oldLevel < 4) {
-    const newLevel = oldLevel + 1;
-    ST.seanceLevel = newLevel;
-    const toastMsg = getProgressionToast(oldLevel, newLevel, true);
-    showToast(toastMsg);
-    if (typeof burstCelebration === 'function') {
-      setTimeout(burstCelebration, 300);
-    }
-  } else if (ans === 'dur_trop' && oldLevel > 1) {
-    const newLevel = oldLevel - 1;
-    ST.seanceLevel = newLevel;
-    const toastMsg = getProgressionToast(oldLevel, newLevel, false);
-    showToast(toastMsg);
-  } else if (ans === 'dur') {
-    showToast('💪 Tu tiens — c\'est de la force. Continue à ton rythme.');
-  } else {
-    showToast('✨ Parfait — on continue au même rythme.');
-  }
-  saveState();
-  renderCarteBouger(SAISONS[ST.currentSaison]);
-}
-
-function togglePremium() { /* désactivé */ }
-
-async function applyPremiumCode() {
-  const inp = document.getElementById('premium-code-input');
-  const msg = document.getElementById('premium-code-msg');
-  if (!inp || !msg) return;
-  const code = inp.value.trim().toUpperCase();
-  if (!code) return;
-  msg.style.color = 'var(--gris)';
-  msg.textContent = 'Vérification…';
-  try {
-    const sb = await initSupabase();
-    if (!sb) { msg.style.color = '#C4694A'; msg.textContent = 'Connecte-toi pour utiliser un code.'; return; }
-    const { data: { session } } = await sb.auth.getSession();
-    const jwt = session?.access_token;
-    if (!jwt) { msg.style.color = '#C4694A'; msg.textContent = 'Connecte-toi pour utiliser un code.'; return; }
-    const r = await fetch('/api/redeem-code', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + jwt },
-      body: JSON.stringify({ code })
-    });
-    if (!r.ok) { const errData = await r.json().catch(() => ({})); throw new Error(errData.error || r.status); }
-    const data = await r.json();
-    if (data && data.valid) {
-      await verifyPremiumFromDB(sb, ST.supabaseUserId);
-      renderDashboard(SAISONS[ST.currentSaison]);
-      applyTrialLocks();
-      msg.style.color = '#3DAE8A';
-      msg.textContent = ST.isPremium ? '✓ Premium activé — bienvenue !' : 'Code accepté — rechargement nécessaire.';
-      inp.value = '';
-    } else {
-      msg.style.color = '#C4694A';
-      msg.textContent = data?.error || 'Code incorrect.';
-    }
-  } catch {
-    msg.style.color = '#C4694A';
-    msg.textContent = 'Erreur réseau — réessaie.';
-  }
-}
-
-function validerSeanceDash() {
-  const today = new Date().toDateString();
-  if (!ST.seanceDone) ST.seanceDone = {};
-  ST.seanceDone[today] = true;
-  ST.totalSeancesAll = (ST.totalSeancesAll || 0) + 1;
-  ST.reportConsecutif = 0;
-
-  const spec = getTodaySeanceSpec();
-  // Incrémenter le compteur Été pour l'alternance bas/haut
-  if (spec && (spec.type === 'ete-intense' || spec.type === 'ete-intense-haut')) {
-    ST.eteSessionIdx = (ST.eteSessionIdx || 0) + 1;
-  }
-  if (spec && spec.type === 'ete-intense' && spec.data?.type === 'amrap') {
-    const inp = document.getElementById('amrap-score-input');
-    const score = inp ? parseInt(inp.value, 10) : NaN;
-    if (!isNaN(score) && score > 0) {
-      const previousRecord = ST.amrapRecord || 0;
-      if (score > previousRecord) {
-        ST.amrapRecord = score;
-        // Nouveau record !
-        setTimeout(() => {
-          showToast(SPORT_PROGRESSION_MESSAGES.record_nouveau);
-          if (typeof burstCelebration === 'function') {
-            setTimeout(burstCelebration, 300);
-          }
-        }, 1500);
-      } else if (score === previousRecord && previousRecord > 0) {
-        // Record égalé
-        setTimeout(() => {
-          showToast(SPORT_PROGRESSION_MESSAGES.record_egal);
-        }, 1500);
-      }
-    }
-  }
-  if (spec && spec.type === 'printemps-bas') {
-    ST.printempsBasCount = (ST.printempsBasCount || 0) + 1;
-  }
-
-  _updateStreakPhase(1);
-  ST.checkpointProgress = (ST.checkpointProgress || 0) + 1;
-  if (typeof updateNiveauStreak === 'function') updateNiveauStreak(true);
-  if (typeof checkNiveauProgression === 'function') checkNiveauProgression();
-
-  // Calculer et afficher le streak
-  const newStreak = calculateSportStreak();
-  const previousStreak = ST.sportStreak || 0;
-  ST.sportStreak = newStreak;
-
-  saveState();
-  const s = SAISONS[ST.currentSaison];
-  renderCarteBouger(s);
-  restoreSeanceDone();
-  checkEndOfPrintemps();
-  burstCelebration();
-  showToast('💪 Alhamdulillah — séance accomplie ! 🌸');
-
-  // Afficher le toast de streak si milestone atteint
-  setTimeout(() => {
-    if (newStreak > previousStreak && [3, 5, 7, 10, 15, 21, 30].includes(newStreak)) {
-      showStreakToast(newStreak);
-    }
-  }, 2500);
-
-  setTimeout(showFeedbackPostSeance, 1000);
-  if (ST.checkpointProgress >= 5) setTimeout(_triggerCheckpoint, 3500);
-  checkPropositionsAmelioration();
-}
-
-function burstCelebration() {
-  const canvas = document.createElement('canvas');
-  canvas.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:9999;';
-
-  // Configuration canvas pour haute résolution
-  const dpr = window.devicePixelRatio || 1;
-  const rect = {width: window.innerWidth, height: window.innerHeight};
-  canvas.width = rect.width * dpr;
-  canvas.height = rect.height * dpr;
-  canvas.style.width = rect.width + 'px';
-  canvas.style.height = rect.height + 'px';
-
-  const ctx = canvas.getContext('2d');
-  ctx.scale(dpr, dpr);
-
-  // Récupérer les couleurs dynamiques
-  const seasonColor = getComputedStyle(document.documentElement).getPropertyValue('--season').trim() || '#7B5EA7';
-  const orColor = '#C9A84C';
-
-  const particles = [];
-  const particleCount = 60;
-  const centerX = rect.width / 2;
-  const centerY = rect.height / 3;
-  const gravity = 400; // px/s²
-
-  // Créer les particules
-  for (let i = 0; i < particleCount; i++) {
-    const angle = Math.random() * Math.PI * 2;
-    const velocity = 200 + Math.random() * 300; // 200-500 px/s
-    const particle = {
-      x: centerX,
-      y: centerY,
-      vx: Math.cos(angle) * velocity,
-      vy: Math.sin(angle) * velocity - Math.random() * 200, // Biais vers le haut
-      size: 6 + Math.random() * 8, // 6-14px
-      color: Math.random() < 0.5 ? seasonColor : orColor,
-      type: Math.random() < 0.4 ? 'circle' : (Math.random() < 0.5 ? 'star' : 'diamond'),
-      rotation: 0,
-      rotationSpeed: (Math.random() - 0.5) * 8, // Vitesse de rotation aléatoire
-      opacity: 1,
-      startTime: performance.now()
-    };
-    particles.push(particle);
-  }
-
-  document.body.appendChild(canvas);
-
-  let animationId;
-  let lastTime = performance.now();
-
-  function drawStar(ctx, x, y, size, rotation) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(rotation);
-    ctx.beginPath();
-    // Étoile à 4 branches
-    const outerRadius = size / 2;
-    const innerRadius = size / 4;
-    ctx.moveTo(0, -outerRadius);
-    ctx.lineTo(innerRadius * 0.3, -innerRadius * 0.3);
-    ctx.lineTo(outerRadius, 0);
-    ctx.lineTo(innerRadius * 0.3, innerRadius * 0.3);
-    ctx.lineTo(0, outerRadius);
-    ctx.lineTo(-innerRadius * 0.3, innerRadius * 0.3);
-    ctx.lineTo(-outerRadius, 0);
-    ctx.lineTo(-innerRadius * 0.3, -innerRadius * 0.3);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-  }
-
-  function drawDiamond(ctx, x, y, size, rotation) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(rotation);
-    ctx.beginPath();
-    const half = size / 2;
-    ctx.moveTo(0, -half);
-    ctx.lineTo(half, 0);
-    ctx.lineTo(0, half);
-    ctx.lineTo(-half, 0);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-  }
-
-  function animate(currentTime) {
-    const deltaTime = (currentTime - lastTime) / 1000; // Conversion en secondes
-    const elapsedTime = currentTime - particles[0].startTime;
-
-    // Nettoyer le canvas
-    ctx.clearRect(0, 0, rect.width, rect.height);
-
-    // Arrêter l'animation après 2.5s
-    if (elapsedTime >= 2500) {
-      cancelAnimationFrame(animationId);
-      if (canvas.parentNode) {
-        document.body.removeChild(canvas);
-      }
-      return;
-    }
-
-    // Calculer l'opacité (fade à partir de 1.5s)
-    let globalOpacity = 1;
-    if (elapsedTime >= 1500) {
-      globalOpacity = 1 - ((elapsedTime - 1500) / 1000); // Fade sur 1s
-      globalOpacity = Math.max(0, globalOpacity);
-    }
-
-    particles.forEach(particle => {
-      // Appliquer la gravité
-      particle.vy += gravity * deltaTime;
-
-      // Appliquer la résistance de l'air
-      particle.vx *= 0.99;
-      particle.vy *= 0.99;
-
-      // Mettre à jour la position
-      particle.x += particle.vx * deltaTime;
-      particle.y += particle.vy * deltaTime;
-
-      // Mettre à jour la rotation
-      particle.rotation += particle.rotationSpeed * deltaTime;
-
-      // Définir la couleur avec opacité
-      ctx.globalAlpha = globalOpacity;
-      ctx.fillStyle = particle.color;
-
-      // Dessiner selon le type
-      switch (particle.type) {
-        case 'circle':
-          ctx.beginPath();
-          ctx.arc(particle.x, particle.y, particle.size / 2, 0, Math.PI * 2);
-          ctx.fill();
-          break;
-        case 'star':
-          drawStar(ctx, particle.x, particle.y, particle.size, particle.rotation);
-          break;
-        case 'diamond':
-          drawDiamond(ctx, particle.x, particle.y, particle.size, particle.rotation);
-          break;
-      }
-    });
-
-    ctx.globalAlpha = 1; // Restaurer l'opacité
-    lastTime = currentTime;
-    animationId = requestAnimationFrame(animate);
-  }
-
-  animationId = requestAnimationFrame(animate);
-}
-
-function checkEndOfPrintemps() {
-  if (ST.currentSaison !== 'printemps') return;
-  const dur = effectiveCycleDur();
-  const { eteStartD } = phaseThresholds(dur);
-  if (ST.currentDay < eteStartD - 1) return;
-  if (ST.printempsUpgradeDone) return;
-  ST.printempsUpgradeDone = true;
-  saveState();
-  const level = ST.seanceLevel || 1;
-  if (level >= 4) {
-    if (!ST.levelMaxShown) {
-      ST.levelMaxShown = true;
-      saveState();
-      setTimeout(showLevelMax, 900);
-    }
-    return;
-  }
-  setTimeout(showPrintempsUpgrade, 900);
-}
-
-function showPrintempsUpgrade() {
-  const el = document.getElementById('printemps-upgrade-modal');
-  if (el) el.classList.add('open');
-}
-
-function handlePrintempsUpgrade(ans) {
-  const el = document.getElementById('printemps-upgrade-modal');
-  if (el) el.classList.remove('open');
-  const oldLevel = ST.seanceLevel || 1;
-  if (ans === 'facile' && oldLevel < 4) {
-    const newLevel = oldLevel + 1;
-    ST.seanceLevel = newLevel;
-    if (ST.seanceLevel >= 4) {
-      ST.levelMaxShown = true;
-      saveState();
-      setTimeout(showLevelMax, 600);
-      return;
-    }
-    const toastMsg = getProgressionToast(oldLevel, newLevel, true);
-    showToast(toastMsg);
-    if (typeof burstCelebration === 'function') {
-      setTimeout(burstCelebration, 300);
-    }
-  } else if (ans === 'dur' && oldLevel > 1) {
-    const newLevel = oldLevel - 1;
-    ST.seanceLevel = newLevel;
-    const toastMsg = getProgressionToast(oldLevel, newLevel, false);
-    showToast(toastMsg);
-  } else {
-    showToast('✨ Parfait — on continue au même rythme.');
-  }
-  saveState();
-  renderCarteBouger(SAISONS[ST.currentSaison]);
-}
-
-// ═══════════════════════════════════════════════
-// SPORT AMÉLIORÉ
-// ═══════════════════════════════════════════════
-
-function reporterSeance() {
-  const today = new Date().toDateString();
-  if (!ST.seanceDone) ST.seanceDone = {};
-  ST.seanceDone[today] = 'reportee';
-  ST.totalReportsAll = (ST.totalReportsAll || 0) + 1;
-  ST.reportConsecutif = (ST.reportConsecutif || 0) + 1;
-  ST.lastReportDate = today;
-  saveState();
-  renderCarteBouger(SAISONS[ST.currentSaison]);
-  if (ST.reportConsecutif >= 2) {
-    setTimeout(() => document.getElementById('report-question-modal')?.classList.add('open'), 400);
-  } else {
-    showToast('📅 Reporté à demain — à ton rythme 🌸');
-  }
-}
-
-function handleReportQuestion(ans) {
-  document.getElementById('report-question-modal')?.classList.remove('open');
-  ST.reportConsecutif = 0;
-  if (ans === 'longue') {
-    showToast('💛 La version 5 min est juste en dessous — tu peux la faire maintenant !');
-    setTimeout(() => { const b = document.getElementById('sport-express-btn'); if (b) { b.style.transform='scale(1.1)'; setTimeout(()=>b.style.transform='',500); } }, 200);
-  } else if (ans === 'difficile') {
-    const oldLevel = ST.seanceLevel || 1;
-    if (oldLevel > 1) {
-      const newLevel = oldLevel - 1;
-      ST.seanceLevel = newLevel;
-      const toastMsg = getProgressionToast(oldLevel, newLevel, false);
-      showToast(toastMsg);
-    }
-    else { showToast('💛 La version 5 min est là pour toi 🌸'); }
-  } else {
-    showToast('🌸 C\'est noté, à demain 🌸');
-  }
-  saveState();
-}
-
-function choisirSeanceMalgreCalme() {
-  ST.calmeOverride = new Date().toDateString();
-  saveState();
-  renderCarteBouger(SAISONS[ST.currentSaison]);
-}
-
-function openSeanceExpress() {
-  const el = document.getElementById('express-modal');
-  if (!el) return;
-  const spec = getTodaySeanceSpec();
-  const body = el.querySelector('#express-body');
-  if (!body) return;
-  let exs = [];
-  if (spec && spec.data && spec.data.exercices) exs = spec.data.exercices.slice(0, 2);
-  else if (spec && spec.data && spec.data.circuit) exs = spec.data.circuit.slice(0, 2);
-  if (!exs.length) { showToast('⚡ Fais 5 min de marche rapide — ça compte !'); validerSeanceExpress(); return; }
-  body.innerHTML = `
-    <div style="font-size:12px;color:var(--gris);text-align:center;margin-bottom:16px;">Pas le temps ? Voici 5 minutes qui changent tout.</div>
-    ${exs.map(ex=>`<div class="sport-ex-row"><div class="sport-ex-name-reps"><span class="sport-ex-name">${ex.nom||ex.name||''}</span></div>${ex.detail?`<div class="sport-ex-detail">${ex.detail}</div>`:''}</div>`).join('')}`;
-  el.classList.add('open');
-}
-
-function validerSeanceExpress() {
-  document.getElementById('express-modal')?.classList.remove('open');
-  const today = new Date().toDateString();
-  if (!ST.seanceDone) ST.seanceDone = {};
-  ST.seanceDone[today] = 'express';
-  ST.totalSeancesAll = (ST.totalSeancesAll || 0) + 0.5;
-  ST.reportConsecutif = 0;
-  ST.checkpointProgress = (ST.checkpointProgress || 0) + 0.5;
-  _updateStreakPhase(0.5);
-
-  // Calculer et mettre à jour le streak
-  const newStreak = calculateSportStreak();
-  const previousStreak = ST.sportStreak || 0;
-  ST.sportStreak = newStreak;
-
-  saveState();
-  renderCarteBouger(SAISONS[ST.currentSaison]);
-  burstCelebration();
-  showToast('⚡ 5 minutes accomplies — Alhamdulillah ! 🌸');
-
-  // Afficher le toast de streak si milestone atteint
-  setTimeout(() => {
-    if (newStreak > previousStreak && [3, 5, 7, 10, 15, 21, 30].includes(newStreak)) {
-      showStreakToast(newStreak);
-    }
-  }, 2500);
-  setTimeout(showFeedbackPostSeance, 1000);
-  if (ST.checkpointProgress >= 5) setTimeout(_triggerCheckpoint, 3500);
-}
-
-function validerReposActif() {
-  const today = new Date().toDateString();
-  if (!ST.seanceDone) ST.seanceDone = {};
-  ST.seanceDone[today] = 'repos-actif';
-  ST.checkpointProgress = (ST.checkpointProgress || 0) + 0.5;
-  _updateStreakPhase(0.5);
-
-  // Calculer et mettre à jour le streak
-  const newStreak = calculateSportStreak();
-  const previousStreak = ST.sportStreak || 0;
-  ST.sportStreak = newStreak;
-
-  saveState();
-  renderCarteBouger(SAISONS[ST.currentSaison]);
-  showToast('🧘‍♀️ Repos actif accompli — ton corps te remercie 🌸');
-
-  // Afficher le toast de streak si milestone atteint
-  setTimeout(() => {
-    if (newStreak > previousStreak && [3, 5, 7, 10, 15, 21, 30].includes(newStreak)) {
-      showStreakToast(newStreak);
-    }
-  }, 2500);
-}
-
-function choisirReposComplet() {
-  showToast('💤 Repos complet — ton corps construit pendant la récupération 🌸');
-}
-
-function _updateStreakPhase(count) {
-  const phase = ST.currentSaison;
-  if (ST.streakPhaseNom !== phase) { ST.streakPhaseNom = phase; ST.streakPhaseSeances = 0; }
-  ST.streakPhaseSeances = (ST.streakPhaseSeances || 0) + count;
-}
-
-function _getStreakLabel() {
-  // Afficher le streak global en priorité s'il est > 0
-  const globalStreak = ST.sportStreak || calculateSportStreak();
-  if (globalStreak > 0) {
-    return `🔥 ${globalStreak} jour${globalStreak > 1 ? 's' : ''} d'affilée`;
-  }
-
-  // Fallback : streak de phase
-  const n = Math.floor(ST.streakPhaseSeances || 0);
-  if (n === 0) return null;
-  const emoji = { hiver:'❄️', printemps:'🌸', ete:'☀️', automne:'🍂' }[ST.streakPhaseNom] || '✨';
-  const nom = { hiver:'Hiver', printemps:'Printemps', ete:'Été', automne:'Automne' }[ST.streakPhaseNom] || '';
-  return `${n} séance${n > 1 ? 's' : ''} ce ${nom} ${emoji}`;
-}
-
-function showFeedbackPostSeance() {
-  document.getElementById('feedback-seance-modal')?.classList.add('open');
-}
-
-function handleFeedbackSport(mood) {
-  document.getElementById('feedback-seance-modal')?.classList.remove('open');
-  const today = new Date().toDateString();
-  if (!ST.feedbackSport) ST.feedbackSport = {};
-  ST.feedbackSport[today] = mood;
-  saveState();
-  const dates = Object.keys(ST.feedbackSport)
-    .map(d => ({ d, t: new Date(d).getTime() }))
-    .filter(o => !isNaN(o.t))
-    .sort((a, b) => a.t - b.t)
-    .slice(-3)
-    .map(o => o.d);
-  const last3 = dates.map(d => ST.feedbackSport[d]);
-  if (last3.length >= 3) {
-    if (last3.every(f => f === 'fatiguee')) setTimeout(() => _showPropositionType('fatigue3'), 600);
-    else if (last3.every(f => f === 'plus')) setTimeout(() => _showPropositionType('niveau_up'), 600);
-  }
-}
-
-function checkPropositionsAmelioration() {
-  const done = Object.keys(ST.seanceDone || {});
-  const last5 = done
-    .map(d => ({ d, t: new Date(d).getTime() }))
-    .filter(o => !isNaN(o.t))
-    .sort((a, b) => a.t - b.t)
-    .slice(-5)
-    .map(o => o.d);
-  const last5AllDone = last5.length >= 5 && last5.every(d => ST.seanceDone[d] === true);
-  if (last5AllDone && !ST._proposeNewEx5) {
-    ST._proposeNewEx5 = true; saveState();
-    setTimeout(() => _showPropositionType('reguliere5'), 2000);
-  }
-}
-
-function _showPropositionType(type) {
-  const el = document.getElementById('proposition-modal');
-  if (!el) return;
-  const body = el.querySelector('#proposition-body');
-  const cfg = {
-    reguliere5: { icon:'🌟', txt:'Tu es régulière depuis 5 séances — tu veux essayer un nouvel exercice ?' },
-    fatigue3:   { icon:'💛', txt:'Tu sembles fatiguée depuis quelques jours — on passe en mode douceur cette semaine ?' },
-    niveau_up:  { icon:'🔥', txt:'Tu te sens à l\'aise — tu veux passer au niveau supérieur ?' },
-  };
-  const c = cfg[type] || cfg.reguliere5;
-  if (body) body.innerHTML = `<div style="font-size:36px;margin-bottom:12px;">${c.icon}</div><div style="font-size:14px;color:var(--gris);line-height:1.7;">${c.txt}</div>`;
-  el.dataset.propType = type;
-  el.classList.add('open');
-}
-
-function handleProposition(ans) {
-  const el = document.getElementById('proposition-modal');
-  if (el) { el.classList.remove('open'); }
-  if (ans === 'oui') {
-    const type = el?.dataset.propType;
-    if (type === 'fatigue3') {
-      const oldLevel = ST.seanceLevel || 1;
-      if (oldLevel > 1) {
-        const newLevel = oldLevel - 1;
-        ST.seanceLevel = newLevel;
-        saveState();
-        renderCarteBouger(SAISONS[ST.currentSaison]);
-        const toastMsg = getProgressionToast(oldLevel, newLevel, false);
-        showToast(toastMsg);
-      } else {
-        showToast('💛 Mode douceur activé — prends soin de toi.');
-      }
-    } else if (type === 'niveau_up') {
-      const oldLevel = ST.seanceLevel || 1;
-      if (oldLevel < 4) {
-        const newLevel = oldLevel + 1;
-        ST.seanceLevel = newLevel;
-        saveState();
-        renderCarteBouger(SAISONS[ST.currentSaison]);
-        const toastMsg = getProgressionToast(oldLevel, newLevel, true);
-        showToast(toastMsg);
-        if (typeof burstCelebration === 'function') {
-          setTimeout(burstCelebration, 300);
-        }
-      } else {
-        showToast('🔥 Niveau monté — Alhamdulillah 💪');
-      }
-    } else {
-      showToast('🌟 Nouvelle séance en route pour toi !');
-    }
-  } else {
-    showToast('🌸 Pas de problème — à ton rythme.');
-  }
-}
-
-function checkSeanceSurprise() {
-  if (ST.currentSaison !== 'ete') return;
-  if (ST.seanceSurpriseShownCycle) return;
-  const today = new Date().toDateString();
-  if (ST.seanceDone && ST.seanceDone[today]) return;
-  ST.seanceSurpriseShownCycle = true;
-  saveState();
-  setTimeout(() => document.getElementById('seance-surprise-modal')?.classList.add('open'), 1200);
-}
-
-function acceptSeanceSurprise() {
-  document.getElementById('seance-surprise-modal')?.classList.remove('open');
-  showToast('Prends soin de toi à chaque mouvement 🌸');
-}
-
-function refuseSeanceSurprise() {
-  document.getElementById('seance-surprise-modal')?.classList.remove('open');
-}
-
-function _triggerCheckpoint() {
-  ST.checkpointProgress = 0;
-  if (!isFullAccess()) { saveState(); return; }
-  saveState();
-  document.getElementById('progression-modal')?.classList.add('open');
-}
-
-let _timerInterval = null;
-let _currentExIdx = 0;
-let _timerExercices = [];
-let _repCount = 0;
-let _currentSetNum = 0;
-let _fullBodyOverride = null;
-
-function _parseSetsFromEx(ex) {
-  if (ex.sets && Number.isFinite(ex.sets) && ex.sets > 1) return ex.sets;
-  const text = (ex.detail || '') + ' ' + (ex.name || ex.nom || '');
-  const m = text.match(/\b([2-8])[×x]\b/i)
-           || text.match(/\b([2-8])\s*s[ée]ries?\b/i)
-           || text.match(/\b([2-8])\s*fois\b/i);
-  if (m) { const n = parseInt(m[1]); if (n >= 2 && n <= 8) return n; }
-  return 1;
-}
-
-function openTimer() {
-  const spec = getTodaySeanceSpec();
-  if (!spec || !spec.data) return;
-  const el = document.getElementById('timer-modal');
-  if (!el) return;
-  _timerExercices = (spec.data.exercices || spec.data.circuit || []);
-  if (!_timerExercices.length) return;
-  _currentExIdx = 0;
-  _currentSetNum = 0;
-  el.classList.add('open');
-  _renderCurrentEx();
-}
-
-function _renderCurrentEx() {
-  const ex = _timerExercices[_currentExIdx];
-  const total = _timerExercices.length;
-  const body = document.getElementById('timer-body');
-  if (!body) return;
-  if (!ex) { _finishTimer(); return; }
-  const nom = ex.nom || ex.name || '';
-  const detail = ex.detail || '';
-  const reps = ex.reps || null;
-  const dureeNum = ex.duree ? parseInt(ex.duree) : null;
-  const isSeconds = dureeNum && (String(ex.duree).includes('sec') || String(ex.duree).includes('s') || dureeNum <= 120);
-  const totalSets = _parseSetsFromEx(ex);
-  const setLabel = totalSets > 1
-    ? `<div class="timer-set-label">Série ${_currentSetNum + 1} / ${totalSets}</div>`
-    : '';
-  let content = '';
-  if (isSeconds && dureeNum) {
-    content = `${setLabel}<div class="timer-ex-name">${nom}</div><div class="timer-ex-detail">${detail}</div>
-      <div class="timer-circle"><svg viewBox="0 0 100 100" class="timer-svg"><circle cx="50" cy="50" r="44" fill="none" stroke="var(--sable)" stroke-width="8"/><circle cx="50" cy="50" r="44" fill="none" stroke="var(--season)" stroke-width="8" stroke-dasharray="276.5" stroke-dashoffset="0" id="timer-arc" stroke-linecap="round" transform="rotate(-90 50 50)"/></svg><div class="timer-count" id="timer-count">${dureeNum}</div></div>
-      <button class="timer-start-btn" id="timer-start-btn" onclick="_startCountdown(${dureeNum})">▶ Démarrer</button>`;
-  } else if (reps) {
-    _repCount = 0;
-    content = `${setLabel}<div class="timer-ex-name">${nom}</div><div class="timer-ex-detail">${detail}</div>
-      <div class="timer-reps-target">Objectif : <strong>${reps} reps</strong></div>
-      <div class="timer-rep-counter" id="timer-rep-counter">0</div>
-      <div class="timer-tap-zone" onclick="tapRep()">Taper</div>
-      <div class="timer-tap-hint">Tape à chaque répétition</div>`;
-  } else {
-    content = `${setLabel}<div class="timer-ex-name">${nom}</div><div class="timer-ex-detail">${detail || 'Fais de ton mieux 💪'}</div>`;
-  }
-  const hasMoreSets = totalSets > 1 && _currentSetNum < totalSets - 1;
-  const nextLabel = hasMoreSets ? `Série suivante →` : `Exercice suivant →`;
-  body.innerHTML = `<div class="timer-progress">${_currentExIdx + 1} / ${total}</div>${content}
-    <div style="display:flex;gap:10px;margin-top:20px;">
-      <button class="timer-next-btn" onclick="timerNextEx()">${nextLabel}</button>
-      <button class="timer-skip-btn" onclick="timerSkipAll()">Passer</button>
-    </div>`;
-}
-
-function tapRep() {
-  _repCount++;
-  const el = document.getElementById('timer-rep-counter');
-  if (el) { el.textContent = _repCount; el.classList.remove('timer-rep-pulse'); void el.offsetWidth; el.classList.add('timer-rep-pulse'); }
-  if (navigator.vibrate) navigator.vibrate(30);
-}
-
-function _startCountdown(secs) {
-  const btn = document.getElementById('timer-start-btn');
-  if (btn) btn.style.display = 'none';
-  let remaining = secs;
-  const arc = document.getElementById('timer-arc');
-  const count = document.getElementById('timer-count');
-  if (_timerInterval) clearInterval(_timerInterval);
-  _timerInterval = setInterval(() => {
-    remaining--;
-    if (count) count.textContent = remaining;
-    if (arc) arc.style.strokeDashoffset = 276.5 * (1 - remaining / secs);
-    if (remaining <= 0) { clearInterval(_timerInterval); _timerInterval = null; if (navigator.vibrate) navigator.vibrate([100,50,100]); }
-  }, 1000);
-}
-
-function timerNextEx() {
-  if (_timerInterval) { clearInterval(_timerInterval); _timerInterval = null; }
-  if (navigator.vibrate) navigator.vibrate(50);
-  const ex = _timerExercices[_currentExIdx];
-  const totalSets = ex ? _parseSetsFromEx(ex) : 1;
-  if (_currentSetNum < totalSets - 1) {
-    _currentSetNum++;
-    _showRestTimer(20, `Repos — série ${_currentSetNum + 1} / ${totalSets}`);
-  } else {
-    _currentSetNum = 0;
-    _currentExIdx++;
-    if (_currentExIdx >= _timerExercices.length) { _finishTimer(); return; }
-    _showRestTimer(30, 'Repos');
-  }
-}
-
-function timerSkipAll() {
-  if (_timerInterval) { clearInterval(_timerInterval); _timerInterval = null; }
-  _currentSetNum = 0;
-  _currentExIdx++;
-  if (_currentExIdx >= _timerExercices.length) { _finishTimer(); return; }
-  _renderCurrentEx();
-}
-
-function _showRestTimer(restSecs, label = 'Repos') {
-  const body = document.getElementById('timer-body');
-  if (!body) return;
-  let r = restSecs;
-  body.innerHTML = `<div class="timer-rest-label">${label}</div><div class="timer-rest-count" id="timer-rest-count">${r}s</div><button class="timer-skip-btn" style="display:block;margin:0 auto;" onclick="timerSkipRest()">Passer le repos →</button>`;
-  if (_timerInterval) clearInterval(_timerInterval);
-  _timerInterval = setInterval(() => {
-    r--;
-    const el = document.getElementById('timer-rest-count');
-    if (el) el.textContent = r + 's';
-    if (r <= 0) { clearInterval(_timerInterval); _timerInterval = null; if (navigator.vibrate) navigator.vibrate([50,30,50]); _renderCurrentEx(); }
-  }, 1000);
-}
-
-function timerSkipRest() {
-  if (_timerInterval) { clearInterval(_timerInterval); _timerInterval = null; }
-  _renderCurrentEx();
-}
-
-function _finishTimer() {
-  const today = new Date().toDateString();
-  const donVal = ST.seanceDone && ST.seanceDone[today];
-  if (donVal === true || donVal === 'express' || donVal === 'repos-actif') {
-    closeTimerModal();
-    return;
-  }
-  validerSeanceDash();
-  closeTimerModal();
-}
-
-function closeTimerModal() {
-  if (_timerInterval) { clearInterval(_timerInterval); _timerInterval = null; }
-  document.getElementById('timer-modal')?.classList.remove('open');
-}
-
-function setSportInitLevel(level) {
-  ST.seanceLevel = level;
-  ST.sportLevelInit = true;
-  saveState();
-  renderHistoriqueSport();
-}
-
-function renderHistoriqueSport() {
-  const el = document.getElementById('sport-historique-section');
-  if (!el) return;
-
-  if (!ST.sportLevelInit) {
-    el.innerHTML = `
-      <div class="sport-histo-title">💪 Parcours sport</div>
-      <div class="sport-init-card">
-        <div class="sport-init-q">Quel est ton niveau sportif actuel ?</div>
-        <div class="sport-init-opts">
-          <button class="sport-init-btn" onclick="setSportInitLevel(1)">
-            <span class="sport-init-icon">🌱</span>
-            <span class="sport-init-lbl">Essentielle</span>
-            <span class="sport-init-sub">Je commence ou reprends</span>
-          </button>
-          <button class="sport-init-btn" onclick="setSportInitLevel(2)">
-            <span class="sport-init-icon">🌿</span>
-            <span class="sport-init-lbl">À ton rythme</span>
-            <span class="sport-init-sub">Je m'entraîne régulièrement</span>
-          </button>
-          <button class="sport-init-btn" onclick="setSportInitLevel(3)">
-            <span class="sport-init-icon">🔥</span>
-            <span class="sport-init-lbl">Vitalité</span>
-            <span class="sport-init-sub">À l'aise avec l'effort intense</span>
-          </button>
-          <button class="sport-init-btn" onclick="setSportInitLevel(4)">
-            <span class="sport-init-icon">⚡</span>
-            <span class="sport-init-lbl">Pleine puissance</span>
-            <span class="sport-init-sub">Performance & dépassement</span>
-          </button>
-        </div>
-      </div>`;
-    return;
-  }
-
-  const done = ST.seanceDone || {};
-  const totalFull = Object.keys(done).filter(d => done[d] === true).length;
-  const totalExpress = Object.keys(done).filter(d => done[d] === 'express').length;
-  const totalReported = Object.keys(done).filter(d => done[d] === 'reportee').length;
-  const level = ST.seanceLevel || 1;
-  const levelNames = ['Essentielle','À ton rythme','Vitalité','Pleine puissance'];
-  const streak = _getStreakLabel();
-  const prog = (ST.checkpointProgress || 0) % 5;
-  const nextCpRaw = prog < 0.01 ? 5 : Math.ceil((5 - prog) * 2) / 2;
-  const nextCpInt = Number.isInteger(nextCpRaw) ? nextCpRaw : nextCpRaw;
-  const nextCpLabel = Number.isInteger(nextCpInt) ? `${nextCpInt} séance${nextCpInt > 1 ? 's' : ''}` : `encore ~${Math.ceil(nextCpRaw)} séance${Math.ceil(nextCpRaw) > 1 ? 's' : ''}`;
-  el.innerHTML = `
-    <div class="sport-histo-title">💪 Ton parcours sport</div>
-    <div class="sport-histo-grid">
-      <div class="sport-histo-stat"><div class="sport-histo-num">${totalFull}</div><div class="sport-histo-lbl">séances complètes</div></div>
-      <div class="sport-histo-stat"><div class="sport-histo-num">Niv.${level}</div><div class="sport-histo-lbl">${levelNames[level-1]}</div></div>
-      <div class="sport-histo-stat"><div class="sport-histo-num">${totalExpress}</div><div class="sport-histo-lbl">express (5 min)</div></div>
-      <div class="sport-histo-stat"><div class="sport-histo-num">${totalReported}</div><div class="sport-histo-lbl">reportées</div></div>
-    </div>
-    ${streak ? `<div class="sport-histo-streak">${streak}</div>` : ''}
-    <div class="sport-histo-next">Prochain checkpoint dans <strong>${nextCpLabel}</strong></div>`;
-}
-
-function showLevelMax() {
-  const el = document.getElementById('level-max-modal');
-  if (el) el.classList.add('open');
-}
-function closeLevelMaxModal() {
-  const el = document.getElementById('level-max-modal');
-  if (el) el.classList.remove('open');
-}
-function contactLevelMax() {
-  window.location.href = 'mailto:sakina.evolution.contact@gmail.com?subject=Niveau%20Pleine%20puissance%20d%C3%A9bloqu%C3%A9&body=Alhamdulillah%20j\'ai%20atteint%20le%20niveau%20Pleine%20puissance%20!';
-}
 
 function renderSuggestionsEngage(s) {
   const container = document.getElementById('sugg-engage-list');
@@ -3954,9 +1995,6 @@ function renderCycle(s) {
 
   // Symptômes
   renderSymptomes();
-
-  // Trial lock (cycle)
-  applyTrialLocks();
 }
 
 function startNewCycleToday() {
@@ -3969,10 +2007,8 @@ function startNewCycleToday() {
     ST.cycleHistory.unshift({
       start: ST.cycleStart,
       duration: ST.cycleDuration || 28,
-      seanceCount: snap.seanceCount,
       prayerDays: snap.prayerDays,
       symptomDays: snap.symptomDays,
-      finalSeanceLevel: ST.seanceLevel || 1,
     });
     if (ST.cycleHistory.length > 6) ST.cycleHistory = ST.cycleHistory.slice(0, 6);
   }
@@ -3980,32 +2016,11 @@ function startNewCycleToday() {
   ST.hiverEnd = null;
   ST._lastCycleNum = -1;
 
-  // Gestion progression inter-cycles
-  const newCycleCount = (ST.cycleHistory || []).length + 1;
-  let transitionMessage = null;
-
-  if (newCycleCount === 2) {
-    transitionMessage = SPORT_PROGRESSION_MESSAGES.transition_cycle1_vers_2;
-  } else if (newCycleCount === 4) {
-    transitionMessage = SPORT_PROGRESSION_MESSAGES.transition_cycle3_vers_4;
-  } else if (newCycleCount === 3) {
-    transitionMessage = SPORT_PROGRESSION_MESSAGES.transition_construction;
-  } else if (newCycleCount > 4) {
-    transitionMessage = SPORT_PROGRESSION_MESSAGES.transition_performance;
-  }
-
   saveState();
   computeCycle();
   applySaisonTheme();
   populateAll();
   showPhaseToast('🌙', 'Hiver déclaré', 'Prends soin de toi 🌙');
-
-  // Afficher le message de transition avec délai
-  if (transitionMessage) {
-    setTimeout(() => {
-      showToast(transitionMessage);
-    }, 1500);
-  }
 }
 
 function declarerPrintemps() {
@@ -4311,24 +2326,12 @@ function renderMesLecturesModal() {
   const content = document.getElementById('mes-lectures-modal-content');
   if (!content) return;
 
-  const canRead = isFullAccess();
   const phases = ['hiver', 'printemps', 'ete', 'automne'];
   const emojis = { hiver: '🌙', printemps: '🌿', ete: '☀️', automne: '🍂' };
   const labels = { hiver: 'Hiver', printemps: 'Printemps', ete: 'Été', automne: 'Automne' };
   const currentPhase = ST.currentSaison || 'hiver';
 
   let html = '';
-
-  // Bandeau si pas d'accès complet
-  if (!canRead) {
-    html += `
-      <div style="background:linear-gradient(135deg,rgba(201,169,110,.13),rgba(168,122,48,.07));border:1px solid #D4B87A;border-radius:14px;padding:11px 14px;margin-bottom:16px;">
-        <div style="font-size:12px;color:#5A3A10;line-height:1.6;font-family:var(--serif);font-style:italic;text-align:center;">
-          Ton essai est terminé. Les lectures sont disponibles avec Premium. 🌸
-        </div>
-      </div>
-    `;
-  }
 
   phases.forEach(phase => {
     const lecturesPhase = LECTURES.filter(l => l.phase === phase);
@@ -4352,7 +2355,6 @@ function renderMesLecturesModal() {
 
     lecturesPhase.forEach(lecture => {
       const estLue = lecturesLues.find(l => l.id === lecture.id);
-      const peutLire = canRead;
 
       html += `
         <div style="display:flex;align-items:center;gap:12px;padding:12px;background:${estLue ? 'var(--season-soft)' : 'white'};border-radius:12px;margin-bottom:8px;border:1px solid var(--sable);">
@@ -4366,9 +2368,9 @@ function renderMesLecturesModal() {
               <span style="background:rgba(var(--season-rgb),.1);padding:2px 6px;border-radius:6px;">${lecture.duree} min</span>
             </div>
           </div>
-          <button onclick="${peutLire ? `openLectureModalById('${lecture.id}')` : `showToast('Rejoindre Premium pour accéder à toutes les lectures 🌸')`}"
-                  style="background:${peutLire ? 'var(--season)' : 'var(--gris)'};color:white;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:600;cursor:pointer;flex-shrink:0;opacity:${peutLire ? '1' : '.5'};">
-            ${peutLire ? 'Lire →' : 'Premium'}
+          <button onclick="openLectureModalById('${lecture.id}')"
+                  style="background:var(--season);color:white;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:600;cursor:pointer;flex-shrink:0;">
+            Lire →
           </button>
         </div>
       `;
@@ -4403,12 +2405,6 @@ function toggleMesLecturesPhase(phase) {
 // Ancienne fonction renderMesLectures supprimée - remplacée par renderMesLecturesModal()
 
 function relireLecture(lectureId) {
-  const isPremium = ST.isPremium || (ST.trialDaysLeft && ST.trialDaysLeft > 0);
-  if (!isPremium) {
-    showToast('Retrouve cette lecture avec Premium 🌸');
-    return;
-  }
-
   openLectureModal(lectureId);
 }
 
@@ -4601,7 +2597,7 @@ function renderMoiBilan() {
   if (!ST.cycleStart) { card.style.display = 'none'; return; }
   card.style.display = 'block';
 
-  const { seanceCount, seanceLevel, symptomDays, prayerDays, allPrayersDays, dhikrDays, coranDays, objCheckCount } = _bilanStats();
+  const { symptomDays, prayerDays, allPrayersDays, dhikrDays, coranDays, objCheckCount } = _bilanStats();
   const joursSuivis = ST.currentDay || 1;
   const dur = ST.cycleDuration || 28;
 
@@ -4629,14 +2625,10 @@ function renderMoiBilan() {
         <div style="height:100%;width:${pct}%;background:var(--season-grad);border-radius:4px;transition:width .4s;"></div>
       </div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:10px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;">
       <div style="background:var(--creme);border-radius:12px;padding:10px 6px;text-align:center;">
         <div style="font-size:20px;font-weight:700;color:var(--noir);font-family:var(--serif);">${prayerDays}</div>
         <div style="font-size:8px;color:var(--gris);margin-top:2px;line-height:1.3;">jours<br>3+ prières</div>
-      </div>
-      <div style="background:var(--creme);border-radius:12px;padding:10px 6px;text-align:center;">
-        <div style="font-size:20px;font-weight:700;color:var(--noir);font-family:var(--serif);">${seanceCount}</div>
-        <div style="font-size:8px;color:var(--gris);margin-top:2px;line-height:1.3;">séances<br>sport</div>
       </div>
       <div style="background:var(--creme);border-radius:12px;padding:10px 6px;text-align:center;">
         <div style="font-size:20px;font-weight:700;color:var(--noir);font-family:var(--serif);">${dhikrDays + coranDays}</div>
@@ -4677,7 +2669,7 @@ function checkDailyReset() {
   // Élaguer les entrées vieilles de plus de 30 jours pour limiter le localStorage
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - 30);
-  ['prayers','dhikrChecks','coranDone','seanceDone','symptomes','mouvDone','autreSymptomesText','feedbackSport'].forEach(key => {
+  ['prayers','dhikrChecks','coranDone','symptomes','autreSymptomesText'].forEach(key => {
     if (!ST[key] || typeof ST[key] !== 'object') return;
     Object.keys(ST[key]).forEach(k => { if (new Date(k) < cutoff) delete ST[key][k]; });
   });
@@ -4755,110 +2747,11 @@ function recordObjectifHistory(id, source, texte, categorie) {
 }
 
 function renderObjectifs() {
-  if (!isFullAccess()) {
-    renderObjectifsBlurGate();
-    return;
-  }
   renderObjSummary();
   renderSuggestionsJour();
   renderCategoriesGrid();
   renderObjPerso();
-  renderHistoriqueSport();
   renderCalendar();
-}
-
-function renderObjectifsBlurGate() {
-  const container = document.getElementById('tab-objectifs');
-  if (!container) return;
-
-  container.innerHTML = `
-    <div class="tab-topbar">
-      <div class="tab-topbar-title">Mes Objectifs</div>
-      <div class="tab-topbar-sub">Semaine &amp; cycle</div>
-    </div>
-
-    <!-- Contenu flouté en arrière-plan -->
-    <div style="filter: blur(3px); opacity: 0.4; pointer-events: none;">
-      <!-- RÉSUMÉ DU JOUR -->
-      <div class="obj-summary-card" style="background: var(--creme); border: 1.5px solid var(--sable); border-radius: 20px; padding: 18px; margin: 0 14px 16px;">
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <div style="font-size: 28px;">🌱</div>
-          <div>
-            <div style="font-size: 15px; font-weight: 700; color: var(--noir); margin-bottom: 4px;">Commence ta journée ✦</div>
-            <div style="font-size: 12px; color: var(--gris);">0 objectif accompli</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SECTION 1 : Pour toi aujourd'hui -->
-      <div class="obj-card">
-        <div class="obj-card-hdr">
-          <span class="obj-card-hdr-icon">&#10022;</span>
-          <span class="obj-card-hdr-title">POUR TOI AUJOURD'HUI</span>
-        </div>
-        <div style="padding: 0 16px 16px;">
-          <div class="obj-item" style="margin-bottom: 8px;">
-            <div class="obj-check"></div>
-            <div class="obj-content">
-              <div class="obj-label">🕌 Écouter le Coran</div>
-              <div class="obj-phase-tag">🌿 Printemps</div>
-            </div>
-          </div>
-          <div class="obj-item" style="margin-bottom: 8px;">
-            <div class="obj-check"></div>
-            <div class="obj-content">
-              <div class="obj-label">💆 Faire un masque douceur</div>
-              <div class="obj-phase-tag">🌿 Printemps</div>
-            </div>
-          </div>
-          <div class="obj-item">
-            <div class="obj-check"></div>
-            <div class="obj-content">
-              <div class="obj-label">🏠 Ranger 1 tiroir</div>
-              <div class="obj-phase-tag">🌿 Printemps</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SECTION 2 : Choisir mes objectifs -->
-      <div class="obj-card">
-        <div class="obj-card-hdr">
-          <span class="obj-card-hdr-icon">&#9672;</span>
-          <span class="obj-card-hdr-title">CHOISIR MES OBJECTIFS</span>
-        </div>
-        <div class="obj-cat-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 16px 16px;">
-          <div class="obj-cat-item">
-            <div class="obj-cat-icon">🕌</div>
-            <div class="obj-cat-label">Spiritualité</div>
-            <div class="obj-cat-count">5</div>
-          </div>
-          <div class="obj-cat-item">
-            <div class="obj-cat-icon">🏠</div>
-            <div class="obj-cat-label">Maison</div>
-            <div class="obj-cat-count">4</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Overlay Premium avec CTA -->
-    <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 100; background: white; border-radius: 24px; padding: 32px 24px; margin: 0 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.25); text-align: center; max-width: 320px; width: 100%;">
-      <div style="font-size: 40px; margin-bottom: 16px;">✨</div>
-      <div style="font-family: var(--serif); font-size: 20px; color: var(--noir); margin-bottom: 8px;">Objectifs Premium</div>
-      <div style="font-size: 14px; color: var(--gris); line-height: 1.6; margin-bottom: 24px;">
-        Suis tes objectifs selon ton cycle.<br>
-        Créé tes propres objectifs personnalisés.
-      </div>
-      <button onclick="startStripeCheckout()" style="width: 100%; padding: 16px; background: linear-gradient(135deg, #C9A96E, #A87A30); color: #1C1008; border: none; border-radius: 16px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: var(--sans);">
-        🌱 Grandir avec mes objectifs
-      </button>
-      <div style="font-size: 12px; color: var(--gris); margin-top: 12px; font-style: italic;">Essai gratuit 20 jours</div>
-    </div>
-
-    <!-- Overlay background -->
-    <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 99;"></div>
-  `;
 }
 
 function renderObjSummary() {
@@ -4925,15 +2818,12 @@ function renderCategoriesGrid() {
       </div>`;
   });
 
-  // Ajouter un bouton "+ Ajouter" si Premium
-  if (isFullAccess()) {
-    categoryItems.push(`
-      <div class="obj-cat-item" onclick="openObjAddModal()" style="border: 2px dashed var(--sable); background: var(--creme);">
-        <div class="obj-cat-icon" style="font-size: 24px;">+</div>
-        <div class="obj-cat-label" style="font-size: 12px;">Ajouter</div>
-        <div class="obj-cat-count"></div>
-      </div>`);
-  }
+  categoryItems.push(`
+    <div class="obj-cat-item" onclick="openObjAddModal()" style="border: 2px dashed var(--sable); background: var(--creme);">
+      <div class="obj-cat-icon" style="font-size: 24px;">+</div>
+      <div class="obj-cat-label" style="font-size: 12px;">Ajouter</div>
+      <div class="obj-cat-count"></div>
+    </div>`);
 
   container.innerHTML = categoryItems.join('');
 }
@@ -5189,28 +3079,6 @@ function renderObjPerso() {
   const container = document.getElementById('obj-perso-list');
   if (!container) return;
 
-  // Si Premium perdu, masquer sans supprimer les objectifs perso
-  if (!isFullAccess()) {
-    const customs = ST.customObjectifs || [];
-    if (customs.length > 0) {
-      container.innerHTML = `
-        <div style="padding: 16px; text-align: center; background: rgba(201, 169, 110, 0.1); border-radius: 14px; margin-bottom: 12px;">
-          <div style="font-size: 24px; margin-bottom: 8px;">🔒</div>
-          <div style="font-size: 13px; color: var(--gris); margin-bottom: 4px;">
-            <strong>${customs.length} objectif${customs.length > 1 ? 's' : ''} personnel${customs.length > 1 ? 's' : ''}</strong> préservé${customs.length > 1 ? 's' : ''}
-          </div>
-          <div style="font-size: 11px; color: var(--gris); font-style: italic;">
-            Redeviennent disponibles avec Premium
-          </div>
-        </div>
-      `;
-    } else {
-      container.innerHTML = '<div class="obj-empty">Ajoute un objectif qui te ressemble ✨</div>';
-    }
-    applyTrialLocks();
-    return;
-  }
-
   const customs = ST.customObjectifs || [];
   const weekKey = _getWeekKey();
   const todayStr = new Date().toISOString().slice(0, 10); // Format YYYY-MM-DD pour consistance
@@ -5241,8 +3109,6 @@ function renderObjPerso() {
         </div>`;
     }).join('');
   }
-
-  applyTrialLocks();
 }
 
 function addObjPerso() {
@@ -5347,14 +3213,12 @@ function renderCalendar() {
       }
     }
     const isToday = d === now.getDate();
-    const seanceDone = !!(ST.seanceDone && ST.seanceDone[dateStr]);
     const prayers = ST.prayers && ST.prayers[dateStr] ? Object.values(ST.prayers[dateStr]).filter(Boolean).length : 0;
     const phaseClass = phase ? ` cal-day-${phase}` : '';
     cells += `
       <div class="cal-day${phaseClass}${isToday ? ' cal-today' : ''}" onclick="openDayModal('${dateStr}','${phase || ''}')">
         <span class="cal-day-num">${d}</span>
         <div class="cal-day-icons">
-          ${seanceDone ? '<span class="cal-dot"></span>' : ''}
           ${prayers >= 3 && phase !== 'hiver' ? '<span class="cal-crescent">☽</span>' : ''}
         </div>
       </div>`;
@@ -5367,7 +3231,6 @@ function openDayModal(dateStr, phase) {
   const monthNames = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
   const phaseEmojis = { hiver:'🌙', printemps:'🌸', ete:'☀️', automne:'🍂' };
   const phaseNames  = { hiver:'Hiver', printemps:'Printemps', ete:'Été', automne:'Automne' };
-  const seanceDone = !!(ST.seanceDone && ST.seanceDone[dateStr]);
   const prayers = ST.prayers && ST.prayers[dateStr] ? Object.values(ST.prayers[dateStr]).filter(Boolean).length : 0;
   const coranDone = !!(ST.coranDone && ST.coranDone[dateStr]);
 
@@ -5380,9 +3243,6 @@ function openDayModal(dateStr, phase) {
       <div style="font-size:12px;color:var(--gris);margin-top:4px;">${phaseNames[phase] || phase}</div>
     </div>
     <div style="display:flex;flex-direction:column;gap:8px;">
-      <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:${seanceDone?'var(--season-soft)':'var(--creme)'};border-radius:12px;">
-        <span style="font-size:18px;">💪</span><span style="font-size:13px;color:var(--noir);">Séance — ${seanceDone?'Accomplie ✓':'Non faite'}</span>
-      </div>
       <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:${prayers>=3?'var(--season-soft)':'var(--creme)'};border-radius:12px;">
         <span style="font-size:18px;">🕌</span><span style="font-size:13px;color:var(--noir);">Prières — ${prayers}/5</span>
       </div>
@@ -5402,7 +3262,6 @@ function checkWeeklyReset() {
   monday.setDate(now.getDate() - (day - 1));
   const weekKey = monday.toISOString().split('T')[0];
   if (ST.lastWeeklyReset === weekKey) return;
-  ST.mouvDone = {};
   // Élaguer les entrées hebdomadaires > 4 semaines (ne pas tout effacer)
   const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 28);
   ['weeklyObjChecks', 'customObjChecks'].forEach(key => {
@@ -5455,18 +3314,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Initialiser les nouvelles propriétés si elles n'existent pas
   if (!ST.lecturesLues) ST.lecturesLues = [];
 
-  // Restaurer fullBodyOverride si la date est aujourd'hui
-  if (ST.fullBodyOverrideDate === new Date().toDateString() && ST.fullBodyOverrideData) {
-    const fb = ST.fullBodyOverrideData;
-    const sport = (typeof SEANCES_SPORT !== 'undefined') ? SEANCES_SPORT : null;
-    if (sport) {
-      let fbData = null;
-      if (fb.phase === 'printemps') fbData = sport.printemps?.fullBody?.[fb.level];
-      else if (fb.phase === 'automne') fbData = sport.automne?.actif?.fullBody?.[fb.level];
-      if (fbData) _fullBodyOverride = { type: 'fullbody', data: fbData, level: fb.level };
-    }
-  }
-
   checkDailyObjReset(); // Remise à zéro des coches chaque matin
   // iOS PWA : localStorage isolé de Safari → lire le cookie pour retrouver l'auth
   if (!ST.isAuthenticated && _getCookie('sakina_auth') === '1') {
@@ -5475,8 +3322,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     ST.authDate = ST.authDate || Date.now();
     saveState();
   }
-  if (!ST.installDate) { ST.installDate = Date.now(); saveState(); } // ms, pas ISO
-
   // Masquer les écrans arrière (loader couvre tout visuellement)
   document.getElementById('revelation').style.display = 'none';
   document.getElementById('app').style.display = 'none';
@@ -5529,7 +3374,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         ST.userEmail = ST.userEmail || session.user.email;
         await loadFromSupabase(sb, session.user.id);
         ST.isAuthenticated = true;
-        await verifyPremiumFromDB(sb, session.user.id);
         setupAuthListener(sb);
         if (_hasAccount) initApp();
 
@@ -5561,8 +3405,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  checkPaymentSuccess();
-  checkTrialEnd();
   checkDailyReset();
   checkWeeklyReset();
 
@@ -5655,7 +3497,6 @@ function doCheckin(mood) {
   ST.checkin = mood; ST.checkinDate = new Date().toDateString();
   document.getElementById('checkin-overlay').style.display = 'none';
   updateMessage();
-  renderCarteBouger(SAISONS[ST.currentSaison]);
   saveState();
 }
 function updateMessage() {
@@ -5761,48 +3602,6 @@ function showPrayerCelebration() {
 }
 
 // ═══════════════════════════════════════════════
-// SPORT
-// ═══════════════════════════════════════════════
-function toggleMouv(idx, el) {
-  const today = new Date().toDateString();
-  if (!ST.mouvDone) ST.mouvDone = {};
-  if (!ST.mouvDone[today]) ST.mouvDone[today] = [];
-  const done = ST.mouvDone[today];
-  const i = done.indexOf(idx);
-  if (i > -1) done.splice(i, 1); else done.push(idx);
-  saveState();
-  const isDone = done.includes(idx);
-  el.style.background = isDone ? 'var(--season-soft)' : 'white';
-  el.style.borderColor = isDone ? 'var(--season)' : 'var(--sable)';
-  const chk = el.querySelector('div');
-  if (chk) { chk.style.background=isDone?'var(--season)':'transparent'; chk.style.borderColor=isDone?'var(--season)':'var(--sable)'; chk.textContent=isDone?'✓':''; }
-  const total = document.getElementById('sport-mouvements')?.children.length || 0;
-  updateMouvProgress(total);
-}
-function updateMouvProgress(total) {
-  const today = new Date().toDateString();
-  const done = (ST.mouvDone && ST.mouvDone[today]) ? ST.mouvDone[today].length : 0;
-  const pct = total > 0 ? Math.round(done/total*100) : 0;
-  const lbl = document.getElementById('mouv-progress-label');
-  const pctEl = document.getElementById('mouv-progress-pct');
-  const fill = document.getElementById('mouv-progress-fill');
-  if (lbl) lbl.textContent = done + ' / ' + total + ' pratiqués';
-  if (pctEl) pctEl.textContent = pct + '%';
-  if (fill) fill.style.width = pct + '%';
-}
-function restoreSeanceDone() {
-  const today = new Date().toDateString();
-  if (ST.seanceDone && ST.seanceDone[today]) {
-    // noop — renderCarteBouger gère déjà qs-btn-wrap / qs-done-wrap
-  } else {
-    const btn = document.getElementById('sport-validate-btn');
-    const done = document.getElementById('sport-done-state');
-    if (btn) btn.style.display = 'block';
-    if (done) done.style.display = 'none';
-  }
-}
-
-// ═══════════════════════════════════════════════
 // GLAIRE CERVICALE
 // ═══════════════════════════════════════════════
 function selectGlaire(el, type) {
@@ -5866,75 +3665,6 @@ function getAutomneMicroPhase(cycleDay, cycleDur) {
   if (autDay <= Math.floor(autLen * 0.35)) return 'actif';
   if (autDay <= Math.floor(autLen * 0.70)) return 'doux';
   return 'fin';
-}
-
-function getTodaySeanceSpec() {
-  if (typeof SEANCES_SPORT === 'undefined') return null;
-  const phase = ST.currentSaison;
-  const day = ST.currentDay;
-  const dur = effectiveCycleDur();
-  const level = ST.seanceLevel || 1;
-  const checkin = ST.checkin;
-  const sport = SEANCES_SPORT;
-
-  if (checkin === 'calme' && ST.calmeOverride !== new Date().toDateString()) return { type: 'calme', data: sport.calme };
-
-  switch (phase) {
-    case 'hiver': {
-      const h = sport.hiver;
-      const effectiveLevel = (checkin === 'fatiguee') ? Math.max(1, level - 1) : level;
-      const hiverData = (h.niveaux ? h.niveaux[effectiveLevel] : null) || h;
-      return { type: 'hiver', data: hiverData, level: effectiveLevel };
-    }
-
-    case 'printemps': {
-      const dayIdx = dayWithinPhase(day, dur);
-      const planning = sport.printemps.planning;
-      const dayType = planning[dayIdx % planning.length];
-      if (dayType === 'repos') {
-        return { type: 'repos', reposSec: sport.printemps.niveauxRepos[level] || 45, level };
-      }
-      const niveauData = sport.printemps[dayType][level];
-      if (!niveauData) return null;
-      if (dayType === 'bas' && level === 4 && niveauData.rotation && niveauData.rotation.length) {
-        const rotIdx = (ST.printempsBasCount || 0) % niveauData.rotation.length;
-        const rot = niveauData.rotation[rotIdx];
-        return { type: 'printemps-bas', data: { nom: rot.nom, duree: niveauData.duree, exercices: rot.exercices }, level, rotIdx };
-      }
-      return { type: 'printemps-' + dayType, data: niveauData, level };
-    }
-
-    case 'ete': {
-      const dayIdx = dayWithinPhase(day, dur);
-      const planning = sport.ete.planning;
-      const dayType = planning[dayIdx % planning.length];
-      if (dayType === 'repos') {
-        return { type: 'ete-repos', message: sport.ete.messageApresIntense };
-      }
-
-      // Alternance bas/haut : version simplifiée plus fiable
-      const eteIdx = ST.eteSessionIdx || 0;
-      if (eteIdx % 2 === 1 && sport.ete.rotationHaut?.[level]) {
-        const niveauData = sport.ete.rotationHaut[level];
-        return { type: 'ete-intense-haut', data: niveauData, level };
-      }
-
-      const niveauData = sport.ete.niveaux[level];
-      if (!niveauData) return null;
-      return { type: 'ete-intense', data: niveauData, level };
-    }
-
-    case 'automne': {
-      const micro = getAutomneMicroPhase(day, dur);
-      const microData = sport.automne[micro];
-      const niveauData = microData?.niveaux?.[level];
-      if (!niveauData) return null;
-      return { type: `automne-${micro}`, data: niveauData, level };
-    }
-
-    default:
-      return null;
-  }
 }
 
 function phaseForDay(i, dur) {
@@ -6196,11 +3926,6 @@ async function joinWaitlist() {
     else throw new Error();
   } catch(e) { msg.style.color='#C4694A'; msg.textContent="Une erreur est survenue."; btn.disabled=false; btn.textContent='Rejoindre ✦'; }
 }
-function goToPremium() {
-  switchTabById('moi');
-  setTimeout(() => { const w=document.getElementById('waitlist-email'); if(w) w.scrollIntoView({behavior:'smooth',block:'center'}); }, 200);
-}
-
 // ═══════════════════════════════════════════════
 // FEEDBACK
 // ═══════════════════════════════════════════════
@@ -6409,46 +4134,20 @@ function renderPatterns() {
   `;
 
   const premEl = document.getElementById('patterns-premium');
-  if (isFullAccess()) {
-    // Premium / trial : données réelles débloquées
-    if (topSymp.length === 0) {
-      premEl.innerHTML = `
-        <div style="border-radius:14px;padding:14px 16px;background:var(--creme);margin-top:4px;">
-          <div style="font-size:12px;color:var(--gris);line-height:1.6;">Note tes symptômes chaque jour depuis l'onglet Cycle — tes patterns apparaîtront ici au fil des semaines.</div>
-        </div>`;
-    } else {
-      const daysUntilNext = Math.max(0, (ST.cycleDuration || 28) - (ST.currentDay - 1));
-      premEl.innerHTML = `
-        <div style="border-radius:14px;padding:14px 16px;background:var(--creme);margin-top:4px;">
-          <div style="font-size:10px;font-weight:600;color:var(--gris);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">Tes symptômes les plus fréquents</div>
-          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;">
-            ${topSymp.map(s => `<div style="background:white;border-radius:10px;padding:6px 12px;font-size:12px;display:flex;align-items:center;gap:6px;">${s.emoji} <span>${s.label}</span> <span style="color:var(--gris);">·</span> <b>${s.cnt}×</b></div>`).join('')}
-          </div>
-          <div style="font-size:11px;color:var(--gris);">🔮 Prochaines règles prévues dans <b style="color:var(--noir);">≈ ${daysUntilNext} jour${daysUntilNext > 1 ? 's' : ''}</b></div>
-        </div>`;
-    }
-  } else {
-    // Non premium : aperçu flouté
-    const previewSymptoms = topSymp.length >= 2 ? topSymp : [
-      { emoji: '😴', label: 'Fatigue', cnt: 8 },
-      { emoji: '🌀', label: 'Crampes', cnt: 5 },
-      { emoji: '🌸', label: 'Bonne humeur', cnt: 4 },
-    ];
+  if (topSymp.length === 0) {
     premEl.innerHTML = `
-      <div style="position:relative;border-radius:14px;overflow:hidden;margin-top:4px;">
-        <div style="filter:blur(3px);pointer-events:none;user-select:none;padding:14px;background:var(--creme);">
-          <div style="font-size:10px;font-weight:600;color:var(--gris);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">Tes symptômes les plus fréquents</div>
-          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">
-            ${previewSymptoms.map(s => `<div style="background:white;border-radius:10px;padding:6px 12px;font-size:12px;display:flex;align-items:center;gap:6px;">${s.emoji} <span>${s.label}</span> <span style="color:var(--gris);">·</span> <b>${s.cnt}×</b></div>`).join('')}
-          </div>
-          <div style="font-size:12px;color:var(--gris);">🔮 Prochaines règles prévues dans ≈ 8 jours</div>
+      <div style="border-radius:14px;padding:14px 16px;background:var(--creme);margin-top:4px;">
+        <div style="font-size:12px;color:var(--gris);line-height:1.6;">Note tes symptômes chaque jour depuis l'onglet Cycle — tes patterns apparaîtront ici au fil des semaines.</div>
+      </div>`;
+  } else {
+    const daysUntilNext = Math.max(0, (ST.cycleDuration || 28) - (ST.currentDay - 1));
+    premEl.innerHTML = `
+      <div style="border-radius:14px;padding:14px 16px;background:var(--creme);margin-top:4px;">
+        <div style="font-size:10px;font-weight:600;color:var(--gris);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">Tes symptômes les plus fréquents</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;">
+          ${topSymp.map(s => `<div style="background:white;border-radius:10px;padding:6px 12px;font-size:12px;display:flex;align-items:center;gap:6px;">${s.emoji} <span>${s.label}</span> <span style="color:var(--gris);">·</span> <b>${s.cnt}×</b></div>`).join('')}
         </div>
-        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,0.72);backdrop-filter:blur(1px);">
-          <div style="font-size:28px;margin-bottom:8px;">✨</div>
-          <div style="font-size:14px;font-weight:700;color:var(--noir);margin-bottom:4px;font-family:var(--serif);">Fonctionnalité Premium</div>
-          <div style="font-size:12px;color:var(--gris);margin-bottom:14px;text-align:center;max-width:200px;line-height:1.5;">Patterns, prédictions et analyse<br>de tes cycles complets</div>
-          <button onclick="showBilanModal()" style="background:var(--season-grad);color:white;border:none;border-radius:12px;padding:10px 22px;font-size:12px;font-weight:700;font-family:var(--sans);cursor:pointer;letter-spacing:.5px;">Débloquer Premium</button>
-        </div>
+        <div style="font-size:11px;color:var(--gris);">🔮 Prochaines règles prévues dans <b style="color:var(--noir);">≈ ${daysUntilNext} jour${daysUntilNext > 1 ? 's' : ''}</b></div>
       </div>`;
   }
 }
@@ -6479,8 +4178,8 @@ function importData() {
       try {
         const parsed = JSON.parse(e.target.result);
         if (typeof parsed !== 'object' || parsed === null) throw new Error();
-        // Bloquer les champs de session et Premium — ne doivent jamais venir d'un fichier externe
-        ['supabaseUserId','supabaseEmail','isPremium','premiumPlan','premiumSince',
+        // Bloquer les champs de session — ne doivent jamais venir d'un fichier externe
+        ['supabaseUserId','supabaseEmail',
          'isAuthenticated','authDate','userEmail','welcomeEmailSent'].forEach(f => delete parsed[f]);
         if (confirm('Restaurer ces données ? Tes données actuelles seront remplacées.')) {
           localStorage.setItem('sakinapp_v1', JSON.stringify(parsed));
@@ -6855,715 +4554,3 @@ function toggleHygiene() {
   if (arrow) arrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
 }
 
-// ═══════════════════════════════════════════════════════════════
-// SEANCE TIMER COMPLET — machine à états guidée
-// RAF-based, Web Audio, WakeLock, Page Visibility API
-// ═══════════════════════════════════════════════════════════════
-const _ST_C = 534.07; // Circonférence SVG : 2*PI*85
-
-const _stx = {
-  steps: [],
-  idx: 0,
-  total: 0,
-  elapsed: 0,
-  duration: 0,
-  remaining: 0,
-  running: false,
-  paused: false,
-  soundOn: true,
-  rafId: null,
-  lastTs: null,
-  wakeLock: null,
-  audioCtx: null,
-  breathRaf: null,
-  breathStart: null,
-  _hiddenAt: null,
-  _stSide: 0, // 0 = premier côté, 1 = deuxième côté pour exercices bilatéraux
-  _sideChangeTimer: null,
-};
-
-const _stSciSeries = [
-  'Chaque répétition forge ta force intérieure.',
-  'Le muscle se construit dans l\'effort et le repos.',
-  'Respire — l\'oxygène est ton carburant.',
-  'Focus sur la sensation, pas sur le chiffre.',
-];
-const _stSciExercise = [
-  'Le mouvement est médecine pour le corps.',
-  'Chaque séance est un acte d\'amour envers toi.',
-  'Le progrès est silencieux mais réel.',
-  'La régularité bat l\'intensité à long terme.',
-];
-
-const _stPhaseMsg = {
-  hiver:     'Écoute ton corps — chaque geste compte.',
-  printemps: 'Ton énergie renaît — accueille-la.',
-  ete:       'Tu es au pic — exprime ta puissance.',
-  automne:   'La douceur est une force en Automne.',
-};
-
-function _stParseDur(str) {
-  if (!str || str === '—' || str === '-' || str === 'aucun') return 0;
-  if (typeof str === 'number') return str;
-  const s = String(str).trim();
-  const m = s.match(/^(\d+)\s*min/i);
-  if (m) return parseInt(m[1]) * 60;
-  const s2 = s.match(/^(\d+)\s*s/i);
-  if (s2) return parseInt(s2[1]);
-  const n = parseInt(s);
-  return isNaN(n) ? 30 : n;
-}
-
-function _stGetRest(phase) {
-  const map = { hiver: 60, printemps: 45, ete: 30, automne: 65 };
-  return map[phase] || 45;
-}
-
-function _stFormatTime(secs) {
-  const s = Math.max(0, Math.round(secs));
-  const m = Math.floor(s / 60);
-  const ss = s % 60;
-  return m > 0 ? m + ':' + String(ss).padStart(2, '0') : ss + 's';
-}
-
-function _stNormalizeEx(ex, idx) {
-  if (!ex) return null;
-  return {
-    nom: ex.nom || ex.exercice || ex.name || ('Exercice ' + (idx + 1)),
-    series: ex.series || ex.sets || 1,
-    reps: ex.repetitions || ex.reps || null,
-    duree: ex.duree || ex.duration || null,
-    repos: ex.repos || ex.rest || null,
-    desc: ex.description || ex.desc || ex.detail || '',
-    conseil: ex.conseil_cycle || ex.conseil || '',
-    mod_easy: ex.modification_facile || '',
-    mod_hard: ex.modification_difficile || '',
-    parJambe: ex.parJambe || false,
-  };
-}
-
-// ── Web Audio ────────────────────────────────────────────────
-function _stAudioCtx() {
-  if (!_stx.audioCtx) {
-    try { _stx.audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
-  }
-  return _stx.audioCtx;
-}
-
-function _stBeep(freq, dur, vol, type) {
-  if (!_stx.soundOn) return;
-  const ctx = _stAudioCtx();
-  if (!ctx) return;
-  try {
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.type = type || 'sine';
-    osc.frequency.value = freq;
-    gain.gain.setValueAtTime(vol || 0.3, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
-    osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + dur);
-  } catch(e) {}
-}
-
-function _stSoundStart()  { _stBeep(660, 0.15, 0.4, 'sine'); }
-function _stSoundTick()   { _stBeep(880, 0.08, 0.2, 'square'); }
-function _stSoundNext()   { _stBeep(523, 0.2, 0.35, 'sine'); setTimeout(function() { _stBeep(659, 0.2, 0.35, 'sine'); }, 120); }
-function _stSoundDone()   {
-  [523, 659, 784, 1047].forEach(function(f, i) { setTimeout(function() { _stBeep(f, 0.3, 0.4, 'sine'); }, i * 130); });
-}
-function _stSoundRest()   { _stBeep(392, 0.25, 0.3, 'triangle'); }
-
-// ── WakeLock ─────────────────────────────────────────────────
-async function _stAcquireWL() {
-  try {
-    if ('wakeLock' in navigator) {
-      _stx.wakeLock = await navigator.wakeLock.request('screen');
-    }
-  } catch(e) {}
-}
-function _stReleaseWL() {
-  if (_stx.wakeLock) { try { _stx.wakeLock.release(); } catch(e) {} _stx.wakeLock = null; }
-}
-
-// ── Page Visibility ──────────────────────────────────────────
-document.addEventListener('visibilitychange', function() {
-  if (!_stx.running || _stx.paused) return;
-  if (document.visibilityState === 'hidden') {
-    _stx._hiddenAt = performance.now();
-    if (_stx.rafId) { cancelAnimationFrame(_stx.rafId); _stx.rafId = null; }
-  } else {
-    if (_stx._hiddenAt) {
-      const elapsed = (performance.now() - _stx._hiddenAt) / 1000;
-      _stx.remaining = Math.max(0, _stx.remaining - elapsed);
-      _stx.elapsed = Math.min(_stx.total, _stx.elapsed + elapsed);
-      _stx._hiddenAt = null;
-    }
-    _stx.lastTs = performance.now();
-    _stx.rafId = requestAnimationFrame(_stxTick);
-    _stAcquireWL();
-  }
-});
-
-// ── Construire les étapes ─────────────────────────────────────
-function _stxBuildSteps(spec, overrideRest) {
-  const steps = [];
-  const phase = (typeof ST !== 'undefined' && ST.currentSaison) || 'printemps';
-  const restDur = (overrideRest != null) ? overrideRest : _stGetRest(phase);
-
-  const warmup = (spec && spec.echauffement) ? spec.echauffement : null;
-  if (warmup && warmup.length) {
-    warmup.forEach(function(item, i) {
-      steps.push({
-        type: 'warmup',
-        label: 'Échauffement',
-        title: item.exercice || item.nom || ('Échauffement ' + (i + 1)),
-        duration: _stParseDur(item.duree),
-        desc: item.description || '',
-        isLast: i === warmup.length - 1,
-      });
-    });
-  } else {
-    steps.push({ type: 'warmup', label: 'Échauffement', title: 'Mobilisation articulaire', duration: 120, desc: 'Cercles épaules, hanches, chevilles. Respire profondément.', isLast: true });
-  }
-
-  const exList = (spec && spec.exercices) ? spec.exercices : [];
-  if (!exList.length) {
-    steps.push({ type: 'exercise', label: 'Mouvement doux', title: 'Respiration & mobilité', duration: 300, desc: 'Respiration abdominale profonde, mobilité articulaire douce. Cercles d\'épaules, hanches, chevilles. Écoute ton corps.', series: 1, serieIdx: 0, seriesTotal: 1, exIdx: 0, exTotal: 1 });
-  } else {
-    exList.forEach(function(rawEx, exIdx) {
-      const ex = _stNormalizeEx(rawEx, exIdx);
-      if (!ex) return;
-      const seriesCount = ex.series || 1;
-      const exDur = ex.duree ? _stParseDur(ex.duree) : (ex.reps ? ex.reps * 3 : 40);
-      const repoDur = ex.repos ? _stParseDur(ex.repos) : restDur;
-      for (let s = 0; s < seriesCount; s++) {
-        steps.push({
-          type: 'exercise',
-          label: 'Exercice',
-          title: ex.nom,
-          duration: exDur,
-          desc: ex.desc,
-          conseil: ex.conseil,
-          mod_easy: ex.mod_easy,
-          mod_hard: ex.mod_hard,
-          reps: ex.reps,
-          serieIdx: s,
-          seriesTotal: seriesCount,
-          exIdx: exIdx,
-          exTotal: exList.length,
-          parJambe: ex.parJambe,
-        });
-        if (s < seriesCount - 1 && repoDur > 0) {
-          steps.push({ type: 'rest_series', label: 'Repos série', title: 'Repos — ' + ex.nom, duration: repoDur, serieIdx: s, seriesTotal: seriesCount });
-        }
-      }
-      if (exIdx < exList.length - 1 && restDur > 0) {
-        steps.push({ type: 'rest_exercise', label: 'Repos', title: 'Repos entre exercices', duration: restDur, exIdx: exIdx, exTotal: exList.length });
-      }
-    });
-  }
-
-  const cooldown = (spec && spec.retour_au_calme) ? spec.retour_au_calme : null;
-  if (cooldown && cooldown.length) {
-    cooldown.forEach(function(item, i) {
-      steps.push({
-        type: 'cooldown',
-        label: 'Retour au calme',
-        title: item.exercice || item.nom || ('Étirement ' + (i + 1)),
-        duration: _stParseDur(item.duree),
-        desc: item.description || '',
-      });
-    });
-  } else {
-    steps.push({ type: 'cooldown', label: 'Retour au calme', title: 'Étirements doux', duration: 180, desc: 'Étire les groupes musculaires sollicités. Respire, relâche.', isLast: true });
-  }
-
-  return steps;
-}
-
-// ── Normalisation EMOM/AMRAP → exercices guidés ──────────────
-function _stxNormalizeEteIntense(niveauData) {
-  const exercices = [];
-  if (niveauData.type === 'emom') {
-    const rounds = niveauData.duree || 10;
-    const reps = niveauData.reps || 5;
-    const exDurSec = reps * 3;
-    const restSec = Math.max(10, 60 - exDurSec);
-    for (let i = 0; i < rounds; i++) {
-      exercices.push({
-        nom: niveauData.exercice + ' — Round ' + (i + 1) + '/' + rounds,
-        reps: reps,
-        repos: restSec,
-        parJambe: niveauData.parJambe || false,
-        detail: 'Effectue ' + reps + ' répétitions' + (niveauData.parJambe ? ' par jambe' : '') + ', puis récupère jusqu\'à la prochaine minute.',
-      });
-    }
-  } else if (niveauData.type === 'amrap') {
-    const circuit = niveauData.circuit || [];
-    const rounds = 8;
-    for (let r = 0; r < rounds; r++) {
-      circuit.forEach(function(ex) {
-        exercices.push({
-          nom: ex.nom + ' — Tour ' + (r + 1) + '/' + rounds,
-          reps: ex.reps,
-          repos: 5,
-          parJambe: ex.parJambe || false,
-          detail: ex.reps + ' rép' + (ex.parJambe ? ' par jambe' : '') + '. Enchaîne sans pause — compte tes tours complets.',
-        });
-      });
-    }
-  }
-  return { exercices: exercices };
-}
-
-// ── Ouvrir le timer ──────────────────────────────────────────
-function openSeanceTimer() {
-  const spec = (typeof getTodaySeanceSpec === 'function') ? getTodaySeanceSpec() : null;
-  const enriched = (spec && typeof getSeanceEnrichie === 'function')
-    ? getSeanceEnrichie(spec.type, spec.level || 1)
-    : null;
-  let data = enriched || (spec && spec.data) || null;
-
-  // ete-intense : EMOM/AMRAP → steps guidés
-  if (spec && spec.type === 'ete-intense' && data && !data.exercices) {
-    data = _stxNormalizeEteIntense(data);
-  }
-
-  let _stLevelRest = null;
-  if (spec && typeof SEANCES_SPORT !== 'undefined') {
-    const _nrMap = SEANCES_SPORT.printemps && SEANCES_SPORT.printemps.niveauxRepos;
-    const _baseRest = _nrMap ? (_nrMap[spec.level || 1] || null) : null;
-    if (_baseRest != null) {
-      if (spec.type && spec.type.startsWith('printemps-')) _stLevelRest = _baseRest;
-    }
-  }
-  // Séances calmes/automne-doux : pas de repos entre exercices ni séries
-  const _stCalmeRest = (spec && spec.type === 'automne-doux') ? 0 : _stLevelRest;
-  _stx.steps = _stxBuildSteps(data, _stCalmeRest);
-  _stx.idx = 0;
-  _stx.elapsed = 0;
-  _stx.total = _stx.steps.reduce(function(sum, s) { return sum + s.duration; }, 0);
-  _stx.running = false;
-  _stx.paused = false;
-  _stx._stSide = 0;
-
-  const overlay = document.getElementById('st-overlay');
-  if (!overlay) return;
-  overlay.classList.add('open');
-  document.body.style.overflow = 'hidden';
-
-  _stxUpdateHeader();
-  _stxRender();
-  _stxOverlay('st-pause-ov', false);
-  _stxOverlay('st-stop-ov', false);
-  _stxOverlay('st-mod-ov', false);
-}
-
-function _stxClose() {
-  _stx.running = false;
-  _stx.paused = false;
-  if (_stx.rafId) { cancelAnimationFrame(_stx.rafId); _stx.rafId = null; }
-  if (_stx.breathRaf) { cancelAnimationFrame(_stx.breathRaf); _stx.breathRaf = null; }
-  if (_stx._sideChangeTimer) { clearTimeout(_stx._sideChangeTimer); _stx._sideChangeTimer = null; }
-  _stx._stSide = 0;
-  _stReleaseWL();
-  const overlay = document.getElementById('st-overlay');
-  if (overlay) overlay.classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-// ── Render étape courante ────────────────────────────────────
-function _stxRender() {
-  const step = _stx.steps[_stx.idx];
-  if (!step) { _stxDone(); return; }
-  _stx.duration = Math.max(1, step.duration);
-  _stx.remaining = Math.max(1, step.duration);
-
-  const label = document.getElementById('st-state-label');
-  const title = document.getElementById('st-ex-title');
-  const desc = document.getElementById('st-desc');
-  const sci = document.getElementById('st-science');
-  const count = document.getElementById('st-count');
-  const countUnit = document.getElementById('st-count-unit');
-  const breathWrap = document.getElementById('st-breath-wrap');
-  const nextEl = document.getElementById('st-next');
-  const modsEl = document.getElementById('st-mods');
-  const doneWrap = document.getElementById('st-done-wrap');
-  const body = document.getElementById('st-body');
-  const actionBtn = document.getElementById('st-action-btn');
-  const skipBtn = document.getElementById('st-skip-btn');
-
-  if (doneWrap) doneWrap.classList.remove('visible');
-  if (body) body.style.display = '';
-
-  if (label) label.textContent = step.label;
-  if (title) title.textContent = step.title;
-
-  switch (step.type) {
-    case 'warmup':         _stRenderWarmup(step, desc, sci, count, countUnit, breathWrap, modsEl); break;
-    case 'exercise':       _stRenderExercise(step, desc, sci, count, countUnit, breathWrap, modsEl); break;
-    case 'rest_series':    _stRenderRestSeries(step, desc, sci, count, countUnit, breathWrap, modsEl); break;
-    case 'rest_exercise':  _stRenderRestExercise(step, desc, sci, count, countUnit, breathWrap, modsEl); break;
-    case 'cooldown':       _stRenderCooldown(step, desc, sci, count, countUnit, breathWrap, modsEl); break;
-  }
-
-  const nextStep = _stx.steps[_stx.idx + 1];
-  if (nextEl) {
-    nextEl.textContent = nextStep ? ('Suivant : ' + nextStep.title) : 'Dernière étape';
-    nextEl.style.display = '';
-  }
-
-  if (actionBtn) {
-    if (_stx.running) {
-      actionBtn.textContent = 'Pause';
-      actionBtn.onclick = stTogglePause;
-    } else {
-      actionBtn.textContent = 'Démarrer';
-      actionBtn.onclick = stAction;
-    }
-  }
-  if (skipBtn) skipBtn.style.display = _stx.steps.length > 1 ? '' : 'none';
-
-  _stxSetArc(1);
-  const timeEl = document.getElementById('st-time-left');
-  if (timeEl) timeEl.textContent = _stFormatTime(step.duration);
-}
-
-function _stRenderWarmup(step, desc, sci, count, countUnit, breathWrap, modsEl) {
-  if (desc) desc.textContent = step.desc || 'Mobilise tes articulations doucement.';
-  if (sci) { sci.textContent = 'L\'échauffement réduit les blessures de 50 %.'; sci.style.display = ''; }
-  if (count) count.textContent = '';
-  if (countUnit) countUnit.textContent = '';
-  if (breathWrap) breathWrap.style.display = 'none';
-  if (modsEl) modsEl.innerHTML = '';
-}
-
-function _stRenderExercise(step, desc, sci, count, countUnit, breathWrap, modsEl) {
-  const sideLabel = step.parJambe && _stx._stSide === 1 ? ' — Côté droit' : (step.parJambe && _stx._stSide === 0 ? ' — Côté gauche' : '');
-  const serieLabel = step.seriesTotal > 1 ? (' — Série ' + (step.serieIdx + 1) + '/' + step.seriesTotal) : '';
-  if (desc) desc.textContent = (step.desc || '') + (step.conseil ? (' ' + step.conseil) : '');
-  const sciMsg = _stSciExercise[step.exIdx % _stSciExercise.length];
-  if (sci) { sci.textContent = sciMsg; sci.style.display = ''; }
-  if (count) {
-    if (step.reps) { count.textContent = step.reps; countUnit.textContent = 'rép.' + sideLabel + serieLabel; }
-    else { count.textContent = ''; countUnit.textContent = (sideLabel + serieLabel).trim(); }
-  }
-  if (breathWrap) breathWrap.style.display = 'none';
-  if (modsEl) {
-    modsEl.innerHTML = '';
-    if (step.mod_easy) {
-      const b = document.createElement('button');
-      b.className = 'st-mod-btn st-mod-easy';
-      b.textContent = 'Plus facile';
-      b.onclick = function() { stShowMod('easy', step.mod_easy); };
-      modsEl.appendChild(b);
-    }
-    if (step.mod_hard) {
-      const b = document.createElement('button');
-      b.className = 'st-mod-btn st-mod-hard';
-      b.textContent = 'Plus difficile';
-      b.onclick = function() { stShowMod('hard', step.mod_hard); };
-      modsEl.appendChild(b);
-    }
-  }
-}
-
-function _stRenderRestSeries(step, desc, sci, count, countUnit, breathWrap, modsEl) {
-  if (desc) desc.textContent = 'Récupère avant la prochaine série. Respire profondément.';
-  const sciMsg = _stSciSeries[step.serieIdx % _stSciSeries.length];
-  if (sci) { sci.textContent = sciMsg; sci.style.display = ''; }
-  if (count) { count.textContent = (step.seriesTotal - step.serieIdx - 1); countUnit.textContent = 'séries restantes'; }
-  if (breathWrap) breathWrap.style.display = '';
-  if (modsEl) modsEl.innerHTML = '';
-  _stxStartBreath(4, 4, 6);
-}
-
-function _stRenderRestExercise(step, desc, sci, count, countUnit, breathWrap, modsEl) {
-  if (desc) desc.textContent = 'Profite de cette pause. Hydrate-toi si besoin.';
-  if (sci) { sci.textContent = 'Le repos est aussi important que l\'effort.'; sci.style.display = ''; }
-  if (count) { count.textContent = (step.exTotal - step.exIdx - 1); countUnit.textContent = 'exercices restants'; }
-  if (breathWrap) breathWrap.style.display = '';
-  if (modsEl) modsEl.innerHTML = '';
-  _stxStartBreath(4, 7, 8);
-}
-
-function _stRenderCooldown(step, desc, sci, count, countUnit, breathWrap, modsEl) {
-  if (desc) desc.textContent = step.desc || 'Étire en douceur. Reste dans le confort.';
-  if (sci) { sci.textContent = 'Les étirements améliorent la récupération musculaire.'; sci.style.display = ''; }
-  if (count) { count.textContent = ''; countUnit.textContent = ''; }
-  if (breathWrap) breathWrap.style.display = 'none';
-  if (modsEl) modsEl.innerHTML = '';
-}
-
-// ── Timer RAF ────────────────────────────────────────────────
-function _stxStartTimer() {
-  if (_stx.rafId) cancelAnimationFrame(_stx.rafId);
-  _stx.lastTs = performance.now();
-  _stx.running = true;
-  _stx.paused = false;
-  _stAcquireWL();
-  _stSoundStart();
-  _stx.rafId = requestAnimationFrame(_stxTick);
-  const actionBtn = document.getElementById('st-action-btn');
-  if (actionBtn) { actionBtn.textContent = 'Pause'; actionBtn.onclick = stTogglePause; }
-}
-
-function _stxTick(ts) {
-  if (!_stx.running || _stx.paused) return;
-  const dt = (ts - _stx.lastTs) / 1000;
-  _stx.lastTs = ts;
-  _stx.remaining -= dt;
-  _stx.elapsed = Math.min(_stx.total, _stx.elapsed + dt);
-
-  const timeEl = document.getElementById('st-time-left');
-  if (timeEl) timeEl.textContent = _stFormatTime(_stx.remaining);
-
-  const progress = Math.max(0, Math.min(1, _stx.remaining / _stx.duration));
-  _stxSetArc(progress);
-  _stxUpdateHeader();
-
-  if (_stx.remaining <= 3.05 && _stx.remaining > 2.95) _stSoundTick();
-  if (_stx.remaining <= 2.05 && _stx.remaining > 1.95) _stSoundTick();
-  if (_stx.remaining <= 1.05 && _stx.remaining > 0.95) _stSoundTick();
-
-  if (_stx.remaining <= 0) { _stxTimerEnd(); return; }
-  _stx.rafId = requestAnimationFrame(_stxTick);
-}
-
-function _stxTimerEnd() {
-  _stx.running = false;
-  _stx.rafId = null;
-  _stxAdvance();
-}
-
-function _stxAdvance() {
-  const currentStep = _stx.steps[_stx.idx];
-
-  // Gestion des exercices bilatéraux
-  if (currentStep && currentStep.type === 'exercise' && currentStep.parJambe && _stx._stSide === 0) {
-    // Premier côté terminé d'un exercice bilatéral → message de changement
-    _stx._stSide = 1;
-    _stxShowSideChangeMessage();
-    return;
-  }
-
-  // Reset du côté si on termine un exercice bilatéral deuxième côté ou n'importe quel autre exercice
-  _stx._stSide = 0;
-
-  _stx.idx++;
-  if (_stx.idx >= _stx.steps.length) { _stxDone(); return; }
-  const nextStep = _stx.steps[_stx.idx];
-  if (nextStep.type === 'rest_series' || nextStep.type === 'rest_exercise') {
-    _stSoundRest();
-  } else {
-    _stSoundNext();
-  }
-  _stxRender();
-  _stxStartTimer();
-}
-
-function _stxShowSideChangeMessage() {
-  // Afficher le message "Change de jambe 🔄"
-  const titleEl = document.getElementById('st-exercise-title');
-  const descEl = document.getElementById('st-exercise-desc');
-  const timeEl = document.getElementById('st-time-left');
-  const labelEl = document.getElementById('st-step-label');
-
-  if (titleEl) titleEl.textContent = 'Change de jambe 🔄';
-  if (descEl) descEl.textContent = 'Prépare-toi pour le deuxième côté';
-  if (timeEl) timeEl.textContent = '3s';
-  if (labelEl) labelEl.textContent = 'Transition';
-
-  // Masquer la progression circulaire pendant la transition
-  _stxSetArc(0);
-
-  // Attendre 3 secondes puis continuer avec le même exercice
-  _stx._sideChangeTimer = setTimeout(function() {
-    _stx._sideChangeTimer = null;
-    _stxRender();
-    _stxStartTimer();
-  }, 3000);
-}
-
-// ── Actions utilisatrice ─────────────────────────────────────
-function stAction() {
-  if (!_stx.running && !_stx.paused) {
-    _stxStartTimer();
-  } else if (_stx.running) {
-    stTogglePause();
-  }
-}
-
-function stSkip() {
-  if (_stx.rafId) { cancelAnimationFrame(_stx.rafId); _stx.rafId = null; }
-  _stx.running = false;
-  _stxAdvance();
-}
-
-function stTogglePause() {
-  if (_stx.paused) {
-    _stx.paused = false;
-    _stx.running = true;
-    _stx.lastTs = performance.now();
-    _stx.rafId = requestAnimationFrame(_stxTick);
-    _stxOverlay('st-pause-ov', false);
-    const actionBtn = document.getElementById('st-action-btn');
-    if (actionBtn) { actionBtn.textContent = 'Pause'; actionBtn.onclick = stTogglePause; }
-    _stAcquireWL();
-  } else {
-    _stx.paused = true;
-    _stx.running = false;
-    if (_stx.rafId) { cancelAnimationFrame(_stx.rafId); _stx.rafId = null; }
-    _stxOverlay('st-pause-ov', true);
-    const actionBtn = document.getElementById('st-action-btn');
-    if (actionBtn) { actionBtn.textContent = 'Reprendre'; actionBtn.onclick = stTogglePause; }
-    _stReleaseWL();
-  }
-}
-
-function stAskStop() {
-  if (_stx.running) {
-    _stx.paused = true;
-    _stx.running = false;
-    if (_stx.rafId) { cancelAnimationFrame(_stx.rafId); _stx.rafId = null; }
-  }
-  _stxOverlay('st-pause-ov', false);
-  _stxOverlay('st-stop-ov', true);
-}
-
-function stCancelStop() {
-  _stxOverlay('st-stop-ov', false);
-  if (_stx.paused) stTogglePause();
-}
-
-function stConfirmStop() {
-  _stxOverlay('st-stop-ov', false);
-  _stxClose();
-}
-
-function stToggleSound() {
-  _stx.soundOn = !_stx.soundOn;
-  const btn = document.getElementById('st-snd-btn');
-  if (btn) btn.textContent = _stx.soundOn ? '' : '';
-  if (_stx.soundOn) _stBeep(660, 0.1, 0.2, 'sine');
-}
-
-function stShowMod(type, text) {
-  const modText = document.getElementById('st-mod-text');
-  if (modText) modText.textContent = text;
-  const modTitle = document.getElementById('st-mod-title');
-  if (modTitle) modTitle.textContent = type === 'easy' ? 'Version plus facile' : 'Version plus difficile';
-  _stxOverlay('st-mod-ov', true);
-}
-
-function stCloseMod() {
-  _stxOverlay('st-mod-ov', false);
-}
-
-// ── Header progress ──────────────────────────────────────────
-function _stxUpdateHeader() {
-  const fill = document.getElementById('st-prog-fill');
-  const text = document.getElementById('st-prog-text');
-  const pct = _stx.total > 0 ? Math.round((_stx.elapsed / _stx.total) * 100) : 0;
-  if (fill) fill.style.width = pct + '%';
-  const remaining = Math.max(0, _stx.total - _stx.elapsed);
-  if (text) text.textContent = _stFormatTime(remaining) + ' restant';
-}
-
-// ── SVG arc ──────────────────────────────────────────────────
-function _stxSetArc(progress) {
-  const arc = document.getElementById('st-arc');
-  if (!arc) return;
-  const offset = _ST_C * (1 - Math.max(0, Math.min(1, progress)));
-  arc.style.strokeDashoffset = offset;
-}
-
-// ── Breath animation ─────────────────────────────────────────
-function _stxStartBreath(inhale, hold, exhale) {
-  if (_stx.breathRaf) { cancelAnimationFrame(_stx.breathRaf); _stx.breathRaf = null; }
-  const ring = document.getElementById('st-breath-dot');
-  if (!ring) return;
-  const total = (inhale + hold + exhale) * 1000;
-  _stx.breathStart = performance.now();
-  const inMs = inhale * 1000;
-  const holdMs = hold * 1000;
-  const exMs = exhale * 1000;
-
-  function tick(ts) {
-    const elapsed = (ts - _stx.breathStart) % total;
-    let scale;
-    if (elapsed < inMs) {
-      scale = 0.7 + 0.3 * (elapsed / inMs);
-    } else if (elapsed < inMs + holdMs) {
-      scale = 1.0;
-    } else {
-      const t = (elapsed - inMs - holdMs) / exMs;
-      scale = 1.0 - 0.3 * t;
-    }
-    ring.style.transform = 'scale(' + scale.toFixed(3) + ')';
-    _stx.breathRaf = requestAnimationFrame(tick);
-  }
-  _stx.breathRaf = requestAnimationFrame(tick);
-}
-
-// ── Done ─────────────────────────────────────────────────────
-function _stxDone() {
-  _stx.running = false;
-  if (_stx.rafId) { cancelAnimationFrame(_stx.rafId); _stx.rafId = null; }
-  if (_stx.breathRaf) { cancelAnimationFrame(_stx.breathRaf); _stx.breathRaf = null; }
-  _stReleaseWL();
-  _stSoundDone();
-
-  const body = document.getElementById('st-body');
-  const doneWrap = document.getElementById('st-done-wrap');
-  if (body) body.style.display = 'none';
-  if (doneWrap) {
-    doneWrap.classList.add('visible');
-    const stats = document.getElementById('st-done-stats');
-    const totalMin = Math.round(_stx.total / 60);
-    const phase = (typeof ST !== 'undefined' && ST.currentSaison) ? ST.currentSaison : 'printemps';
-    const msg = _stPhaseMsg[phase] || 'Bravo pour cette séance !';
-    if (stats) stats.innerHTML =
-      '<div class="st-done-big">Séance terminée !</div>' +
-      '<div class="st-done-detail">' + totalMin + ' min · ' + _stx.steps.length + ' étapes</div>' +
-      '<div class="st-done-msg">' + msg + '</div>';
-  }
-  _stxSetArc(1);
-  _stxConfetti();
-}
-
-function stFinish() {
-  _stxClose();
-  if (typeof validerSeanceDash === 'function') validerSeanceDash();
-}
-
-// ── Confetti ─────────────────────────────────────────────────
-function _stxConfetti() {
-  const container = document.getElementById('st-confetti');
-  if (!container) return;
-  container.innerHTML = '';
-  const colors = ['#f6c90e', '#43b89c', '#e8a0bf', '#7c5cbf', '#f9844a', '#4cc9f0'];
-  for (let i = 0; i < 40; i++) {
-    const el = document.createElement('div');
-    el.className = 'st-confetti-piece';
-    el.style.cssText =
-      'left:' + Math.random() * 100 + '%;' +
-      'background:' + colors[i % colors.length] + ';' +
-      'animation-delay:' + (Math.random() * 0.6).toFixed(2) + 's;' +
-      'animation-duration:' + (0.8 + Math.random() * 0.6).toFixed(2) + 's;' +
-      'width:' + (6 + Math.random() * 6) + 'px;' +
-      'height:' + (6 + Math.random() * 6) + 'px;' +
-      'border-radius:' + (Math.random() > 0.5 ? '50%' : '2px') + ';';
-    container.appendChild(el);
-  }
-}
-
-// ── Overlay helper ────────────────────────────────────────────
-function _stxOverlay(id, show) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.classList.toggle('visible', !!show);
-}

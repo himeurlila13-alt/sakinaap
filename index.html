@@ -307,15 +307,6 @@
     <div class="home-message-text" id="daily-message">L'energie revient — profites-en pour avancer sur ce qui attend.</div>
   </div>
 
-  <!-- BANDEAU J-17 TRIAL -->
-  <div id="trial-banner-j17" style="display:none;margin:8px 14px 0;background:linear-gradient(135deg,rgba(201,169,110,.13),rgba(168,122,48,.07));border:1px solid #D4B87A;border-radius:14px;padding:11px 14px;">
-    <div style="display:flex;align-items:flex-start;gap:10px;">
-      <span id="trial-banner-text" style="flex:1;font-size:12px;color:#5A3A10;line-height:1.6;font-family:var(--serif);font-style:italic;"></span>
-      <button onclick="dismissTrialBanner()" style="background:none;border:none;color:#8A7060;font-size:20px;cursor:pointer;padding:0;flex-shrink:0;line-height:1;margin-top:-2px;">&times;</button>
-    </div>
-  </div>
-
-
   <!-- CARTE LECTURE DU JOUR -->
   <div class="day-card" id="day-card-lecture" style="display:none;">
     <div class="day-card-header">
@@ -355,34 +346,13 @@
     <div id="action-soin-premium" style="margin-top:10px;"></div>
   </div>
 
-  <!-- CARTE SÉANCE -->
+  <!-- CARTE MOUVEMENT -->
   <div class="day-card" id="day-card-seance">
     <div class="day-card-header">
       <span class="day-card-icon">&#128170;</span>
-      <span class="day-card-title">Séance du jour</span>
-      <span class="day-card-dur" id="qs-duration">12 min</span>
+      <span class="day-card-title">Bouger aujourd&rsquo;hui</span>
     </div>
-    <div class="day-card-name" id="qs-name">Réveil en douceur</div>
-    <div class="day-card-meta" id="qs-meta">Mix sol + debout</div>
-    <div class="qs-exercises" id="qs-exercises" style="margin-top:10px;"></div>
-    <div id="qs-btn-wrap" style="margin-top:12px;">
-      <button class="day-card-btn" onclick="validerSeanceDash()">&#10003; Alhamdulillah, c&#8217;est fait !</button>
-      <button class="day-card-btn" onclick="openSeanceTimer()" style="margin-top:8px;background:var(--season-soft);color:var(--season);border:1.5px solid var(--season-light);font-size:13px;">&#9654; Commencer avec le timer</button>
-      <div style="display:flex;gap:8px;margin-top:8px;">
-        <button id="sport-express-btn" onclick="openSeanceExpress()" class="sport-secondary-btn">&#9889; Version 5 min</button>
-      </div>
-    </div>
-    <div id="qs-reporter-btn-wrap" style="margin-top:8px;display:none;">
-      <button onclick="reporterSeance()" class="sport-secondary-btn">&#128197; Reporter</button>
-    </div>
-    <div class="qs-done" id="qs-done-wrap" style="display:none;">
-      <div class="qs-done-check">&#10003;</div>
-      <div class="qs-done-text">Alhamdulillah — s&eacute;ance accomplie &#127800;</div>
-    </div>
-    <div class="sport-reported-wrap" id="qs-reported-wrap" style="display:none;">
-      <div style="font-size:18px;margin-bottom:4px;">&#128197;</div>
-      <div style="font-size:13px;color:var(--gris);">Report&eacute;e &agrave; demain &mdash; &agrave; ton rythme &#127800;</div>
-    </div>
+    <div class="day-card-meta" id="mouv-conseil-text" style="margin-top:6px;line-height:1.6;"></div>
   </div>
 
   <!-- CARTE REPAS -->
@@ -417,26 +387,6 @@
       <div class="sugg-engage-count" id="sugg-engage-count">0/5 faits</div>
     </div>
     <div class="sugg-engage-list" id="sugg-engage-list"></div>
-  </div>
-
-  <!-- TRIAL LOCK ACCUEIL -->
-  <div id="trial-lock-accueil" style="display:none;margin:12px 14px 16px;">
-    <div class="trial-lock-card">
-      <div class="trial-lock-top">
-        <div class="trial-lock-emoji">&#127807;</div>
-        <div class="trial-lock-texts">
-          <div class="trial-lock-title">Ton essai gratuit est termin&#233;</div>
-          <div class="trial-lock-sub">L&#8217;onglet &#194;me reste toujours accessible gratuitement.</div>
-        </div>
-      </div>
-      <div class="trial-lock-features">
-        <div class="trial-lock-feat">&#128170; S&#233;ances de sport adapt&#233;es</div>
-        <div class="trial-lock-feat">&#10024; Routine skincare quotidienne</div>
-        <div class="trial-lock-feat">&#127869; Recettes &amp; Mon March&#233;</div>
-        <div class="trial-lock-feat">&#127919; Objectifs personnalis&#233;s</div>
-      </div>
-      <button class="trial-lock-btn" onclick="startStripeCheckout()">S&rsquo;abonner &agrave; Premium &#8250;</button>
-    </div>
   </div>
 
   <div style="height:16px;"></div>
@@ -558,14 +508,6 @@
         </div>
         <div style="margin-top:8px;font-size:12px;color:var(--gris);font-style:italic;font-family:var(--serif);line-height:1.6;">Pendant les regles, le dhikr reste toujours ouvert. Ton coeur reste connecte a Allah.</div>
       </div>
-    </div>
-  </div>
-  <!-- TRIAL LOCK CYCLE -->
-  <div id="trial-lock-cycle" style="display:none;margin:0 14px 14px;">
-    <div class="trial-lock-banner">
-      <span class="trial-lock-banner-icon">&#128274;</span>
-      <div class="trial-lock-banner-text">Suivi des sympt&#244;mes et glaire disponibles avec Premium</div>
-      <button class="trial-lock-banner-btn" onclick="startStripeCheckout()">Premium</button>
     </div>
   </div>
 
@@ -822,9 +764,6 @@
   </div>
 
 
-  <!-- PARCOURS SPORT -->
-  <div class="sport-histo-section" id="sport-historique-section"></div>
-
   <!-- CALENDRIER -->
   <div class="obj-card obj-cal-card">
     <div class="obj-card-hdr">
@@ -992,9 +931,6 @@
   </div>
   <div style="height:32px;"></div>
 
-  <!-- STATUT ESSAI / ABONNEMENT -->
-  <div id="trial-status-card" style="margin:0 14px 14px;"></div>
-
   <!-- WORKBOOK CTA -->
   <a id="wb-cta-card-el" href="/workbook" target="_blank" class="wb-cta-card">
     <div id="wb-badge" style="display:inline-block;background:rgba(123,94,167,.15);padding:4px 10px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#3D2060;margin-bottom:10px;">BONUS GRATUIT</div>
@@ -1003,81 +939,6 @@
     <div id="wb-meta" style="font-size:12px;color:#7B5EA7;margin-bottom:16px;">23 chapitres interactifs</div>
     <div id="wb-btn" style="display:inline-block;background:#3D2060;color:white;padding:10px 24px;border-radius:50px;font-size:13px;font-weight:500;">Ouvrir le Workbook &rarr;</div>
   </a>
-
-  <!-- PREMIUM CARD -->
-  <div id="premium-upsell-card" style="margin:0 14px 14px;border-radius:22px;overflow:hidden;border:1.5px solid var(--season-light);box-shadow:0 12px 32px rgba(61,174,138,.15);">
-    <!-- En-tête avec couleur de phase -->
-    <div style="background:var(--season-grad);padding:26px 22px 22px;">
-      <div style="width:32px;height:2px;background:rgba(255,255,255,.3);border-radius:1px;margin-bottom:14px;"></div>
-      <div style="font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:10px;font-weight:600;">Pour toi ·</div>
-      <div style="font-family:var(--script);font-size:28px;color:white;margin-bottom:8px;">🌸 Prends soin de toi à chaque phase</div>
-      <div style="font-family:var(--serif);font-size:13px;font-style:italic;color:rgba(255,255,255,.75);line-height:1.6;">Ton corps te parle différemment chaque semaine.<br>Écoute-le avec bienveillance.</div>
-    </div>
-    <!-- Corps clair refondu -->
-    <div style="background:white;padding:24px 22px 20px;">
-      <!-- 4 fonctionnalités refondue -->
-      <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:20px;">
-        <div style="display:flex;align-items:flex-start;gap:12px;font-size:13px;color:#2D2420;">
-          <span style="font-size:16px;flex-shrink:0;">🍯</span>
-          <div>
-            <div style="font-weight:600;color:var(--season);margin-bottom:2px;">Recettes cycliques quotidiennes</div>
-            <div style="font-size:11px;color:#8A7060;font-style:italic;line-height:1.4;">Les aliments que ton corps réclame, selon ta saison intérieure</div>
-          </div>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:12px;font-size:13px;color:#2D2420;">
-          <span style="font-size:16px;flex-shrink:0;">💃</span>
-          <div>
-            <div style="font-weight:600;color:var(--season);margin-bottom:2px;">Séances sport qui t'honorent</div>
-            <div style="font-size:11px;color:#8A7060;font-style:italic;line-height:1.4;">Bouger avec douceur ou intensité — selon ton énergie du jour</div>
-          </div>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:12px;font-size:13px;color:#2D2420;">
-          <span style="font-size:16px;flex-shrink:0;">✨</span>
-          <div>
-            <div style="font-weight:600;color:var(--season);margin-bottom:2px;">Routine skincare sacrée</div>
-            <div style="font-size:11px;color:#8A7060;font-style:italic;line-height:1.4;">Matin et soir · Médecine prophétique · Ta peau mérite cette douceur</div>
-          </div>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:12px;font-size:13px;color:#2D2420;">
-          <span style="font-size:16px;flex-shrink:0;">🌱</span>
-          <div>
-            <div style="font-weight:600;color:var(--season);margin-bottom:2px;">Objectifs qui respirent avec toi</div>
-            <div style="font-size:11px;color:#8A7060;font-style:italic;line-height:1.4;">3 types d'objectifs par phase · Tes défis perso · Bilan de cycle insha'Allah</div>
-          </div>
-        </div>
-      </div>
-      <!-- Séparateur -->
-      <div style="height:1px;background:var(--season-light);margin-bottom:18px;"></div>
-      <!-- Prix — sélecteur de plan -->
-      <div style="display:flex;gap:10px;margin-bottom:12px;">
-        <div id="moi-plan-monthly" onclick="selectPlan('monthly')" style="flex:1;background:white;border:2px solid var(--season-light);border-radius:14px;padding:14px;text-align:center;cursor:pointer;transition:border-color .2s,box-shadow .2s;">
-          <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#8A7060;margin-bottom:6px;">Mensuel</div>
-          <div style="font-family:var(--script);font-size:28px;color:var(--season);">3,99&#8364;</div>
-          <div style="font-size:10px;color:#8A7060;margin-top:2px;">/ mois</div>
-        </div>
-        <div id="moi-plan-annual" onclick="selectPlan('annual')" style="flex:1;background:var(--season-grad);border:2px solid transparent;border-radius:14px;padding:14px;text-align:center;position:relative;cursor:pointer;box-shadow:0 0 0 2px var(--season);">
-          <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:white;color:var(--season);font-size:9px;font-weight:700;padding:3px 10px;border-radius:10px;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.12);">RECOMMANDÉ</div>
-          <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:6px;">Annuel</div>
-          <div style="font-family:var(--script);font-size:28px;color:white;">34,99&#8364;</div>
-          <div style="font-size:10px;color:rgba(255,255,255,.8);margin-top:2px;">/ an · économise 27%</div>
-        </div>
-      </div>
-      <button onclick="startStripeCheckout()" style="width:100%;padding:16px;background:var(--season-grad);color:white;border:none;border-radius:14px;font-size:15px;font-weight:700;font-family:var(--sans);cursor:pointer;letter-spacing:.3px;">🤍 Choisir la douceur avec moi</button>
-      <div style="text-align:center;font-size:11px;color:#8A7060;margin-top:10px;">Bismillah · Essai 20 jours · Sécurisé par Stripe · Tu peux annuler quand tu veux</div>
-    </div>
-  </div>
-
-  <!-- CODE D'ACCÈS PREMIUM -->
-  <div id="premium-code-card" style="margin:0 14px 14px;background:white;border-radius:20px;border:1.5px solid var(--sable);padding:18px 20px;">
-    <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:12px;">&#10022; Code d'accès Premium</div>
-    <div style="display:flex;gap:8px;">
-      <input id="premium-code-input" type="text" placeholder="Ton code..." maxlength="20"
-             onkeydown="if(event.key==='Enter'){applyPremiumCode();this.blur()}"
-             style="flex:1;padding:11px 14px;border:1.5px solid var(--sable);border-radius:12px;font-size:13px;font-family:var(--sans);color:var(--noir);background:var(--creme);outline:none;-webkit-appearance:none;appearance:none;text-transform:uppercase;letter-spacing:1px;">
-      <button onclick="applyPremiumCode()" style="background:var(--season-grad);color:white;border:none;border-radius:12px;padding:11px 18px;font-size:13px;font-weight:700;font-family:var(--sans);cursor:pointer;flex-shrink:0;">Valider</button>
-    </div>
-    <div id="premium-code-msg" style="font-size:12px;color:var(--gris);margin-top:8px;font-family:var(--serif);font-style:italic;min-height:16px;"></div>
-  </div>
 
   <!-- FEEDBACK BETA -->
   <div id="feedback-section" style="margin:0 14px 14px;background:white;border-radius:20px;border:1.5px solid var(--sable);padding:18px 20px;display:none;">
@@ -1127,19 +988,12 @@
     <div class="ps-accordion" onclick="toggleAccordion('acc-reglages')" id="acc-reglages-hdr">
       <div style="display:flex;align-items:center;gap:13px;flex:1;">
         <div class="ps-ico">&#9881;&#65039;</div>
-        <div><div class="ps-lbl">Réglages</div><div class="ps-sub">Cycle &amp; abonnement</div></div>
+        <div><div class="ps-lbl">Réglages</div><div class="ps-sub">Cycle</div></div>
       </div>
       <span class="ps-acc-arrow" id="arr-reglages">&#8250;</span>
     </div>
     <div class="ps-acc-body" id="acc-reglages">
-      <div class="ps-row" style="cursor:default;padding-left:20px;display:none;">
-        <div class="ps-ico">&#10022;</div>
-        <div style="flex:1;"><div class="ps-lbl">Mode Premium <span style="font-size:10px;background:#EAD9C0;color:#8A6A30;padding:2px 7px;border-radius:8px;margin-left:6px;font-weight:600;">TEST</span></div><div class="ps-sub">Active pour prévisualiser les fonctions</div></div>
-        <button id="premium-toggle-btn" onclick="event.stopPropagation();togglePremium()" style="background:var(--sable);color:var(--gris);border:none;border-radius:10px;padding:7px 14px;font-size:12px;font-weight:700;font-family:var(--sans);cursor:pointer;flex-shrink:0;">Inactif</button>
-      </div>
       <div class="ps-row" style="padding-left:20px;" onclick="openEditCycle()"><div class="ps-ico">&#128197;</div><div><div class="ps-lbl">Modifier mon cycle</div><div class="ps-sub" id="psCycle">Configurer</div></div><div class="ps-arr">&#8250;</div></div>
-
-      <div id="manage-sub-row" class="ps-row" style="padding-left:20px;display:none;" onclick="openCustomerPortal()"><div class="ps-ico">&#10022;</div><div><div class="ps-lbl">Gérer mon abonnement</div><div class="ps-sub">Modifier, annuler — portail Stripe</div></div><div class="ps-arr">&#8250;</div></div>
     </div>
 
     <!-- Accordéon 2 : Données & Légal -->
@@ -1155,7 +1009,7 @@
       <div class="ps-row" style="padding-left:20px;" onclick="deleteMyData()"><div class="ps-ico">&#128465;</div><div><div class="ps-lbl" style="color:#B88189;">Supprimer mes données</div><div class="ps-sub">Demande de suppression RGPD — 48h</div></div><div class="ps-arr">&#8250;</div></div>
       <div class="ps-row" style="padding-left:20px;" onclick="openMentionsLegales()"><div class="ps-ico">&#9878;</div><div><div class="ps-lbl">Mentions légales</div><div class="ps-sub">Éditrice, hébergeur, données</div></div><div class="ps-arr">&#8250;</div></div>
       <div class="ps-row" style="padding-left:20px;" onclick="openConfidentialite()"><div class="ps-ico">&#128274;</div><div><div class="ps-lbl">Politique de confidentialité</div><div class="ps-sub">Tes données &amp; tes droits RGPD</div></div><div class="ps-arr">&#8250;</div></div>
-      <div class="ps-row" style="padding-left:20px;" onclick="openCGU()"><div class="ps-ico">&#128203;</div><div><div class="ps-lbl">CGU &amp; Conditions d'abonnement</div><div class="ps-sub">Conditions d'utilisation de SakinApp</div></div><div class="ps-arr">&#8250;</div></div>
+      <div class="ps-row" style="padding-left:20px;" onclick="openCGU()"><div class="ps-ico">&#128203;</div><div><div class="ps-lbl">CGU</div><div class="ps-sub">Conditions d'utilisation de SakinApp</div></div><div class="ps-arr">&#8250;</div></div>
       <a href="mailto:sakina.evolution.contact@gmail.com" class="ps-row" style="padding-left:20px;text-decoration:none;color:inherit;"><div class="ps-ico">&#9993;</div><div><div class="ps-lbl">Nous contacter</div><div class="ps-sub">sakina.evolution.contact@gmail.com</div></div><div class="ps-arr">&#8250;</div></a>
     </div>
 
@@ -1237,7 +1091,6 @@
     <div class="ml-section">
       <div class="ml-titre">Données personnelles</div>
       <p class="ml-txt">SakinApp collecte ton adresse e-mail (pour l'authentification) et tes données d'utilisation (cycle, prières, humeurs, objectifs, sport), stockées sur les serveurs de <strong>Supabase</strong> (sous-traitant), ainsi qu'en local sur ton appareil (localStorage).</p>
-      <p class="ml-txt" style="margin-top:8px;">Les données de paiement sont traitées exclusivement par <strong>Stripe Inc.</strong> — SakinApp n'a jamais accès à tes coordonnées bancaires.</p>
       <p class="ml-txt" style="margin-top:8px;">Conformément au RGPD, tu peux exporter ou supprimer tes données à tout moment.</p>
       <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
         <button onclick="closeMentionsLegales();exportData();" style="flex:1;min-width:120px;padding:10px;background:var(--sable);color:var(--noir);border:none;border-radius:12px;font-size:13px;cursor:pointer;">&#128229; Exporter mes données</button>
@@ -1249,7 +1102,6 @@
       <div class="ml-titre">Sous-traitants</div>
       <div class="ml-ligne"><span class="ml-lbl">Vercel Inc.</span> H&eacute;bergement de l&rsquo;application &mdash; USA</div>
       <div class="ml-ligne"><span class="ml-lbl">Supabase Inc.</span> Base de donn&eacute;es &amp; authentification &mdash; USA</div>
-      <div class="ml-ligne"><span class="ml-lbl">Stripe Inc.</span> Paiement s&eacute;curis&eacute; &mdash; USA</div>
       <p class="ml-txt" style="margin-top:8px;">Les transferts vers les &Eacute;tats-Unis sont encadr&eacute;s par les clauses contractuelles types de la Commission europ&eacute;enne.</p>
     </div>
 
@@ -1287,15 +1139,13 @@
     <div class="ml-section">
       <div class="ml-titre">Données collectées et finalités</div>
       <p class="ml-txt" style="margin-bottom:10px;"><strong>1. Adresse e-mail</strong> — collect&eacute;e lors de la cr&eacute;ation du compte. Finalit&eacute; : authentification et s&eacute;curit&eacute; du compte. Base l&eacute;gale : ex&eacute;cution du contrat (art.&nbsp;6.1.b RGPD).</p>
-      <p class="ml-txt" style="margin-bottom:10px;"><strong>2. Donn&eacute;es de sant&eacute; et de conviction religieuse</strong> — cycle menstruel, date de d&eacute;but, dur&eacute;e des r&egrave;gles, sympt&ocirc;mes, historique de cycles, glaire cervicale. <strong>Pratique religieuse</strong> : prières quotidiennes (fajr, dohr, asr, maghrib, isha), dhikr, lecture du Coran. Ces donn&eacute;es rel&egrave;vent de l&rsquo;article 9.1 du RGPD (donn&eacute;es de sant&eacute; et convictions religieuses). Finalit&eacute; : personnalisation de l&rsquo;exp&eacute;rience et sauvegarde multi-appareils. Base l&eacute;gale : <strong>consentement explicite</strong> (art.&nbsp;9.2.a RGPD), recueilli lors de la configuration initiale de l&rsquo;application.</p>
-      <p class="ml-txt"><strong>3. Donn&eacute;es de paiement</strong> — trait&eacute;es exclusivement par <strong>Stripe Inc.</strong> SakinApp ne voit jamais tes coordonn&eacute;es bancaires.</p>
+      <p class="ml-txt"><strong>2. Donn&eacute;es de sant&eacute; et de conviction religieuse</strong> — cycle menstruel, date de d&eacute;but, dur&eacute;e des r&egrave;gles, sympt&ocirc;mes, historique de cycles, glaire cervicale. <strong>Pratique religieuse</strong> : prières quotidiennes (fajr, dohr, asr, maghrib, isha), dhikr, lecture du Coran. Ces donn&eacute;es rel&egrave;vent de l&rsquo;article 9.1 du RGPD (donn&eacute;es de sant&eacute; et convictions religieuses). Finalit&eacute; : personnalisation de l&rsquo;exp&eacute;rience et sauvegarde multi-appareils. Base l&eacute;gale : <strong>consentement explicite</strong> (art.&nbsp;9.2.a RGPD), recueilli lors de la configuration initiale de l&rsquo;application.</p>
     </div>
 
     <div class="ml-section">
       <div class="ml-titre">Stockage et sous-traitants</div>
       <p class="ml-txt" style="margin-bottom:10px;">Tes donn&eacute;es sont stock&eacute;es sur ton appareil (localStorage) <strong>et</strong> sur les serveurs de nos sous-traitants :</p>
       <div class="ml-ligne"><span class="ml-lbl">Supabase Inc.</span> Auth + base de donn&eacute;es &mdash; <strong>Irlande (UE)</strong> &mdash; serveurs h&eacute;berg&eacute;s dans l&rsquo;Union europ&eacute;enne</div>
-      <div class="ml-ligne"><span class="ml-lbl">Stripe Inc.</span> Paiements &mdash; San Francisco, USA</div>
       <div class="ml-ligne"><span class="ml-lbl">Vercel Inc.</span> H&eacute;bergement app &mdash; Walnut, CA, USA</div>
       <div class="ml-ligne"><span class="ml-lbl">Formspree Inc.</span> Formulaire de contact &mdash; San Francisco, USA</div>
       <p class="ml-txt" style="margin-top:10px;">Les transferts hors UE sont encadr&eacute;s par les <strong>clauses contractuelles types</strong> de la Commission europ&eacute;enne (d&eacute;cision 2021/914).</p>
@@ -1303,8 +1153,8 @@
 
     <div class="ml-section">
       <div class="ml-titre">Dur&eacute;e de conservation</div>
-      <div class="ml-ligne"><span class="ml-lbl">Compte actif</span> Pendant toute la dur&eacute;e de l&rsquo;abonnement</div>
-      <div class="ml-ligne"><span class="ml-lbl">Apr&egrave;s r&eacute;siliation</span> 3 ans (obligations comptables et l&eacute;gales)</div>
+      <div class="ml-ligne"><span class="ml-lbl">Compte actif</span> Pendant toute la dur&eacute;e d&rsquo;utilisation du compte</div>
+      <div class="ml-ligne"><span class="ml-lbl">Apr&egrave;s suppression du compte</span> 3 ans (obligations comptables et l&eacute;gales)</div>
       <div class="ml-ligne"><span class="ml-lbl">Inactivit&eacute;</span> Les donn&eacute;es de sant&eacute; et de pratique religieuse sont supprim&eacute;es automatiquement apr&egrave;s 3 ans sans connexion</div>
       <div class="ml-ligne"><span class="ml-lbl">Sur demande</span> Suppression imm&eacute;diate possible via Param&egrave;tres → R&eacute;initialiser</div>
     </div>
@@ -1329,7 +1179,7 @@
 
     <div class="ml-section">
       <div class="ml-titre">S&eacute;curit&eacute;</div>
-      <p class="ml-txt">Connexion HTTPS chiffr&eacute;e, authentification s&eacute;curis&eacute;e via Supabase, donn&eacute;es de paiement jamais stock&eacute;es par SakinApp. Aucun mot de passe requis &mdash; connexion par lien magique uniquement.</p>
+      <p class="ml-txt">Connexion HTTPS chiffr&eacute;e, authentification s&eacute;curis&eacute;e via Supabase. Aucun mot de passe requis &mdash; connexion par lien magique uniquement.</p>
       <p class="ml-txt" style="margin-top:8px;">Les donn&eacute;es d&rsquo;utilisation (cycle, pri&egrave;res, humeurs) sont &eacute;galement stock&eacute;es en clair dans le stockage local (<em>localStorage</em>) de ton navigateur. Ces donn&eacute;es ne sont pas chiffr&eacute;es sur l&rsquo;appareil : elles restent inaccessibles depuis l&rsquo;ext&eacute;rieur, mais sont lisibles par quiconque a acc&egrave;s physique &agrave; ton appareil et &agrave; ton navigateur. Nous te recommandons d&rsquo;utiliser le verrouillage d&rsquo;&eacute;cran de ton appareil.</p>
     </div>
 
@@ -1404,7 +1254,7 @@
   <div class="modal-sheet" style="max-height:85vh;overflow-y:auto;">
     <div class="modal-handle"></div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-      <div style="font-family:'Playfair Display',serif;font-size:17px;color:var(--noir);">CGU &amp; Conditions d'abonnement</div>
+      <div style="font-family:'Playfair Display',serif;font-size:17px;color:var(--noir);">CGU</div>
       <button onclick="closeCGU()" style="background:var(--sable);border:none;border-radius:50%;width:32px;height:32px;font-size:18px;cursor:pointer;">&#215;</button>
     </div>
 
@@ -1420,44 +1270,35 @@
     </div>
 
     <div class="ml-section">
-      <div class="ml-titre">3. Version gratuite — Période d'essai</div>
-      <p class="ml-txt">SakinApp est accessible gratuitement pendant une période d'essai de <strong>20 jours</strong> à compter de la première utilisation. À l'issue de cette période, l'accès aux fonctionnalités complètes nécessite un abonnement Premium.</p>
+      <div class="ml-titre">3. Version gratuite</div>
+      <p class="ml-txt">SakinApp est accessible gratuitement, sans abonnement ni carte bancaire requise.</p>
     </div>
 
     <div class="ml-section">
-      <div class="ml-titre">4. Abonnement Premium</div>
-      <div class="ml-ligne"><span class="ml-lbl">Mensuel</span> 3,99 &euro; / mois</div>
-      <div class="ml-ligne"><span class="ml-lbl">Annuel</span> 34,99 &euro; / an (&eacute;conomie de 27%)</div>
-      <p class="ml-txt" style="margin-top:10px;">Le paiement est trait&eacute; par <strong>Stripe Inc.</strong> (paiement s&eacute;curis&eacute; par carte). L&rsquo;abonnement se renouvelle automatiquement sauf r&eacute;siliation. Tu peux r&eacute;silier &agrave; tout moment depuis ton espace Stripe ou en contactant sakina.evolution.contact@gmail.com &mdash; sans frais, avec effet &agrave; la fin de la p&eacute;riode en cours.</p>
-      <p class="ml-txt" style="margin-top:8px;">Les tarifs sont indiqu&eacute;s en euros TTC. L&rsquo;&eacute;ditrice se r&eacute;serve le droit de modifier les tarifs avec un pr&eacute;avis de 30 jours.</p>
-      <p class="ml-txt" style="margin-top:8px;"><strong>Droit de r&eacute;tractation :</strong> conform&eacute;ment &agrave; l&rsquo;art. L221-18 du Code de la consommation, tu disposes de 14 jours pour te r&eacute;tracter. Pass&eacute; ce d&eacute;lai, l&rsquo;abonnement court jusqu&rsquo;&agrave; la fin de la p&eacute;riode.</p>
-    </div>
-
-    <div class="ml-section">
-      <div class="ml-titre">5. Propriété intellectuelle</div>
+      <div class="ml-titre">4. Propriété intellectuelle</div>
       <p class="ml-txt">L'ensemble des éléments de SakinApp (contenus, design, code, textes spirituels, traductions, nom et logo) est protégé par le droit de la propriété intellectuelle et est la propriété exclusive de Lila Himeur. Toute reproduction ou utilisation sans autorisation est interdite.</p>
     </div>
 
     <div class="ml-section">
-      <div class="ml-titre">6. Responsabilité</div>
+      <div class="ml-titre">5. Responsabilité</div>
       <p class="ml-txt">SakinApp fournit des informations à caractère général sur le cycle menstruel, la nutrition, le sport et le bien-être spirituel. Ces informations ne constituent pas un avis médical ou religieux. L'éditrice décline toute responsabilité en cas d'utilisation des contenus à des fins médicales ou de diagnostic.</p>
       <p class="ml-txt" style="margin-top:8px;">Toute décision de santé doit être prise en concertation avec un professionnel de santé qualifié.</p>
     </div>
 
     <div class="ml-section">
-      <div class="ml-titre">7. Donn&eacute;es personnelles</div>
-      <p class="ml-txt">SakinApp collecte ton adresse e-mail (authentification) et tes donn&eacute;es d&rsquo;utilisation (cycle, pr&egrave;res, humeurs, sport), stock&eacute;es sur Supabase Inc. Les paiements sont trait&eacute;s par Stripe Inc. SakinApp n&rsquo;a jamais acc&egrave;s &agrave; tes donn&eacute;es bancaires.</p>
+      <div class="ml-titre">6. Donn&eacute;es personnelles</div>
+      <p class="ml-txt">SakinApp collecte ton adresse e-mail (authentification) et tes donn&eacute;es d&rsquo;utilisation (cycle, pri&egrave;res, humeurs, sport), stock&eacute;es sur Supabase Inc.</p>
       <p class="ml-txt" style="margin-top:8px;">Le traitement complet est d&eacute;crit dans la <strong>Politique de confidentialit&eacute;</strong> accessible dans Param&egrave;tres. Tu peux exporter ou supprimer tes donn&eacute;es &agrave; tout moment.</p>
     </div>
 
     <div class="ml-section">
-      <div class="ml-titre">8. Droit applicable &amp; litiges</div>
+      <div class="ml-titre">7. Droit applicable &amp; litiges</div>
       <p class="ml-txt">Les présentes CGU sont soumises au droit français. En cas de litige, une solution amiable sera recherchée en priorité. À défaut, les tribunaux français seront compétents.</p>
       <p class="ml-txt" style="margin-top:8px;"><strong>M&eacute;diation de la consommation (art. L616-1 C. conso) :</strong> en cas de litige non r&eacute;solu, tu peux saisir gratuitement le m&eacute;diateur <strong>MEDICYS</strong> — 73 bd de Clichy, 75009 Paris — <em>www.medicys.fr</em>. Tu peux &eacute;galement utiliser la plateforme europ&eacute;enne de r&egrave;glement en ligne des litiges : <em>ec.europa.eu/consumers/odr</em>.</p>
     </div>
 
     <div class="ml-section">
-      <div class="ml-titre">9. Contact</div>
+      <div class="ml-titre">8. Contact</div>
       <p class="ml-txt">sakina.evolution.contact@gmail.com</p>
     </div>
 
@@ -1467,7 +1308,7 @@
   </div>
 </div>
 
-<!-- MODAL RECETTE PREMIUM -->
+<!-- MODAL RECETTE -->
 <div class="modal-overlay" id="recipe-modal" onclick="if(event.target===this)closeRecipeModal()">
   <div class="modal-sheet pmod-sheet">
     <div class="pmod-handle"></div>
@@ -1476,7 +1317,7 @@
   </div>
 </div>
 
-<!-- MODAL ROUTINE SKINCARE PREMIUM -->
+<!-- MODAL ROUTINE SKINCARE -->
 <div class="modal-overlay" id="skin-modal" onclick="if(event.target===this)closeSkinModal()">
   <div class="modal-sheet pmod-sheet">
     <div class="pmod-handle"></div>
@@ -1487,33 +1328,7 @@
 </div>
 
 
-<!-- MODAL UPGRADE FIN PRINTEMPS -->
-<div class="modal-overlay" id="printemps-upgrade-modal">
-  <div class="modal-sheet" style="text-align:center;padding:32px 24px 28px;">
-    <div style="font-size:44px;margin-bottom:14px;">&#127960;</div>
-    <div style="font-family:var(--serif);font-size:20px;color:var(--noir);margin-bottom:8px;">Fin du Printemps !</div>
-    <div style="font-size:13px;color:var(--gris);line-height:1.7;margin-bottom:24px;">Comment tu t'es sentie sur tes s&eacute;ances ce cycle ?</div>
-    <div style="display:flex;flex-direction:column;gap:10px;">
-      <button onclick="handlePrintempsUpgrade('facile')" style="background:var(--season-grad);color:white;border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">&#128293; C'&eacute;tait accessible — je monte</button>
-      <button onclick="handlePrintempsUpgrade('bien')" style="background:var(--season-soft);color:var(--noir);border:1.5px solid var(--season-light);border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">&#128522; &Ccedil;a me convient bien</button>
-      <button onclick="handlePrintempsUpgrade('dur')" style="background:var(--sable);color:var(--gris);border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">&#128549; C'&eacute;tait encore intense pour moi</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL LEVEL MAX -->
-<div class="modal-overlay" id="level-max-modal" onclick="if(event.target===this)closeLevelMaxModal()">
-  <div class="modal-sheet" style="text-align:center;padding:36px 24px 32px;">
-    <div style="font-size:56px;margin-bottom:12px;">&#127942;</div>
-    <div style="font-family:var(--serif);font-size:22px;color:var(--noir);margin-bottom:8px;">Niveau Pleine puissance atteint</div>
-    <div style="font-size:13px;color:var(--gris);line-height:1.75;margin-bottom:8px;">Alhamdulillah — tu as travaill&eacute; dur pour arriver ici.</div>
-    <div style="font-family:var(--serif);font-size:14px;color:var(--season);font-style:italic;margin-bottom:28px;">&laquo; Et quiconque fait le bien, f&ucirc;t-ce du poids d'un atome, le verra. &raquo;</div>
-    <button onclick="contactLevelMax()" style="background:var(--season-grad);color:white;border:none;border-radius:14px;padding:14px 24px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;width:100%;margin-bottom:10px;">&#9993; Partager avec Sakina</button>
-    <button onclick="closeLevelMaxModal()" style="background:none;border:none;font-size:13px;color:var(--gris);cursor:pointer;font-family:var(--sans);">Fermer</button>
-  </div>
-</div>
-
-<!-- MODAL BILAN FIN D'ESSAI -->
+<!-- MODAL BILAN DE CYCLE -->
 <div class="modal-overlay" id="bilan-modal" onclick="if(event.target===this)closeBilanModal()">
   <div class="modal-sheet bilan-sheet">
     <div class="bilan-header">
@@ -1522,127 +1337,7 @@
       <div class="bilan-header-title">Alhamdulillah ✦<br><span id="bilan-header-days" style="font-size:16px;font-family:var(--sans);font-weight:400;">tu as travers&#233; 20 jours</span></div>
     </div>
     <div class="bilan-body" id="bilan-body"></div>
-    <div class="bilan-footer" id="bilan-footer">
-      <div class="bilan-prem-header">
-        <div class="bilan-prem-eyebrow">Ce qui t&rsquo;attend avec Premium</div>
-        <div class="bilan-prem-feats">
-          <span class="bilan-prem-feat">&#128170; Sport adapt&eacute;</span>
-          <span class="bilan-prem-feat">&#127807; Skincare</span>
-          <span class="bilan-prem-feat">&#127869; Recettes</span>
-          <span class="bilan-prem-feat">&#127919; Objectifs</span>
-          <span class="bilan-prem-feat">&#128202; Sympt&ocirc;mes</span>
-        </div>
-      </div>
-      <div class="bilan-plan-row">
-        <div class="bilan-plan-card" id="plan-monthly" onclick="selectBilanPlan('monthly')">
-          <div class="bilan-plan-name">Mensuel</div>
-          <div class="bilan-plan-price">3,99 <span class="bilan-plan-cur">&euro;</span></div>
-          <div class="bilan-plan-period">par mois</div>
-        </div>
-        <div class="bilan-plan-card selected" id="plan-annual" onclick="selectBilanPlan('annual')">
-          <div class="bilan-plan-badge">Recommand&eacute;</div>
-          <div class="bilan-plan-name">Annuel</div>
-          <div class="bilan-plan-price">34,99 <span class="bilan-plan-cur">&euro;</span></div>
-          <div class="bilan-plan-period">par an &middot; <strong>2,92&euro;/mois</strong></div>
-        </div>
-      </div>
-      <button id="bilan-checkout-btn" onclick="startStripeCheckout()" class="bilan-cta-premium">&#10022; Commencer mon abonnement</button>
-      <div class="bilan-stripe-note">&#128274; Paiement s&eacute;curis&eacute; par Stripe &middot; R&eacute;siliation &agrave; tout moment</div>
-      <button onclick="closeBilanModal()" class="bilan-cta-free">Continuer gratuitement</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL REPORT QUESTION -->
-<div class="modal-overlay" id="report-question-modal">
-  <div class="modal-sheet" style="text-align:center;padding:32px 24px 28px;">
-    <div style="font-size:36px;margin-bottom:12px;">&#128155;</div>
-    <div style="font-family:var(--serif);font-size:18px;color:var(--noir);margin-bottom:8px;">Je remarque que tu repousses ta s&eacute;ance</div>
-    <div style="font-size:13px;color:var(--gris);line-height:1.7;margin-bottom:24px;">Tout va bien&nbsp;? Tu veux qu&rsquo;on adapte quelque chose&nbsp;?</div>
-    <div style="display:flex;flex-direction:column;gap:10px;">
-      <button onclick="handleReportQuestion('longue')" style="background:var(--season-soft);color:var(--season);border:1.5px solid var(--season-light);border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">La s&eacute;ance est trop longue</button>
-      <button onclick="handleReportQuestion('difficile')" style="background:var(--sable);color:var(--noir);border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">C&rsquo;est trop difficile</button>
-      <button onclick="handleReportQuestion('ok')" style="background:none;border:none;font-size:13px;color:var(--gris);cursor:pointer;font-family:var(--sans);padding:10px;">&Ccedil;a va, juste ce moment &#127800;</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL FEEDBACK POST-SEANCE -->
-<div class="modal-overlay" id="feedback-seance-modal">
-  <div class="modal-sheet" style="text-align:center;padding:28px 24px 28px;">
-    <div style="font-size:28px;margin-bottom:8px;">&#128172;</div>
-    <div style="font-family:var(--serif);font-size:17px;color:var(--noir);margin-bottom:20px;">Comment tu te sens&nbsp;?</div>
-    <div class="feedback-grid">
-      <button class="feedback-btn" onclick="handleFeedbackSport('energisee')">&#128170;<br>&#201;nergis&eacute;e</button>
-      <button class="feedback-btn" onclick="handleFeedbackSport('bien')">&#128522;<br>Bien</button>
-      <button class="feedback-btn" onclick="handleFeedbackSport('fatiguee')">&#128564;<br>Fatigu&eacute;e</button>
-      <button class="feedback-btn" onclick="handleFeedbackSport('plus')">&#128293;<br>J&rsquo;aurais pu faire plus</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL PROPOSITION AMELIORATION -->
-<div class="modal-overlay" id="proposition-modal" onclick="if(event.target===this)handleProposition('non')">
-  <div class="modal-sheet" style="text-align:center;padding:32px 24px 28px;">
-    <div id="proposition-body"></div>
-    <div style="display:flex;flex-direction:column;gap:10px;margin-top:24px;">
-      <button onclick="handleProposition('oui')" style="background:var(--season-grad);color:white;border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">Oui &#127800;</button>
-      <button onclick="handleProposition('non')" style="background:none;border:none;font-size:13px;color:var(--gris);cursor:pointer;font-family:var(--sans);padding:8px;">Pas maintenant</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL SEANCE SURPRISE -->
-<div class="modal-overlay" id="seance-surprise-modal" onclick="if(event.target===this)refuseSeanceSurprise()">
-  <div class="modal-sheet" style="text-align:center;padding:32px 24px 28px;">
-    <div style="font-size:42px;margin-bottom:12px;">&#10024;</div>
-    <div style="font-family:var(--serif);font-size:19px;color:var(--noir);margin-bottom:8px;">Tu es &agrave; ton pic aujourd&rsquo;hui</div>
-    <div style="font-size:13px;color:var(--gris);line-height:1.7;margin-bottom:24px;">Et si on essayait quelque chose de nouveau&nbsp;?</div>
-    <div style="display:flex;flex-direction:column;gap:10px;">
-      <button onclick="acceptSeanceSurprise()" style="background:var(--season-grad);color:white;border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">Je tente &#10024;</button>
-      <button onclick="refuseSeanceSurprise()" style="background:none;border:none;font-size:12px;color:var(--gris);cursor:pointer;font-family:var(--sans);padding:8px;">Non merci</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL EXPRESS 5 MIN -->
-<div class="modal-overlay" id="express-modal" onclick="if(event.target===this)document.getElementById('express-modal').classList.remove('open')">
-  <div class="modal-sheet" style="padding:28px 24px 24px;">
-    <div class="pmod-handle"></div>
-    <div style="text-align:center;margin-bottom:16px;">
-      <div style="font-size:28px;margin-bottom:6px;">&#9889;</div>
-      <div style="font-family:var(--serif);font-size:18px;color:var(--noir);">S&eacute;ance express</div>
-    </div>
-    <div id="express-body"></div>
-    <button onclick="validerSeanceExpress()" style="width:100%;padding:14px;background:var(--season-grad);color:white;border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:var(--sans);margin-top:16px;">&#10003; C&rsquo;est fait &mdash; 5 min accomplies !</button>
-    <button onclick="document.getElementById('express-modal').classList.remove('open')" style="width:100%;padding:10px;background:none;border:none;font-size:13px;color:var(--gris);cursor:pointer;font-family:var(--sans);margin-top:4px;">Finalement non</button>
-  </div>
-</div>
-
-<!-- MODAL TIMER -->
-<div class="modal-overlay" id="timer-modal" onclick="if(event.target===this)closeTimerModal()">
-  <div class="modal-sheet" style="padding:28px 24px 24px;">
-    <div class="pmod-handle"></div>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-      <div style="font-family:var(--serif);font-size:16px;color:var(--noir);">Timer s&eacute;ance</div>
-      <button onclick="closeTimerModal()" style="background:var(--sable);border:none;border-radius:10px;padding:6px 12px;font-size:12px;color:var(--gris);cursor:pointer;font-family:var(--sans);">Fermer</button>
-    </div>
-    <div id="timer-body"></div>
-  </div>
-</div>
-
-<!-- MODAL PROGRESSION SPORT (mise à jour 4 options) -->
-<div class="modal-overlay" id="progression-modal">
-  <div class="modal-sheet" style="text-align:center;padding:32px 24px 28px;">
-    <div style="font-size:44px;margin-bottom:14px;">&#128170;</div>
-    <div style="font-family:var(--serif);font-size:20px;color:var(--noir);margin-bottom:8px;">5 s&eacute;ances valid&eacute;es !</div>
-    <div style="font-size:13px;color:var(--gris);line-height:1.7;margin-bottom:28px;">Comment tu te sens par rapport &agrave; tes s&eacute;ances du moment&nbsp;?</div>
-    <div style="display:flex;flex-direction:column;gap:10px;">
-      <button onclick="handleProgressionAnswer('facile')" style="background:var(--season-grad);color:white;border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">&#128293; Trop facile &mdash; je veux aller plus loin</button>
-      <button onclick="handleProgressionAnswer('bien')" style="background:var(--season-soft);color:var(--noir);border:1.5px solid var(--season-light);border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">&#128522; Parfait &mdash; je reste &agrave; ce niveau</button>
-      <button onclick="handleProgressionAnswer('dur')" style="background:var(--sable);color:var(--gris);border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">&#128170; Dur mais je tiens &mdash; je continue</button>
-      <button onclick="handleProgressionAnswer('dur_trop')" style="background:none;border:1px solid var(--sable);border-radius:14px;padding:14px;font-size:13px;color:var(--gris);font-family:var(--sans);cursor:pointer;">&#128549; Trop difficile &mdash; descendre d&rsquo;un niveau</button>
-    </div>
+    <button onclick="closeBilanModal()" class="bilan-cta-free" style="margin-top:16px;">Fermer</button>
   </div>
 </div>
 
@@ -1767,117 +1462,7 @@
   </div>
 </div>
 
-
-<!-- ════════════════════════════════════════════════════════
-     SEANCE TIMER — overlay plein écran
-════════════════════════════════════════════════════════ -->
-<div id="st-overlay" class="st-overlay" aria-modal="true" role="dialog">
-
-  <!-- Header : barre de progression + contrôles -->
-  <div class="st-header">
-    <div class="st-header-left">
-      <div class="st-prog-text" id="st-prog-text"></div>
-      <div class="st-prog-bar-wrap">
-        <div class="st-prog-bar"><div class="st-prog-fill" id="st-prog-fill"></div></div>
-      </div>
-      <div class="st-time-left" id="st-time-left"></div>
-    </div>
-    <div class="st-header-btns">
-      <button class="st-hbtn" id="st-snd-btn" onclick="stToggleSound()" title="Son">🔔</button>
-      <button class="st-hbtn" id="st-pause-btn" onclick="stTogglePause()" title="Pause">⏸️</button>
-      <button class="st-hbtn" onclick="stAskStop()" title="Arrêter">⏹️</button>
-    </div>
-  </div>
-
-  <!-- Corps principal -->
-  <div class="st-body" id="st-body">
-
-    <div class="st-state-label" id="st-state-label"></div>
-    <div class="st-ex-title" id="st-ex-title"></div>
-
-    <!-- Cercle SVG animé -->
-    <div class="st-circle-outer">
-      <svg class="st-svg" viewBox="0 0 200 200" fill="none" aria-hidden="true">
-        <circle class="st-arc-bg" cx="100" cy="100" r="85"/>
-        <circle class="st-arc-track" id="st-arc" cx="100" cy="100" r="85"
-          stroke-dasharray="534.07" stroke-dashoffset="0"
-          transform="rotate(-90 100 100)" stroke-linecap="round"/>
-      </svg>
-      <div class="st-circle-inner">
-        <div class="st-count" id="st-count"></div>
-        <div class="st-count-unit" id="st-count-unit"></div>
-      </div>
-    </div>
-
-    <div class="st-desc" id="st-desc"></div>
-
-    <!-- Phrase scientifique (états repos) -->
-    <div class="st-science" id="st-science" style="display:none"></div>
-
-    <!-- Animation respiration (repos inter-exercices) -->
-    <div class="st-breath-wrap" id="st-breath-wrap" style="display:none">
-      <div class="st-breath-dot" id="st-breath-dot"></div>
-      <div class="st-breath-lbl" id="st-breath-lbl">Inspire...</div>
-    </div>
-
-    <!-- Prochain exercice -->
-    <div class="st-next" id="st-next"></div>
-
-    <!-- Boutons modification (état exercice) -->
-    <div class="st-mods" id="st-mods"></div>
-
-    <!-- Bouton d'action principal -->
-    <div class="st-actions">
-      <button class="st-action-btn" id="st-action-btn" onclick="stAction()"></button>
-      <button class="st-skip-btn" id="st-skip-btn" onclick="stSkip()" style="display:none">Passer →</button>
-    </div>
-
-  </div><!-- /st-body -->
-
-  <!-- État FIN -->
-  <div class="st-done-wrap" id="st-done-wrap">
-    <div class="st-confetti" id="st-confetti"></div>
-    <div class="st-done-emoji">🌸</div>
-    <div class="st-done-title">Séance accomplie ✓</div>
-    <div class="st-done-sub">Alhamdulillah</div>
-    <div class="st-done-stats" id="st-done-stats"></div>
-    <button class="st-done-btn" onclick="stFinish()">Valider ma séance →</button>
-  </div>
-
-  <!-- Overlay pause -->
-  <div class="st-inner-ov" id="st-pause-ov">
-    <div class="st-ov-box">
-      <div class="st-ov-icon">⏸️</div>
-      <div class="st-ov-title">En pause</div>
-      <button class="st-ov-btn primary" onclick="stTogglePause()">▶ Reprendre</button>
-      <button class="st-ov-btn danger" onclick="stAskStop()">⏹️ Arrêter la séance</button>
-    </div>
-  </div>
-
-  <!-- Overlay confirmation arrêt -->
-  <div class="st-inner-ov" id="st-stop-ov">
-    <div class="st-ov-box">
-      <div class="st-ov-icon">🤔</div>
-      <div class="st-ov-title">Tu es sûre ?</div>
-      <div class="st-ov-sub">Ta progression est sauvegardée.</div>
-      <button class="st-ov-btn danger" onclick="stConfirmStop()">Oui, arrêter</button>
-      <button class="st-ov-btn secondary" onclick="stCancelStop()">Continuer ▶</button>
-    </div>
-  </div>
-
-  <!-- Overlay modification exercice -->
-  <div class="st-inner-ov" id="st-mod-ov">
-    <div class="st-ov-box">
-      <div class="st-ov-title" id="st-mod-title"></div>
-      <div class="st-ov-sub" id="st-mod-text"></div>
-      <button class="st-ov-btn primary" onclick="stCloseMod()">Compris ✓</button>
-    </div>
-  </div>
-
-</div><!-- /st-overlay -->
-
 <script src="/data.js" defer></script>
-<script src="/sport-additions.js" defer></script>
 <script src="/app.js" defer></script>
 
 <!-- ── PWA INSTALL GUIDE ─────────────────────────────────────── -->
