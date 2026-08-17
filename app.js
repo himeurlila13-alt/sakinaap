@@ -48,6 +48,7 @@ let ST = {
   calmeOverride: null,
   _lastSaison: null,
   hiverEnd: null,
+  _undoNouveauCycle: null, // snapshot pour annuler un "Mon Hiver commence aujourd'hui" déclenché par erreur (<48h)
   supabaseUserId: null,
   supabaseEmail: null,
   isAuthenticated: false,
@@ -1627,6 +1628,14 @@ function renderCycle(s) {
   if (_bnh) _bnh.style.display = (ST.currentSaison === 'automne') ? 'flex' : 'none';
   if (_bfh) _bfh.style.display = _isH ? 'flex' : 'none';
 
+  // Bouton "Annuler ce début de cycle" — visible <48h après un startNewCycleToday()
+  const _bac = document.getElementById('btn-annuler-cycle');
+  if (_bac) {
+    const undo = ST._undoNouveauCycle;
+    const canUndo = !!undo && ((Date.now() - undo.declaredAt) / 3600000) < 48;
+    _bac.style.display = canUndo ? 'flex' : 'none';
+  }
+
   drawCycleRing();
 
   // Symptômes
@@ -1638,6 +1647,15 @@ function startNewCycleToday() {
   const todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
   if (ST.cycleStart === todayStr) return;
   if (!ST.cycleHistory) ST.cycleHistory = [];
+
+  // Snapshot de l'état précédent — permet d'annuler cette déclaration si elle a été
+  // faite par erreur (bouton "Annuler ce début de cycle", disponible <48h).
+  const prevCycleStart = ST.cycleStart;
+  const prevHiverEnd = ST.hiverEnd;
+  const prevLastCycleNum = ST._lastCycleNum;
+  const prevLastSaison = ST._lastSaison;
+  let historyEntryAdded = false;
+
   if (ST.cycleStart) {
     const snap = _bilanStats();
     ST.cycleHistory.unshift({
@@ -1646,17 +1664,59 @@ function startNewCycleToday() {
       prayerDays: snap.prayerDays,
       symptomDays: snap.symptomDays,
     });
+    historyEntryAdded = true;
     if (ST.cycleHistory.length > 6) ST.cycleHistory = ST.cycleHistory.slice(0, 6);
   }
   ST.cycleStart = todayStr;
   ST.hiverEnd = null;
   ST._lastCycleNum = -1;
 
+  ST._undoNouveauCycle = {
+    cycleStart: prevCycleStart,
+    hiverEnd: prevHiverEnd,
+    lastCycleNum: prevLastCycleNum,
+    lastSaison: prevLastSaison,
+    historyEntryAdded,
+    declaredAt: Date.now(),
+  };
+
   saveState();
   computeCycle();
   applySaisonTheme();
   populateAll();
   showPhaseToast('🌙', 'Hiver déclaré', 'Prends soin de toi 🌙');
+}
+
+// Annule un "Mon Hiver commence aujourd'hui" déclenché par erreur, tant que c'est
+// récent (<48h). Restaure exactement l'état précédent (date, fin d'hiver, compteurs
+// de cycle) et retire l'entrée d'historique créée au passage, puis relance le calcul
+// de phase depuis l'état restauré.
+function annulerNouveauCycle() {
+  const undo = ST._undoNouveauCycle;
+  if (!undo) return;
+  const hoursElapsed = (Date.now() - undo.declaredAt) / 3600000;
+  if (hoursElapsed >= 48) {
+    ST._undoNouveauCycle = null;
+    saveState();
+    populateAll();
+    showToast('Ce début de cycle date de plus de 48h — corrige la date depuis Moi → Modifier mon cycle 🌙');
+    return;
+  }
+
+  if (undo.historyEntryAdded && ST.cycleHistory && ST.cycleHistory[0] && ST.cycleHistory[0].start === undo.cycleStart) {
+    ST.cycleHistory.shift();
+  }
+  ST.cycleStart = undo.cycleStart;
+  ST.hiverEnd = undo.hiverEnd;
+  ST._lastCycleNum = undo.lastCycleNum;
+  ST._lastSaison = undo.lastSaison;
+  ST._undoNouveauCycle = null;
+
+  saveState();
+  computeCycle();
+  applySaisonTheme();
+  populateAll();
+  showToast('✓ Début de cycle annulé — retour à ta saison précédente 🌙');
 }
 
 // dateStr optionnel (YYYY-MM-DD) : déclaration rétroactive de fin de règles.
@@ -3491,12 +3551,29 @@ function saveEditCycle() {
   if (!dateVal) { showToast('Indique la date 🌙'); return; }
   const todayStr = new Date().toISOString().split('T')[0];
   if (dateVal > todayStr) { showToast('La date de début ne peut pas être dans le futur 🌙'); return; }
+
+  // Garde-fou : la nouvelle date ne doit pas chevaucher le cycle précédent (évite un
+  // état incohérent — on avertit plutôt que de silencieusement l'enregistrer).
+  const prevCycle = (ST.cycleHistory || [])[0];
+  if (prevCycle && prevCycle.start && dateVal !== ST.cycleStart) {
+    const [py, pm, pd] = prevCycle.start.split('-').map(Number);
+    const prevEndDate = new Date(py, pm - 1, pd + (Number(prevCycle.duration) || 28));
+    const [dy, dm, dd] = dateVal.split('-').map(Number);
+    const newStartDate = new Date(dy, dm - 1, dd);
+    if (newStartDate < prevEndDate) {
+      const prevEndStr = prevEndDate.getFullYear() + '-' + String(prevEndDate.getMonth()+1).padStart(2,'0') + '-' + String(prevEndDate.getDate()).padStart(2,'0');
+      showToast('Cette date chevauche ton cycle précédent (terminé le ' + formatDateFr(prevEndStr) + ') 🌙');
+      return;
+    }
+  }
+
   if (ST.cycleStart && ST.cycleStart !== dateVal) {
     if (!ST.cycleHistory) ST.cycleHistory = [];
     ST.cycleHistory.unshift({ start: ST.cycleStart, duration: ST.cycleDuration || 28 });
     if (ST.cycleHistory.length > 6) ST.cycleHistory = ST.cycleHistory.slice(0, 6);
   }
   if (ST.cycleStart !== dateVal) ST.hiverEnd = null; // nouvelle date → hiverEnd caduc
+  ST._undoNouveauCycle = null; // une correction manuelle via cette modale rend l'annulation obsolète
   ST.cycleStart=dateVal; ST.cycleDuration=editDuration; ST.dureeRegles=editDureeRegles; saveState(); closeEditCycle();
   computeCycle(); applySaisonTheme(); populateAll();
   showToast('✓ Cycle mis à jour — ' + SAISONS[ST.currentSaison].emoji + ' ' + SAISONS[ST.currentSaison].nom + ' · Jour ' + ST.currentDay);
