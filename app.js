@@ -1010,134 +1010,6 @@ const SAISONS = {
   }
 };
 
-// ═══════════════════════════════════════════════
-// PREMIUM DATA
-// ═══════════════════════════════════════════════
-const RECETTES = {
-  hiver: [
-    { nom:'Soupe lentilles-curcuma-gingembre', emoji:'🍲', pourquoi:'Le fer des lentilles compense tes pertes. Curcuma + gingembre réduisent l\'inflammation naturellement.', ingredients:['200g lentilles corail','600ml bouillon de légumes','1 cc curcuma, 1 cc gingembre râpé','1 oignon, 2 gousses d\'ail','Jus d\'un citron'], etapes:['Faire revenir oignon et ail 3 min à l\'huile d\'olive','Ajouter lentilles + bouillon','Cuire 15 min à feu moyen','Mixer la moitié pour crémer','Assaisonner, presser le citron'] },
-    { nom:'Bowl épinards-sardines au sésame', emoji:'🥣', pourquoi:'Oméga-3 des sardines + fer des épinards — le duo anti-crampes de l\'Hiver par excellence.', ingredients:['1 boîte sardines à l\'huile d\'olive','Grosse poignée d\'épinards frais','80g riz complet cuit','1 cs sésame toasté','Huile d\'olive, jus de citron'], etapes:['Disposer le riz dans le bol','Faire revenir les épinards 2 min à l\'huile','Ajouter les sardines égouttées','Arroser d\'huile d\'olive et citron','Parsemer de sésame toasté'] },
-    { nom:'Dattes farcies amandes-chocolat noir', emoji:'🍫', pourquoi:'Magnésium du chocolat + fer des dattes + bons gras des amandes — collation anti-fatigue complète.', ingredients:['6 dattes Medjool','Poignée d\'amandes entières','2 carrés chocolat noir 70%+','Fleur de sel'], etapes:['Ouvrir les dattes et retirer les noyaux','Glisser une amande dans chaque datte','Fondre le chocolat au bain-marie','Napper les dattes de chocolat fondu','Fleur de sel + réfrigérer 10 min'] },
-    { nom:'Tajine de poulet citron-olives', emoji:'🍗', pourquoi:'Les protéines du poulet reconstruisent les tissus. Le citron confit stimule l\'absorption du fer non-héminique.', ingredients:['2 cuisses de poulet','1 citron confit coupé en quartiers','Poignée d\'olives vertes','1 oignon, 2 gousses d\'ail','Cumin, paprika, coriandre fraîche'], etapes:['Faire dorer le poulet sur toutes les faces','Ajouter oignon et ail émincés','Incorporer les épices, remuer 1 min','Ajouter citron confit, olives et 150ml eau','Couvrir et mijoter 35 min à feu doux'] },
-    { nom:'Potage butternut-lentilles-noisettes', emoji:'🎃', pourquoi:'Le bêta-carotène du butternut soutient les hormones. Les lentilles apportent le fer dont tu as besoin pendant l\'Hiver.', ingredients:['½ butternut en dés','100g lentilles vertes','1 oignon, 500ml bouillon','1 cc cumin, sel, poivre','Poignée de noisettes torréfiées'], etapes:['Faire revenir oignon 3 min','Ajouter butternut, lentilles et bouillon','Cuire 25 min à feu moyen','Mixer finement, ajuster la texture','Servir avec les noisettes concassées'] },
-    { nom:'Omelette aux champignons & herbes fraîches', emoji:'🍳', pourquoi:'Les œufs sont riches en fer et en vitamine B12. Les champignons apportent du sélénium, précieux pendant les règles.', ingredients:['3 œufs','100g champignons de Paris émincés','½ oignon, 1 gousse d\'ail','Persil, ciboulette fraîche','Huile d\'olive, sel, poivre'], etapes:['Faire revenir champignons, oignon et ail 5 min','Battre les œufs avec les herbes ciselées','Verser sur les champignons en poêle chaude','Laisser prendre 2 min à feu moyen','Plier en deux, servir aussitôt'] },
-    { nom:'Riz complet aux pois chiches-épinards', emoji:'🍚', pourquoi:'Le combo riz complet + pois chiches forme des protéines complètes. Le fer des épinards est mieux absorbé avec la vitamine C des tomates.', ingredients:['80g riz complet cuit','150g pois chiches égouttés','Grosse poignée d\'épinards','2 tomates cerises coupées','Huile d\'olive, paprika fumé, citron'], etapes:['Faire revenir les pois chiches au paprika 3 min','Ajouter les épinards, remuer 2 min','Mélanger avec le riz chaud','Ajouter les tomates cerises','Arroser d\'huile d\'olive et de citron'] },
-    { nom:'Œufs cocotte épinards-crème', emoji:'🥚', pourquoi:'Les œufs apportent 13g de protéines et du fer biodisponible. La chaleur du four réconforte pendant les règles et les épinards reconstituent les réserves en fer perdues.', ingredients:['2 œufs','Grosse poignée d\'épinards','2 cs crème fraîche','1 gousse d\'ail, sel, muscade','Pain complet grillé'], etapes:['Préchauffer le four à 180°C','Faire revenir les épinards à l\'ail 2 min','Répartir dans un ramequin avec la crème','Casser les œufs par-dessus, saler et muscader','Cuire 12 min — blanc pris, jaune coulant'] },
-    { nom:'Velouté potimarron-lentilles corail', emoji:'🎃', pourquoi:'Le potimarron est riche en bêta-carotène précurseur de vitamine A. Associé aux lentilles corail (fer + protéines), ce velouté réchauffe et reconstitue les réserves de l\'Hiver.', ingredients:['½ potimarron en dés','100g lentilles corail','1 oignon, 500ml bouillon de légumes','1 cc gingembre, ½ cc curcuma','Graines de courge, sel, poivre'], etapes:['Faire revenir l\'oignon émincé 3 min','Ajouter potimarron, lentilles, épices et bouillon','Cuire 20 min à feu moyen','Mixer finement en velouté lisse','Servir avec les graines de courge'] },
-    { nom:'Bœuf mijoté curcuma-tomates', emoji:'🍖', pourquoi:'Le bœuf est une excellente source de fer héminique (biodisponibilité 15-35%). Le curcuma réduit les prostaglandines responsables des crampes selon les études récentes en nutrition cyclique.', ingredients:['200g bœuf en morceaux (paleron)','1 boîte tomates pelées','100g petits pois surgelés','1 cc curcuma, 1 cc cumin, 1 oignon','Huile d\'olive, sel, poivre'], etapes:['Faire dorer le bœuf sur toutes les faces','Ajouter l\'oignon émincé et les épices','Verser les tomates pelées écrasées','Couvrir et mijoter 45 min à feu doux','Ajouter les petits pois les 5 dernières min'] },
-    { nom:'Tartines sardines-avocat-citron', emoji:'🥫', pourquoi:'Les sardines combinent fer héminique et oméga-3 anti-inflammatoires en un seul aliment. L\'avocat améliore l\'absorption des vitamines liposolubles présentes dans les sardines.', ingredients:['1 boîte sardines à l\'huile d\'olive','1 avocat mûr','2 tranches pain complet grillé','Jus d\'un citron, ciboulette fraîche','Fleur de sel, piment d\'Espelette'], etapes:['Griller le pain','Écraser l\'avocat avec le citron à la fourchette','Tartiner généreusement les tranches','Disposer les sardines égouttées par-dessus','Ciboulette ciselée, fleur de sel et piment'] },
-    { nom:'Bowl quinoa-betterave-noix-feta', emoji:'🟣', pourquoi:'La betterave est riche en fer et en nitrates qui améliorent l\'oxygénation cellulaire pendant les règles. Les noix apportent des oméga-3 et du magnésium anti-crampes.', ingredients:['80g quinoa cuit','1 betterave cuite en dés','30g noix concassées','50g feta émiettée','1 cs huile d\'olive, vinaigre balsamique, sel'], etapes:['Cuire le quinoa 12 min, laisser tiédir','Couper la betterave en petits dés','Assembler quinoa + betterave dans un bol','Ajouter noix et feta émiettée','Assaisonner huile d\'olive + balsamique'] },
-    { nom:'Soupe haricots blancs-kale-ail', emoji:'🫘', pourquoi:'Les haricots blancs apportent 3mg de fer pour 100g. Le kale contient plus de vitamine C que l\'orange, doublant l\'absorption du fer végétal — synergie bien documentée entre vitamine C et absorption du fer végétal.', ingredients:['1 boîte haricots blancs égouttés','Grosse poignée de kale ou chou frisé émincé','2 gousses d\'ail, 1 oignon','500ml bouillon de légumes','Sel, poivre, huile d\'olive'], etapes:['Faire revenir ail et oignon 3 min dans l\'huile','Ajouter les haricots et le bouillon','Mijoter 10 min à feu moyen','Ajouter le kale, cuire encore 5 min','Ajuster sel et poivre, servir chaud'] },
-    { nom:'Dahl de pois cassés gingembre-citron', emoji:'🟡', pourquoi:'Les pois cassés contiennent 23g de protéines et du magnésium anti-crampes pour 100g sec. Le gingembre frais réduit significativement la douleur menstruelle via l\'inhibition des prostaglandines.', ingredients:['150g pois cassés jaunes','1 oignon, 2 gousses d\'ail, 2cm gingembre râpé','1 cc curcuma, 1 cc coriandre moulue','500ml bouillon de légumes','Jus d\'un citron, coriandre fraîche, sel'], etapes:['Rincer les pois cassés','Faire revenir oignon, ail, gingembre et épices 3 min','Ajouter pois cassés et bouillon','Cuire 25 min jusqu\'à consistance crémeuse','Presser le citron, garnir de coriandre fraîche'] },
-    { nom:'Lablabi — soupe de pois chiches au cumin', emoji:'🫘', pourquoi:'Les pois chiches apportent 3mg de fer et de la vitamine B6 — essentiels pour reconstituer les réserves pendant les règles. Le pain complet ajoute des glucides complexes énergétiques. Plat tunisien réconfortant, économique et rapide.', ingredients:['400g pois chiches égouttés','2 œufs cuits mollets','2 tranches pain complet rassis en cubes','2 gousses d\'ail écrasées','1 cc cumin, ½ cc harissa douce, jus de citron, huile d\'olive, sel'], etapes:['Chauffer les pois chiches dans leur jus 5 min avec l\'ail et le cumin','Cuire les œufs mollets 6 min à l\'eau bouillante, écaler','Répartir le pain en cubes dans les bols','Verser la soupe de pois chiches par-dessus','Poser les œufs coupés en deux, harissa douce, citron et filet d\'huile d\'olive'] },
-    { nom:'Harira légère poulet-lentilles-tomates', emoji:'🍲', pourquoi:'La harira est l\'une des soupes les plus complètes : lentilles (fer + protéines), tomates (vitamine C pour absorber le fer), herbes fraîches. Emblème de la cuisine marocaine et algérienne, parfaite pour réchauffer et reconstituer le corps en Hiver.', ingredients:['150g poulet halal en petits morceaux','100g lentilles corail','1 boîte tomates pelées + 2 cs concentré de tomates','1 oignon, 2 gousses d\'ail, 1 branche de céleri','Coriandre et persil frais, cumin, cannelle, sel, poivre'], etapes:['Faire revenir oignon, céleri et poulet 5 min','Ajouter tomates pelées, concentré, ail et épices','Verser les lentilles et 800ml d\'eau chaude','Mijoter 25 min à feu doux','Terminer avec les herbes fraîches ciselées, ajuster sel et servir chaud'] },
-    { nom:'Bissara — crème de fèves à l\'huile d\'olive', emoji:'🫛', pourquoi:'Les fèves sont riches en fer végétal, en protéines et en magnésium — le trio anti-crampes de l\'Hiver. L\'huile d\'olive et le cumin facilitent la digestion souvent perturbée pendant les règles. Plat marocain du quotidien, économique et réconfortant.', ingredients:['400g fèves séchées pelées (ou surgelées)','4 gousses d\'ail','1 cs cumin moulu, sel','Huile d\'olive généreuse','Piment doux ou paprika, persil frais'], etapes:['Cuire les fèves dans l\'eau avec l\'ail 20 min','Égoutter en conservant un peu d\'eau de cuisson','Mixer finement en ajoutant l\'eau de cuisson selon la texture souhaitée','Verser dans des bols, creuser un puits au centre','Remplir d\'huile d\'olive, saupoudrer de cumin et piment, servir chaud'] },
-  ],
-  printemps: [
-    { nom:'Bowl avocat-œuf poché-quinoa', emoji:'🥑', pourquoi:'Les bons gras de l\'avocat soutiennent la montée des œstrogènes. Le quinoa apporte les 9 acides aminés essentiels.', ingredients:['80g quinoa cuit','1 œuf poché','½ avocat tranché','1 cs graines de lin moulues','Citron, fleur de sel'], etapes:['Cuire le quinoa 12 min, égoutter','Porter l\'eau à frémissement pour l\'œuf','Pocher l\'œuf 3 min','Assembler quinoa + avocat + œuf','Lin moulu, citron, sel'] },
-    { nom:'Salade fruits rouges & graines de lin', emoji:'🍓', pourquoi:'Les phyto-œstrogènes du lin amplifient ton élan naturel. Les antioxydants des fruits rouges protègent tes cellules.', ingredients:['Mélange fruits rouges (fraises, myrtilles, framboises)','150g yaourt grec','1 cs graines de lin moulues','1 cc miel','Quelques feuilles de menthe'], etapes:['Disposer les fruits dans un bol','Verser le yaourt à côté','Parsemer de graines de lin moulues','Filet de miel, feuilles de menthe fraîche'] },
-    { nom:'Wrap brocoli-poulet-houmous', emoji:'🌯', pourquoi:'Les fibres du brocoli éliminent l\'excès d\'œstrogènes. Les protéines du poulet soutiennent l\'énergie montante.', ingredients:['1 grande galette de blé complet','100g poulet cuit émincé','Fleurets de brocoli cuits vapeur','2 cs houmous maison','Paprika, citron'], etapes:['Chauffer la galette 30 sec','Tartiner d\'houmous généreusement','Ajouter le poulet et le brocoli','Saupoudrer de paprika et presser le citron','Rouler serré et couper en deux'] },
-    { nom:'Saumon vapeur & riz basmati aux herbes', emoji:'🐟', pourquoi:'Les oméga-3 du saumon soutiennent la production d\'œstrogènes. Le zinc favorise la maturation folliculaire.', ingredients:['150g pavé de saumon','80g riz basmati cuit','Jus de citron, aneth frais','1 cc huile d\'olive','Sel, poivre, zeste de citron'], etapes:['Cuire le saumon vapeur 10 min','Assaisonner le riz avec huile et herbes','Dresser le saumon sur le riz','Zeste + jus de citron par-dessus','Parsemer d\'aneth frais ciselé'] },
-    { nom:'Buddha bowl brocoli-edamame-sésame', emoji:'🥦', pourquoi:'Le brocoli est riche en indole-3-carbinol qui régule les œstrogènes. L\'edamame apporte des phyto-œstrogènes naturels.', ingredients:['Fleurets de brocoli rôtis','80g edamame cuits','80g riz complet ou quinoa','1 cs sauce soja','Sésame toasté, gingembre râpé'], etapes:['Rôtir le brocoli 20 min au four à 200°C','Cuire l\'edamame 5 min à l\'eau bouillante','Disposer les céréales dans le bol','Ajouter brocoli et edamame','Sauce soja + sésame + gingembre'] },
-    { nom:'Salade tiède lentilles-chèvre chaud-noix', emoji:'🥗', pourquoi:'Les lentilles apportent du fer et du zinc pour la phase folliculaire. Le fromage de chèvre est riche en calcium et protéines.', ingredients:['120g lentilles vertes cuites','60g fromage de chèvre en rondelles','Poignée de noix','Mâche ou roquette','Vinaigrette moutarde-miel'], etapes:['Tiédir les lentilles à la poêle avec une noix d\'huile','Griller les rondelles de chèvre sous le gril 3 min','Disposer la salade verte','Ajouter lentilles et noix','Poser le chèvre chaud, arroser de vinaigrette'] },
-    { nom:'Tartines avocat-tomates-graines de courge', emoji:'🍞', pourquoi:'Le bon gras de l\'avocat favorise l\'absorption des vitamines liposolubles. Les graines de courge sont riches en zinc, essentiel à l\'ovocyte.', ingredients:['2 tranches de pain complet grillé','1 avocat mûr','Tomates cerises coupées en deux','1 cs graines de courge','Fleur de sel, piment d\'Espelette, citron'], etapes:['Griller les tranches de pain','Écraser l\'avocat à la fourchette avec le citron','Tartiner généreusement','Disposer les tomates cerises','Graines de courge, fleur de sel, piment'] },
-    { nom:'Omelette roulée aux herbes printanières', emoji:'🌿', pourquoi:'3 œufs = 18g de protéines complètes et vitamines B essentielles à la synthèse des œstrogènes. Les herbes fraîches apportent de la vitamine C qui soutient la montée hormonale du Printemps.', ingredients:['3 œufs','Ciboulette, persil, basilic frais ciselés','½ poivron rouge en lanières fines','1 cc huile d\'olive, sel, poivre','30g fromage de chèvre frais'], etapes:['Battre les œufs avec les herbes, sel, poivre','Faire chauffer l\'huile dans une poêle antiadhésive','Verser les œufs, cuire 1 min à feu doux','Déposer poivron et fromage de chèvre','Rouler délicatement, servir aussitôt'] },
-    { nom:'Smoothie bowl kéfir-fruits rouges-lin', emoji:'🍓', pourquoi:'Le kéfir est l\'une des sources de probiotiques les plus denses — l\'axe intestin-cerveau influence directement l\'équilibre hormonal. Le lin moulu apporte des lignanes phyto-œstrogènes naturels.', ingredients:['150ml kéfir de lait','100g fruits rouges surgelés','1 banane','1 cs graines de lin moulues','Granola nature, amandes effilées'], etapes:['Mixer kéfir + fruits rouges + banane','Verser dans un bol large','Parsemer de graines de lin moulues','Ajouter le granola pour le croquant','Décorer d\'amandes effilées, servir frais'] },
-    { nom:'Tofu sauté gingembre-poivrons colorés', emoji:'🟧', pourquoi:'Le tofu ferme contient 14g de protéines et du zinc essentiel à la maturation folliculaire. Les poivrons (200mg vit C/100g) boostent l\'absorption du zinc — synergie clé en phase folliculaire.', ingredients:['200g tofu ferme en cubes','1 poivron rouge + 1 poivron jaune en lamelles','2cm gingembre râpé, 1 gousse d\'ail','1 cs sauce soja, 1 cc miel, huile de sésame','Sésame toasté, ciboulette'], etapes:['Éponger le tofu avec du papier absorbant','Faire dorer les cubes de tofu 4 min par face','Retirer le tofu, faire sauter les poivrons 3 min','Ajouter gingembre, ail, sauce soja et miel','Remettre le tofu, mélanger, sésame + ciboulette'] },
-    { nom:'Salade de quinoa-légumes rôtis-tahini', emoji:'🥗', pourquoi:'Le quinoa est la seule céréale contenant les 9 acides aminés essentiels — idéal en phase folliculaire pour reconstruire les réserves musculaires. Le tahini apporte du zinc et du calcium essentiels.', ingredients:['100g quinoa cuit','1 courgette + 1 poivron rôtis au four','2 cs tahini (purée de sésame)','Jus d\'1 citron, 1 cs huile d\'olive, sel','Menthe fraîche, graines de courge'], etapes:['Rôtir les légumes en dés 20 min à 200°C','Cuire le quinoa, laisser tiédir','Mélanger tahini + citron + huile + sel en sauce','Assembler quinoa + légumes dans un bol','Napper de sauce tahini, menthe + graines de courge'] },
-    { nom:'Velouté brocoli-amandes-lait de coco', emoji:'🥦', pourquoi:'Le brocoli est la plante la plus riche en indole-3-carbinol, qui aide le foie à métaboliser les œstrogènes. Les amandes ajoutent du zinc et des acides gras essentiels pour la maturation folliculaire.', ingredients:['1 brocoli en fleurets','30g amandes mondées','200ml lait de coco','1 oignon, 400ml bouillon de légumes','Sel, poivre, muscade, graines de courge'], etapes:['Faire revenir l\'oignon 3 min','Ajouter brocoli, amandes et bouillon','Cuire 15 min à couvert','Ajouter le lait de coco, mixer finement','Servir avec graines de courge et muscade'] },
-    { nom:'Cabillaud vapeur-légumes & herbes', emoji:'🐟', pourquoi:'Le cabillaud est la protéine la plus légère (17g/100g) et la plus riche en iode, indispensable à la production des hormones thyroïdiennes qui régulent le cycle menstruel.', ingredients:['150g filet de cabillaud','Haricots verts, carottes en bâtonnets','Herbes de Provence, 1 cc huile d\'olive','Jus de citron, sel, poivre','80g riz basmati ou quinoa cuit'], etapes:['Assaisonner le cabillaud d\'herbes, citron, sel','Cuire vapeur 8 min avec les légumes','Préparer le riz ou quinoa séparément','Dresser le poisson sur les céréales','Légumes à côté, filet d\'huile d\'olive'] },
-    { nom:'Bowl fromage blanc-kiwi-graines de courge', emoji:'🥝', pourquoi:'Le fromage blanc apporte 11g de protéines et des probiotiques pour le microbiome. Le kiwi contient plus de vitamine C que l\'orange — crucial pour la maturation folliculaire et l\'absorption du zinc.', ingredients:['200g fromage blanc 0% ou 3%','2 kiwis pelés et tranchés','1 cs graines de courge','1 cc miel','1 cc graines de chia, quelques myrtilles'], etapes:['Verser le fromage blanc dans un bol','Éplucher et trancher les kiwis','Disposer kiwis et myrtilles sur le dessus','Parsemer graines de courge + chia','Filet de miel pour finir'] },
-    { nom:'Salade de carottes à la fleur d\'oranger', emoji:'🥕', pourquoi:'Les carottes sont riches en bêta-carotène, précurseur des œstrogènes qui montent au Printemps. Les raisins secs apportent du fer et des sucres naturels pour l\'élan folliculaire. L\'eau de fleur d\'oranger est un ingrédient identitaire maghrébin, parfumé et accessible.', ingredients:['4 carottes râpées finement','30g raisins secs blonds','1 cs eau de fleur d\'oranger','Jus d\'1 citron, 1 cs huile d\'olive','½ cc cumin, sel, quelques feuilles de coriandre fraîche'], etapes:['Râper les carottes finement à la râpe ou au robot','Réhydrater les raisins secs 5 min dans l\'eau tiède, égoutter','Mélanger carottes, raisins et coriandre ciselée','Assaisonner fleur d\'oranger + citron + huile + cumin + sel','Mélanger délicatement, laisser reposer 10 min avant de servir'] },
-    { nom:'Taboulé de boulgour aux herbes fraîches', emoji:'🌿', pourquoi:'Le boulgour est une alternative économique au quinoa — mêmes fibres, mêmes protéines, ancrage culturel maghrébin. Le persil est riche en vitamine C qui soutient la montée des œstrogènes. Plat frais et léger, parfait pour le regain d\'énergie du Printemps.', ingredients:['120g boulgour fin','Gros bouquet de persil plat ciselé finement','Quelques feuilles de menthe fraîche ciselées','2 tomates en petits dés, ½ concombre en dés','Jus de 2 citrons, 3 cs huile d\'olive, sel'], etapes:['Verser de l\'eau bouillante sur le boulgour, couvrir 15 min, égoutter','Laisser refroidir complètement','Ciseler finement persil et menthe','Mélanger boulgour + herbes + tomates + concombre','Assaisonner citron + huile + sel, servir bien frais'] },
-  ],
-  ete: [
-    { nom:'Salade pastèque-grenade-menthe-feta', emoji:'🍉', pourquoi:'Ultra-hydratante à l\'ovulation quand le corps chauffe. La grenade est un antioxydant puissant pour les cellules ovariennes.', ingredients:['Tranches de pastèque sans graines','Grains de ½ grenade','60g feta émiettée','Feuilles de menthe fraîche','Jus de citron vert'], etapes:['Couper la pastèque en cubes','Égrener la grenade au-dessus','Émietter la feta par-dessus','Ajouter la menthe ciselée finement','Presser le citron vert, servir frais'] },
-    { nom:'Filet de poisson vapeur & taboulé léger', emoji:'🐟', pourquoi:'Les protéines légères soutiennent l\'ovulation. Le zinc des herbes et céréales renforce l\'immunité à son pic.', ingredients:['150g filet de poisson blanc (cabillaud, lieu)','120g taboulé (boulgour, persil, tomates)','1 cs graines de courge','Huile d\'olive extra-vierge','Citron, sel, poivre'], etapes:['Cuire le poisson vapeur 8 min','Préparer le taboulé avec persil, tomates et menthe','Dresser le poisson sur le taboulé','Parsemer de graines de courge','Huile d\'olive et quartier de citron'] },
-    { nom:'Smoothie myrtilles-épinards-gingembre', emoji:'🫐', pourquoi:'Les antioxydants des myrtilles protègent les ovocytes. Le gingembre est anti-inflammatoire et booste la digestion.', ingredients:['100g myrtilles surgelées','Grosse poignée d\'épinards','2cm gingembre frais râpé','150ml lait de coco léger','1 cc miel'], etapes:['Tout mettre dans le blender','Mixer 45 secondes à haute vitesse','Goûter et ajuster le miel','Servir immédiatement dans un grand verre'] },
-    { nom:'Brochettes poulet-légumes grillés', emoji:'🍢', pourquoi:'Les protéines maigres du poulet soutiennent l\'ovulation. Les légumes grillés apportent des antioxydants au moment où ton énergie est au sommet.', ingredients:['200g blanc de poulet en cubes','1 courgette, 1 poivron rouge','1 cs huile d\'olive','Herbes de Provence, paprika','Jus de citron, sel, poivre'], etapes:['Couper poulet et légumes en morceaux','Mariner 15 min dans huile + épices + citron','Alterner sur les brochettes','Griller 12 min en retournant','Servir avec une salade verte'] },
-    { nom:'Gaspacho tomates-poivron-concombre', emoji:'🍅', pourquoi:'Hydratant et riche en lycopène antioxydant. Parfait à l\'ovulation pour soutenir les cellules ovariennes sans alourdir le corps.', ingredients:['4 tomates bien mûres','1 poivron rouge','½ concombre','1 gousse d\'ail, 1 cs vinaigre de cidre de pomme','Huile d\'olive, sel, basilic'], etapes:['Couper tous les légumes grossièrement','Mixer avec l\'ail et le vinaigre','Ajouter l\'huile d\'olive en filet','Saler, mixer à nouveau finement','Réfrigérer 1h, servir très frais avec basilic'] },
-    { nom:'Salade pois chiches-menthe-citron-concombre', emoji:'🥙', pourquoi:'Les pois chiches sont riches en zinc et en manganèse, nutriments clés pour la santé des ovocytes. La menthe facilite la digestion.', ingredients:['250g pois chiches égouttés','½ concombre en dés','Menthe fraîche ciselée','Jus d\'un citron, 1 cs huile d\'olive','Sel, sumac (optionnel)'], etapes:['Égoutter et rincer les pois chiches','Couper le concombre en petits dés','Mélanger avec la menthe','Assaisonner citron + huile d\'olive + sel','Saupoudrer de sumac si disponible'] },
-    { nom:'Tartare saumon-avocat-mangue', emoji:'🥭', pourquoi:'Les oméga-3 du saumon protègent les membranes cellulaires au moment de l\'ovulation. La mangue apporte de la vitamine C pour l\'absorption du fer.', ingredients:['150g saumon décongelé (surgelé min. 24h) ou qualité sashimi certifiée','½ avocat en dés','½ mangue en petits dés','Jus de citron vert, 1 cc sauce soja','Ciboulette, sésame'], etapes:['Couper le saumon en petits dés réguliers','Mélanger délicatement avec l\'avocat et la mangue','Assaisonner citron vert + sauce soja','Dresser à l\'aide d\'un emporte-pièce','Ciboulette ciselée + sésame par-dessus'] },
-    { nom:'Bowl fraises-épinards-amandes-balsamique', emoji:'🍓', pourquoi:'Les fraises contiennent de l\'ellagic acid, antioxydant qui protège les ovocytes au pic d\'ovulation. Le magnésium des épinards soutient les performances sportives, au sommet en été.', ingredients:['Grosse poignée d\'épinards baby','150g fraises fraîches coupées en deux','30g amandes effilées toastées','60g feta émiettée','1 cs balsamique, 1 cs huile d\'olive, sel'], etapes:['Laver et sécher les épinards','Couper les fraises en deux','Toaster les amandes à sec 2 min','Assembler épinards + fraises + amandes + feta','Assaisonner balsamique + huile d\'olive + sel'] },
-    { nom:'Carpaccio courgette-parmesan-menthe', emoji:'🥒', pourquoi:'La courgette crue est ultra-légère (17 kcal/100g) et hydratante à 95% d\'eau. Le parmesan apporte du sélénium, minéral-clé pour la qualité des ovocytes selon les études récentes.', ingredients:['2 courgettes fermes jaune et verte','30g parmesan en copeaux','Feuilles de menthe fraîche','Jus d\'1 citron, 2 cs huile d\'olive extra-vierge','Sel, poivre noir, pignons de pin toastés'], etapes:['Trancher les courgettes en ruban avec un économe','Disposer en rosace dans un plat','Arroser d\'huile d\'olive et de citron','Saler et poivrer généreusement','Parmesan, menthe et pignons par-dessus'] },
-    { nom:'Wrap poulet-crudités-tzatziki maison', emoji:'🌯', pourquoi:'Le poulet est la source de protéines maigres par excellence — les protéines soutiennent particulièrement bien le corps au moment de l\'ovulation. Le tzatziki apporte des probiotiques et hydrate grâce au concombre (96% d\'eau).', ingredients:['1 grande galette de blé complet','100g blanc de poulet grillé émincé','½ concombre en dés, roquette','3 cs yaourt grec + 1 gousse d\'ail + aneth (tzatziki)','Tomates cerises, sel, poivre'], etapes:['Mélanger yaourt + ail + aneth + sel (tzatziki rapide)','Griller le poulet émincé 5 min','Tartiner la galette de tzatziki généreusement','Répartir poulet, roquette, concombre, tomates','Rouler serré, couper en biais et servir'] },
-    { nom:'Zaalouk d\'aubergines à la chermoula', emoji:'🍆', pourquoi:'Les aubergines sont riches en nasunine, un antioxydant qui protège les membranes cellulaires au moment de l\'ovulation. La chermoula (coriandre, cumin, paprika, citron) apporte du zinc et de la vitamine C. Plat marocain frais et légèrement fumé, parfait en Été.', ingredients:['2 grosses aubergines','3 tomates mûres pelées et mixées','3 gousses d\'ail','1 cc cumin, 1 cc paprika doux, ½ cc curcuma','Coriandre fraîche, jus de citron, huile d\'olive, sel'], etapes:['Cuire les aubergines entières au four à 220°C ou sous le gril 30 min (peau brûlée)','Éplucher et écraser grossièrement la chair','Faire revenir l\'ail émincé 2 min, ajouter les tomates mixées et les épices','Ajouter la chair d\'aubergine, cuire 10 min en remuant','Terminer avec coriandre ciselée, citron et huile d\'olive — servir chaud ou froid'] },
-    { nom:'Mechouia — salade de poivrons-tomates grillés', emoji:'🌶️', pourquoi:'Les poivrons grillés contiennent 2 à 3 fois plus de vitamine C que crus, protégeant les ovocytes au pic ovulatoire. La mechouia est un plat tunisien estival, naturellement antioxydant et très hydratant, prêt en 30 minutes.', ingredients:['2 poivrons rouges + 1 poivron vert','3 tomates mûres, 1 oignon','2 gousses d\'ail, jus de citron','Huile d\'olive, sel, cumin, piment doux (optionnel)','Persil ou coriandre fraîche'], etapes:['Griller poivrons, tomates et oignon entiers au four à 220°C ou sous le gril 20-25 min','Éplucher les poivrons et tomates une fois refroidis','Hacher grossièrement en petits morceaux ou mixer légèrement','Assaisonner ail écrasé + cumin + citron + huile + sel','Parsemer d\'herbes fraîches, servir tiède ou à température ambiante'] },
-  ],
-  automne: [
-    { nom:'Curry patate douce-lentilles-coco', emoji:'🍛', pourquoi:'Les glucides complexes stabilisent ta glycémie et ton humeur. Le magnésium des lentilles réduit directement l\'irritabilité du SPM.', ingredients:['2 petites patates douces en dés','150g lentilles corail','200ml lait de coco','Curry, cumin, curcuma','1 oignon, 2 gousses d\'ail'], etapes:['Faire revenir oignon, ail et épices 3 min','Ajouter les dés de patate douce','Verser lentilles + lait de coco + 200ml eau','Couvrir, cuire 20 min à feu doux','Rectifier l\'assaisonnement, servir avec du riz'] },
-    { nom:'Porridge avoine-banane-chocolat noir', emoji:'🍌', pourquoi:'Le tryptophane de la banane se transforme en sérotonine. L\'avoine libère l\'énergie lentement pour éviter les fringales du SPM.', ingredients:['80g flocons d\'avoine','300ml lait d\'amande','1 banane mûre','1 carré chocolat noir 70%+','Cannelle, 1 cc miel'], etapes:['Porter le lait d\'amande à frémissement','Ajouter les flocons, remuer 5 min à feu doux','Trancher la banane en rondelles','Disposer sur le porridge chaud','Râper le chocolat, saupoudrer cannelle + filet de miel'] },
-    { nom:'Bowl épinards-amandes-datte & fromage', emoji:'🥗', pourquoi:'Magnésium des amandes + sucre lent des dattes + fer des épinards — le trio parfait contre le SPM.', ingredients:['Grosse poignée épinards','Poignée d\'amandes effilées toastées','4 dattes Medjool coupées','60g halloumi grillé (ou feta)','1 cs vinaigre balsamique, 1 gousse d\'ail'], etapes:['Sauter les épinards à l\'ail 2 min','Griller le halloumi 2 min par face','Assembler épinards + amandes + dattes dans un bol','Poser le fromage chaud dessus','Filet de balsamique, servir chaud'] },
-    { nom:'Soupe miso-tofu-champignons', emoji:'🍜', pourquoi:'Le miso est riche en probiotiques qui stabilisent l\'humeur via l\'axe intestin-cerveau. Le tofu apporte des phyto-œstrogènes doux.', ingredients:['1 cs pâte miso blanche','150g tofu soyeux en dés','6 champignons shiitake émincés','500ml eau chaude (pas bouillante)','Ciboulette, 1 cc sauce soja'], etapes:['Chauffer l\'eau à 70°C (ne pas bouillir)','Délayer le miso dans un peu d\'eau froide','Verser dans l\'eau chaude, remuer','Ajouter le tofu et les champignons','Laisser infuser 3 min, ciboulette + sauce soja'] },
-    { nom:'Galettes de patate douce-avoine-cannelle', emoji:'🥞', pourquoi:'La patate douce est riche en vitamine B6 qui réduit les symptômes du SPM. L\'avoine stabilise la glycémie et l\'humeur.', ingredients:['1 patate douce cuite écrasée','50g flocons d\'avoine fin','1 œuf','½ cc cannelle, pincée de sel','Huile de coco ou d\'olive pour la cuisson'], etapes:['Mélanger patate douce écrasée + avoine + œuf + cannelle','Former des galettes à la main','Chauffer une poêle avec l\'huile','Cuire 3-4 min par face à feu moyen','Servir avec un peu de miel ou du yaourt'] },
-    { nom:'Wok bœuf-brocoli-champignons', emoji:'🥩', pourquoi:'Le bœuf est une excellente source de zinc et de fer héminique pour contrer la fatigue pré-menstruelle. Le brocoli aide à éliminer l\'excès d\'œstrogènes.', ingredients:['150g bœuf émincé (rumsteck)','Fleurets de brocoli','100g champignons de Paris','1 cs sauce soja, 1 cc miel, 1 cc gingembre râpé','Huile de sésame, sésame toasté'], etapes:['Préparer la marinade : soja + miel + gingembre','Mariner le bœuf 10 min','Faire sauter le bœuf à feu très vif 3 min','Ajouter brocoli et champignons, wok 4 min','Arroser d\'huile de sésame, parsemer de sésame'] },
-    { nom:'Crumble pomme-amandes-avoine', emoji:'🍎', pourquoi:'La pomme est riche en pectine qui nourrit les bonnes bactéries intestinales. Les amandes apportent le magnésium anti-SPM dont tu as le plus besoin.', ingredients:['3 pommes pelées en dés','60g flocons d\'avoine','30g amandes effilées','2 cs miel ou sirop d\'érable','1 cs huile de coco, cannelle'], etapes:['Préchauffer le four à 180°C','Disposer les pommes dans un plat','Mélanger avoine + amandes + miel + huile de coco','Étaler le crumble sur les pommes','Cuire 25 min jusqu\'à coloration dorée'] },
-    { nom:'Saumon au four-patate douce-épinards', emoji:'🐠', pourquoi:'Le saumon est la meilleure source d\'oméga-3 EPA/DHA qui réduisent l\'inflammation du SPM. La patate douce apporte de la vitamine B6, qui aide à réduire les symptômes du SPM en soutenant la production de sérotonine et de dopamine en phase lutéale.', ingredients:['150g pavé de saumon','1 petite patate douce en rondelles','Grosse poignée d\'épinards frais','Jus de citron, 1 cs huile d\'olive, aneth','Sel, poivre, paprika fumé'], etapes:['Préchauffer le four à 180°C','Rôtir les rondelles de patate douce 15 min','Placer le saumon sur les patates, assaisonner','Cuire encore 12 min','Servir sur un lit d\'épinards frais + citron'] },
-    { nom:'Gratin quinoa-poireaux-chèvre', emoji:'🧀', pourquoi:'Le quinoa est riche en tryptophane précurseur direct de la sérotonine — l\'anti-déprime naturel du SPM. Les poireaux apportent des prébiotiques qui équilibrent le microbiome et l\'humeur.', ingredients:['100g quinoa cuit','2 poireaux émincés et fondus à l\'huile','80g fromage de chèvre en rondelles','2 œufs battus + 100ml lait','Sel, poivre, muscade, herbes de Provence'], etapes:['Préchauffer le four à 180°C','Faire fondre les poireaux à l\'huile 8 min','Mélanger quinoa + poireaux + œufs + lait + épices','Verser dans un plat, disposer les rondelles de chèvre','Cuire 25 min jusqu\'à gratin doré'] },
-    { nom:'Soupe pois cassés-cumin-citron', emoji:'🟡', pourquoi:'Les pois cassés combinent tryptophane et magnésium, deux molécules documentées contre l\'anxiété du SPM. Le cumin favorise la digestion souvent perturbée en phase lutéale.', ingredients:['150g pois cassés jaunes','1 oignon, 2 gousses d\'ail','1 cc cumin, ½ cc curcuma, 500ml bouillon','Jus d\'1 citron, persil frais','Sel, poivre, 1 cs huile d\'olive'], etapes:['Rincer les pois cassés, faire revenir oignon et ail','Ajouter les épices, remuer 1 min','Verser pois cassés et bouillon','Cuire 30 min jusqu\'à texture crémeuse','Presser le citron, garnir de persil et d\'huile'] },
-    { nom:'Chocolat chaud épicé-lait d\'amande', emoji:'☕', pourquoi:'Le cacao contient 290mg de magnésium pour 100g — le minéral anti-SPM le plus documenté. La cannelle stabilise la glycémie pour éviter les fringales sucrées de la phase lutéale.', ingredients:['300ml lait d\'amande non sucré','1 cs cacao 100% non sucré','1 carré chocolat noir 70%+ râpé','½ cc cannelle, pincée de cardamome','1 cc miel ou sirop d\'érable'], etapes:['Chauffer le lait d\'amande à feu doux','Ajouter le cacao et le chocolat râpé','Remuer jusqu\'à dissolution complète','Incorporer les épices et le miel','Servir chaud dans un grand bol, saupoudrer de cannelle'] },
-    { nom:'Bowl riz complet-avocat-chia-sésame', emoji:'🥑', pourquoi:'Les graines de chia sont une source végétale d\'oméga-3 ALA anti-inflammatoires. L\'avocat est riche en vitamine B6, qui aide à réduire les symptômes du SPM en soutenant la production de sérotonine en phase lutéale.', ingredients:['80g riz complet cuit','½ avocat tranché en lamelles','1 cs graines de chia','1 cs sauce soja + jus de citron vert','Sésame toasté, ciboulette, radis tranchés'], etapes:['Cuire le riz, laisser tiédir','Trancher l\'avocat en fines lamelles','Disposer le riz dans un bol','Ajouter avocat, radis et ciboulette','Sauce soja + citron vert, sésame + chia'] },
-    { nom:'Dinde sautée champignons-sauce soja', emoji:'🦃', pourquoi:'La dinde est la source animale la plus riche en tryptophane (300mg/100g), précurseur direct de la sérotonine. Les champignons apportent de la vitamine D qui soutient l\'humeur en phase lutéale.', ingredients:['150g escalope de dinde émincée','150g champignons de Paris tranchés','1 cs sauce soja, 1 cc gingembre râpé, 1 gousse d\'ail','1 cc huile de sésame','80g riz basmati cuit, ciboulette'], etapes:['Faire sauter la dinde émincée 4 min à feu vif','Ajouter les champignons, cuire 3 min','Incorporer ail, gingembre et sauce soja','Remuer et cuire encore 2 min','Servir sur le riz, huile de sésame + ciboulette'] },
-    { nom:'Tarte fine potiron-chèvre-noix', emoji:'🍂', pourquoi:'Le potiron est riche en vitamine B6 (0.3mg/100g) qui réduit les symptômes prémenstruels. Les noix apportent oméga-3 et magnésium, deux nutriments bien documentés contre le SPM.', ingredients:['1 rouleau pâte brisée','200g chair de potiron cuite écrasée','80g fromage de chèvre frais émietté','Poignée de noix concassées','1 œuf, sel, poivre, herbes de Provence'], etapes:['Préchauffer le four à 190°C','Étaler la pâte finement dans un moule','Mélanger potiron écrasé + œuf + sel + poivre','Étaler sur la pâte, émietter le chèvre','Parsemer de noix, cuire 25 min jusqu\'à dorure'] },
-    { nom:'Chorba de frik — soupe de blé vert aux légumes', emoji:'🌾', pourquoi:'Le frik (blé vert concassé) est riche en magnésium et en fibres qui stabilisent la glycémie de la phase lutéale. Le bouillon chaud réconforte le corps en SPM. Plat emblématique de la cuisine algérienne, économique et très nourrissant.', ingredients:['80g frik (blé vert concassé)','150g poulet halal en petits morceaux','2 carottes en dés, 1 courgette en dés','1 oignon, 2 tomates mixées','Coriandre et persil frais, cumin, ras el hanout, sel'], etapes:['Faire revenir le poulet et l\'oignon 5 min dans un peu d\'huile','Ajouter les tomates mixées et les épices, cuire 3 min','Verser le frik rincé et 800ml d\'eau chaude','Ajouter les légumes en dés, cuire 20 min à feu doux','Terminer avec les herbes fraîches, ajuster sel, servir très chaud'] },
-    { nom:'Kefta de dinde aux herbes au four', emoji:'🍖', pourquoi:'La dinde est la source animale la plus riche en tryptophane (300mg/100g), précurseur direct de la sérotonine — l\'anti-SPM naturel. Sous forme de kefta, elle s\'intègre naturellement dans la cuisine maghrébine. La sauce tomate-cumin apporte du lycopène anti-inflammatoire.', ingredients:['300g viande hachée de dinde','½ oignon râpé, persil et coriandre ciselés','1 œuf, 1 cc cumin, 1 cc paprika, sel, poivre','400g tomates pelées, ail, cumin (sauce)','Huile d\'olive'], etapes:['Mélanger la dinde avec l\'oignon, les herbes, l\'œuf et les épices','Former des boulettes de la taille d\'une noix','Préparer la sauce : faire revenir l\'ail, ajouter tomates et cumin, mijoter 5 min','Disposer les kefta dans un plat, napper de sauce','Cuire au four à 180°C pendant 25 min'] },
-    { nom:'Loubia — ragoût de haricots blancs au cumin', emoji:'🫘', pourquoi:'Les haricots blancs sont riches en magnésium (63mg/100g) et en tryptophane, deux nutriments-clés contre le SPM. La loubia est un plat maghrébin du quotidien, économique et réconfortant. Le cumin facilite la digestion souvent alourdie en phase lutéale.', ingredients:['1 boîte haricots blancs égouttés (ou 200g secs cuits)','3 tomates ou ½ boîte tomates pelées','3 gousses d\'ail, 1 oignon','1 cc cumin, ½ cc paprika, pincée de piment doux','Huile d\'olive, sel, poivre, persil frais'], etapes:['Faire revenir l\'oignon et l\'ail émincés 4 min','Ajouter les tomates et les épices, cuire 5 min','Verser les haricots blancs égouttés et 200ml d\'eau','Mijoter 15 min à feu doux en remuant','Ajuster sel et poivre, parsemer de persil, un filet d\'huile d\'olive'] },
-  ],
-};
-
-const ROUTINES_PREMIUM = {
-  hiver: {
-    matin: [
-      { icon:'💧', geste:'Rinçage eau tiède', duree:'1 min', detail:'Eau tiède sur le visage, tamponner avec un tissu propre. Pas de nettoyant agressif — la peau menstruelle est déjà fragilisée.' },
-      { icon:'🌹', geste:'Eau de rose', duree:'30 sec', detail:'Vaporiser sur visage ou tampon de coton, laisser pénétrer sans rincer. Anti-inflammatoire naturel, apaise les rougeurs.' },
-      { icon:'🖤', geste:'Huile de nigelle (1 goutte)', duree:'1 min', detail:'Presser sur peau légèrement humide. ☪️ Sunnah — anti-inflammatoire, parfaite pour la sensibilité menstruelle (Bukhari 5688).' },
-    ],
-    soir: [
-      { icon:'🫒', geste:'Nettoyage huile d\'olive', duree:'2 min', detail:'Quelques gouttes sur visage sec, masser 60 sec en cercles. Rincer à l\'eau tiède. Démaquille et nourrit sans agresser. ☪️ Sunnah (Tirmidhi).' },
-      { icon:'🍯', geste:'Masque miel pur (3×/sem)', duree:'10 min', detail:'1 c.à.c de miel pur sur visage propre. Laisser 10 min, rincer à l\'eau tiède. Antibactérien et réparateur. ☪️ Sunnah (Coran 16:69).' },
-      { icon:'🫒', geste:'Huile d\'olive soin de nuit', duree:'1 min', detail:'2-3 gouttes pressées entre les paumes, appliquer sur peau légèrement humide. Nourrit en profondeur pendant le sommeil. ☪️ Sunnah.' },
-    ],
-  },
-  printemps: {
-    matin: [
-      { icon:'🌿', geste:'Rhassoul léger à l\'eau de rose', duree:'3 min', detail:'1 c.à.c rhassoul + eau de rose jusqu\'à pâte crémeuse. Masser en douceur, rincer à l\'eau tiède. Purifie sans agresser. 🌿 Tradition islamique.' },
-      { icon:'🌹', geste:'Eau de rose tonique', duree:'30 sec', detail:'Vaporiser ou tampon sur visage propre. Rééquilibre le pH, tonifie, resserre les pores délicatement. Laisser sécher naturellement.' },
-      { icon:'🫒', geste:'Huile d\'olive (1 goutte)', duree:'30 sec', detail:'Sur peau légèrement humide, laisser absorber. Légère et antioxydante — accompagne l\'éclat naturel du Printemps. ☪️ Sunnah (Tirmidhi).' },
-    ],
-    soir: [
-      { icon:'✨', geste:'Gommage sucre + olive (2×/sem)', duree:'5 min', detail:'1 c.à.c sucre fin + 1 c.à.c huile d\'olive. Massage doux 2 min en cercles, rincer. Révèle le renouveau cellulaire du Printemps. ☪️ Sunnah.' },
-      { icon:'🍯', geste:'Masque miel + curcuma (2×/sem)', duree:'10 min', detail:'1 c.à.c miel + 1 pincée curcuma. Appliquer 10 min, rincer à l\'eau tiède. ⚠️ Peut légèrement teinter la peau claire. ☪️ Sunnah.' },
-      { icon:'🫒', geste:'Huile d\'olive soin de nuit', duree:'1 min', detail:'2-3 gouttes sur peau propre, presser entre les paumes. Nourrit sans occlure — légèreté de la phase folliculaire. ☪️ Sunnah (Tirmidhi).' },
-    ],
-  },
-  ete: {
-    matin: [
-      { icon:'💧', geste:'Eau fraîche uniquement', duree:'30 sec', detail:'En Été, rincer le visage à l\'eau froide suffit le matin. La peau est équilibrée — le sur-nettoyage perturbe le sébum naturel.' },
-      { icon:'🌹', geste:'Brume eau de rose', duree:'20 sec', detail:'Spritzer à 20 cm du visage. Laisser sécher naturellement, ne pas tamponner. Rafraîchit et hydrate sans surcharger. 🌿 Tradition islamique.' },
-      { icon:'🌿', geste:'Aloe vera gel pur', duree:'30 sec', detail:'Fine couche sur peau humide. Ultra-léger, non occlusif — laisse respirer les pores au pic naturel de sébum. 🌿 Médecine islamique classique.' },
-    ],
-    soir: [
-      { icon:'🌿', geste:'Rhassoul purifiant', duree:'7 min', detail:'1 c.à.s rhassoul + eau de rose = pâte légère. Appliquer 5 min, rincer avant séchage complet. Absorbe l\'excès de sébum sans agresser. 🌿 Tradition islamique.' },
-      { icon:'🖤', geste:'Masque argile + huile de nigelle', duree:'12 min', detail:'Argile blanche + 3 gouttes huile de nigelle + eau de rose. Appliquer 10 min, rincer. Purifie et apaise simultanément. ☪️ Sunnah.' },
-      { icon:'🌹', geste:'Eau de rose finale', duree:'30 sec', detail:'Tampon d\'eau de rose sur peau propre après rinçage. Ne pas rincer — referme les pores et fixe le soin. 🌿 Tradition islamique.' },
-    ],
-  },
-  automne: {
-    matin: [
-      { icon:'🧼', geste:'Nettoyage savon d\'Alep', duree:'1 min', detail:'Savon d\'Alep = nettoyant naturel au laurier antibactérien. Rincer à l\'eau tiède — pas d\'eau chaude en phase lutéale. 🌿 Tradition levantine islamique.' },
-      { icon:'🖤', geste:'Huile de nigelle pure', duree:'1 min', detail:'2 gouttes sur peau légèrement humide, masser doucement en cercles. Anti-inflammatoire — prévient les boutons hormonaux. ☪️ Sunnah (Bukhari 5688).' },
-      { icon:'🌹', geste:'Eau de rose tonique', duree:'30 sec', detail:'Tamponner après la nigelle pour apaiser et fixer. Referme les pores actifs de la phase lutéale. 🌿 Tradition islamique.' },
-    ],
-    soir: [
-      { icon:'🫒', geste:'Démaquillage huile d\'olive', duree:'2 min', detail:'Quelques gouttes sur visage sec, masser 60 sec. Rincer à l\'eau tiède. Dissout maquillage et impuretés sans assécher. ☪️ Sunnah (Tirmidhi).' },
-      { icon:'🍯', geste:'Masque miel + curcuma (3×/sem)', duree:'10 min', detail:'1 c.à.c miel + 1 pincée curcuma. Appliquer 10 min, rincer. Antibactérien + anti-inflammatoire contre les boutons hormonaux. ⚠️ Peut teinter. ☪️ Sunnah.' },
-      { icon:'🫒', geste:'Huile d\'olive soin de nuit', duree:'1 min', detail:'2-3 gouttes pressées, appliquer sur peau légèrement humide. Nourrit en profondeur — indispensable en fin de cycle. ☪️ Sunnah (Tirmidhi).' },
-    ],
-  },
-};
-
-
 const ASMA = [
   {num:1,ar:'الرَّحْمَنُ',fr:'Ar-Rahman · Le Tout Miséricordieux'},{num:2,ar:'الرَّحِيمُ',fr:'Ar-Rahim · Le Très Miséricordieux'},{num:3,ar:'الْمَلِكُ',fr:'Al-Malik · Le Roi'},{num:4,ar:'الْقُدُّوسُ',fr:'Al-Quddous · Le Très Saint'},{num:5,ar:'السَّلَامُ',fr:'As-Salam · La Paix'},
   {num:6,ar:'الْمُؤْمِنُ',fr:"Al-Mu'min · Celui qui donne la sécurité"},{num:7,ar:'الْمُهَيْمِنُ',fr:'Al-Muhaimin · Le Surveillant Suprême'},{num:8,ar:'الْعَزِيزُ',fr:"Al-Aziz · Le Puissant"},{num:9,ar:'الْجَبَّارُ',fr:'Al-Jabbar · Le Contraignant'},{num:10,ar:'الْمُتَكَبِّرُ',fr:'Al-Mutakabbir · Le Très Grand'},
@@ -1566,44 +1438,34 @@ function renderCarteMouvement(s) {
 }
 
 // ═══════════════════════════════════════════════
-// CARTES MANGER & PRENDRE SOIN
+// CARTES MANGER & PRENDRE SOIN — conseil ponctuel par phase, pas de programme
 // ═══════════════════════════════════════════════
 function renderCarteRepas(s) {
   const alim = s.alimentation;
   if (!alim) return;
 
-  const recettes = RECETTES[ST.currentSaison] || [];
-  const idx = (ST.currentDay - 1) % Math.max(recettes.length, 1);
-  const r = recettes[idx];
-  const saisonLabel = { hiver: 'Hiver', printemps: 'Printemps', ete: 'Été', automne: 'Automne' }[ST.currentSaison] || '';
+  const dur = effectiveCycleDur();
+  const dayIdx = dayWithinPhase(ST.currentDay, dur);
+  const idees = (typeof REPAS_QUOTIDIENS !== 'undefined' && REPAS_QUOTIDIENS[ST.currentSaison]) || [];
+  const ideeIdx = idees.length ? dayIdx % idees.length : 0;
+  const idee = idees.length ? idees[ideeIdx] : null;
 
   const starsEl = document.getElementById('dc-repas-stars');
   if (starsEl) {
-    starsEl.innerHTML = r
-      ? `<div class="repas-hero">
-           <span class="repas-hero-emoji">${r.emoji}</span>
-           <div class="repas-hero-text">
-             <div class="repas-hero-phase" style="text-transform:lowercase;font-variant:small-caps;letter-spacing:.08em;">${saisonLabel}</div>
-             <div class="repas-hero-nom">${r.nom}</div>
-           </div>
-         </div>`
+    starsEl.innerHTML = idee
+      ? `<span class="day-card-chip">${idee.emoji} ${idee.nom}</span>`
       : (alim.star || []).map(f => `<span class="day-card-chip">⭐ ${f}</span>`).join('');
   }
 
   const nutrimEl = document.getElementById('dc-repas-nutriments');
   if (nutrimEl) {
-    if (r) {
-      nutrimEl.innerHTML = `
-        <div class="repas-pourquoi-block">
-          <div class="repas-pourquoi-text">✨ ${r.pourquoi}</div>
-        </div>`;
-    } else {
-      nutrimEl.innerHTML = (alim.nutriments || []).slice(0, 2).map(n => `
+    nutrimEl.innerHTML = idee
+      ? `<div class="repas-pourquoi-block"><div class="repas-pourquoi-text">✨ ${idee.benefice}</div></div>`
+      : (alim.nutriments || []).slice(0, 2).map(n => `
         <div class="day-card-nutriment-row">
           <span class="day-card-nutriment-nom">${n.nom}</span>
           <span class="day-card-nutriment-why">${n.why}</span>
         </div>`).join('');
-    }
   }
 
   const eviterEl = document.getElementById('dc-repas-eviter');
@@ -1615,238 +1477,36 @@ function renderCarteRepas(s) {
   }
 
   const premEl = document.getElementById('action-manger-premium');
-  if (!premEl || !r) return;
+  if (!premEl || !idee) return;
   premEl.innerHTML = `
-    <div class="action-premium-unlocked" onclick="openRecipeModal('${ST.currentSaison}',${idx})">
-      <span class="action-prem-unlocked-emoji">${r.emoji}</span>
+    <div class="action-premium-unlocked" onclick="openRecipeModal('${ST.currentSaison}',${ideeIdx})">
+      <span class="action-prem-unlocked-emoji">${idee.emoji}</span>
       <div class="action-prem-unlocked-text">
-        <div class="action-prem-unlocked-name">Voir la recette complète</div>
-        <div class="action-prem-unlocked-sub">Ingrédients · étapes détaillées →</div>
+        <div class="action-prem-unlocked-name">En savoir plus</div>
+        <div class="action-prem-unlocked-sub">Pourquoi ce repas, pour toi →</div>
       </div>
       <span class="action-prem-unlocked-arrow">›</span>
     </div>`;
 }
 
-// ═══════════════════════════════════════════════
-// MON MARCHÉ
-// ═══════════════════════════════════════════════
-function switchRepasTab(tab) {
-  ['recettes', 'phase', 'marche'].forEach(t => {
-    const btn = document.getElementById('repas-tab-btn-' + t);
-    const pane = document.getElementById('repas-tab-' + t);
-    if (btn) btn.classList.toggle('active', t === tab);
-    if (pane) pane.style.display = t === tab ? 'block' : 'none';
-  });
-  if (tab === 'marche') renderMarcheTab();
-  if (tab === 'phase') renderRepasPhaseTab();
+function openRecipeModal(phase, idx) {
+  const idees = (typeof REPAS_QUOTIDIENS !== 'undefined' && REPAS_QUOTIDIENS[phase]) || [];
+  const idee = idees[idx];
+  if (!idee) return;
+  const el = document.getElementById('recipe-modal-content');
+  if (el) el.innerHTML = `
+    <div style="font-size:48px;text-align:center;margin-bottom:14px;">${idee.emoji}</div>
+    <div class="pmod-title">${idee.nom}</div>
+    <div class="pmod-pourquoi">${idee.benefice}</div>
+  `;
+  document.getElementById('recipe-modal').classList.add('open');
 }
-
-function renderRepasPhaseTab() {
-  const saison = ST.currentSaison;
-  const recettes = RECETTES[saison] || [];
-  const container = document.getElementById('repas-phase-content');
-  if (!container) return;
-  const phaseLabel = { hiver: '🌙 Hiver', printemps: '🌿 Printemps', ete: '☀️ Été', automne: '🍂 Automne' }[saison] || '';
-  container.innerHTML = `
-    <div class="repas-phase-header">${phaseLabel} · ${recettes.length} recettes</div>
-    ${recettes.map((r, i) => `
-      <div class="repas-phase-item" onclick="openRecipeModal('${saison}',${i})">
-        <span class="repas-phase-emoji">${r.emoji}</span>
-        <div class="repas-phase-info">
-          <div class="repas-phase-nom">${r.nom}</div>
-          <div class="repas-phase-why">${r.pourquoi.length > 65 ? r.pourquoi.slice(0, 65) + '…' : r.pourquoi}</div>
-        </div>
-        <span class="repas-phase-arrow">›</span>
-      </div>`).join('')}`;
-}
-
-const MARCHE_CATEGORIES = [
-  { key: 'proteines', label: 'Protéines', icon: '🥩',
-    mots: ['poulet','bœuf','boeuf','veau','agneau','dinde','sardines','saumon','thon','cabillaud','maquereau','crevettes','œufs','oeufs','tofu','pois chiches','lentilles','haricots blancs','haricots rouges','haricots noirs','fèves','feves','pois cassés','edamame'] },
-  { key: 'epices', label: 'Épices & Condiments', icon: '🧂',
-    mots: ['curcuma','gingembre','cumin','paprika','cannelle','coriandre','persil','menthe','aneth','basilic','thym','fleur de sel','poivre','harissa','sauce soja','vinaigre','moutarde','miel','olives','bouillon','piment','épices','herbes','zaatar','fleur d\'oranger','concentré','citron confit','ras el hanout','muscade','sel'] },
-  { key: 'legumes', label: 'Légumes', icon: '🥦',
-    mots: ['épinards','brocoli','tomates','carottes','oignon','ail','courgette','poivron','betterave','kale','chou','champignons','haricots verts','céleri','butternut','potimarron','potiron','concombre','aubergine','roquette','mâche','poireau','artichaut','fenouil','pommes de terre','patate','salade'] },
-  { key: 'fruits', label: 'Fruits', icon: '🍎',
-    mots: ['citron vert','citron','orange','pomme','poire','banane','fraises','myrtilles','framboises','grenade','pastèque','kiwi','mangue','avocat','dattes','raisins secs','raisins','figues','fruits rouges','ananas'] },
-  { key: 'feculents', label: 'Féculents', icon: '🌾',
-    mots: ['riz','pâtes','boulgour','pain','farine','semoule','couscous','quinoa'] },
-  { key: 'laitiers', label: 'Produits laitiers', icon: '🧀',
-    mots: ['fromage blanc','lait de coco','yaourt','fromage','feta','chèvre','crème fraîche','crème','kéfir','beurre','lait'] },
-  { key: 'graines', label: 'Oléagineux & Graines', icon: '🫘',
-    mots: ['amandes','noix','noisettes','graines de courge','graines de sésame','graines de lin','graines de chia','graines','sésame','tahini','huile','chocolat','cacao'] },
-];
-
-function _categorizeIngredient(text) {
-  const lower = text.toLowerCase();
-  for (const cat of MARCHE_CATEGORIES) {
-    if (cat.mots.some(m => lower.includes(m))) return cat.key;
-  }
-  return 'autres';
-}
-
-function _cleanIngr(ing) {
-  let s = ing
-    .replace(/^[\d.,/½¼¾]+\s*(g|kg|ml|cl|l|cs|cc)?\s*/i, '')
-    .replace(/,\s*\d+[.,]?\d*\s*(g|kg|ml|cl|l|cs|cc)?\s*/gi, ', ')
-    .replace(/^(grosses?|petites?|grandes?)?\s*(poign[ée]+s?|verres?|tranches?|boîtes?|carr[ée]+s?|bottes?)\s+(d[e']\s*|de\s+l[a']?\s*)?/i, '')
-    .replace(/^(quelques|un|une|des|du|de la|de l')\s+/i, '')
-    .replace(/\s+/g, ' ')
-    .trim();
-  return s ? s[0].toUpperCase() + s.slice(1) : s;
-}
-
-function _getMarcheItems(saison) {
-  const items = [];
-  const alim = SAISONS[saison]?.alimentation;
-  if (alim?.aliments) {
-    alim.aliments.forEach(a => {
-      items.push({ id: 'alim_' + a.replace(/[\s'']/g, '_'), text: a, section: 'phase', star: (alim.star || []).includes(a) });
-    });
-  }
-  function _keyIngr(raw) {
-    return raw.toLowerCase()
-      .normalize('NFD').replace(/[̀-ͯ]/g, '')     // accents ignorés pour la clé
-      .replace(/^[\d.,/½¼¾]+\s*(g|kg|ml|cl|l|cs|cc)?\s*/i, '')
-      .replace(/^(quelques|une|un|des|du|de la|de l['']?|d[''])\s*/i, '')  // articles (avant mesures)
-      .replace(/^(grosses?|petites?|grandes?)?\s*(poignees?|verres?|tranches?|boites?|carres?|bottes?)\s+d[e']?\s*/i, '')
-      .replace(/[,(].*$/, '')                                // coupure à la virgule/parenthèse
-      .replace(/\s+en\s+\w+s?\s*$/i, '')                    // "en morceaux", "en branches", "en dés"
-      .replace(/\s+(fraich[e]?s?|cuit[e]?s?|emince[e]?s?|hache[e]?s?|rape[e]?s?|congele[e]?s?|en conserve|frais?|bio|nature|cru[e]?s?|entier[e]?s?)\s*$/i, '')
-      .replace(/\s+/g, ' ').trim().slice(0, 25);
-  }
-  const seen = new Map();
-  (RECETTES[saison] || []).forEach(r => {
-    (r.ingredients || []).forEach(ing => {
-      const key = 'ingr_' + _keyIngr(ing).replace(/[\s''(),]/g, '_');
-      if (!seen.has(key)) seen.set(key, _cleanIngr(ing));
-    });
-  });
-  seen.forEach((text, key) => items.push({ id: key, text, section: 'recette' }));
-  return items;
-}
-
-function _marcheItemHtml(item, checked, canDelete) {
-  const star = item.star ? ' ⭐' : '';
-  return `<div class="marche-item${checked ? ' checked' : ''}" id="mitem-${item.id}">
-    <div class="marche-item-chk" onclick="marcheToggleItem('${item.id}')">${checked ? '✓' : ''}</div>
-    <span class="marche-item-text" onclick="marcheToggleItem('${item.id}')">${item.text}${star}</span>
-    ${canDelete ? `<span class="marche-item-del" onclick="marcheRemoveCustom('${item.id}')">×</span>` : ''}
-  </div>`;
-}
-
-function renderMarcheTab() {
-  const saison = ST.currentSaison;
-  if (!ST.marche) ST.marche = { phase: null, checks: {}, custom: [] };
-  const m = ST.marche;
-  if (m.phase !== saison) {
-    m.phase = saison;
-    m.checks = {};
-    saveState();
-  }
-  const container = document.getElementById('marche-content');
-  if (!container) return;
-  const s = SAISONS[saison];
-  const items = _getMarcheItems(saison);
-  const phaseItems = items.filter(it => it.section === 'phase');
-  const recetteItems = items.filter(it => it.section === 'recette');
-  let html = '';
-  html += `<div class="marche-section-lbl">${s.emoji} Aliments cl&#233;s &middot; ${s.nom}</div>`;
-  html += phaseItems.map(it => _marcheItemHtml(it, !!m.checks[it.id], false)).join('');
-  html += `<div class="marche-section-lbl">&#128203; Recettes du moment</div>`;
-  const byCategory = {};
-  recetteItems.forEach(item => {
-    const cat = _categorizeIngredient(item.text);
-    if (!byCategory[cat]) byCategory[cat] = [];
-    byCategory[cat].push(item);
-  });
-  const catOrder = ['proteines', 'legumes', 'fruits', 'feculents', 'laitiers', 'graines', 'epices', 'autres'];
-  catOrder.forEach(catKey => {
-    if (!byCategory[catKey]?.length) return;
-    const catInfo = MARCHE_CATEGORIES.find(c => c.key === catKey) || { icon: '🛒', label: 'Autres' };
-    html += `<div class="marche-cat-lbl">${catInfo.icon} ${catInfo.label}</div>`;
-    byCategory[catKey].forEach(item => { html += _marcheItemHtml(item, !!m.checks[item.id], false); });
-  });
-  html += `<div class="marche-section-lbl">&#10133; Mes ajouts</div>`;
-  (m.custom || []).forEach(c => { html += _marcheItemHtml({ id: c.id, text: c.text, section: 'custom' }, !!m.checks[c.id], true); });
-  html += `<div class="marche-input-row">
-    <input class="marche-input" id="marche-input" type="text" placeholder="Ajouter un article&#8230;" inputmode="text"
-           onkeydown="if(event.key==='Enter'){this.blur();marcheAddItem();}">
-    <button class="marche-add-btn" onclick="marcheAddItem()">+</button>
-  </div>
-  <div class="marche-actions-row">
-    <button class="marche-action-btn" onclick="marcheNouvelleListe()">&#128465; Nouvelle liste</button>
-    <button class="marche-action-btn marche-action-share" onclick="marchePartager()">&#128228; Partager</button>
-  </div>`;
-  container.innerHTML = html;
-}
-
-function marcheToggleItem(itemId) {
-  if (!ST.marche) ST.marche = { phase: ST.currentSaison, checks: {}, custom: [] };
-  ST.marche.checks[itemId] = !ST.marche.checks[itemId];
-  saveState();
-  const el = document.getElementById('mitem-' + itemId);
-  if (!el) return;
-  const checked = !!ST.marche.checks[itemId];
-  el.classList.toggle('checked', checked);
-  const chk = el.querySelector('.marche-item-chk');
-  if (chk) chk.textContent = checked ? '✓' : '';
-}
-
-function marcheAddItem() {
-  const inp = document.getElementById('marche-input');
-  if (!inp) return;
-  const text = inp.value.trim();
-  if (!text) return;
-  if (!ST.marche) ST.marche = { phase: ST.currentSaison, checks: {}, custom: [] };
-  const id = 'custom_' + Date.now();
-  ST.marche.custom.push({ id, text });
-  inp.value = '';
-  saveState();
-  renderMarcheTab();
-  document.getElementById('marche-input')?.focus();
-}
-
-function marcheRemoveCustom(id) {
-  if (!ST.marche) return;
-  ST.marche.custom = (ST.marche.custom || []).filter(c => c.id !== id);
-  delete ST.marche.checks[id];
-  saveState();
-  renderMarcheTab();
-}
-
-function marcheNouvelleListe() {
-  if (!ST.marche) return;
-  ST.marche.checks = {};
-  saveState();
-  renderMarcheTab();
-  showToast('🛒 Liste remise à zéro');
-}
-
-function marchePartager() {
-  if (!ST.marche) return;
-  const m = ST.marche;
-  const saison = ST.currentSaison;
-  const s = SAISONS[saison];
-  const allItems = _getMarcheItems(saison);
-  const unchecked = [
-    ...allItems.filter(it => !m.checks[it.id]),
-    ...(m.custom || []).filter(c => !m.checks[c.id])
-  ];
-  if (!unchecked.length) { showToast('✅ Tout est déjà coché !'); return; }
-  const text = '🛒 Mon Marché SakinApp — ' + s.nom + '\n\n' + unchecked.map(it => '• ' + it.text).join('\n');
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(text).then(() => showToast('📤 Liste copiée dans le presse-papier !'));
-  } else {
-    showToast('❌ Copie non disponible sur ce navigateur');
-  }
-}
+function closeRecipeModal() { document.getElementById('recipe-modal').classList.remove('open'); }
 
 function renderCarteSkincare(s) {
   const skin = s.skincare;
   if (!skin) return;
 
-  // Soin du jour (données statiques)
   const dur = effectiveCycleDur();
   const dayIdx = dayWithinPhase(ST.currentDay, dur);
   const soinPhase = (typeof SOINS_QUOTIDIENS !== 'undefined' && SOINS_QUOTIDIENS[ST.currentSaison]) || [];
@@ -1885,66 +1545,36 @@ function renderCarteSkincare(s) {
   }
 
   const premEl = document.getElementById('action-soin-premium');
-  if (!premEl) return;
-  const routine = ROUTINES_PREMIUM[ST.currentSaison];
-  const steps = routine ? routine.matin.length + routine.soir.length : 0;
+  if (!premEl || !soinJour) return;
   const phaseEmoji = { hiver: '🌙', printemps: '🌿', ete: '☀️', automne: '🍂' }[ST.currentSaison] || '🌿';
   premEl.innerHTML = `
     <div class="action-premium-unlocked" onclick="openSkinModal('${ST.currentSaison}')">
       <span class="action-prem-unlocked-emoji">${phaseEmoji}</span>
       <div class="action-prem-unlocked-text">
-        <div class="action-prem-unlocked-name">Ta routine · matin &amp; soir</div>
-        <div class="action-prem-unlocked-sub">${steps} gestes naturels pens&eacute;s pour toi →</div>
+        <div class="action-prem-unlocked-name">En savoir plus</div>
+        <div class="action-prem-unlocked-sub">Pourquoi ce soin, pour toi →</div>
       </div>
       <span class="action-prem-unlocked-arrow">›</span>
     </div>`;
 }
 
-// ═══════════════════════════════════════════════
-// MODAUX PREMIUM
-// ═══════════════════════════════════════════════
-function openRecipeModal(phase, idx) {
-  const r = (RECETTES[phase] || [])[idx];
-  if (!r) return;
-  const el = document.getElementById('recipe-modal-content');
-  if (el) el.innerHTML = `
-    <div style="font-size:48px;text-align:center;margin-bottom:14px;">${r.emoji}</div>
-    <div class="pmod-title">${r.nom}</div>
-    <div class="pmod-pourquoi">${r.pourquoi}</div>
-    <div class="pmod-section">🛒 Ingrédients</div>
-    <ul class="pmod-list">${(r.ingredients||[]).map(i=>`<li>${i}</li>`).join('')}</ul>
-    <div class="pmod-section">👩‍🍳 Préparation</div>
-    <ol class="pmod-list">${(r.etapes||[]).map(e=>`<li>${e}</li>`).join('')}</ol>
-  `;
-  document.getElementById('recipe-modal').classList.add('open');
-}
-function closeRecipeModal() { document.getElementById('recipe-modal').classList.remove('open'); }
-
 function openSkinModal(phase) {
-  const r = ROUTINES_PREMIUM[phase];
-  if (!r) return;
-  const renderSteps = steps => steps.map(g => `
-    <div class="pmod-skin-step">
-      <div class="pmod-skin-icon">${g.icon}</div>
-      <div class="pmod-skin-body">
-        <div class="pmod-skin-name">${g.geste} <span class="pmod-skin-dur">${g.duree}</span></div>
-        <div class="pmod-skin-detail">${g.detail}</div>
-      </div>
-    </div>`).join('');
+  const dur = effectiveCycleDur();
+  const dayIdx = dayWithinPhase(ST.currentDay, dur);
+  const soinPhase = (typeof SOINS_QUOTIDIENS !== 'undefined' && SOINS_QUOTIDIENS[phase]) || [];
+  const soin = soinPhase.length ? soinPhase[dayIdx % soinPhase.length] : null;
+  if (!soin) return;
   const el = document.getElementById('skin-modal-content');
   if (el) el.innerHTML = `
-    <div class="pmod-routine-block">
-      <div class="pmod-routine-time">☀️ Routine Matin</div>
-      ${renderSteps(r.matin)}
-    </div>
-    <div class="pmod-routine-block">
-      <div class="pmod-routine-time">🌙 Routine Soir</div>
-      ${renderSteps(r.soir)}
-    </div>`;
+    <div style="font-size:40px;text-align:center;margin-bottom:12px;">✨</div>
+    <div class="pmod-title">${soin.nom}</div>
+    <div class="pmod-pourquoi">${soin.geste}</div>
+    <div class="pmod-pourquoi" style="margin-top:8px;">${soin.benefice}</div>
+    ${soin.source ? `<div style="font-size:11px;color:var(--gris);margin-top:14px;font-style:italic;">${soin.source}</div>` : ''}
+  `;
   document.getElementById('skin-modal').classList.add('open');
 }
 function closeSkinModal() { document.getElementById('skin-modal').classList.remove('open'); }
-
 
 function renderSuggestionsEngage(s) {
   const container = document.getElementById('sugg-engage-list');

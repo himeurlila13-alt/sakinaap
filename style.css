@@ -601,58 +601,6 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
   text-align: center;
   padding: 0 8px;
 }
-.pmod-section {
-  font-size: 10px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--season);
-  font-weight: 700;
-  margin: 16px 0 10px;
-  font-family: var(--sans);
-}
-.pmod-list {
-  padding-left: 18px;
-  margin: 0;
-}
-.pmod-list li {
-  font-size: 13px;
-  color: var(--noir);
-  line-height: 1.7;
-  margin-bottom: 4px;
-}
-
-/* Routine skin dans modal */
-.pmod-routine-block { margin-bottom: 8px; }
-.pmod-routine-time {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--season);
-  letter-spacing: .5px;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--sable);
-}
-.pmod-skin-step {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--sable);
-}
-.pmod-skin-step:last-child { border-bottom: none; }
-.pmod-skin-icon { font-size: 20px; flex-shrink: 0; width: 28px; text-align: center; }
-.pmod-skin-name { font-size: 13px; font-weight: 600; color: var(--noir); }
-.pmod-skin-dur {
-  font-size: 10px;
-  background: var(--season-soft);
-  color: var(--season);
-  border-radius: 8px;
-  padding: 2px 6px;
-  margin-left: 6px;
-  font-weight: 600;
-}
-.pmod-skin-detail { font-size: 11px; color: var(--gris); line-height: 1.5; margin-top: 3px; }
-
 .pmod-close-btn {
   display: block;
   width: 100%;
@@ -1193,55 +1141,9 @@ div[onclick="toggleSymptomesSection()"]:active { background: rgba(0,0,0,.03); }
   font-style: italic;
 }
 
-/* ── Repas hero ── */
-.repas-hero{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-.repas-hero-emoji{font-size:38px;flex-shrink:0;line-height:1}
-.repas-hero-text{flex:1;min-width:0}
-.repas-hero-phase{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--season);margin-bottom:3px}
-.repas-hero-nom{font-size:14px;font-weight:700;color:var(--noir);line-height:1.3;font-family:var(--serif)}
-
 /* ── Pourquoi block ── */
 .repas-pourquoi-block{background:var(--season-soft);border-left:3px solid var(--season);border-radius:0 10px 10px 0;padding:9px 12px;margin-bottom:10px}
 .repas-pourquoi-text{font-size:12px;color:var(--noir);line-height:1.6;font-style:italic;font-family:var(--serif)}
-
-/* ── Ingrédients preview ── */
-.repas-ingr-preview{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
-.repas-ingr-chip{font-size:11px;background:white;border:1px solid var(--sable);border-radius:20px;padding:4px 9px;color:var(--gris);white-space:nowrap;max-width:160px;overflow:hidden;text-overflow:ellipsis}
-.repas-ingr-more{font-size:11px;color:var(--season);font-weight:600;padding:4px 2px;white-space:nowrap}
-
-/* ═══ MON MARCHÉ ═══ */
-.repas-tab-bar{display:flex;gap:5px;background:var(--creme);border-radius:12px;padding:4px;margin:10px 0 12px}
-.repas-tab-btn{flex:1;padding:8px 6px;font-size:12px;font-weight:600;color:var(--gris);background:transparent;border:none;border-radius:9px;cursor:pointer;font-family:var(--sans);transition:all .18s;white-space:nowrap}
-.repas-tab-btn.active{background:white;color:var(--season);box-shadow:0 2px 8px rgba(45,36,32,.08)}
-.repas-phase-header{padding:10px 0 8px;font-size:11px;color:var(--gris);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
-.repas-phase-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--sable);cursor:pointer;transition:opacity .15s}
-.repas-phase-item:last-of-type{border-bottom:none}
-.repas-phase-item:active{opacity:.7}
-.repas-phase-emoji{font-size:26px;flex-shrink:0;line-height:1}
-.repas-phase-info{flex:1;min-width:0}
-.repas-phase-nom{font-size:13px;font-weight:600;color:var(--noir);line-height:1.3}
-.repas-phase-why{font-size:11px;color:var(--gris);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.repas-phase-arrow{color:var(--gris);font-size:18px;flex-shrink:0}
-.marche-section-lbl{font-size:9px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--season);margin:14px 0 8px}
-.marche-section-lbl:first-child{margin-top:2px}
-.marche-cat-lbl{font-size:10px;font-weight:600;color:var(--gris);margin:10px 0 4px 2px;display:flex;align-items:center;gap:5px}
-.marche-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:12px;margin-bottom:4px;background:var(--creme);cursor:pointer;transition:opacity .15s}
-.marche-item.checked{opacity:.45}
-.marche-item.checked .marche-item-text{text-decoration:line-through}
-.marche-item-chk{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--sable);background:white;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:white;transition:all .18s}
-.marche-item.checked .marche-item-chk{background:var(--season);border-color:var(--season)}
-.marche-item-text{font-size:13px;color:var(--noir);flex:1;line-height:1.3}
-.marche-item-del{font-size:17px;color:var(--gris);padding:2px 4px;cursor:pointer;flex-shrink:0;opacity:.4;transition:opacity .15s}
-.marche-item-del:active{opacity:1}
-.marche-input-row{display:flex;gap:8px;margin:10px 0 4px}
-.marche-input{flex:1;padding:10px 13px;border:1.5px solid var(--sable);border-radius:12px;font-size:13px;font-family:var(--sans);color:var(--noir);background:white;outline:none;-webkit-appearance:none}
-.marche-input:focus{border-color:var(--season)}
-.marche-add-btn{width:42px;height:42px;border-radius:12px;background:var(--season-grad);color:white;border:none;font-size:26px;font-weight:300;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;line-height:1}
-.marche-add-btn:active{opacity:.85}
-.marche-actions-row{display:flex;gap:8px;margin-top:14px}
-.marche-action-btn{flex:1;padding:10px 8px;font-size:12px;font-weight:600;border-radius:12px;border:1.5px solid var(--sable);background:white;color:var(--gris);cursor:pointer;font-family:var(--sans);transition:all .15s}
-.marche-action-btn:active{background:var(--season-soft);border-color:var(--season);color:var(--season)}
-.marche-action-share{border-color:var(--season-light);color:var(--season)}
 
 /* ═══ BILAN MODAL ═══ */
 .bilan-sheet{padding:0;max-height:90vh;overflow-y:auto;display:flex;flex-direction:column}

@@ -14,182 +14,34 @@
 //   Automne  : J18–28/24–35 (lutéale)
 // ═══════════════════════════════════════════════════════════════════════
 
-
 // ───────────────────────────────────────────────────────────────────────
 // REPAS_QUOTIDIENS
-// 1 repas par jour d'index de phase — 100 % halal, ingrédients France
+// Quelques idées de repas par phase (pas un programme jour par jour) —
+// rotation simple par dayIdx, même esprit que MOUVEMENT_DU_JOUR : un texte
+// court par idée, pas de structure multi-jours.
 // ───────────────────────────────────────────────────────────────────────
 const REPAS_QUOTIDIENS = {
-
-  // ── HIVER (Phase menstruelle · 5 entrées) ──────────────────────────
-  // Besoins : fer, magnésium, oméga-3, anti-inflammatoires, chaleur
   hiver: [
-    {
-      nom: 'Soupe de lentilles corail au curcuma',
-      benefice: 'Le fer des lentilles compense les pertes. Le curcuma réduit l\'inflammation naturellement.'
-    },
-    {
-      nom: 'Pâtes complètes aux épinards et œuf poché',
-      benefice: 'Magnésium et fer en duo — ce que ton corps réclame au cœur des règles.'
-    },
-    {
-      nom: 'Sardines au citron sur pain de seigle',
-      benefice: 'Les oméga-3 des sardines agissent directement sur les crampes et l\'inflammation.'
-    },
-    {
-      nom: 'Tajine de pois chiches à la betterave et épices',
-      benefice: 'La betterave soutient la production de globules rouges. Réconfortant et nutritif.'
-    },
-    {
-      nom: 'Bol de quinoa, dattes et amandes effilées',
-      benefice: 'Dernier jour d\'Hiver : protéines complètes et sucre naturel pour relancer l\'énergie.'
-    },
+    { emoji: '🍲', nom: 'Soupe de lentilles corail au curcuma', benefice: 'Le fer des lentilles compense les pertes. Le curcuma réduit l\'inflammation naturellement.' },
+    { emoji: '🐟', nom: 'Sardines au citron sur pain de seigle', benefice: 'Les oméga-3 agissent directement sur les crampes et l\'inflammation.' },
+    { emoji: '🌰', nom: 'Bol de quinoa, dattes et amandes effilées', benefice: 'Protéines complètes et sucre naturel pour relancer l\'énergie.' },
   ],
-
-  // ── PRINTEMPS (Phase folliculaire · 14 entrées pour cycle long) ────
-  // Besoins : phytoœstrogènes, fibres, vitamines B, zinc, probiotiques
   printemps: [
-    {
-      nom: 'Toast avocat, graines de lin, œufs brouillés',
-      benefice: 'Les graines de lin sont les meilleures sources de phytoœstrogènes — soutient la montée hormonale.'
-    },
-    {
-      nom: 'Buddha bowl quinoa, crudités, pois chiches rôtis',
-      benefice: 'Fibres et protéines végétales pour soutenir l\'élimination des œstrogènes en excès.'
-    },
-    {
-      nom: 'Salade de roquette, noix, cranberries et feta',
-      benefice: 'Les noix apportent le zinc essentiel à la bonne maturation folliculaire.'
-    },
-    {
-      nom: 'Poulet rôti aux herbes, brocoli vapeur, riz basmati',
-      benefice: 'Le sulforaphane du brocoli équilibre les hormones. Les B vitamines clarifient l\'esprit.'
-    },
-    {
-      nom: 'Smoothie bowl aux fruits rouges et graines de chia',
-      benefice: 'Antioxydants et fibres solubles qui amplifient l\'énergie naturelle du Printemps.'
-    },
-    {
-      nom: 'Taboulé au boulgour, persil frais, concombre, tomate',
-      benefice: 'Le persil est dense en vitamine C — amplifie l\'absorption du fer encore stocké.'
-    },
-    {
-      nom: 'Filet de saumon au citron, légumes grillés',
-      benefice: 'Protéines complètes et DHA pour soutenir la régulation naturelle de l\'humeur.'
-    },
-    {
-      nom: 'Yaourt grec, miel, noix et banane tranchée',
-      benefice: 'Probiotiques du yaourt pour la santé intestinale — liée directement à l\'équilibre hormonal.'
-    },
-    {
-      nom: 'Wrap au poulet grillé, avocat, salade, sauce tahini',
-      benefice: 'Graisses saines de l\'avocat et du tahini pour soutenir la production d\'hormones.'
-    },
-    {
-      nom: 'Soupe de pois cassés à la menthe fraîche',
-      benefice: 'Les folates des pois cassés soutiennent la division cellulaire folliculaire — nutriment clé de cette phase de croissance.'
-    },
-    {
-      nom: 'Curry de lentilles vertes, coriandre fraîche et riz',
-      benefice: 'Fer non héminique des lentilles avec vitamine C naturelle de la coriandre — absorption renforcée.'
-    },
-    {
-      nom: 'Omelette aux champignons et épinards sautés',
-      benefice: 'Vitamines B12 et D des œufs pour l\'énergie nerveuse et l\'équilibre hormonal.'
-    },
-    {
-      nom: 'Porridge d\'avoine aux myrtilles et graines de lin',
-      benefice: 'Bêta-glucanes de l\'avoine pour stabiliser la glycémie — énergie stable toute la matinée.'
-    },
-    {
-      nom: 'Tian de légumes au four (courgette, tomate, aubergine)',
-      benefice: 'Légèreté et vitamines du soleil pour cette fin de Printemps pleine d\'élan.'
-    },
+    { emoji: '🥑', nom: 'Toast avocat, graines de lin, œufs brouillés', benefice: 'Les graines de lin sont riches en phytoœstrogènes — soutiennent la montée hormonale.' },
+    { emoji: '🥗', nom: 'Buddha bowl quinoa, crudités, pois chiches rôtis', benefice: 'Fibres et protéines végétales pour soutenir l\'élimination des œstrogènes en excès.' },
+    { emoji: '🐟', nom: 'Filet de saumon au citron, légumes grillés', benefice: 'Protéines complètes et DHA pour soutenir la régulation naturelle de l\'humeur.' },
   ],
-
-  // ── ÉTÉ (Phase ovulatoire · 4 entrées) ────────────────────────────
-  // Besoins : antioxydants, zinc, légèreté, hydratation maximale
   ete: [
-    {
-      nom: 'Salade de pastèque, feta, menthe et graines de courge',
-      benefice: 'Hydratation maximale et zinc des graines de courge pour soutenir l\'ovulation.'
-    },
-    {
-      nom: 'Gaspacho maison : tomates, poivrons, concombre, ail',
-      benefice: 'Lycopène et vitamine C crus — antioxydants au pic hormonal pour protéger les cellules.'
-    },
-    {
-      nom: 'Poisson blanc en papillote, citron, herbes et haricots verts',
-      benefice: 'Protéines légères et sélénium pour protéger les cellules de l\'ovulation.'
-    },
-    {
-      nom: 'Bol myrtilles, grenade, amandes effilées et yaourt à boire',
-      benefice: 'Anthocyanes des myrtilles et ellagitanines de la grenade — protection antioxydante maximale pour ce pic d\'Été.'
-    },
+    { emoji: '🍉', nom: 'Salade de pastèque, feta, menthe et graines de courge', benefice: 'Hydratation maximale et zinc pour soutenir l\'ovulation.' },
+    { emoji: '🍅', nom: 'Gaspacho maison : tomates, poivrons, concombre, ail', benefice: 'Antioxydants crus au pic hormonal pour protéger les cellules.' },
+    { emoji: '🫐', nom: 'Bol myrtilles, grenade, amandes effilées et yaourt', benefice: 'Protection antioxydante maximale pour ce pic d\'Été.' },
   ],
-
-  // ── AUTOMNE (Phase lutéale · 14 entrées pour cycle long) ──────────
-  // Besoins : magnésium, tryptophane, glucides complexes, B6, réconfort
   automne: [
-    {
-      nom: 'Porridge d\'avoine au chocolat noir 70%, banane et noix',
-      benefice: 'Magnésium et tryptophane en combo — le duo anti-SPM par excellence pour commencer l\'Automne.'
-    },
-    {
-      nom: 'Soupe de patate douce au lait de coco et gingembre',
-      benefice: 'Glucides complexes pour stabiliser l\'humeur. Le gingembre réduit les ballonnements.'
-    },
-    {
-      nom: 'Lentilles béluga, carottes rôties et sauce tahini',
-      benefice: 'Vitamine B6 et magnésium pour réduire l\'irritabilité et les tensions de l\'Automne.'
-    },
-    {
-      nom: 'Pâtes complètes, sauce aux amandes et épinards fondus',
-      benefice: 'Tryptophane des amandes pour soutenir la production naturelle de sérotonine.'
-    },
-    {
-      nom: 'Tajine de poulet aux pruneaux et noix de cajou',
-      benefice: 'Sucre naturel des pruneaux sans pic glycémique — énergie stable, sans fringale sucrée.'
-    },
-    {
-      nom: 'Riz basmati au cumin, pois chiches et épinards sautés',
-      benefice: 'Potassium des épinards contre la rétention d\'eau. Fibres des pois chiches pour l\'intestin.'
-    },
-    {
-      nom: 'Velouté de courge butternut aux noisettes grillées',
-      benefice: 'Zinc et magnésium de la courge pour apaiser les tensions prémenstruelles.'
-    },
-    {
-      nom: 'Filet de saumon aux lentilles vertes et citron',
-      benefice: 'Oméga-3 anti-inflammatoires + vitamine B6 contre les symptômes du SPM.'
-    },
-    {
-      nom: 'Dattes farcies aux amandes, lait chaud à la cannelle',
-      benefice: 'Magnésium des amandes pour le sommeil. Choisis 2-3 dattes maximum — si tu as tendance aux insomnies en fin de cycle, mise sur les amandes et le lait à la cannelle seuls.'
-    },
-    {
-      nom: 'Gratin de quinoa aux légumes d\'automne et herbes fraîches',
-      benefice: 'Protéines complètes et glucides complexes pour tenir sans fringale sucrée.'
-    },
-    {
-      nom: 'Bouillon de légumes maison, vermicelles et tofu soyeux',
-      benefice: 'Minéraux apaisants et chaleur réconfortante pour les derniers jours avant les règles.'
-    },
-    {
-      nom: 'Galette de sarrasin aux champignons et fromage de chèvre',
-      benefice: 'Magnésium du sarrasin + confort émotionnel d\'un plat chaud et réconfortant en fin de cycle.'
-    },
-    {
-      nom: 'Soupe de haricots blancs, romarin et huile d\'olive',
-      benefice: 'Fibres solubles pour l\'intestin, magnésium pour les crampes. Chaud et réconfortant.'
-    },
-    {
-      nom: 'Riz complet au lait de coco, banane et cannelle',
-      benefice: 'Tryptophane de la banane pour soutenir la sérotonine. Douceur naturelle sans pic glycémique.'
-    },
+    { emoji: '🍫', nom: 'Porridge d\'avoine au chocolat noir, banane et noix', benefice: 'Magnésium et tryptophane — le duo anti-SPM par excellence.' },
+    { emoji: '🍠', nom: 'Soupe de patate douce au lait de coco et gingembre', benefice: 'Glucides complexes pour stabiliser l\'humeur, gingembre anti-ballonnements.' },
+    { emoji: '🐟', nom: 'Filet de saumon aux lentilles vertes et citron', benefice: 'Oméga-3 anti-inflammatoires et vitamine B6 contre les symptômes du SPM.' },
   ],
 };
-
 
 // ───────────────────────────────────────────────────────────────────────
 // SOINS_QUOTIDIENS
@@ -277,212 +129,6 @@ const SOINS_QUOTIDIENS = {
     },
   ],
 };
-
-// ───────────────────────────────────────────────────────────────────────
-// RECETTES_SOINS
-// Catalogue complet 15 recettes — naturel, halal, médecine prophétique
-// soins_du_jour : 2 recettes recommandées par phase (ids recettes)
-// ───────────────────────────────────────────────────────────────────────
-const RECETTES_SOINS = {
-
-  soins_du_jour: {
-    hiver:     [12, 6],   // Masque apaisant eau de rose+aloe · Soin mains/pieds nourrissant
-    printemps: [11, 10],  // Gommage doux visage · Masque cheveux miel+olive
-    ete:       [8,  3],   // Masque éclat miel+curcuma · Masque purifiant argile+nigelle
-    automne:   [2,  14],  // Masque hydratant aloe+miel+olive · Soin pieds exfoliant
-  },
-
-  categories: [
-    { id: 1, categorie: 'Visage',     description: 'Soins du visage, masques, nettoyants doux' },
-    { id: 2, categorie: 'Cheveux',    description: 'Soins du cuir chevelu et longueurs, bains d\'huile' },
-    { id: 3, categorie: 'Corps',      description: 'Gommages, hydratation et massages corporels' },
-    { id: 4, categorie: 'Mains/Pieds',description: 'Soins hydratants et nourrissants' },
-    { id: 5, categorie: 'Dents',      description: 'Blanchiment naturel et hygiène buccale' },
-    { id: 6, categorie: 'Yeux',       description: 'Compresses et soins pour cernes et fatigue oculaire' },
-  ],
-
-  ingredients: [
-    { id: 1,  nom: 'Huile de nigelle',   proprietes: 'Anti-inflammatoire, antibactérienne, nourrit peau et cheveux',     sunnah: true,  coranique: false },
-    { id: 2,  nom: 'Huile d\'olive',     proprietes: 'Hydratante, nutritive, bonne pour cheveux et peau',                sunnah: true,  coranique: true  },
-    { id: 3,  nom: 'Miel',              proprietes: 'Cicatrisant, antibactérien, apaisant',                              sunnah: true,  coranique: true  },
-    { id: 4,  nom: 'Aloe vera',         proprietes: 'Hydratant, cicatrisant, apaisant',                                  sunnah: false, coranique: false },
-    { id: 5,  nom: 'Curcuma',           proprietes: 'Éclaircissant naturel, anti-inflammatoire',                         sunnah: false, coranique: false },
-    { id: 6,  nom: 'Argile blanche',    proprietes: 'Purifiante, absorbe les impuretés',                                 sunnah: false, coranique: false },
-    { id: 7,  nom: 'Eau de rose',       proprietes: 'Apaisante, rafraîchissante, resserre les pores',                    sunnah: false, coranique: false },
-    { id: 8,  nom: 'Sucre',            proprietes: 'Gommage doux pour le corps et le visage',                           sunnah: false, coranique: false },
-    { id: 9,  nom: 'Beurre de karité', proprietes: 'Hydratant intense pour mains et pieds',                             sunnah: false, coranique: false },
-    { id: 10, nom: 'Camomille',        proprietes: 'Apaise et réduit l\'inflammation',                                  sunnah: false, coranique: false },
-  ],
-
-  recettes: [
-    {
-      id: 1,
-      titre: 'Blanchiment des dents au curcuma',
-      description: 'Pâte naturelle pour blanchir les dents sans les abîmer',
-      ingredients: [5, 2, 3],
-      mode_application: 'Mélanger curcuma + huile d\'olive + miel pour former une pâte. Appliquer sur les dents avec un siwak ou le bout du doigt propre. Brosser doucement 1-2 min, rincer à l\'eau tiède.',
-      frequence: '1 fois par semaine',
-      categorie: 5,
-      phases: [1, 2, 3, 4],
-      note: '☪️ Sunnah — le siwak est recommandé avant chaque prière (Bukhari)',
-    },
-    {
-      id: 2,
-      titre: 'Masque visage aloe vera + miel + huile d\'olive',
-      description: 'Masque hydratant et apaisant pour peau sensible',
-      ingredients: [4, 3, 2],
-      mode_application: 'Appliquer sur peau nettoyée, laisser poser 15-20 min, rincer à l\'eau tiède.',
-      frequence: '1-2 fois par semaine',
-      categorie: 1,
-      phases: [1, 4],
-      note: '☪️ Sunnah — miel (Coran 16:69) + huile d\'olive (Tirmidhi)',
-    },
-    {
-      id: 3,
-      titre: 'Masque purifiant argile + huile de nigelle',
-      description: 'Nettoie les pores et équilibre la peau',
-      ingredients: [6, 1],
-      mode_application: 'Mélanger argile blanche + huile de nigelle + un peu d\'eau de rose jusqu\'à pâte. Poser 10-12 min, rincer doucement, hydrater après.',
-      frequence: 'Tous les 10-14 jours',
-      categorie: 1,
-      phases: [3, 4],
-      note: '☪️ Sunnah — huile de nigelle : "Dans la nigelle il y a une guérison pour tout sauf la mort" (Bukhari 5688)',
-    },
-    {
-      id: 4,
-      titre: 'Bain d\'huile cheveux olive + nigelle',
-      description: 'Nourrit cuir chevelu et longueurs selon la Sunnah',
-      ingredients: [2, 1],
-      mode_application: 'Mélanger à parts égales huile d\'olive et huile de nigelle. Masser le cuir chevelu et les cheveux, laisser 1-2h ou toute la nuit, puis laver.',
-      frequence: '1 fois par semaine',
-      categorie: 2,
-      phases: [2, 3, 4],
-      note: '☪️ Sunnah — huile d\'olive (Tirmidhi) + huile de nigelle (Bukhari 5688)',
-    },
-    {
-      id: 5,
-      titre: 'Gommage corps sucre + huile d\'olive',
-      description: 'Exfolie et hydrate le corps en douceur',
-      ingredients: [8, 2],
-      mode_application: 'Sur peau humide, masser doucement en cercles puis rincer.',
-      frequence: '1 fois tous les 7-10 jours',
-      categorie: 3,
-      phases: [1, 2, 3, 4],
-      note: '☪️ Sunnah — huile d\'olive : "Oignez-vous en" (Tirmidhi)',
-    },
-    {
-      id: 6,
-      titre: 'Soin mains/pieds nourrissant',
-      description: 'Hydrate intensément mains et pieds secs',
-      ingredients: [9, 1, 2],
-      mode_application: 'Appliquer le soir sur mains et pieds propres. Porter gants et chaussettes en coton pour une pénétration optimale pendant la nuit.',
-      frequence: '2-3 fois par semaine',
-      categorie: 4,
-      phases: [1, 4],
-      note: '☪️ Sunnah — huile de nigelle + olive pour la peau',
-    },
-    {
-      id: 7,
-      titre: 'Compresses yeux à l\'eau de rose',
-      description: 'Apaise et dégonfle les yeux fatigués',
-      ingredients: [7, 10],
-      mode_application: 'Infuser la camomille, laisser refroidir. Ajouter eau de rose. Tremper un tissu propre et poser sur les yeux fermés 5-10 min.',
-      frequence: '1-2 fois par semaine',
-      categorie: 6,
-      phases: [1, 4],
-      note: '🌿 Eau de rose : tradition islamique de purification et apaisement',
-    },
-    {
-      id: 8,
-      titre: 'Masque éclat miel + curcuma',
-      description: 'Illumine et adoucit la peau grâce aux propriétés anti-inflammatoires du curcuma',
-      ingredients: [3, 5],
-      mode_application: 'Mélanger 1 c.à.c de miel + 1 pincée de curcuma. Appliquer sur visage propre 10 min, rincer à l\'eau tiède. ⚠️ Peut légèrement teinter la peau claire — tester d\'abord.',
-      frequence: '1 fois par semaine',
-      categorie: 1,
-      phases: [2, 3],
-      note: '☪️ Sunnah — miel (Coran 16:69) · Curcuma : médecine islamique traditionnelle',
-    },
-    {
-      id: 9,
-      titre: 'Masque hydratant avocat + miel + huile d\'olive',
-      description: 'Nourrit intensément les peaux sèches',
-      ingredients: [3, 2],
-      mode_application: 'Écraser ¼ avocat mûr, ajouter miel et huile d\'olive. Appliquer 15-20 min, rincer à l\'eau tiède.',
-      frequence: '1-2 fois par semaine',
-      categorie: 1,
-      phases: [1, 4],
-      note: '☪️ Sunnah — miel (Coran 16:69) + huile d\'olive (Tirmidhi)',
-    },
-    {
-      id: 10,
-      titre: 'Masque cheveux nourrissant miel + huile d\'olive',
-      description: 'Cheveux doux et brillants',
-      ingredients: [3, 2],
-      mode_application: 'Masser cuir chevelu et longueurs avec le mélange miel+olive, laisser poser 1h, rincer abondamment.',
-      frequence: '1 fois par semaine',
-      categorie: 2,
-      phases: [2, 3],
-      note: '☪️ Sunnah — miel + huile d\'olive',
-    },
-    {
-      id: 11,
-      titre: 'Gommage doux visage sucre + huile d\'olive',
-      description: 'Exfolie la peau délicatement',
-      ingredients: [8, 2],
-      mode_application: 'Sur peau humide, mélanger 1 c.à.c sucre fin + 1 c.à.c huile d\'olive. Masser doucement 1-2 min en cercles, rincer.',
-      frequence: '1 fois tous les 10 jours',
-      categorie: 1,
-      phases: [2, 3],
-      note: '☪️ Sunnah — huile d\'olive (Tirmidhi)',
-    },
-    {
-      id: 12,
-      titre: 'Masque apaisant eau de rose + aloe vera',
-      description: 'Apaise les rougeurs et irritations en douceur',
-      ingredients: [4, 7],
-      mode_application: 'Mélanger gel d\'aloe vera pur avec quelques gouttes d\'eau de rose. Appliquer sur visage propre 15 min, rincer à l\'eau tiède.',
-      frequence: '1-2 fois par semaine',
-      categorie: 1,
-      phases: [1, 4],
-      note: '🌿 Eau de rose : tradition islamique · Aloe vera : médecine islamique classique',
-    },
-    {
-      id: 13,
-      titre: 'Bain d\'huile cheveux nigelle + olive',
-      description: 'Nourrit le cuir chevelu et les longueurs selon la Sunnah',
-      ingredients: [1, 2],
-      mode_application: 'Mélanger à parts égales huile de nigelle et huile d\'olive. Masser le cuir chevelu et les longueurs. Laisser 1h minimum ou toute la nuit, rincer avec un shampoing doux.',
-      frequence: '1 fois par semaine',
-      categorie: 2,
-      phases: [1, 2, 3, 4],
-      note: '☪️ Sunnah — huile de nigelle (Bukhari 5688) + huile d\'olive (Tirmidhi) — soin capillaire de la Sunnah, toutes phases',
-    },
-    {
-      id: 14,
-      titre: 'Soin pieds exfoliant sucre + huile de nigelle',
-      description: 'Doux pour talons et pieds secs',
-      ingredients: [8, 1],
-      mode_application: 'Masser pieds humides avec le mélange sucre+nigelle, rincer, hydrater.',
-      frequence: '1 fois par semaine',
-      categorie: 4,
-      phases: [1, 4],
-      note: '☪️ Sunnah — huile de nigelle (Bukhari 5688)',
-    },
-    {
-      id: 15,
-      titre: 'Masque yeux camomille + eau de rose',
-      description: 'Réduit cernes et fatigue oculaire',
-      ingredients: [10, 7],
-      mode_application: 'Infuser camomille concentrée, laisser refroidir, ajouter eau de rose. Tremper tissu propre et poser 10 min sur les yeux fermés.',
-      frequence: '1-2 fois par semaine',
-      categorie: 6,
-      phases: [1, 4],
-      note: '🌿 Eau de rose : tradition islamique',
-    },
-  ],
-};
-
 
 // ───────────────────────────────────────────────────────────────────────
 // MESSAGES_JOUR
