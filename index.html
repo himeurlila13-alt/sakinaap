@@ -1,1579 +1,261 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SakinApp — Cycle, foi &amp; bien-être au féminin</title>
-<meta name="description" content="Suis ton cycle menstruel avec ta foi. Prières, dhikr, 99 Noms d'Allah et suivi de cycle adaptés à chaque phase — Hiver, Printemps, Été, Automne.">
-<meta name="keywords" content="cycle menstruel islam, bien-être femme musulmane, suivi cycle, prières, dhikr, 99 noms d'Allah">
-<meta name="author" content="SakinApp">
-<meta property="og:title" content="SakinApp — Cycle, foi &amp; bien-être au féminin">
-<meta property="og:description" content="Suis ton cycle menstruel avec ta foi. Prières, dhikr et suivi de cycle adaptés à chaque phase.">
-<meta property="og:image" content="https://sakinaap.com/icons/icon-512.png">
-<meta property="og:url" content="https://sakinaap.com">
-<meta property="og:type" content="website">
-<meta property="og:locale" content="fr_FR">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SakinApp — Cycle, foi &amp; bien-être">
-<meta name="twitter:description" content="Suis ton cycle menstruel avec ta foi.">
-<meta name="twitter:image" content="https://sakinaap.com/icons/icon-512.png">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SakinApp · Cycle et foi, tout en douceur</title>
+<meta name="description" content="SakinApp, la grande sœur qui accompagne les femmes musulmanes : suivi du cycle en quatre saisons, horaires de prière, pause pendant les règles, invocations sourcées et les 99 noms d'Allah. Gratuite, sans compte, tes données restent sur ton téléphone.">
+<meta name="theme-color" content="#5C2453">
+<link rel="icon" href="/img/favicon.png">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
 <link rel="canonical" href="https://sakinaap.com/">
-<link rel="sitemap" type="application/xml" href="/sitemap.xml">
-<link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="SakinApp">
-<meta name="theme-color" content="#3D2060">
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta property="og:type" content="website">
+<meta property="og:title" content="SakinApp · Cycle et foi, tout en douceur">
+<meta property="og:description" content="Ton cycle, ta prière, ta paix : une grande sœur douce pour les musulmanes.">
+<meta property="og:image" content="https://sakinaap.com/img/1-accueil.jpg">
+<meta property="og:url" content="https://sakinaap.com/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
-#onboarding{display:none;}
-#app-loader{
-  position:fixed;inset:0;z-index:9000;
-  background:#FDF8F2;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  gap:14px;
-  transition:opacity .35s ease, visibility .35s ease;
-}
-#app-loader.hidden{opacity:0;visibility:hidden;pointer-events:none;}
-.apl-logo{
-  font-family:var(--script,'Dancing Script',cursive);
-  font-size:32px;
-  color:#7B5EA7;letter-spacing:.5px;
-}
-.apl-bismillah{
-  font-size:16px;color:#8AAE97;letter-spacing:1px;
-  margin-top:-6px;
-}
-.apl-spinner{
-  width:36px;height:36px;
-  border:3px solid rgba(123,94,167,.15);
-  border-top-color:#7B5EA7;
-  border-radius:50%;
-  animation:aplSpin .9s linear infinite;
-  margin-top:6px;
-}
-@keyframes aplSpin{to{transform:rotate(360deg);}}
-.screen-enter{animation:screenFadeIn .3s ease forwards;}
-@keyframes screenFadeIn{
-  from{opacity:0;transform:translateY(10px);}
-  to  {opacity:1;transform:none;}
-}
+  :root {
+    --creme: #FAF6F0; --carte: #FFFFFF; --encre: #2D2420; --gris: #6B5B53; --sable: #E8DDD0; --or: #9A7A3E;
+    --hiver: #A65591; --hiver-f: #5C2453; --printemps: #14B8A6; --printemps-f: #0B6E67;
+    --ete: #FF8E5E; --ete-f: #C2552B; --automne: #C0354F; --automne-f: #8C1F35;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --creme: #1A1513; --carte: #241D1A; --encre: #F3ECE4; --gris: #B9A99E; --sable: #3A302A; --or: #D9B97A; --hiver: #D08DBE; }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--creme); color: var(--encre); font: 17px/1.6 "DM Sans", system-ui, sans-serif; }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; }
+  .enveloppe { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+  .barre { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .logo img { width: 40px; height: 40px; border-radius: 10px; }
+  .logo span { font-family: "Dancing Script", cursive; font-size: 30px; color: var(--hiver); }
+  .barre nav { display: flex; gap: 22px; font-size: 15px; }
+  .barre nav a { text-decoration: none; color: var(--gris); }
+  .barre nav a:hover { color: var(--encre); }
+  @media (max-width: 640px) { .barre nav { display: none; } }
+
+  .ouverture { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: center; padding-top: 36px; padding-bottom: 64px; }
+  .surtitre { font-size: 13px; font-weight: 600; letter-spacing: 2.4px; text-transform: uppercase; color: var(--or); margin: 0 0 14px; }
+  h1 { font-family: "Playfair Display", Georgia, serif; font-weight: 500; font-size: clamp(38px, 6vw, 60px); line-height: 1.08; margin: 0 0 18px; }
+  h1 em, h2 em { color: var(--hiver); }
+  .chapo { font-size: 19px; color: var(--gris); margin: 0 0 28px; max-width: 34em; }
+  .boutons { display: flex; flex-wrap: wrap; gap: 12px; }
+  .store { display: inline-flex; align-items: center; gap: 10px; padding: 12px 20px; border-radius: 14px; background: var(--encre); color: var(--creme); text-decoration: none; font-weight: 600; font-size: 15px; line-height: 1.2; text-align: left; }
+  .store small { display: block; font-weight: 400; font-size: 11px; opacity: .8; }
+  .store svg { width: 22px; height: 22px; fill: currentColor; flex: none; }
+  .store[aria-disabled="true"] { background: transparent; color: var(--gris); border: 1.5px dashed var(--sable); cursor: default; }
+  .rassurant { margin: 18px 0 0; font-size: 14px; color: var(--gris); }
+  .telephone { justify-self: center; width: min(320px, 80vw); border-radius: 36px; box-shadow: 0 30px 60px -20px rgba(92, 36, 83, .45); }
+  @media (max-width: 820px) { .ouverture { grid-template-columns: 1fr; text-align: center; } .chapo { margin-inline: auto; } .boutons { justify-content: center; } }
+
+  section { padding: 64px 0; }
+  h2 { font-family: "Playfair Display", Georgia, serif; font-weight: 500; font-size: clamp(30px, 4.4vw, 42px); line-height: 1.15; margin: 0 0 14px; }
+  .intro { color: var(--gris); max-width: 40em; margin: 0 0 34px; }
+
+  .saisons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .saison { border-radius: 22px; padding: 22px; color: #fff; min-height: 190px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; }
+  .saison b { font-family: "Playfair Display", Georgia, serif; font-weight: 600; font-size: 24px; }
+  .saison span { font-size: 14.5px; opacity: .93; }
+  .saison i { font-style: normal; font-size: 26px; }
+  .s-hiver { background: linear-gradient(145deg, var(--hiver-f), #A65591); }
+  .s-printemps { background: linear-gradient(145deg, var(--printemps-f), var(--printemps)); }
+  .s-ete { background: linear-gradient(145deg, var(--ete-f), var(--ete)); }
+  .s-automne { background: linear-gradient(145deg, var(--automne-f), var(--automne)); }
+  @media (max-width: 820px) { .saisons { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 420px) { .saisons { grid-template-columns: 1fr; } .saison { min-height: 0; } }
+
+  .grille { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .carte { background: var(--carte); border: 1px solid var(--sable); border-radius: 22px; padding: 24px; }
+  .carte h3 { font-family: "Playfair Display", Georgia, serif; font-weight: 600; font-size: 20px; margin: 10px 0 6px; }
+  .carte p { margin: 0; color: var(--gris); font-size: 15.5px; }
+  .pastille { font-size: 24px; }
+  @media (max-width: 820px) { .grille { grid-template-columns: 1fr; } }
+
+  .captures { display: flex; gap: 18px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 4px 18px; }
+  .captures img { flex: 0 0 auto; width: 230px; height: auto; border-radius: 26px; scroll-snap-align: center; box-shadow: 0 16px 34px -18px rgba(45, 36, 32, .5); }
+
+  .confiance { background: linear-gradient(145deg, #5C2453, #A65591); color: #fff; border-radius: 32px; padding: 48px 36px; }
+  .confiance h2 em { color: #F6D9EC; }
+  .confiance .intro { color: rgba(255, 255, 255, .86); }
+  .confiance ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 28px; }
+  .confiance li { padding-left: 28px; position: relative; }
+  .confiance li::before { content: "✦"; position: absolute; left: 0; color: #F2D29B; }
+  @media (max-width: 640px) { .confiance { padding: 36px 22px; } .confiance ul { grid-template-columns: 1fr; } }
+
+  .avis { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .avis blockquote { margin: 0; }
+  .avis p { font-family: "Playfair Display", Georgia, serif; font-style: italic; font-size: 18px; line-height: 1.55; margin: 0 0 14px; color: var(--encre); }
+  .avis cite { font-style: normal; font-weight: 600; color: var(--hiver); font-size: 15px; }
+  .etoiles { color: var(--or); letter-spacing: 2px; font-size: 14px; margin-bottom: 8px; }
+  @media (max-width: 820px) { .avis { grid-template-columns: 1fr; } }
+
+  details { background: var(--carte); border: 1px solid var(--sable); border-radius: 18px; padding: 16px 20px; margin-bottom: 10px; }
+  summary { cursor: pointer; font-weight: 600; }
+  details p { color: var(--gris); margin: 10px 0 0; }
+
+  .appel { text-align: center; padding-top: 72px; padding-bottom: 40px; }
+  .appel .boutons { justify-content: center; }
+  .appel .intro { margin-inline: auto; }
+  .citation { font-family: "Playfair Display", Georgia, serif; font-style: italic; color: var(--gris); margin: 28px auto 0; max-width: 34em; }
+  footer { border-top: 1px solid var(--sable); padding: 28px 0 40px; font-size: 14px; color: var(--gris); }
+  footer .enveloppe { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; }
+  footer nav { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+  footer a { text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
 
-<!-- LOADER DE DÉMARRAGE -->
-<div id="app-loader" aria-live="polite" aria-label="Chargement de SakinApp">
-  <div class="apl-logo">SakinApp</div>
-  <div class="apl-bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
-  <div class="apl-spinner"></div>
-</div>
+<header class="barre" style="max-width:1080px;margin:0 auto">
+  <a class="logo" href="/"><img src="/img/icone.png" alt=""><span>SakinApp</span></a>
+  <nav>
+    <a href="#saisons">Ton cycle</a>
+    <a href="#appli">L'appli</a>
+    <a href="#confiance">Tes données</a>
+    <a href="#questions">Questions</a>
+  </nav>
+</header>
 
-<!-- TOUR GUIDE -->
-<div id="tour-overlay" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(30,20,10,0.72);align-items:center;justify-content:center;padding:24px;">
-  <div style="background:white;border-radius:28px;padding:32px 24px 24px;max-width:340px;width:100%;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,0.25);">
-    <div id="tour-emoji" style="font-size:52px;margin-bottom:16px;line-height:1;">🏠</div>
-    <div id="tour-title" style="font-family:'Playfair Display',serif;font-size:20px;color:#1C1008;margin-bottom:10px;font-weight:600;"></div>
-    <div id="tour-text" style="font-size:13px;color:#8A7060;line-height:1.7;margin-bottom:28px;"></div>
-    <button onclick="tourNext()" style="width:100%;padding:15px;background:var(--season,#3DAE8A);color:white;border:none;border-radius:16px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:0.3px;">Je commence ✦</button>
-    <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:18px;" id="tour-dots"></div>
-  </div>
-</div>
-
-<!-- BANDEAU RECONNEXION -->
-<div id="reconnect-nudge" style="display:none;position:fixed;bottom:72px;left:12px;right:12px;z-index:8000;background:linear-gradient(135deg,#3D2060,#7B5EA7);padding:12px 14px;border-radius:16px;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 4px 20px rgba(61,32,96,.35);">
-  <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
-    <span style="font-size:18px;flex-shrink:0;">&#128274;</span>
-    <div style="min-width:0;">
-      <div style="font-size:12px;font-weight:600;color:white;line-height:1.3;">Reste connectée à ton compte</div>
-      <div style="font-size:11px;color:rgba(255,255,255,.75);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Garde l'accès à ton espace sur cet email</div>
-    </div>
-  </div>
-  <div style="display:flex;gap:6px;flex-shrink:0;">
-    <button onclick="openReconnectFromNudge()" style="background:white;color:#3D2060;border:none;border-radius:10px;padding:7px 12px;font-size:12px;font-weight:700;cursor:pointer;">Se connecter</button>
-    <button onclick="dismissReconnectNudge()" style="background:rgba(255,255,255,.15);color:white;border:none;border-radius:10px;padding:7px 10px;font-size:14px;cursor:pointer;">&#215;</button>
-  </div>
-</div>
-
-<!-- BANNIERE MISE A JOUR -->
-<div id="update-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(135deg,var(--season,#3DAE8A),var(--season-light,#80D4B8));padding:12px 16px;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 2px 12px rgba(0,0,0,0.15);">
-  <div style="display:flex;align-items:center;gap:10px;flex:1;">
-    <span style="font-size:18px;">✨</span>
+<main>
+  <div class="enveloppe ouverture">
     <div>
-      <div style="font-size:13px;font-weight:600;color:white;line-height:1.3;">Mise à jour disponible</div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.85);">Nouvelle version de SakinApp prête</div>
+      <p class="surtitre">Cycle · Foi · Bien-être</p>
+      <h1>Ton cycle, ta prière, <em>ta paix.</em></h1>
+      <p class="chapo">SakinApp, c'est la grande sœur qui t'accompagne tout au long de ton cycle, dans ton corps comme dans ta foi. Avec douceur, sans culpabilité.</p>
+      <div class="boutons">
+        <!-- À la sortie : remplacer chaque <span class="store" aria-disabled="true"> par un lien
+             App Store : https://apps.apple.com/app/id6823710440
+             Google Play : https://play.google.com/store/apps/details?id=com.sakinaap.app -->
+        <span class="store" aria-disabled="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9s-2-.9-3.4-.9c-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.5 1.3-.1 1.8-.8 3.3-.8s2 .8 3.4.8c1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.7-1-2.7-4zM13.9 4.9c.7-.9 1.2-2 1.1-3.2-1 0-2.3.7-3 1.6-.7.8-1.3 2-1.1 3.1 1.1.1 2.3-.6 3-1.5z"/></svg>
+          <span><small>Très bientôt sur</small>l'App Store</span>
+        </span>
+        <span class="store" aria-disabled="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 2.3c-.3.3-.4.7-.4 1.2v17c0 .5.1.9.4 1.2l9.5-9.7-9.5-9.7zm10.6 10.8 2.7 2.8-11.1 6.3c-.4.2-.8.3-1.1.2l9.5-9.3zm3.9-3.2 3 1.7c.9.5.9 1.3 0 1.8l-3.1 1.8-3-3 3.1-2.3zM5.8 1.8c.3 0 .7 0 1.1.3l11.1 6.3-2.7 2.8L5.8 1.8z"/></svg>
+          <span><small>Très bientôt sur</small>Google Play</span>
+        </span>
+      </div>
+      <p class="rassurant">🔒 Gratuite · sans compte · tes données restent sur ton téléphone</p>
     </div>
+    <img class="telephone" src="/img/1-accueil.jpg" alt="L'accueil de SakinApp : la saison du jour, un mot doux et une invocation" width="600" height="1300">
   </div>
-  <button onclick="applyUpdate()" style="background:white;color:var(--season,#3DAE8A);border:none;border-radius:10px;padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;">Actualiser</button>
-</div>
 
-<!-- AUTH -->
-<div id="auth-screen" style="display:none;position:fixed;inset:0;z-index:5000;background:#FAF6F0;overflow-y:auto;">
-  <div style="max-width:390px;margin:0 auto;padding:48px 24px 40px;text-align:center;min-height:100vh;display:flex;flex-direction:column;justify-content:center;box-sizing:border-box;">
-    <div style="font-family:'Dancing Script',cursive;font-size:38px;color:#3D2060;margin-bottom:6px;">SakinApp</div>
-    <div style="font-size:12px;color:#C9A96E;letter-spacing:2.5px;margin-bottom:40px;text-transform:uppercase;">Cycle · Foi · Bien-être</div>
-    <div data-auth-title style="font-family:'Playfair Display',serif;font-size:22px;color:#2D2420;margin-bottom:8px;">As-salamu alaykum 🌸</div>
-    <div data-auth-sub style="font-size:14px;color:#6B5B53;margin-bottom:8px;line-height:1.6;">Entre ton adresse email pour accéder à ton espace SakinApp.</div>
-    <div style="font-size:12px;color:#C9A96E;margin-bottom:28px;line-height:1.5;">Nouveau téléphone ou premier accès ?<br>Tu retrouveras toutes tes données automatiquement.</div>
-
-    <div id="auth-step1">
-      <input id="auth-email" type="email" placeholder="ton@email.com" inputmode="email" autocomplete="email"
-        style="width:100%;box-sizing:border-box;padding:15px;border:1.5px solid #E8DDD0;border-radius:16px;font-size:15px;color:#2D2420;background:white;margin-bottom:12px;font-family:'DM Sans',sans-serif;outline:none;">
-      <button id="auth-magic-btn" onclick="handleMagicLink()"
-        style="width:100%;padding:15px;background:linear-gradient(135deg,#3D2060,#7B5EA7);color:white;border:none;border-radius:16px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:16px;box-sizing:border-box;">
-        Recevoir mon code 🌸
-      </button>
-    </div>
-
-    <div id="auth-step2" style="display:none;">
-      <div style="font-size:13px;color:#6B5B53;margin-bottom:16px;line-height:1.6;padding:12px;background:rgba(201,169,110,0.12);border-radius:12px;">
-        📧 Code envoyé&nbsp;! Ouvre ton email et entre les <strong>8 caractères</strong> ici.<br><span style="font-size:11px;color:#C9A96E;">(Vérifie aussi les spams)</span>
-      </div>
-      <input id="auth-otp-input" type="text" placeholder="· · · · · · · ·" inputmode="text" maxlength="8" autocomplete="one-time-code"
-        style="width:100%;box-sizing:border-box;padding:16px;border:2px solid #C9A96E;border-radius:16px;font-size:26px;color:#2D2420;background:white;margin-bottom:12px;font-family:'DM Sans',sans-serif;outline:none;text-align:center;letter-spacing:10px;">
-      <button id="auth-verify-btn" onclick="verifyAuthCode()"
-        style="width:100%;padding:15px;background:linear-gradient(135deg,#3D2060,#7B5EA7);color:white;border:none;border-radius:16px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:10px;box-sizing:border-box;">
-        Valider le code ✓
-      </button>
-      <button onclick="resetAuthStep()" style="background:none;border:none;color:#C9A96E;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;padding:4px;">
-        &#8592; Changer d&rsquo;email
-      </button>
-    </div>
-
-    <div id="auth-msg" style="font-size:13px;color:#7B5EA7;display:none;padding:12px;background:rgba(123,94,167,0.08);border-radius:12px;line-height:1.5;margin-bottom:12px;margin-top:8px;"></div>
-
-    <div id="auth-howto" style="display:flex;align-items:center;gap:10px;margin:16px 0 16px;">
-      <div style="flex:1;height:1px;background:#E8DDD0;"></div>
-      <span style="font-size:11px;color:#6B5B53;">Comment ça marche ?</span>
-      <div style="flex:1;height:1px;background:#E8DDD0;"></div>
-    </div>
-    <div id="auth-steps" style="text-align:left;display:flex;flex-direction:column;gap:10px;margin-bottom:28px;">
-      <div style="display:flex;align-items:flex-start;gap:10px;font-size:12px;color:#6B5B53;line-height:1.5;">
-        <span style="color:#C9A96E;font-weight:700;flex-shrink:0;">1.</span>
-        Tu entres ton email ci-dessus
-      </div>
-      <div style="display:flex;align-items:flex-start;gap:10px;font-size:12px;color:#6B5B53;line-height:1.5;">
-        <span style="color:#C9A96E;font-weight:700;flex-shrink:0;">2.</span>
-        Tu reçois un email avec un code à 8 caractères (vérifie les spams)
-      </div>
-      <div style="display:flex;align-items:flex-start;gap:10px;font-size:12px;color:#6B5B53;line-height:1.5;">
-        <span style="color:#C9A96E;font-weight:700;flex-shrink:0;">3.</span>
-        Tu entres le code ici → connectée directement dans l&rsquo;app 🌸
+  <section id="saisons">
+    <div class="enveloppe">
+      <h2>Ton cycle a <em>quatre saisons</em></h2>
+      <p class="intro">Chaque phase a son énergie. SakinApp t'aide à comprendre la tienne, et ses couleurs changent avec toi, jour après jour.</p>
+      <div class="saisons">
+        <div class="saison s-hiver"><i>🌙</i><div><b>Hiver</b><br><span>Tes règles : repos et douceur. La prière se met en pause, ton lien avec Allah continue.</span></div></div>
+        <div class="saison s-printemps"><i>🌿</i><div><b>Printemps</b><br><span>L'énergie remonte : le moment de reprendre ton élan.</span></div></div>
+        <div class="saison s-ete"><i>☀️</i><div><b>Été</b><br><span>Ton pic d'énergie : bouger, partager, rayonner.</span></div></div>
+        <div class="saison s-automne"><i>🍂</i><div><b>Automne</b><br><span>On ralentit, on écoute son corps, on se prépare.</span></div></div>
       </div>
     </div>
+  </section>
 
-    <div style="font-size:11px;color:#6B5B53;line-height:1.7;">
-      En continuant, tu acceptes nos <button type="button" onclick="document.getElementById('cgu-modal').classList.add('open')" style="background:none;border:none;padding:0;font-size:inherit;color:#7B5EA7;text-decoration:underline;cursor:pointer;font-family:inherit;">conditions d&rsquo;utilisation</button>.<br>Tes données de cycle restent sur ton téléphone.
-    </div>
-  </div>
-</div>
-
-<!-- ONBOARDING -->
-<div id="onboarding">
-<div class="ob-wrap">
-  <div class="ob-step active" id="step-0">
-    <div class="ob-logo">SakinApp</div>
-    <div class="ob-eye">As-salamu alaykum, 
-      ✨</div>
-    <div class="ob-title">Ton corps a sa propre sagesse.<br><em>Apprends à l'écouter.</em></div>
-    <div class="ob-sub">SakinApp t'accompagne chaque jour selon ton cycle, ta foi et ton énergie.</div>
-    <div class="ob-fl">Ton prenom</div>
-    <input class="ob-input" id="input-prenom" type="text" placeholder="Lisa, Aya, Lila..." maxlength="30" autocomplete="given-name" autocorrect="off" autocapitalize="words" spellcheck="false" inputmode="text">
-    <div class="ob-privacy" style="margin-top:12px;">
-      <span style="font-size:16px">&#128274;</span>
-      <span class="ob-privacy-txt">Tes donn&eacute;es sont sauvegard&eacute;es sur ton compte s&eacute;curis&eacute;. Jamais vendues, jamais partag&eacute;es.</span>
-    </div>
-    <button class="ob-btn" onclick="nextStep(1)" style="margin-top:24px;">Commencer</button>
-    <div style="font-size:11px;color:#6B5B53;line-height:1.7;text-align:center;margin-top:14px;">
-      En continuant, tu acceptes nos <button type="button" onclick="document.getElementById('cgu-modal').classList.add('open')" style="background:none;border:none;padding:0;font-size:inherit;color:#7B5EA7;text-decoration:underline;cursor:pointer;font-family:inherit;">conditions d&rsquo;utilisation</button>.
-    </div>
-  </div>
-  <div class="ob-step" id="step-1">
-    <div class="ob-logo">SakinApp</div>
-    <div class="ob-eye">Ton cycle</div>
-    <div class="ob-title">Où en es-tu<br><em>dans ton cycle ?</em></div>
-    <div class="ob-sub">Je calcule ta saison du moment pour personnaliser ton expérience.</div>
-    <div class="ob-fl">1er jour de tes dernières règles</div>
-    <input class="ob-input" id="input-date" type="date" style="margin-bottom:18px">
-    <div class="ob-fl">Duree habituelle de ton cycle</div>
-    <div class="ob-options" id="duration-options">
-      <div class="ob-option" onclick="selectDuration(this,26)"><span class="ob-option-emoji">&#127769;</span><div><div class="ob-option-text">Court - 24 a 26 jours</div></div><div class="ob-option-chk">&#10003;</div></div>
-      <div class="ob-option selected" onclick="selectDuration(this,28)"><span class="ob-option-emoji">&#127800;</span><div><div class="ob-option-text">Moyen - 27 a 30 jours</div></div><div class="ob-option-chk">&#10003;</div></div>
-      <div class="ob-option" onclick="selectDuration(this,33)"><span class="ob-option-emoji">&#9728;&#65039;</span><div><div class="ob-option-text">Long - 31 a 35 jours</div></div><div class="ob-option-chk">&#10003;</div></div>
-    </div>
-    <div class="ob-fl" style="margin-top:18px;">Duree habituelle de tes regles</div>
-    <div class="ob-options" id="duree-regles-options">
-      <div class="ob-option" onclick="selectDureeRegles(this,4)"><span class="ob-option-emoji">&#127772;</span><div><div class="ob-option-text">Courtes - 3 a 4 jours</div></div><div class="ob-option-chk">&#10003;</div></div>
-      <div class="ob-option selected" onclick="selectDureeRegles(this,5)"><span class="ob-option-emoji">&#127800;</span><div><div class="ob-option-text">Moyennes - 5 a 6 jours</div></div><div class="ob-option-chk">&#10003;</div></div>
-      <div class="ob-option" onclick="selectDureeRegles(this,7)"><span class="ob-option-emoji">&#127807;</span><div><div class="ob-option-text">Longues - 7 jours ou plus</div></div><div class="ob-option-chk">&#10003;</div></div>
-    </div>
-    <button class="ob-btn" onclick="nextStep(2)" style="margin-top:24px">Révéler ma saison</button>
-  </div>
-</div>
-</div>
-
-<!-- REVELATION -->
-<div id="revelation" class="screen">
-  <div class="rev-emoji" id="rev-emoji">&#127800;</div>
-  <div class="rev-title" id="rev-title">Tu es en Printemps</div>
-  <div class="rev-subtitle" id="rev-subtitle">Phase folliculaire - Jour 8</div>
-  <div class="rev-message" id="rev-message">L'energie revient. C'est le moment de commencer ce qui attend.</div>
-  <button class="rev-btn" onclick="enterApp()">Entrer dans ma journ&#233;e</button>
-</div>
-
-<!-- CHECK-IN MATIN -->
-<div class="checkin-overlay" id="checkin-overlay">
-  <div class="checkin-sheet">
-    <div class="checkin-handle"></div>
-    <div class="checkin-title">Comment tu vas vraiment, ce matin ?</div>
-    <div class="checkin-options">
-      <div class="checkin-option" onclick="doCheckin('bien')"><span class="checkin-option-emoji">&#127800;</span><span class="checkin-option-text">Je vais bien</span></div>
-      <div class="checkin-option" onclick="doCheckin('fatiguee')"><span class="checkin-option-emoji">&#128564;</span><span class="checkin-option-text">Je suis fatiguee</span></div>
-      <div class="checkin-option" onclick="doCheckin('difficile')"><span class="checkin-option-emoji">&#127754;</span><span class="checkin-option-text">C'est difficile en ce moment</span></div>
-      <div class="checkin-option" onclick="doCheckin('foi')"><span class="checkin-option-emoji">&#129330;</span><span class="checkin-option-text">Ma foi est en bas</span></div>
-      <div class="checkin-option checkin-option-calme" onclick="doCheckin('calme')"><span class="checkin-option-emoji">&#127807;</span><span class="checkin-option-text">Mon coeur a besoin de calme</span></div>
-    </div>
-  </div>
-</div>
-
-<!-- CHECK-IN SOIR -->
-<div class="checkin-overlay" id="evening-checkin-overlay" style="display:none;">
-  <div class="checkin-sheet" style="max-height:90vh;overflow-y:auto;">
-    <div class="checkin-handle"></div>
-    <div id="evening-questions">
-      <div style="font-family:var(--serif);font-size:20px;color:var(--noir);margin-bottom:6px;text-align:center;">Comment s'est passee ta journee ?</div>
-      <div style="font-size:13px;color:var(--gris);text-align:center;margin-bottom:20px;font-family:var(--serif);font-style:italic;">Sakina t'ecoute</div>
-      <div style="display:flex;flex-direction:column;gap:8px;">
-        <div class="checkin-option" onclick="doEveningCheckin('bien')"><span class="checkin-option-emoji">&#127775;</span><span class="checkin-option-text">Belle journee, alhamdulillah</span></div>
-        <div class="checkin-option" onclick="doEveningCheckin('fatiguee')"><span class="checkin-option-emoji">&#128564;</span><span class="checkin-option-text">Je suis epuisee</span></div>
-        <div class="checkin-option" onclick="doEveningCheckin('difficile')"><span class="checkin-option-emoji">&#127754;</span><span class="checkin-option-text">C'etait dur aujourd'hui</span></div>
-        <div class="checkin-option" onclick="doEveningCheckin('calme')"><span class="checkin-option-emoji">&#127810;</span><span class="checkin-option-text">Journee calme, sans plus</span></div>
+  <section id="appli">
+    <div class="enveloppe">
+      <h2>Tout ce qu'il te faut, <em>au même endroit</em></h2>
+      <p class="intro">Pensée pour la femme musulmane, avec des repères religieux sourcés et un ton de grande sœur, jamais de reproche.</p>
+      <div class="grille">
+        <div class="carte"><span class="pastille">🤲</span><h3>Un mot pour chaque matin</h3><p>Dis comment tu te sens : tu reçois un mot doux selon ta saison et une invocation authentique, avec sa source.</p></div>
+        <div class="carte"><span class="pastille">🕌</span><h3>Tes prières, sans culpabilité</h3><p>Horaires précis pour ta ville et la méthode de ta mosquée. Pendant tes règles, les prières se mettent en pause ; à la fin, les prières dues se déverrouillent.</p></div>
+        <div class="carte"><span class="pastille">📅</span><h3>Ton cycle, simplement</h3><p>Calendrier, flux, ressentis et notes. Des prévisions qui apprennent de tes cycles, et tes tendances saison par saison.</p></div>
+        <div class="carte"><span class="pastille">💧</span><h3>Pureté et jeûnes</h3><p>Le ghusl expliqué pas à pas avec ses sources, et tes jours de Ramadan à rattraper, comptés pour toi.</p></div>
+        <div class="carte"><span class="pastille">✨</span><h3>Les 99 noms d'Allah</h3><p>Découvre-les et mémorise-les à ton rythme, avec des révisions espacées et une petite fête tous les 10 noms.</p></div>
+        <div class="carte"><span class="pastille">🌸</span><h3>Des rappels doux</h3><p>Prières, humeur du matin, journée du soir, 99 noms : c'est toi qui choisis. Et chaque invocation se partage en jolie carte.</p></div>
       </div>
     </div>
-    <div id="evening-response" style="display:none;">
-      <div style="text-align:center;margin-bottom:16px;">
-        <div style="font-size:36px;margin-bottom:10px;" id="evening-resp-emoji">&#127800;</div>
-        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--season);font-weight:600;margin-bottom:10px;">Sakina te dit</div>
-      </div>
-      <div style="background:var(--season-soft);border-radius:16px;padding:18px;margin-bottom:16px;border-left:3px solid var(--season);">
-        <div id="evening-resp-msg" style="font-family:var(--serif);font-size:15px;color:var(--noir);line-height:1.75;font-style:italic;"></div>
-      </div>
-      <div style="background:white;border:1.5px solid var(--sable);border-radius:16px;padding:16px;margin-bottom:20px;text-align:center;">
-        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gris);font-weight:600;margin-bottom:10px;">Invocation du soir</div>
-        <div style="font-size:18px;direction:rtl;color:var(--noir);line-height:1.8;margin-bottom:6px;">بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا</div>
-        <div style="font-size:12px;color:var(--gris);font-style:italic;">"En Ton Nom, o Allah, je meurs et je vis." — Boukhari n°6324</div>
-      </div>
-      <button onclick="closeEveningCheckin()" style="width:100%;padding:14px;background:var(--season-grad);color:white;border:none;border-radius:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;">Bonne nuit &#8212; qu&#8217;Allah te prot&#232;ge 🤍</button>
-    </div>
-  </div>
-</div>
+  </section>
 
-<!-- APP -->
-<div id="app">
-<div class="app-content" id="app-content">
-
-<!-- ACCUEIL -->
-<div class="tab-page active" id="tab-accueil">
-
-  <!-- BANNIERE PWA -->
-  <div id="install-banner" style="display:none;margin:10px 14px 0;background:linear-gradient(135deg,var(--season-soft),white);border:1.5px solid var(--season-light);border-radius:16px;padding:16px;">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-      <div style="width:36px;height:36px;border-radius:10px;background:var(--season-grad);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;">&#128242;</div>
-      <div style="flex:1;"><div style="font-size:13px;font-weight:600;color:var(--noir);">Installe SakinApp sur ton telephone</div><div style="font-size:11px;color:var(--gris);margin-top:2px;">Pour les rappels et un acces rapide</div></div>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px;">
-      <div style="background:white;border-radius:10px;padding:10px 12px;display:flex;align-items:flex-start;gap:8px;"><span style="font-size:15px;flex-shrink:0;">&#127822;</span><div><div style="font-size:12px;font-weight:600;color:var(--noir);margin-bottom:2px;">iPhone (Safari)</div><div style="font-size:11px;color:var(--gris);line-height:1.5;">Appuie sur Partager puis Sur l'ecran d'accueil puis Ajouter</div></div></div>
-      <div style="background:white;border-radius:10px;padding:10px 12px;display:flex;align-items:flex-start;gap:8px;"><span style="font-size:15px;flex-shrink:0;">&#129302;</span><div><div style="font-size:12px;font-weight:600;color:var(--noir);margin-bottom:2px;">Android (Chrome)</div><div style="font-size:11px;color:var(--gris);line-height:1.5;">Appuie sur le menu puis Ajouter a l'ecran d'accueil</div></div></div>
-    </div>
-    <div style="display:flex;justify-content:flex-end;"><button onclick="dismissInstallBanner()" style="background:none;border:none;color:var(--gris);font-size:12px;cursor:pointer;text-decoration:underline;font-family:var(--sans);">J&#8217;installerai plus tard</button></div>
-  </div>
-
-  <!-- TOPBAR -->
-  <div class="home-topbar">
-    <div class="home-topbar-logo">SakinApp</div>
-  </div>
-
-  <!-- HEADER COMPACT -->
-  <div class="home-header" id="home-header-bg" style="text-align:center;">
-    <div class="home-header-deco" id="home-header-deco"></div>
-    <div class="home-header-deco home-header-deco-bl" id="home-header-deco2"></div>
-    <div class="home-header-arabic">&#1575;&#1604;&#1587;&#1617;&#1614;&#1604;&#1614;&#1575;&#1605;&#1615; &#1593;&#1614;&#1604;&#1614;&#1610;&#1618;&#1603;&#1615;&#1605;&#1618;</div>
-    <div class="home-header-greeting">As-salāmu alaykum,</div>
-    <div class="home-header-name" id="home-name">Lila</div>
-    <div class="home-header-phase" id="home-phase-line">&#127800; Printemps &middot; Jour 8</div>
-  </div>
-
-  <!-- MESSAGE DU JOUR -->
-  <div class="home-message-band" id="home-message-band">
-    <span class="home-msg-icon" id="home-msg-icon">&#127807;</span>
-    <div class="home-message-text" id="daily-message">L'energie revient — profites-en pour avancer sur ce qui attend.</div>
-  </div>
-
-  <!-- CARTE LECTURE DU JOUR -->
-  <div class="day-card" id="day-card-lecture" style="display:none;">
-    <div class="day-card-header">
-      <span class="day-card-icon">📚</span>
-      <span class="day-card-title">Lecture du jour</span>
-      <div style="display:flex;align-items:center;gap:6px;margin-left:auto;">
-        <span id="ldu-phase-emoji" style="font-size:14px;"></span>
-        <span id="ldu-duree" class="day-card-dur"></span>
+  <section aria-label="Aperçu de l'appli" style="padding-top:0">
+    <div class="enveloppe">
+      <div class="captures">
+        <img src="/img/2-cycle.jpg" alt="Le cycle en quatre saisons" width="600" height="1300" loading="lazy">
+        <img src="/img/3-prieres.jpg" alt="Les horaires de prière du jour" width="600" height="1300" loading="lazy">
+        <img src="/img/4-regles.jpg" alt="La pause de prière pendant les règles" width="600" height="1300" loading="lazy">
+        <img src="/img/6-jeunes.jpg" alt="Les jours de jeûne à rattraper" width="600" height="1300" loading="lazy">
+        <img src="/img/8-noms.jpg" alt="La mémorisation des 99 noms d'Allah" width="600" height="1300" loading="lazy">
       </div>
     </div>
+  </section>
 
-    <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;">
-      <div style="flex:1;">
-        <div id="ldu-titre" class="day-card-name" style="margin-bottom:8px;"></div>
-        <div style="background:var(--season-soft);border-left:3px solid var(--season);border-radius:0 12px 12px 0;padding:10px 12px;">
-          <div id="ldu-accroche" style="font-size:13px;color:var(--noir);line-height:1.6;font-style:italic;font-family:var(--serif);"></div>
-        </div>
-      </div>
-      <div id="ldu-status-indicator" style="width:20px;height:20px;border-radius:50%;background:var(--sable);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;margin-top:2px;">
-        <span style="color:transparent;" id="ldu-check">✓</span>
-      </div>
-    </div>
-
-    <button onclick="openLectureModal()" class="day-card-btn" id="ldu-btn-text">✨ Découvrir cette lecture</button>
-  </div>
-
-  <!-- 3 CARTES DÉTAILLÉES -->
-
-  <!-- CARTE SKINCARE -->
-  <div class="day-card" id="day-card-skin">
-    <div class="day-card-header">
-      <span class="day-card-icon">&#10024;</span>
-      <span class="day-card-title">Ta routine du jour</span>
-    </div>
-    <div id="dc-skin-actifs" class="day-card-actifs"></div>
-    <div id="dc-skin-gestes" class="day-card-chips" style="margin-top:10px;"></div>
-    <div id="action-soin-info" style="margin-top:10px;"></div>
-  </div>
-
-  <!-- CARTE MOUVEMENT -->
-  <div class="day-card" id="day-card-seance">
-    <div class="day-card-header">
-      <span class="day-card-icon">&#128170;</span>
-      <span class="day-card-title">Bouger aujourd&rsquo;hui</span>
-    </div>
-    <div class="day-card-meta" id="mouv-conseil-text" style="margin-top:6px;line-height:1.6;"></div>
-  </div>
-
-  <!-- CARTE REPAS -->
-  <div class="day-card" id="day-card-repas">
-    <div class="day-card-header">
-      <span class="day-card-icon">&#127869;&#65039;</span>
-      <span class="day-card-title">Ton repas du jour</span>
-    </div>
-    <div id="dc-repas-stars" class="day-card-chips"></div>
-    <div id="dc-repas-nutriments" class="day-card-nutriments"></div>
-    <div id="dc-repas-eviter" class="day-card-eviter"></div>
-    <div id="action-manger-info" style="margin-top:10px;"></div>
-  </div>
-
-  <!-- SUGGESTIONS DU JOUR -->
-  <div class="sugg-engage-card">
-    <div class="sugg-engage-header">
-      <div class="sugg-engage-title">&#10022; SUGGESTIONS DU JOUR</div>
-      <div class="sugg-engage-count" id="sugg-engage-count">0/5 faits</div>
-    </div>
-    <div class="sugg-engage-list" id="sugg-engage-list"></div>
-  </div>
-
-  <div style="height:16px;"></div>
-</div>
-
-<!-- CYCLE -->
-<div class="tab-page" id="tab-cycle">
-  <div class="tab-topbar">
-    <div class="tab-topbar-title">Mon Cycle</div>
-    <div class="tab-topbar-sub" id="cycle-header-sub">Printemps - Jour 8 sur 28</div>
-  </div>
-  <div style="height:14px;"></div>
-
-  <div class="cycle-ring-container">
-    <div class="cycle-ring-wrap">
-      <svg viewBox="0 0 200 200" id="cycle-svg">
-        <path id="seg-hiver" fill="none" stroke="#7B5EA7" stroke-width="18" stroke-linecap="round"/>
-        <path id="seg-printemps" fill="none" stroke="#3DAE8A" stroke-width="18" stroke-linecap="round"/>
-        <path id="seg-ete" fill="none" stroke="#FF8A65" stroke-width="18" stroke-linecap="round"/>
-        <path id="seg-automne" fill="none" stroke="#C82B4A" stroke-width="18" stroke-linecap="round"/>
-        <circle id="day-dot" r="10" fill="white" stroke-width="3"/>
-      </svg>
-      <div class="cycle-center-info">
-        <div class="cycle-center-day" id="cycle-day-num">8</div>
-        <div class="cycle-center-label">Jour du cycle</div>
-        <div class="cycle-center-season" id="cycle-season-label">&#127800; Printemps</div>
+  <section id="confiance">
+    <div class="enveloppe">
+      <div class="confiance">
+        <h2>Tes données <em>t'appartiennent</em></h2>
+        <p class="intro">Ton cycle, c'est intime. SakinApp a été construite pour que rien ne sorte de ton téléphone.</p>
+        <ul>
+          <li>Pas de compte, pas de serveur : tout reste sur ton téléphone.</li>
+          <li>Pas de publicité, pas de traceur, rien n'est revendu.</li>
+          <li>Une sauvegarde que tu exportes toi-même, quand tu veux.</li>
+          <li>Des repères religieux sourcés (Coran, Bukhari, Muslim…), et les divergences entre savants signalées.</li>
+        </ul>
       </div>
     </div>
-    <div class="cycle-legend">
-      <div class="legend-item"><div class="legend-dot" style="background:#7B5EA7"></div>Hiver</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#3DAE8A"></div>Printemps</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#FF8A65"></div>Ete</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#C82B4A"></div>Automne</div>
-    </div>
-  </div>
+  </section>
 
-  <div style="margin:0 14px 12px;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-    <div style="background:linear-gradient(135deg,var(--season-soft),var(--season-light));border-radius:18px;padding:16px;text-align:center;border:1.5px solid var(--season-light);">
-      <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--season-dark);margin-bottom:6px;font-weight:600;">Prochaines regles</div>
-      <div style="font-family:var(--script);font-size:30px;color:var(--season-dark);line-height:1;" id="countdown-num">6</div>
-      <div style="font-size:11px;color:var(--season);margin-top:4px;" id="countdown-label">jours</div>
-    </div>
-    <div style="background:white;border:1.5px solid var(--sable);border-radius:18px;padding:16px;text-align:center;">
-      <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gris);margin-bottom:6px;font-weight:600;">Phase actuelle</div>
-      <div style="font-family:var(--serif);font-size:16px;color:var(--season);font-weight:600;line-height:1.3;" id="cycle-phase-name">Folliculaire</div>
-      <div style="font-size:11px;color:var(--gris);margin-top:4px;" id="cycle-phase-days">J6 - J13</div>
-    </div>
-  </div>
-
-  <!-- BOUTONS GESTION PHASES -->
-  <div style="margin:0 14px 14px;display:flex;flex-direction:column;gap:8px;">
-    <button onclick="startNewCycleToday()" id="btn-nouveau-hiver" class="cycle-phase-btn" style="display:none;">🌙 Mon Hiver commence aujourd'hui</button>
-    <button onclick="openFinHiverModal()" id="btn-fin-hiver" class="cycle-phase-btn" style="display:none;">🌸 Mon Hiver est termin&#233;</button>
-    <button onclick="annulerNouveauCycle()" id="btn-annuler-cycle" class="cycle-phase-btn" style="display:none;background:var(--sable);color:var(--gris);">&#8617; Annuler ce d&eacute;but de cycle</button>
-  </div>
-
-  <!-- SYMPTOMES DU JOUR -->
-  <div class="card">
-    <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="toggleSymptomesSection()">
-      <div class="card-title" style="margin-bottom:0;">&#127777;&#65039; Mes symptomes du jour</div>
-      <span id="symptomes-arrow" style="font-size:11px;color:var(--gris);opacity:.5;transition:transform .25s;">&#9660;</span>
-    </div>
-    <div id="symptomes-content" style="margin-top:12px;">
-      <div style="font-size:12px;color:var(--gris);margin-bottom:12px;font-family:var(--serif);font-style:italic;">Coche ce que tu ressens - adapte a ta phase du cycle.</div>
-      <div class="symptomes-grid" id="symptomes-grid"></div>
-      <div id="autre-symptome-wrap" style="display:none;margin-top:10px;">
-        <div style="display:flex;gap:8px;align-items:center;">
-          <input type="text" id="autre-symptome-input" placeholder="Décris ton symptôme..." oninput="saveAutreSymptome(this.value)" onkeydown="if(event.key==='Enter'){this.blur();validateAutreSymptome();}" style="flex:1;border:1.5px solid var(--sable);border-radius:12px;padding:10px 14px;font-size:14px;font-family:var(--serif);color:var(--noir);background:var(--creme);box-sizing:border-box;outline:none;">
-          <button onclick="validateAutreSymptome()" style="background:var(--season);color:#fff;border:none;border-radius:12px;padding:10px 16px;font-size:14px;cursor:pointer;white-space:nowrap;flex-shrink:0;">&#10003; OK</button>
-        </div>
-        <div id="autre-symptome-confirm" style="display:none;font-size:12px;color:var(--season);margin-top:6px;font-family:var(--serif);font-style:italic;">Noté &#10003;</div>
+  <section>
+    <div class="enveloppe">
+      <h2>Elles ont testé <em>SakinApp</em></h2>
+      <p class="intro">Les mots de sœurs qui ont essayé la première version de l'appli.</p>
+      <div class="avis">
+        <blockquote class="carte">
+          <div class="etoiles" aria-label="5 étoiles sur 5">★★★★★</div>
+          <p>« Cette application a tout changé pour moi. Tout ce que je cherchais, je l'ai trouvé ici. C'est l'une des applications les plus complètes qui existe pour une femme musulmane (ou pas). Un grand merci à la créatrice, je suis trop satisfaite ❤️😍 »</p>
+          <cite>Aya, 21 ans</cite>
+        </blockquote>
+        <blockquote class="carte">
+          <div class="etoiles" aria-label="5 étoiles sur 5">★★★★★</div>
+          <p>« Enfin une application pensée pour les femmes sans culpabilisation 🤍 Cycle menstruel, prières, dhikr, bien-être... tout est pensé selon notre phase du cycle, avec énormément de douceur et de bienveillance. Une vraie bulle apaisante au quotidien »</p>
+          <cite>Lisa, 33 ans</cite>
+        </blockquote>
       </div>
     </div>
+  </section>
+
+  <section id="questions">
+    <div class="enveloppe">
+      <h2>Tes <em>questions</em></h2>
+      <details><summary>SakinApp est-elle gratuite ?</summary><p>Oui. Tout ce qui touche à ta pratique (prières, pureté, jeûnes, invocations, 99 noms) restera toujours gratuit.</p></details>
+      <details><summary>Faut-il créer un compte ?</summary><p>Non. Tu ouvres l'appli, tu réponds à trois petites questions, et c'est parti. Rien n'est envoyé sur un serveur.</p></details>
+      <details><summary>Sur quels téléphones ?</summary><p>iPhone et Android. L'appli arrive très bientôt sur l'App Store et sur Google Play.</p></details>
+      <details><summary>Les horaires de prière sont-ils fiables ?</summary><p>Ils sont calculés pour ta ville avec la méthode de ta mosquée (France 12°, Ligue islamique mondiale, Umm al-Qura…), et tu peux ajuster chaque prière à la minute près.</p></details>
+      <details><summary>Est-ce un moyen de contraception ?</summary><p>Non. Les prévisions sont des estimations, et SakinApp ne remplace ni un avis médical ni l'avis d'une personne de science.</p></details>
+      <details><summary>Une question, une idée ?</summary><p>Écris-moi à <a href="mailto:contact@studio-lila.fr">contact@studio-lila.fr</a>, je te réponds avec plaisir.</p></details>
+    </div>
+  </section>
+
+  <div class="enveloppe appel">
+    <h2>Prête à <em>commencer</em> ?</h2>
+    <p class="intro">Gratuite, sans compte, en français.</p>
+    <div class="boutons">
+      <span class="store" aria-disabled="true"><span><small>Très bientôt sur</small>l'App Store</span></span>
+      <span class="store" aria-disabled="true"><span><small>Très bientôt sur</small>Google Play</span></span>
+    </div>
+    <p class="citation">« C'est par l'évocation d'Allah que les cœurs se tranquillisent. » (Coran 13:28)</p>
   </div>
+</main>
 
-  <!-- GLAIRE CERVICALE -->
-  <div class="card">
-    <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="toggleGlaire()">
-      <div class="card-title" style="margin-bottom:0;">&#128167; Observation du jour - Glaire cervicale</div>
-      <span id="glaire-arrow" style="font-size:11px;color:var(--gris);opacity:.5;transition:transform .25s;">&#9660;</span>
-    </div>
-    <div id="glaire-collapsed" style="margin-top:8px;font-size:12px;color:var(--gris);font-family:var(--serif);font-style:italic;">Touche pour observer ta glaire aujourd'hui</div>
-    <div id="glaire-content" style="display:none;margin-top:12px;">
-      <div style="font-size:12px;color:var(--gris);margin-bottom:12px;font-family:var(--serif);font-style:italic;">Ce que tu observes t'indique ta fertilite du moment.</div>
-      <div class="glaire-options" id="glaire-options">
-        <div class="glaire-option" data-type="regles" onclick="selectGlaire(this,'regles')"><div class="glaire-dot" style="background:#F0EBF8;">&#127769;</div><div><div class="glaire-name">Rien / Regles</div><div class="glaire-desc">Periode de repos - Pas de fertilite</div></div></div>
-        <div class="glaire-option" data-type="seche" onclick="selectGlaire(this,'seche')"><div class="glaire-dot" style="background:#F5F5F5;">&#129293;</div><div><div class="glaire-name">Seche ou collante</div><div class="glaire-desc">Debut de cycle - Faible fertilite</div></div></div>
-        <div class="glaire-option" data-type="cremeuse" onclick="selectGlaire(this,'cremeuse')"><div class="glaire-dot" style="background:#E8F8F3;">&#127807;</div><div><div class="glaire-name">Cremeuse / Laiteuse</div><div class="glaire-desc">Fertilite possible</div></div></div>
-        <div class="glaire-option" data-type="filante" onclick="selectGlaire(this,'filante')"><div class="glaire-dot" style="background:#FFF3F0;">&#9889;</div><div><div class="glaire-name">Filante / Transparente</div><div class="glaire-desc">Ovulation proche - Pic de fertilite</div></div></div>
-        <div class="glaire-option" data-type="epaisse" onclick="selectGlaire(this,'epaisse')"><div class="glaire-dot" style="background:#FCF0F3;">&#127810;</div><div><div class="glaire-name">Epaisse / Absente</div><div class="glaire-desc">Apres ovulation - Phase luteale</div></div></div>
-      </div>
-    </div>
+<footer>
+  <div class="enveloppe">
+    <span>© 2026 Lila Himeur · SakinApp</span>
+    <nav>
+      <a href="/assistance">Assistance</a>
+      <a href="/confidentialite">Confidentialité</a>
+      <a href="/mentions-legales">Mentions légales</a>
+      <a href="/conditions">Conditions d'utilisation</a>
+    </nav>
   </div>
-
-  <!-- REGLES ET INTIMITE -->
-  <div style="margin:0 14px 12px;border-radius:20px;overflow:hidden;border:1.5px solid var(--sable);">
-    <div style="background:var(--season-soft);padding:16px 18px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;" onclick="toggleIntimite()">
-      <div style="font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--season);">&#127769; Regles et Intimite en Islam</div>
-      <span id="intimite-arrow" style="font-size:11px;color:var(--season);opacity:.6;">&#9660;</span>
-    </div>
-    <div id="intimite-content" style="display:none;">
-      <div style="background:var(--season-soft);padding:0 18px 16px;">
-        <div style="font-size:13px;color:var(--noir);line-height:1.7;margin-bottom:10px;">Pendant les regles (haidh), le coit est interdit. Les calins et la tendresse restent permis.</div>
-        <div style="background:rgba(255,255,255,.7);border-radius:10px;padding:10px 12px;">
-          <div style="font-size:14px;direction:rtl;text-align:right;color:var(--season-dark);line-height:1.8;margin-bottom:4px;">&#1602;&#1615;&#1604;&#1618; &#1607;&#1615;&#1608;&#1614; &#1575;&#1614;&#1584;&#1611;&#1609; &#1601;&#1614;&#1575;&#1618;&#1593;&#1618;&#1578;&#1614;&#1586;&#1616;&#1604;&#1615;&#1608;&#1575; &#1575;&#1604;&#1606;&#1617;&#1616;&#1587;&#1614;&#1575;&#1569;&#1614; &#1601;&#1616;&#1610; &#1575;&#1604;&#1618;&#1605;&#1614;&#1581;&#1616;&#1610;&#1590;&#1616;</div>
-          <div style="font-size:11px;color:var(--gris);font-style:italic;">Coran 2:222</div>
-        </div>
-        <div style="margin-top:10px;font-size:12px;color:var(--gris);line-height:1.6;">Apres les regles : ghusl obligatoire avant de reprendre les rapports.<br>Le coit interrompu est permis avec l'accord de l'epouse.</div>
-      </div>
-      <div style="background:var(--season-soft);padding:16px 18px;border-top:1px solid rgba(var(--season-rgb),.1);">
-        <div style="font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--season-dark);margin-bottom:8px;">&#129329; Lochies - Post-accouchement</div>
-        <div style="font-size:13px;color:var(--noir);line-height:1.6;">Saignements après l'accouchement (nifas). Mêmes règles que le haidh. Durée : jusqu'à 40 jours (écoles Hanafi et Hanbali), jusqu'à 60 jours (école Shafi'i). L'école Maliki se base sur le retour de la pureté. Consulte un savant selon ton école.</div>
-      </div>
-      <div style="background:white;padding:16px 18px;border-top:1px solid rgba(0,0,0,.04);">
-        <div style="font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--season);margin-bottom:12px;">&#129330; Invocation pendant les douleurs</div>
-        <div style="background:var(--season-soft);border-radius:12px;padding:12px 14px;">
-          <div style="font-size:18px;direction:rtl;text-align:right;color:var(--noir);line-height:1.8;margin-bottom:6px;">&#1585;&#1614;&#1576;&#1617;&#1616; &#1573;&#1616;&#1606;&#1617;&#1616;&#1610; &#1605;&#1614;&#1587;&#1617;&#1614;&#1606;&#1616;&#1610;&#1614; &#1575;&#1604;&#1590;&#1617;&#1615;&#1585;&#1617;&#1615; &#1608;&#1614;&#1575;&#1614;&#1606;&#1618;&#1578;&#1614; &#1575;&#1614;&#1585;&#1618;&#1581;&#1614;&#1605;&#1615; &#1575;&#1604;&#1585;&#1617;&#1614;&#1575;&#1581;&#1616;&#1605;&#1616;&#1610;&#1606;&#1614;</div>
-          <div style="font-size:12px;color:var(--gris);font-style:italic;margin-bottom:2px;">"Seigneur, l'adversite m'a touchee, et Tu es le plus Misericordieux."</div>
-          <div style="font-size:10px;color:var(--gris);opacity:.7;">Coran 21:83</div>
-        </div>
-        <div style="margin-top:8px;font-size:12px;color:var(--gris);font-style:italic;font-family:var(--serif);line-height:1.6;">Pendant les regles, le dhikr reste toujours ouvert. Ton coeur reste connecte a Allah.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- BILAN PERMANENT -->
-  <div id="moi-bilan-card" style="margin:0 14px 14px;background:white;border-radius:20px;border:1.5px solid var(--sable);padding:18px 20px;display:none;">
-    <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:14px;">&#10022; Mon bilan</div>
-    <div id="moi-bilan-body"></div>
-    <button onclick="showBilanModal()" style="width:100%;margin-top:12px;padding:11px;background:var(--season-grad);color:white;border:none;border-radius:14px;font-size:13px;font-weight:700;font-family:var(--sans);cursor:pointer;letter-spacing:.3px;">Voir le bilan complet</button>
-  </div>
-
-  <!-- SÉPARATEUR HISTORIQUE -->
-  <div style="margin:20px 14px 14px;display:flex;align-items:center;gap:10px;">
-    <div style="flex:1;height:1px;background:var(--sable);"></div>
-    <div style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--season);">&#128202; TON HISTORIQUE</div>
-    <div style="flex:1;height:1px;background:var(--sable);"></div>
-  </div>
-
-  <!-- HISTORIQUE DES CYCLES -->
-  <div id="cycle-history-card" style="margin:0 14px 14px;background:white;border-radius:20px;border:1.5px solid var(--sable);padding:18px 20px;display:none;">
-    <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:14px;">&#128197; Historique des cycles</div>
-    <div id="cycle-history-list"></div>
-  </div>
-
-
-  <!-- SECTION CYCLES PRÉCÉDENTS (accordéon) -->
-  <div id="historique-cycles-section" style="margin:14px 14px 14px;background:white;border-radius:20px;border:1.5px solid var(--sable);overflow:hidden;">
-    <button onclick="toggleHistoriqueCycles()" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:none;border:none;cursor:pointer;font-family:var(--sans);">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <span style="font-size:15px;">&#128197;</span>
-        <span style="font-size:12px;font-weight:600;color:var(--noir);letter-spacing:.2px;">Mes cycles pr&#233;c&#233;dents</span>
-      </div>
-      <span id="historique-cycles-arrow" style="font-size:11px;color:var(--gris);transition:transform .25s;">&#9660;</span>
-    </button>
-    <div id="historique-cycles-body" style="display:none;padding:0 20px 18px;">
-      <div style="font-size:12px;color:var(--gris);line-height:1.6;margin-bottom:14px;">Tu te souviens de tes cycles pass&#233;s&nbsp;? Ajoute-les pour un meilleur suivi.</div>
-      <div id="historique-cycles-list"></div>
-      <button id="btn-add-cycle-hist" onclick="openAddCycleModal(null)" style="width:100%;padding:11px;background:transparent;color:var(--season);border:1.5px dashed var(--season);border-radius:14px;font-size:13px;font-weight:600;font-family:var(--sans);cursor:pointer;letter-spacing:.3px;margin-top:4px;">+ Ajouter un cycle pass&#233;</button>
-      <div id="historique-cycles-limit" style="display:none;font-size:11px;color:var(--gris);text-align:center;margin-top:10px;line-height:1.5;">4 cycles enregistr&#233;s — modifie ou supprime pour en ajouter</div>
-    </div>
-  </div>
-
-  <div style="height:14px;"></div>
-</div>
-
-<!-- AME -->
-<div class="tab-page" id="tab-ame">
-  <div class="tab-topbar">
-    <div class="tab-topbar-title">L'Ame</div>
-    <div class="tab-topbar-sub">Nourrir son interieur</div>
-  </div>
-
-  <!-- NOM D'ALLAH DU JOUR -->
-  <div id="asma-day-card" style="margin:14px 14px 0;border-radius:20px;overflow:hidden;box-shadow:0 4px 20px rgba(45,36,32,.1);">
-    <div style="background:var(--season-grad);padding:20px;cursor:pointer;" onclick="openAsmaModal()">
-      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:12px;font-weight:600;">&#10022; Nom d'Allah du jour</div>
-      <div id="asma-day-arabic" style="font-size:34px;direction:rtl;text-align:center;color:white;line-height:1.6;margin-bottom:6px;">&#1575;&#1604;&#1604;&#1617;&#1614;&#1591;&#1616;&#1610;&#1601;</div>
-      <div id="asma-day-fr" style="font-family:var(--script);font-size:24px;color:white;text-align:center;margin-bottom:16px;">Al-Latif</div>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div style="flex:1;height:3px;background:rgba(255,255,255,.2);border-radius:2px;overflow:hidden;"><div id="asma-progress" style="height:100%;background:white;border-radius:2px;transition:width .4s;width:0%"></div></div>
-        <div style="font-size:11px;color:rgba(255,255,255,.55);white-space:nowrap;"><span id="asma-count">0</span>/99</div>
-      </div>
-      <div style="font-size:10px;color:rgba(255,255,255,.4);text-align:center;margin-top:8px;letter-spacing:.5px;">Touche pour voir les 99 noms</div>
-    </div>
-  </div>
-
-  <!-- LIVRET 99 NOMS -->
-  <a id="asma-livret-card" href="/asma.html" target="_blank" style="display:flex;align-items:center;gap:14px;margin:10px 14px 0;padding:14px 16px;background:linear-gradient(135deg,#F0EBF8,#B89FD4);border-radius:16px;text-decoration:none;box-shadow:0 3px 14px rgba(123,94,167,.15);">
-    <div id="asma-livret-icon-wrap" style="width:40px;height:40px;border-radius:12px;background:rgba(123,94,167,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;">📖</div>
-    <div style="flex:1;min-width:0;">
-      <div id="asma-livret-title" style="font-family:var(--serif);font-size:14px;color:#3D2060;font-weight:600;margin-bottom:2px;">Livret de méditation</div>
-      <div id="asma-livret-sub" style="font-size:11px;color:#7B5EA7;line-height:1.4;">Les 99 Noms d'Allah · Sens, méditation &amp; invocation</div>
-    </div>
-    <div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:3px;">
-      <div id="asma-livret-badge" style="background:rgba(123,94,167,.15);border-radius:8px;padding:4px 10px;font-size:10px;color:#3D2060;font-weight:700;letter-spacing:.5px;">GRATUIT</div>
-      <div id="asma-livret-arrow" style="font-size:18px;color:#7B5EA7;">›</div>
-    </div>
-  </a>
-
-  <!-- 5 PRIERES -->
-  <div class="prayers-card" id="prayers-card">
-    <div class="prayers-hdr"><div class="prayers-hdr-t">&#128332; Mes 5 prieres</div><div class="prayers-hdr-s" id="prayers-hdr-sub">Coche au fur et a mesure de ta journee</div></div>
-    <div class="prayers-prog"><div class="prayers-prog-t"><div class="prayers-prog-f" id="prayer-progress" style="width:0%"></div></div><div class="prayers-prog-lbl" id="prayer-prog-lbl">0 / 5</div></div>
-    <div class="prayer-row" onclick="togglePrayer(this,'fajr')"><div class="prayer-chk" id="pr-fajr">&#9728;&#65039;</div><div class="prayer-name" id="prn-fajr">Fajr</div><div class="prayer-time">Aube</div></div>
-    <div class="prayer-row" onclick="togglePrayer(this,'dohr')"><div class="prayer-chk" id="pr-dohr">&#127780;&#65039;</div><div class="prayer-name" id="prn-dohr">Dhuhr</div><div class="prayer-time">Midi</div></div>
-    <div class="prayer-row" onclick="togglePrayer(this,'asr')"><div class="prayer-chk" id="pr-asr">&#127781;&#65039;</div><div class="prayer-name" id="prn-asr">Asr</div><div class="prayer-time">Apres-midi</div></div>
-    <div class="prayer-row" onclick="togglePrayer(this,'maghrib')"><div class="prayer-chk" id="pr-maghrib">&#127749;</div><div class="prayer-name" id="prn-maghrib">Maghrib</div><div class="prayer-time">Coucher du soleil</div></div>
-    <div class="prayer-row" onclick="togglePrayer(this,'isha')"><div class="prayer-chk" id="pr-isha">&#127769;</div><div class="prayer-name" id="prn-isha">Isha</div><div class="prayer-time">Nuit</div></div>
-  </div>
-
-  <!-- MESSAGE HIVER (remplace les prieres pendant les regles) -->
-  <div id="prayers-hiver-card" style="display:none;margin:14px 14px 0;background:white;border-radius:20px;border:1.5px solid #D4C4EE;padding:20px 18px;text-align:center;">
-    <div style="font-size:28px;margin-bottom:10px;">&#129353;</div>
-    <div style="font-family:'Playfair Display',serif;font-size:16px;color:#7B5EA7;margin-bottom:8px;">Tu es dispensée des prières</div>
-    <div style="font-size:13px;color:var(--gris);line-height:1.7;margin-bottom:14px;">Pendant tes règles, Allah t'a accordé une permission. Continue le dhikr et le souvenir d'Allah — tu restes connectée à Lui.</div>
-    <div style="font-size:15px;direction:rtl;color:#7B5EA7;font-weight:500;line-height:2;">فَاذْكُرُونِي أَذْكُرْكُمْ</div>
-    <div style="font-size:11px;color:var(--gris);margin-top:4px;font-style:italic;">« Souvenez-vous de Moi, Je Me souviendrai de vous. » — Sourate Al-Baqara, 2:152</div>
-  </div>
-
-  <!-- INVOCATION DU JOUR -->
-  <div id="inv-card" style="margin:12px 14px 0;background:white;border-radius:20px;border:1.5px solid var(--sable);padding:18px 16px;">
-    <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--season);margin-bottom:12px;">&#10022; Invocation du jour</div>
-    <div id="inv-arabic" style="font-size:20px;direction:rtl;text-align:center;color:var(--noir);line-height:1.9;margin-bottom:8px;font-weight:500;"></div>
-    <div id="inv-translation" style="font-size:13px;color:var(--gris);text-align:center;font-style:italic;line-height:1.6;margin-bottom:4px;"></div>
-    <div id="inv-source" style="font-size:10px;color:var(--gris);text-align:center;opacity:.6;"></div>
-  </div>
-
-  <!-- DHIKR CASES A COCHER -->
-  <div class="dhikr-check-card">
-    <div class="dhikr-check-hdr">
-      <div class="dhikr-check-hdr-t">&#128255; Adhkar du jour</div>
-      <div class="dhikr-check-hdr-s">Coche quand tu as accompli chaque dhikr</div>
-    </div>
-    <div class="dhikr-check-items" id="dhikr-check-items"></div>
-  </div>
-
-  <!-- LECTURE DU CORAN -->
-  <div class="coran-check-card" style="margin:12px 14px 0;">
-    <div class="coran-check-inner" id="coran-check-inner" onclick="toggleCoranCheck()">
-      <div class="coran-check-box">&#128214;</div>
-      <div class="coran-check-content">
-        <div class="coran-check-title">Lecture du Coran</div>
-        <div class="coran-check-sub">Meme un verset - c'est une lumiere pour ta journee</div>
-      </div>
-    </div>
-    <div class="coran-check-hadith">« Le meilleur d'entre vous est celui qui apprend le Coran et l'enseigne. » — Boukhari 5027 · Toi aussi, sœur, tu es incluse dans cette parole. 🌿</div>
-    <div id="coran-hiver-note" style="display:none;font-size:11px;color:var(--gris);line-height:1.6;padding:8px 14px 12px;border-top:1px solid var(--sable);">
-      📚 Pendant les règles, les savants divergent sur la lecture du Coran depuis un écran numérique. Ibn Taymiyya, Ibn Baz et d'autres la permettent. Suis l'avis de ton savant de confiance.
-    </div>
-  </div>
-
-  <!-- MES LECTURES -->
-  <div style="margin:12px 14px 0;">
-    <a id="mes-lectures-entry-card" onclick="openMesLecturesModal()" style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:linear-gradient(135deg,var(--season-soft),var(--season-light));border-radius:16px;text-decoration:none;cursor:pointer;box-shadow:0 3px 14px rgba(var(--season-rgb),.15);border:none;width:100%;box-sizing:border-box;">
-      <div style="width:40px;height:40px;border-radius:12px;background:rgba(var(--season-rgb),.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;">📚</div>
-      <div style="flex:1;min-width:0;">
-        <div id="mes-lectures-entry-title" style="font-family:'Playfair Display',serif;font-size:14px;color:var(--season-dark);font-weight:600;margin-bottom:2px;">Mes Lectures</div>
-        <div id="mes-lectures-entry-sub" style="font-size:11px;color:var(--season);line-height:1.4;">4 phases du cycle</div>
-      </div>
-      <div style="flex-shrink:0;">
-        <div style="font-size:18px;color:var(--season);opacity:.7;">›</div>
-      </div>
-    </a>
-  </div>
-
-  <!-- HYGIENE ISLAMIQUE -->
-  <div style="margin:12px 14px 0;background:white;border-radius:20px;border:1.5px solid var(--sable);overflow:hidden;">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;" onclick="toggleHygiene()">
-      <div>
-        <div style="font-family:'Playfair Display',serif;font-size:15px;color:var(--noir);">&#128167; Pureté &amp; Hygiène islamique</div>
-        <div style="font-size:11px;color:var(--gris);margin-top:2px;">Règles, Ghusl, ce qui redevient permis</div>
-      </div>
-      <span id="hygiene-arrow" style="font-size:11px;color:var(--gris);opacity:.5;transition:transform .25s;">&#9660;</span>
-    </div>
-
-    <div id="hygiene-content" style="display:none;padding:0 16px 16px;">
-
-      <!-- PENDANT LES RÈGLES -->
-      <div style="background:var(--creme);border-radius:14px;padding:14px;margin-bottom:10px;">
-        <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7B5EA7;margin-bottom:10px;">&#127769; Pendant les règles</div>
-        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--noir);line-height:1.5;">
-          <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#7B5EA7;font-size:16px;flex-shrink:0;">·</span><span>La <b>prière</b> est dispensée — elle n'est pas à rattraper. Le <b>jeûne</b> est dispensé mais doit être compensé ultérieurement.</span></div>
-          <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#7B5EA7;font-size:16px;flex-shrink:0;">·</span><span>Les <b>rapports intimes</b> sont interdits jusqu'à la purification.</span></div>
-          <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#7B5EA7;font-size:16px;flex-shrink:0;">·</span><span>Le <b>dhikr et la du'â</b> restent pleinement ouverts et recommandés. La <b>récitation du Coran</b> pendant les règles fait l'objet d'un désaccord entre les savants — certains l'autorisent (Ibn Taymiyya, Ibn Baz), d'autres la restreignent. L'écoute est unanimement permise. Consulte un savant selon ton école.</span></div>
-          <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#7B5EA7;font-size:16px;flex-shrink:0;">·</span><span>L'<b>entrée à la mosquée</b> est interdite pendant les règles selon la majorité des écoles (sauf traversée sans séjour selon certains). Consulte l'avis de ton savant.</span></div>
-        </div>
-      </div>
-
-      <!-- LE GHUSL -->
-      <div style="background:var(--season-soft);border-radius:14px;padding:14px;margin-bottom:10px;">
-        <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--season);margin-bottom:10px;">&#10024; Le Ghusl — Purification après les règles</div>
-        <div style="font-size:12px;color:var(--gris);font-style:italic;margin-bottom:12px;line-height:1.5;">Le ghusl est obligatoire (fard) dès la fin des règles, avant de reprendre la prière. Les éléments obligatoires (fard) sont : l'intention et que l'eau atteigne tout le corps. Les étapes ci-dessous sont la sunna du Prophète ﷺ.</div>
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <div style="display:flex;gap:12px;align-items:flex-start;">
-            <div style="width:22px;height:22px;border-radius:50%;background:var(--season);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
-            <div style="font-size:13px;color:var(--noir);line-height:1.5;"><b>Niyyah</b> — Formuler l'intention dans son cœur de se purifier de l'état d'impureté majeure.</div>
-          </div>
-          <div style="display:flex;gap:12px;align-items:flex-start;">
-            <div style="width:22px;height:22px;border-radius:50%;background:var(--season);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
-            <div style="font-size:13px;color:var(--noir);line-height:1.5;"><b>Bismillah</b> — Commencer au nom d'Allah.</div>
-          </div>
-          <div style="display:flex;gap:12px;align-items:flex-start;">
-            <div style="width:22px;height:22px;border-radius:50%;background:var(--season);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
-            <div style="font-size:13px;color:var(--noir);line-height:1.5;"><b>Laver les mains</b> 3 fois.</div>
-          </div>
-          <div style="display:flex;gap:12px;align-items:flex-start;">
-            <div style="width:22px;height:22px;border-radius:50%;background:var(--season);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
-            <div style="font-size:13px;color:var(--noir);line-height:1.5;"><b>Nettoyer les parties intimes</b> soigneusement.</div>
-          </div>
-          <div style="display:flex;gap:12px;align-items:flex-start;">
-            <div style="width:22px;height:22px;border-radius:50%;background:var(--season);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">5</div>
-            <div style="font-size:13px;color:var(--noir);line-height:1.5;"><b>Faire le wudu complet</b> (comme pour la prière).</div>
-          </div>
-          <div style="display:flex;gap:12px;align-items:flex-start;">
-            <div style="width:22px;height:22px;border-radius:50%;background:var(--season);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">6</div>
-            <div style="font-size:13px;color:var(--noir);line-height:1.5;"><b>Verser l'eau sur la tête</b> 3 fois en massant la racine des cheveux pour que l'eau atteigne le cuir chevelu.</div>
-          </div>
-          <div style="display:flex;gap:12px;align-items:flex-start;">
-            <div style="width:22px;height:22px;border-radius:50%;background:var(--season);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">7</div>
-            <div style="font-size:13px;color:var(--noir);line-height:1.5;"><b>Verser l'eau sur tout le corps</b> — côté droit puis gauche, en veillant à ce qu'aucune partie ne reste sèche.</div>
-          </div>
-        </div>
-        <div style="margin-top:12px;padding:10px 12px;background:white;border-radius:10px;font-size:12px;color:var(--gris);line-height:1.5;font-style:italic;">
-          💡 Il n'est pas obligatoire de défaire les tresses selon l'avis de la majorité — à condition que l'eau atteigne les racines.
-        </div>
-      </div>
-
-      <!-- CE QUI REDEVIENT PERMIS -->
-      <div style="background:var(--season-soft);border-radius:14px;padding:14px;">
-        <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--season);margin-bottom:10px;">&#127800; Après le Ghusl — Ce qui redevient permis</div>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;">
-          <div style="background:white;border-radius:10px;padding:7px 12px;font-size:12px;color:var(--noir);display:flex;align-items:center;gap:6px;"><span>&#128332;</span> La prière</div>
-          <div style="background:white;border-radius:10px;padding:7px 12px;font-size:12px;color:var(--noir);display:flex;align-items:center;gap:6px;"><span>&#127758;</span> Le jeûne</div>
-          <div style="background:white;border-radius:10px;padding:7px 12px;font-size:12px;color:var(--noir);display:flex;align-items:center;gap:6px;"><span>&#128214;</span> Toucher le Mushaf</div>
-          <div style="background:white;border-radius:10px;padding:7px 12px;font-size:12px;color:var(--noir);display:flex;align-items:center;gap:6px;"><span>&#128255;</span> Réciter le Coran</div>
-          <div style="background:white;border-radius:10px;padding:7px 12px;font-size:12px;color:var(--noir);display:flex;align-items:center;gap:6px;"><span>&#128101;</span> Les rapports intimes</div>
-          <div style="background:white;border-radius:10px;padding:7px 12px;font-size:12px;color:var(--noir);display:flex;align-items:center;gap:6px;"><span>&#128591;</span> Le tawaf</div>
-          <div style="background:white;border-radius:10px;padding:7px 12px;font-size:12px;color:var(--noir);display:flex;align-items:center;gap:6px;"><span>&#127891;</span> Entrer à la mosquée</div>
-        </div>
-        <div style="margin-top:10px;font-size:12px;color:var(--gris);font-family:'Playfair Display',serif;font-style:italic;line-height:1.6;">« Et ils t'interrogent sur les menstrues. Dis : C'est une indisposition. Éloignez-vous des femmes pendant les menstrues... Puis quand elles se sont purifiées, abordez-les de la manière qu'Allah vous a prescrite. » — Coran 2:222</div>
-      </div>
-
-    </div>
-  </div>
-
-
-</div>
-
-<!-- OBJECTIFS -->
-<div class="tab-page" id="tab-objectifs">
-  <div class="tab-topbar">
-    <div class="tab-topbar-title">Mes Objectifs</div>
-    <div class="tab-topbar-sub">Semaine &amp; cycle</div>
-  </div>
-
-  <!-- RÉSUMÉ DU JOUR -->
-  <div class="obj-summary-card" id="obj-summary-card"></div>
-
-  <!-- SECTION 1 : Pour toi aujourd'hui -->
-  <div class="obj-card">
-    <div class="obj-card-hdr">
-      <span class="obj-card-hdr-icon">&#10022;</span>
-      <span class="obj-card-hdr-title">POUR TOI AUJOURD'HUI</span>
-    </div>
-    <div id="obj-suggestions-list"></div>
-  </div>
-
-  <!-- SECTION 2 : Choisir mes objectifs -->
-  <div class="obj-card">
-    <div class="obj-card-hdr">
-      <span class="obj-card-hdr-icon">&#9672;</span>
-      <span class="obj-card-hdr-title">CHOISIR MES OBJECTIFS</span>
-    </div>
-    <div class="obj-cat-grid" id="obj-categories-grid"></div>
-  </div>
-
-
-  <!-- CALENDRIER -->
-  <div class="obj-card obj-cal-card">
-    <div class="obj-card-hdr">
-      <span class="obj-card-hdr-icon">&#128197;</span>
-      <span class="obj-card-hdr-title" id="cal-header">Mai 2026</span>
-    </div>
-    <div class="cal-weekdays">
-      <div>L</div><div>M</div><div>M</div><div>J</div><div>V</div><div>S</div><div>D</div>
-    </div>
-    <div class="cal-grid" id="cal-grid"></div>
-    <div class="cal-legend">
-      <div class="cal-leg-item"><span class="cal-leg-dot" style="background:#C9B8E8;"></span>Hiver</div>
-      <div class="cal-leg-item"><span class="cal-leg-dot" style="background:#A8DBC5;"></span>Printemps</div>
-      <div class="cal-leg-item"><span class="cal-leg-dot" style="background:#F5C99A;"></span>Été</div>
-      <div class="cal-leg-item"><span class="cal-leg-dot" style="background:#F0B5A5;"></span>Automne</div>
-    </div>
-  </div>
-
-  <div style="height:20px;"></div>
-</div>
-
-<!-- MODAL LECTURE DU JOUR -->
-<div class="modal-overlay" id="lecture-modal" onclick="if(event.target.id==='lecture-modal')closeLectureModal()">
-  <div style="background:white;border-radius:24px 24px 0 0;width:100%;max-height:92vh;overflow-y:auto;position:fixed;bottom:0;left:0;padding-bottom:env(safe-area-inset-bottom);">
-    <div id="lecture-modal-header" style="background:var(--season-grad);padding:20px 18px 16px;position:relative;">
-      <button onclick="closeLectureModal()" style="position:absolute;top:14px;right:14px;background:rgba(255,255,255,.18);border:none;width:30px;height:30px;border-radius:50%;color:white;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
-      <div id="lm-badge" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.18);border-radius:20px;padding:3px 10px;margin-bottom:10px;">
-        <span id="lm-emoji" style="font-size:13px;"></span>
-        <span id="lm-phase" style="font-size:10px;color:rgba(255,255,255,.85);font-weight:600;letter-spacing:.5px;"></span>
-        <span style="width:1px;height:10px;background:rgba(255,255,255,.3);margin:0 2px;"></span>
-        <span id="lm-duree" style="font-size:10px;color:rgba(255,255,255,.7);"></span>
-      </div>
-      <div id="lm-titre" style="font-family:'Playfair Display',serif;font-size:20px;color:white;font-weight:600;line-height:1.3;margin-bottom:6px;padding-right:36px;"></div>
-      <div id="lm-accroche" style="font-size:13px;color:rgba(255,255,255,.75);line-height:1.5;font-style:italic;"></div>
-    </div>
-    <div style="padding:20px 18px;">
-      <!-- Source islamique (type ame) -->
-      <div id="lm-source-block" style="background:#F9F5FF;border-radius:16px;padding:16px;margin-bottom:18px;border-left:3px solid var(--season);">
-        <div id="lm-arabe" style="font-size:20px;direction:rtl;text-align:center;color:var(--noir);line-height:2;margin-bottom:8px;font-weight:500;"></div>
-        <div id="lm-fr" style="font-size:13px;color:var(--gris);text-align:center;font-style:italic;line-height:1.6;margin-bottom:6px;"></div>
-        <div id="lm-ref" style="font-size:10px;color:var(--gris);text-align:center;opacity:.6;letter-spacing:.3px;"></div>
-      </div>
-      <!-- Idée centrale (type soi) -->
-      <div id="lm-idee-block" style="display:none;background:rgba(var(--season-rgb),.06);border-radius:16px;padding:16px;margin-bottom:18px;border-left:3px solid var(--season);">
-        <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--season);margin-bottom:8px;">💡 L'idée qui change tout</div>
-        <div id="lm-idee" style="font-size:14px;color:var(--noir);line-height:1.7;font-style:italic;"></div>
-      </div>
-      <!-- Corps du texte -->
-      <div id="lm-corps" style="font-size:14px;color:var(--noir);line-height:1.8;margin-bottom:20px;"></div>
-      <!-- À emporter -->
-      <div style="background:var(--creme);border-radius:16px;padding:16px;">
-        <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--season);margin-bottom:12px;">✦ À emporter aujourd'hui</div>
-        <div id="lm-pensee" style="font-family:'Playfair Display',serif;font-size:15px;color:var(--noir);font-style:italic;line-height:1.5;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--sable);"></div>
-        <div id="lm-geste" style="font-size:13px;color:var(--gris);line-height:1.6;margin-bottom:14px;"></div>
-        <!-- Du'a (type ame) -->
-        <div id="lm-dua-block" style="background:white;border-radius:12px;padding:12px;text-align:center;">
-          <div id="lm-dua-arabe" style="font-size:17px;direction:rtl;color:var(--noir);line-height:2;font-weight:500;margin-bottom:6px;"></div>
-          <div id="lm-dua-fr" style="font-size:12px;color:var(--gris);font-style:italic;line-height:1.5;"></div>
-        </div>
-        <!-- Question introspection (type soi) -->
-        <div id="lm-question-block" style="display:none;background:white;border-radius:12px;padding:12px;">
-          <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--season);margin-bottom:6px;">Question pour ce soir</div>
-          <div id="lm-question" style="font-size:13px;color:var(--noir);line-height:1.6;font-style:italic;"></div>
-        </div>
-        <button id="lm-archive-btn" onclick="archiverLectureFromModal()"
-                style="width:100%;margin-top:16px;background:var(--season);color:white;border:none;border-radius:12px;padding:12px;font-size:14px;font-weight:600;cursor:pointer;">
-          J'ai lu ✓
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL MES LECTURES -->
-<div id="mes-lectures-modal" style="display:none;position:fixed;inset:0;z-index:3000;background:#FAF6F0;overflow-y:auto;flex-direction:column;">
-  <div style="position:sticky;top:0;background:#FAF6F0;z-index:10;padding:16px 16px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--sable);">
-    <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--noir);">📚 Mes Lectures</div>
-    <button onclick="closeMesLecturesModal()" style="background:none;border:none;font-size:22px;color:var(--gris);cursor:pointer;padding:4px;">✕</button>
-  </div>
-  <div id="mes-lectures-modal-content" style="padding:16px;">
-    <!-- Rendu dynamique par renderMesLecturesModal() -->
-  </div>
-</div>
-
-<!-- MODAL CATÉGORIE OBJECTIFS -->
-<div class="modal-overlay" id="obj-cat-modal" onclick="if(event.target.id==='obj-cat-modal')closeObjCatModal()">
-  <div class="modal-sheet">
-    <div id="obj-cat-modal-content"></div>
-  </div>
-</div>
-
-<!-- MODAL AJOUTER OBJECTIF PERSO -->
-<div class="modal-overlay" id="obj-add-modal" onclick="if(event.target.id==='obj-add-modal')closeObjAddModal()">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div style="padding: 20px;">
-      <div style="font-size: 18px; font-weight: 700; color: var(--noir); margin-bottom: 16px; text-align: center;">
-        ✨ Nouvel objectif personnel
-      </div>
-
-      <div style="margin-bottom: 16px;">
-        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--gris); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
-          Ton objectif
-        </label>
-        <input type="text" id="obj-add-text" placeholder="Ex: Finir la formation Coran..." maxlength="80"
-               onkeydown="if(event.key==='Enter'){confirmAddObjPerso();}"
-               style="width: 100%; padding: 12px 16px; border: 1.5px solid var(--sable); border-radius: 14px; font-size: 14px; font-family: var(--sans); color: var(--noir); background: var(--creme); outline: none; box-sizing: border-box;">
-      </div>
-
-      <div style="margin-bottom: 16px;">
-        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--gris); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
-          Catégorie
-        </label>
-        <select id="obj-add-category" style="width: 100%; padding: 12px 16px; border: 1.5px solid var(--sable); border-radius: 14px; font-size: 14px; font-family: var(--sans); color: var(--noir); background: var(--creme); outline: none; box-sizing: border-box;">
-          <option value="spiritualite">🕌 Spiritualité</option>
-          <option value="maison">🏠 Maison</option>
-          <option value="famille">👨‍👩‍👧 Famille</option>
-          <option value="apprentissage">📚 Apprentissage</option>
-          <option value="projet">💼 Projet</option>
-          <option value="soin">💆 Soin de soi</option>
-          <option value="croissance">🌱 Croissance</option>
-        </select>
-      </div>
-
-      <div style="margin-bottom: 24px;">
-        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--gris); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
-          Durée
-        </label>
-        <select id="obj-add-recurrence" style="width: 100%; padding: 12px 16px; border: 1.5px solid var(--sable); border-radius: 14px; font-size: 14px; font-family: var(--sans); color: var(--noir); background: var(--creme); outline: none; box-sizing: border-box;">
-          <option value="today">Aujourd'hui seulement</option>
-          <option value="phase">Jusqu'à la fin de cette phase</option>
-          <option value="cycle">Jusqu'au prochain cycle</option>
-          <option value="permanent" selected>Toujours visible</option>
-        </select>
-      </div>
-
-      <div style="display: flex; gap: 12px;">
-        <button onclick="closeObjAddModal()" style="flex: 1; padding: 14px; background: var(--creme); color: var(--gris); border: 1.5px solid var(--sable); border-radius: 14px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--sans);">
-          Annuler
-        </button>
-        <button onclick="confirmAddObjPerso()" style="flex: 2; padding: 14px; background: var(--season-grad); color: white; border: none; border-radius: 14px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: var(--sans);">
-          Ajouter ✨
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL JOUR CALENDRIER -->
-<div class="modal-overlay" id="day-modal" onclick="if(event.target.id==='day-modal')closeDayModal()">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div id="day-modal-content"></div>
-    <button onclick="closeDayModal()" class="modal-cta" style="margin-top:16px;">Fermer</button>
-  </div>
-</div>
-
-<!-- MOI -->
-<div class="tab-page" id="tab-moi">
-  <div class="moi-hero">
-    <div class="moi-hero-icon" id="moi-hero-icon">🌙</div>
-    <div class="moi-hero-name" id="moi-hero-name"></div>
-    <div class="moi-hero-badge" id="moi-hero-badge"></div>
-    <div class="moi-hero-msg" id="moi-hero-msg"></div>
-  </div>
-  <div style="height:32px;"></div>
-
-  <!-- WORKBOOK CTA -->
-  <a id="wb-cta-card-el" href="/workbook" target="_blank" class="wb-cta-card">
-    <div id="wb-badge" style="display:inline-block;background:rgba(123,94,167,.15);padding:4px 10px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#3D2060;margin-bottom:10px;">BONUS GRATUIT</div>
-    <div id="wb-title" style="font-family:var(--serif);font-size:22px;font-style:italic;color:#3D2060;margin-bottom:8px;line-height:1.2;">Workbook Interactif ✦</div>
-    <div id="wb-desc" style="font-size:13px;color:#7B5EA7;font-weight:300;line-height:1.5;margin-bottom:4px;">Comprends ton cycle, nourris ton corps, transforme tes habitudes</div>
-    <div id="wb-meta" style="font-size:12px;color:#7B5EA7;margin-bottom:16px;">23 chapitres interactifs</div>
-    <div id="wb-btn" style="display:inline-block;background:#3D2060;color:white;padding:10px 24px;border-radius:50px;font-size:13px;font-weight:500;">Ouvrir le Workbook &rarr;</div>
-  </a>
-
-  <!-- FEEDBACK BETA -->
-  <div id="feedback-section" style="margin:0 14px 14px;background:white;border-radius:20px;border:1.5px solid var(--sable);padding:18px 20px;display:none;">
-    <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:14px;">&#10038; Ton avis compte</div>
-    <div id="feedback-form-wrap">
-      <div style="font-size:13px;color:var(--gris);line-height:1.6;margin-bottom:16px;">Comment tu vis SakinApp jusqu&rsquo;ici ?</div>
-      <div id="rating-stars" style="display:flex;gap:8px;margin-bottom:8px;">
-        <div onclick="setRating(1)" style="flex:1;text-align:center;padding:10px 4px;border-radius:12px;border:1.5px solid var(--sable);font-size:13px;font-weight:700;color:var(--gris);cursor:pointer;transition:all .2s;">1</div>
-        <div onclick="setRating(2)" style="flex:1;text-align:center;padding:10px 4px;border-radius:12px;border:1.5px solid var(--sable);font-size:13px;font-weight:700;color:var(--gris);cursor:pointer;transition:all .2s;">2</div>
-        <div onclick="setRating(3)" style="flex:1;text-align:center;padding:10px 4px;border-radius:12px;border:1.5px solid var(--sable);font-size:13px;font-weight:700;color:var(--gris);cursor:pointer;transition:all .2s;">3</div>
-        <div onclick="setRating(4)" style="flex:1;text-align:center;padding:10px 4px;border-radius:12px;border:1.5px solid var(--sable);font-size:13px;font-weight:700;color:var(--gris);cursor:pointer;transition:all .2s;">4</div>
-        <div onclick="setRating(5)" style="flex:1;text-align:center;padding:10px 4px;border-radius:12px;border:1.5px solid var(--sable);font-size:13px;font-weight:700;color:var(--gris);cursor:pointer;transition:all .2s;">5</div>
-      </div>
-      <div id="rating-label" style="font-size:12px;color:var(--season);font-family:var(--serif);font-style:italic;min-height:18px;margin-bottom:14px;text-align:center;"></div>
-      <div style="font-size:11px;font-weight:600;letter-spacing:.5px;color:var(--gris);margin-bottom:8px;text-transform:uppercase;">Ce que j&rsquo;aime :</div>
-      <div id="likes-chips" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;">
-        <div onclick="toggleChip(this)" data-selected="false" style="padding:7px 14px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;transition:all .15s;">Les recettes &#127869;&#65039;</div>
-        <div onclick="toggleChip(this)" data-selected="false" style="padding:7px 14px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;transition:all .15s;">Le sport &#128170;</div>
-        <div onclick="toggleChip(this)" data-selected="false" style="padding:7px 14px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;transition:all .15s;">La spiritualit&eacute; &#128332;</div>
-        <div onclick="toggleChip(this)" data-selected="false" style="padding:7px 14px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;transition:all .15s;">L&rsquo;aspect cycle &#127769;</div>
-        <div onclick="toggleChip(this)" data-selected="false" style="padding:7px 14px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;transition:all .15s;">Le design &#127800;</div>
-        <div onclick="toggleChip(this)" data-selected="false" style="padding:7px 14px;border-radius:20px;border:1.5px solid var(--sable);font-size:12px;color:var(--gris);cursor:pointer;background:white;transition:all .15s;">Mon march&eacute; &#128722;</div>
-      </div>
-      <textarea id="feedback-text" rows="3" placeholder="Ce qu&rsquo;on pourrait am&eacute;liorer&hellip; (optionnel)" style="width:100%;padding:12px 14px;border:1.5px solid var(--sable);border-radius:14px;font-size:13px;font-family:var(--sans);color:var(--noir);background:var(--creme);resize:none;outline:none;box-sizing:border-box;margin-bottom:10px;-webkit-appearance:none;appearance:none;"></textarea>
-      <input id="feedback-email" type="email" placeholder="Ton email (requis pour te r&eacute;pondre)" style="width:100%;padding:12px 14px;border:1.5px solid var(--sable);border-radius:14px;font-size:13px;font-family:var(--sans);color:var(--noir);background:var(--creme);outline:none;box-sizing:border-box;margin-bottom:12px;-webkit-appearance:none;appearance:none;">
-      <div id="feedback-msg" style="font-size:12px;color:var(--gris);min-height:16px;margin-bottom:10px;"></div>
-      <button onclick="sendFeedback()" style="width:100%;padding:14px;background:var(--season-grad);color:white;border:none;border-radius:14px;font-size:14px;font-weight:700;font-family:var(--sans);cursor:pointer;">Envoyer mon avis &#10022;</button>
-    </div>
-    <div id="feedback-sent-wrap" style="display:none;text-align:center;padding:16px 0;">
-      <div style="font-size:32px;margin-bottom:10px;">&#127800;</div>
-      <div style="font-family:var(--serif);font-size:16px;color:var(--noir);margin-bottom:6px;">Merci pour ton retour !</div>
-      <div style="font-size:12px;color:var(--gris);line-height:1.6;">Ton avis aide SakinApp &agrave; s&rsquo;am&eacute;liorer pour toutes les utilisatrices. Barak Allahu fik. &#127800;</div>
-    </div>
-  </div>
-
-  <!-- PARAMÈTRES -->
-  <div class="prof-sec">
-
-    <!-- Toujours visible : connexion -->
-    <div id="ps-auth-row" class="ps-row" onclick="openReconnectFromNudge()">
-      <div class="ps-ico">&#128100;</div>
-      <div><div class="ps-lbl" id="ps-auth-lbl">Se connecter</div><div class="ps-sub" id="ps-auth-sub">Sauvegarde tes donn&eacute;es sur tous tes appareils</div></div>
-      <div class="ps-arr">&#8250;</div>
-    </div>
-
-    <!-- Accordéon 1 : Réglages -->
-    <div class="ps-accordion" onclick="toggleAccordion('acc-reglages')" id="acc-reglages-hdr">
-      <div style="display:flex;align-items:center;gap:13px;flex:1;">
-        <div class="ps-ico">&#9881;&#65039;</div>
-        <div><div class="ps-lbl">Réglages</div><div class="ps-sub">Cycle</div></div>
-      </div>
-      <span class="ps-acc-arrow" id="arr-reglages">&#8250;</span>
-    </div>
-    <div class="ps-acc-body" id="acc-reglages">
-      <div class="ps-row" style="padding-left:20px;" onclick="openEditCycle()"><div class="ps-ico">&#128197;</div><div><div class="ps-lbl">Modifier mon cycle</div><div class="ps-sub" id="psCycle">Configurer</div></div><div class="ps-arr">&#8250;</div></div>
-    </div>
-
-    <!-- Accordéon 2 : Données & Légal -->
-    <div class="ps-accordion" onclick="toggleAccordion('acc-legal')" id="acc-legal-hdr">
-      <div style="display:flex;align-items:center;gap:13px;flex:1;">
-        <div class="ps-ico">&#128203;</div>
-        <div><div class="ps-lbl">Données &amp; Légal</div><div class="ps-sub">RGPD, mentions, CGU</div></div>
-      </div>
-      <span class="ps-acc-arrow" id="arr-legal">&#8250;</span>
-    </div>
-    <div class="ps-acc-body" id="acc-legal">
-      <div class="ps-row" style="padding-left:20px;" onclick="exportData()"><div class="ps-ico">&#128229;</div><div><div class="ps-lbl">Exporter mes données</div><div class="ps-sub">Télécharger un fichier JSON — RGPD</div></div><div class="ps-arr">&#8250;</div></div>
-      <div class="ps-row" style="padding-left:20px;" onclick="deleteMyData()"><div class="ps-ico">&#128465;</div><div><div class="ps-lbl" style="color:#B88189;">Supprimer mes données</div><div class="ps-sub">Ferme ton compte immédiatement</div></div><div class="ps-arr">&#8250;</div></div>
-      <div class="ps-row" style="padding-left:20px;" onclick="openMentionsLegales()"><div class="ps-ico">&#9878;</div><div><div class="ps-lbl">Mentions légales</div><div class="ps-sub">Éditrice, hébergeur, données</div></div><div class="ps-arr">&#8250;</div></div>
-      <div class="ps-row" style="padding-left:20px;" onclick="openConfidentialite()"><div class="ps-ico">&#128274;</div><div><div class="ps-lbl">Politique de confidentialité</div><div class="ps-sub">Tes données &amp; tes droits RGPD</div></div><div class="ps-arr">&#8250;</div></div>
-      <div class="ps-row" style="padding-left:20px;" onclick="openCGU()"><div class="ps-ico">&#128203;</div><div><div class="ps-lbl">CGU</div><div class="ps-sub">Conditions d'utilisation de SakinApp</div></div><div class="ps-arr">&#8250;</div></div>
-      <a href="mailto:sakina.evolution.contact@gmail.com" class="ps-row" style="padding-left:20px;text-decoration:none;color:inherit;"><div class="ps-ico">&#9993;</div><div><div class="ps-lbl">Nous contacter</div><div class="ps-sub">sakina.evolution.contact@gmail.com</div></div><div class="ps-arr">&#8250;</div></a>
-    </div>
-
-  </div>
-
-  <div style="text-align:center;padding:24px 20px 32px;color:var(--gris);font-size:12px;">
-    <div style="font-family:'Dancing Script',cursive;font-size:22px;color:var(--season);margin-bottom:6px;">SakinApp</div>
-    <span style="font-family:'Dancing Script',cursive;font-size:18px;color:var(--season);opacity:.6;">&#1576;&#1616;&#1587;&#1618;&#1605;&#1616; &#1575;&#1604;&#1604;&#1617;&#1614;&#1607;&#1616;</span>
-  </div>
-</div>
-
-</div><!-- app-content -->
-
-<!-- MODAL CYCLE -->
-<div class="modal-overlay" id="edit-cycle-modal" onclick="if(event.target.id==='edit-cycle-modal')closeEditCycle()">
-  <div class="modal-sheet">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-      <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--noir);">Modifier mon cycle</div>
-      <button onclick="closeEditCycle()" style="background:var(--sable);border:none;border-radius:50%;width:32px;height:32px;font-size:18px;cursor:pointer;">&#215;</button>
-    </div>
-    <div style="font-size:12px;color:var(--gris);margin-bottom:8px;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Premier jour de mes dernières règles</div>
-    <input id="edit-cycle-date" type="date" class="ob-input" style="margin-bottom:16px;">
-    <div style="font-size:12px;color:var(--gris);margin-bottom:8px;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Duree habituelle du cycle</div>
-    <div style="display:flex;gap:8px;margin-bottom:24px;" id="edit-duration-options">
-      <div class="ob-option" data-val="26" onclick="selectEditDuration(this,26)" style="flex:1;padding:12px;flex-direction:column;align-items:center;text-align:center;"><span class="ob-option-emoji">&#127769;</span><div class="ob-option-text" style="font-size:12px;margin-top:4px;">24-26 j</div></div>
-      <div class="ob-option selected" data-val="28" onclick="selectEditDuration(this,28)" style="flex:1;padding:12px;flex-direction:column;align-items:center;text-align:center;"><span class="ob-option-emoji">&#127800;</span><div class="ob-option-text" style="font-size:12px;margin-top:4px;">27-30 j</div></div>
-      <div class="ob-option" data-val="33" onclick="selectEditDuration(this,33)" style="flex:1;padding:12px;flex-direction:column;align-items:center;text-align:center;"><span class="ob-option-emoji">&#9728;&#65039;</span><div class="ob-option-text" style="font-size:12px;margin-top:4px;">31-35 j</div></div>
-    </div>
-    <div style="font-size:12px;color:var(--gris);margin-bottom:8px;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Duree habituelle de tes regles</div>
-    <div style="display:flex;gap:8px;margin-bottom:24px;" id="edit-regles-options">
-      <div class="ob-option" data-val="4" onclick="selectEditDureeRegles(this,4)" style="flex:1;padding:12px;flex-direction:column;align-items:center;text-align:center;"><span class="ob-option-emoji">&#127772;</span><div class="ob-option-text" style="font-size:12px;margin-top:4px;">3-4 j</div></div>
-      <div class="ob-option selected" data-val="5" onclick="selectEditDureeRegles(this,5)" style="flex:1;padding:12px;flex-direction:column;align-items:center;text-align:center;"><span class="ob-option-emoji">&#127800;</span><div class="ob-option-text" style="font-size:12px;margin-top:4px;">5-6 j</div></div>
-      <div class="ob-option" data-val="7" onclick="selectEditDureeRegles(this,7)" style="flex:1;padding:12px;flex-direction:column;align-items:center;text-align:center;"><span class="ob-option-emoji">&#127807;</span><div class="ob-option-text" style="font-size:12px;margin-top:4px;">7+ j</div></div>
-    </div>
-    <button onclick="saveEditCycle()" class="ob-btn" style="margin-top:0;">Enregistrer</button>
-  </div>
-</div>
-
-<!-- MODAL FIN D'HIVER (déclaration rétroactive) -->
-<div class="modal-overlay" id="fin-hiver-modal" onclick="if(event.target.id==='fin-hiver-modal')closeFinHiverModal()">
-  <div class="modal-sheet">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-      <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--noir);">🌸 Mon Hiver est termin&eacute;</div>
-      <button onclick="closeFinHiverModal()" style="background:var(--sable);border:none;border-radius:50%;width:32px;height:32px;font-size:18px;cursor:pointer;">&#215;</button>
-    </div>
-    <div style="font-size:13px;color:var(--gris);line-height:1.6;margin-bottom:16px;">Tes r&egrave;gles se sont termin&eacute;es aujourd&rsquo;hui&nbsp;? Ou il y a quelques jours&nbsp;? Choisis la date r&eacute;elle &mdash; le calcul de ta phase repartira de l&agrave;.</div>
-    <div style="font-size:12px;color:var(--gris);margin-bottom:8px;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Mes r&egrave;gles se sont termin&eacute;es le</div>
-    <input id="fin-hiver-date" type="date" class="ob-input" style="margin-bottom:20px;">
-    <button onclick="confirmFinHiver()" class="ob-btn" style="margin-top:0;">Confirmer</button>
-  </div>
-</div>
-
-<!-- MODAL NOTIFS -->
-<div class="modal-overlay" id="notif-modal" onclick="if(event.target.id==='notif-modal')closeNotifModal()">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title">&#128276; Rappels Sakina</div>
-    <div class="modal-sub">Sakina t'enverra des messages doux selon ta saison.</div>
-    <div id="notif-permission-status" style="background:var(--creme);border-radius:14px;padding:12px 15px;margin-bottom:20px;font-size:13px;color:var(--gris);line-height:1.5;"></div>
-    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:22px;" id="notif-freq-options">
-      <div class="ob-option" onclick="selectFreq(this,1)" data-freq="1"><span class="ob-option-emoji">&#127807;</span><div><div class="ob-option-text">Une fois par jour</div><div style="font-size:11px;color:var(--gris);margin-top:2px;">Le soir - bilan de journee</div></div><div class="ob-option-chk">&#10003;</div></div>
-      <div class="ob-option selected" onclick="selectFreq(this,2)" data-freq="2"><span class="ob-option-emoji">&#127800;</span><div><div class="ob-option-text">Deux fois par jour</div><div style="font-size:11px;color:var(--gris);margin-top:2px;">Matin 8h + Soir 20h30</div></div><div class="ob-option-chk">&#10003;</div></div>
-      <div class="ob-option" onclick="selectFreq(this,3)" data-freq="3"><span class="ob-option-emoji">&#9728;&#65039;</span><div><div class="ob-option-text">Trois fois par jour</div><div style="font-size:11px;color:var(--gris);margin-top:2px;">8h + 13h30 + 20h30</div></div><div class="ob-option-chk">&#10003;</div></div>
-      <div class="ob-option" onclick="selectFreq(this,0)" data-freq="0"><span class="ob-option-emoji">&#128277;</span><div><div class="ob-option-text">Desactiver</div></div><div class="ob-option-chk">&#10003;</div></div>
-    </div>
-    <button onclick="saveNotifSettings()" class="modal-cta">Activer mes rappels</button>
-  </div>
-</div>
-
-<!-- MODAL MENTIONS LÉGALES -->
-<div class="modal-overlay" id="mentions-modal" onclick="if(event.target.id==='mentions-modal')closeMentionsLegales()">
-  <div class="modal-sheet" style="max-height:85vh;overflow-y:auto;">
-    <div class="modal-handle"></div>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-      <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--noir);">Mentions légales</div>
-      <button onclick="closeMentionsLegales()" style="background:var(--sable);border:none;border-radius:50%;width:32px;height:32px;font-size:18px;cursor:pointer;">&#215;</button>
-    </div>
-
-    <div class="ml-section">
-      <div class="ml-titre">Éditrice</div>
-      <div class="ml-ligne"><span class="ml-lbl">Nom</span> Lila Himeur</div>
-      <div class="ml-ligne"><span class="ml-lbl">Statut</span> Particulière</div>
-      <div class="ml-ligne"><span class="ml-lbl">Contact</span> sakina.evolution.contact@gmail.com</div>
-      <div class="ml-ligne"><span class="ml-lbl">Directrice de publication</span> Lila Himeur</div>
-    </div>
-
-    <div class="ml-section">
-      <div class="ml-titre">Hébergeur</div>
-      <div class="ml-ligne"><span class="ml-lbl">Société</span> Vercel Inc.</div>
-      <div class="ml-ligne"><span class="ml-lbl">Adresse</span> 340 S Lemon Ave #4133, Walnut, CA 91789, États-Unis</div>
-      <div class="ml-ligne"><span class="ml-lbl">Site</span> vercel.com</div>
-    </div>
-
-    <div class="ml-section">
-      <div class="ml-titre">Propriété intellectuelle</div>
-      <p class="ml-txt">L'ensemble du contenu de SakinApp (textes, design, code, icônes, invocations, contenus spirituels) est la propriété exclusive de Lila Himeur. Toute reproduction, même partielle, est interdite sans autorisation écrite préalable.</p>
-    </div>
-
-    <div class="ml-section">
-      <div class="ml-titre">Données personnelles</div>
-      <p class="ml-txt">SakinApp collecte ton adresse e-mail (pour l'authentification, stockée sur les serveurs de <strong>Supabase</strong>, sous-traitant). Tes données d'utilisation (cycle, prières, humeurs, objectifs) sont stockées uniquement en local sur ton appareil (localStorage) — elles ne sont pas envoyées sur nos serveurs.</p>
-      <p class="ml-txt" style="margin-top:8px;">Conformément au RGPD, tu peux exporter ou supprimer tes données à tout moment.</p>
-      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
-        <button onclick="closeMentionsLegales();exportData();" style="flex:1;min-width:120px;padding:10px;background:var(--sable);color:var(--noir);border:none;border-radius:12px;font-size:13px;cursor:pointer;">&#128229; Exporter mes données</button>
-        <button onclick="closeMentionsLegales();deleteMyData();" style="flex:1;min-width:120px;padding:10px;background:#B88189;color:#fff;border:none;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;">&#128465; Supprimer mon compte</button>
-      </div>
-    </div>
-
-    <div class="ml-section">
-      <div class="ml-titre">Sous-traitants</div>
-      <div class="ml-ligne"><span class="ml-lbl">Vercel Inc.</span> H&eacute;bergement de l&rsquo;application &mdash; USA</div>
-      <div class="ml-ligne"><span class="ml-lbl">Supabase Inc.</span> Authentification (compte e-mail) &mdash; USA</div>
-      <p class="ml-txt" style="margin-top:8px;">Les transferts vers les &Eacute;tats-Unis sont encadr&eacute;s par les clauses contractuelles types de la Commission europ&eacute;enne.</p>
-    </div>
-
-    <div class="ml-section">
-      <div class="ml-titre">Cookies</div>
-      <p class="ml-txt">SakinApp n&rsquo;utilise <strong>aucun cookie publicitaire ou de tracking</strong>. Le localStorage et la session Supabase sont techniquement n&eacute;cessaires au fonctionnement de l&rsquo;app.</p>
-    </div>
-
-    <div class="ml-section">
-      <div class="ml-titre">Responsabilité</div>
-      <p class="ml-txt">Les contenus spirituels et de bien-être de SakinApp (cycle menstruel, nutrition, sport, invocations) sont fournis à titre informatif et ne remplacent pas un avis médical ou religieux qualifié. Consulte un professionnel de santé pour toute question médicale.</p>
-    </div>
-
-    <div style="text-align:center;font-size:11px;color:var(--gris);margin-top:20px;padding-top:16px;border-top:1px solid var(--sable);">
-      SakinApp — Dernière mise à jour : août 2026
-    </div>
-  </div>
-</div>
-
-<!-- MODAL POLITIQUE DE CONFIDENTIALITÉ -->
-<div class="modal-overlay" id="confidentialite-modal" onclick="if(event.target.id==='confidentialite-modal')closeConfidentialite()">
-  <div class="modal-sheet" style="max-height:85vh;overflow-y:auto;">
-    <div class="modal-handle"></div>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-      <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--noir);">Politique de confidentialité</div>
-      <button onclick="closeConfidentialite()" style="background:var(--sable);border:none;border-radius:50%;width:32px;height:32px;font-size:18px;cursor:pointer;">&#215;</button>
-    </div>
-
-    <div class="ml-section">
-      <div class="ml-titre">Responsable du traitement</div>
-      <div class="ml-ligne"><span class="ml-lbl">Nom</span> Lila Himeur</div>
-      <div class="ml-ligne"><span class="ml-lbl">Contact</span> sakina.evolution.contact@gmail.com</div>
-    </div>
-
-    <div class="ml-section">
-      <div class="ml-titre">Données collectées et finalités</div>
-      <p class="ml-txt" style="margin-bottom:10px;"><strong>1. Adresse e-mail</strong> — collect&eacute;e lors de la cr&eacute;ation du compte. Finalit&eacute; : authentification et s&eacute;curit&eacute; du compte. Base l&eacute;gale : ex&eacute;cution du contrat (art.&nbsp;6.1.b RGPD).</p>
-      <p class="ml-txt"><strong>2. Donn&eacute;es de sant&eacute; et de conviction religieuse</strong> — cycle menstruel, date de d&eacute;but, dur&eacute;e des r&egrave;gles, sympt&ocirc;mes, historique de cycles, glaire cervicale. <strong>Pratique religieuse</strong> : prières quotidiennes (fajr, dohr, asr, maghrib, isha), dhikr, lecture du Coran. Ces donn&eacute;es rel&egrave;vent de l&rsquo;article 9.1 du RGPD (donn&eacute;es de sant&eacute; et convictions religieuses). Finalit&eacute; : personnalisation de l&rsquo;exp&eacute;rience. Ces donn&eacute;es restent stock&eacute;es uniquement sur ton appareil, elles ne transitent jamais par nos serveurs. Base l&eacute;gale : <strong>consentement explicite</strong> (art.&nbsp;9.2.a RGPD), recueilli lors de la configuration initiale de l&rsquo;application.</p>
-    </div>
-
-    <div class="ml-section">
-      <div class="ml-titre">Stockage et sous-traitants</div>
-      <p class="ml-txt" style="margin-bottom:10px;">Tes donn&eacute;es de cycle, de pri&egrave;res et de pratique religieuse sont stock&eacute;es uniquement sur ton appareil (localStorage) — elles ne sont jamais envoy&eacute;es sur nos serveurs. Seule ton adresse e-mail transite par un sous-traitant, pour l&rsquo;authentification :</p>
-      <div class="ml-ligne"><span class="ml-lbl">Supabase Inc.</span> Authentification (compte e-mail) &mdash; <strong>Irlande (UE)</strong> &mdash; serveurs h&eacute;berg&eacute;s dans l&rsquo;Union europ&eacute;enne</div>
-      <div class="ml-ligne"><span class="ml-lbl">Vercel Inc.</span> H&eacute;bergement app &mdash; Walnut, CA, USA</div>
-      <div class="ml-ligne"><span class="ml-lbl">Formspree Inc.</span> Formulaire de contact &mdash; San Francisco, USA</div>
-      <p class="ml-txt" style="margin-top:10px;">Les transferts hors UE sont encadr&eacute;s par les <strong>clauses contractuelles types</strong> de la Commission europ&eacute;enne (d&eacute;cision 2021/914).</p>
-    </div>
-
-    <div class="ml-section">
-      <div class="ml-titre">Dur&eacute;e de conservation</div>
-      <div class="ml-ligne"><span class="ml-lbl">Compte actif</span> Pendant toute la dur&eacute;e d&rsquo;utilisation du compte</div>
-      <div class="ml-ligne"><span class="ml-lbl">Apr&egrave;s suppression du compte</span> Suppression imm&eacute;diate et d&eacute;finitive de ton adresse e-mail et de ton acc&egrave;s &mdash; aucune p&eacute;riode de r&eacute;tention, l&rsquo;app &eacute;tant enti&egrave;rement gratuite (aucune obligation comptable li&eacute;e &agrave; un paiement)</div>
-      <div class="ml-ligne"><span class="ml-lbl">Inactivit&eacute;</span> Tes donn&eacute;es de sant&eacute; et de pratique religieuse restent uniquement sur ton appareil et n&rsquo;expirent pas automatiquement. Elles disparaissent si tu d&eacute;sinstalles l&rsquo;application ou effaces les donn&eacute;es de ton navigateur</div>
-      <div class="ml-ligne"><span class="ml-lbl">Sur demande</span> Suppression imm&eacute;diate possible via Param&egrave;tres → Supprimer mes donn&eacute;es</div>
-    </div>
-
-    <div class="ml-section">
-      <div class="ml-titre">Cookies et traceurs</div>
-      <p class="ml-txt">SakinApp n&rsquo;utilise <strong>aucun cookie publicitaire</strong>, aucun outil d&rsquo;analyse (Google Analytics, etc.), aucun pixel de tracking. Seul le localStorage et la session Supabase sont utilis&eacute;s pour le fonctionnement de l&rsquo;app.</p>
-    </div>
-
-    <div class="ml-section">
-      <div class="ml-titre">Tes droits (RGPD)</div>
-      <p class="ml-txt">Conform&eacute;ment au R&egrave;glement UE 2016/679, tu disposes des droits suivants :</p>
-      <div class="ml-ligne" style="margin-top:10px;flex-direction:column;gap:8px;">
-        <div>• <strong>Acc&egrave;s &amp; portabilit&eacute;</strong> : Param&egrave;tres → Exporter mes donn&eacute;es (JSON)</div>
-        <div>• <strong>Rectification</strong> : modifiable directement dans l&rsquo;app</div>
-        <div>• <strong>Suppression</strong> : Param&egrave;tres → R&eacute;initialiser, ou demande par e-mail</div>
-        <div>• <strong>Opposition</strong> : &agrave; tout moment par e-mail</div>
-        <div>• <strong>R&eacute;clamation</strong> : aupr&egrave;s de la <strong>CNIL</strong> (cnil.fr)</div>
-      </div>
-      <p class="ml-txt" style="margin-top:10px;">Contact : <strong>sakina.evolution.contact@gmail.com</strong> &mdash; R&eacute;ponse sous 30 jours.</p>
-    </div>
-
-    <div class="ml-section">
-      <div class="ml-titre">S&eacute;curit&eacute;</div>
-      <p class="ml-txt">Connexion HTTPS chiffr&eacute;e, authentification s&eacute;curis&eacute;e via Supabase. Aucun mot de passe requis &mdash; connexion par lien magique uniquement.</p>
-      <p class="ml-txt" style="margin-top:8px;">Les donn&eacute;es d&rsquo;utilisation (cycle, pri&egrave;res, humeurs) sont stock&eacute;es en clair dans le stockage local (<em>localStorage</em>) de ton navigateur, uniquement sur ton appareil. Ces donn&eacute;es ne sont pas chiffr&eacute;es sur l&rsquo;appareil : elles restent inaccessibles depuis l&rsquo;ext&eacute;rieur, mais sont lisibles par quiconque a acc&egrave;s physique &agrave; ton appareil et &agrave; ton navigateur. Nous te recommandons d&rsquo;utiliser le verrouillage d&rsquo;&eacute;cran de ton appareil, et d&rsquo;exporter r&eacute;guli&egrave;rement tes donn&eacute;es (Param&egrave;tres → Exporter) puisqu&rsquo;elles ne sont sauvegard&eacute;es nulle part ailleurs.</p>
-    </div>
-
-    <div style="text-align:center;font-size:11px;color:var(--gris);margin-top:20px;padding-top:16px;border-top:1px solid var(--sable);">
-      SakinApp &mdash; Politique de confidentialit&eacute; &mdash; Derni&egrave;re mise &agrave; jour : 18 ao&ucirc;t 2026
-    </div>
-  </div>
-</div>
-
-<!-- BOTTOM NAV -->
-<div class="bottom-nav" id="bottomNav">
-  <div class="nav-item active" id="nav-accueil" role="button" tabindex="0" aria-label="Accueil" onclick="switchTab('accueil',this)" onkeydown="if(event.key==='Enter'||event.key===' ')switchTab('accueil',this)">
-    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-    <div class="nav-label">Accueil</div><div class="nav-pip"></div>
-  </div>
-  <div class="nav-item" id="nav-cycle" role="button" tabindex="0" aria-label="Cycle" onclick="switchTab('cycle',this)" onkeydown="if(event.key==='Enter'||event.key===' ')switchTab('cycle',this)">
-    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-    <div class="nav-label">Cycle</div><div class="nav-pip"></div>
-  </div>
-  <div class="nav-item" id="nav-ame" role="button" tabindex="0" aria-label="Âme" onclick="switchTab('ame',this)" onkeydown="if(event.key==='Enter'||event.key===' ')switchTab('ame',this)">
-    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
-    <div class="nav-label">Âme</div><div class="nav-pip"></div>
-  </div>
-  <div class="nav-item" id="nav-objectifs" role="button" tabindex="0" aria-label="Objectifs" onclick="switchTab('objectifs',this)" onkeydown="if(event.key==='Enter'||event.key===' ')switchTab('objectifs',this)">
-    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
-    <div class="nav-label">Objectifs</div><div class="nav-pip"></div>
-  </div>
-  <div class="nav-item" id="nav-moi" role="button" tabindex="0" aria-label="Moi" onclick="switchTab('moi',this)" onkeydown="if(event.key==='Enter'||event.key===' ')switchTab('moi',this)">
-    <div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-    <div class="nav-label">Moi</div><div class="nav-pip"></div>
-  </div>
-</div>
-
-<!-- MODAL SUPPRESSION DONNÉES -->
-<div class="modal-overlay" id="delete-modal" onclick="if(event.target===this)closeDeleteModal()">
-  <div class="modal-sheet" style="text-align:center;">
-    <div class="modal-handle"></div>
-    <div style="font-size:36px;margin-bottom:12px;">🌸</div>
-    <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--noir);margin-bottom:14px;">Supprimer mes données</div>
-    <div style="font-size:13px;color:var(--gris);line-height:1.8;margin-bottom:20px;background:var(--sable);border-radius:14px;padding:14px 16px;">
-      Ton compte sera fermé <strong style="color:var(--noir);">immédiatement</strong> — tu perdras l'accès à ton espace SakinApp.<br>
-      Tu recevras un email de confirmation à<br>
-      <strong id="delete-modal-email" style="color:var(--noir);word-break:break-all;"></strong>
-    </div>
-    <button id="delete-confirm-btn" onclick="confirmDeleteMyData()" style="width:100%;padding:14px;background:#B88189;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:var(--sans);margin-bottom:10px;">Confirmer la suppression</button>
-    <button onclick="closeDeleteModal()" style="width:100%;padding:14px;background:var(--sable);color:var(--noir);border:none;border-radius:14px;font-size:15px;cursor:pointer;font-family:var(--sans);">Annuler</button>
-  </div>
-</div>
-
-<!-- MODAL 99 NOMS -->
-<div class="asma-modal-ov" id="asma-modal" onclick="if(event.target.id==='asma-modal')closeAsmaModal()">
-  <div class="asma-sheet">
-    <div class="asma-hdr">
-      <div style="display:flex;align-items:center;justify-content:space-between;">
-        <div><div style="font-family:var(--serif);font-size:18px;color:var(--noir);">&#1575;&#1604;&#1571;&#1587;&#1605;&#1575;&#1569; &#1575;&#1604;&#1581;&#1587;&#1606;&#1609;</div><div style="font-size:12px;color:var(--gris);margin-top:2px;">Les 99 plus beaux noms d'Allah</div></div>
-        <button onclick="closeAsmaModal()" style="background:var(--sable);border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#215;</button>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;margin-top:12px;">
-        <div style="flex:1;height:5px;background:var(--sable);border-radius:3px;overflow:hidden;"><div id="asma-modal-progress" style="height:100%;border-radius:3px;background:var(--season);transition:width .4s;width:0%"></div></div>
-        <div style="font-size:12px;color:var(--gris);white-space:nowrap;"><span id="asma-modal-count">0</span> / 99 appris</div>
-      </div>
-      <div style="font-size:11px;color:var(--gris);margin-top:8px;font-style:italic;font-family:var(--serif);">Coche les noms que tu connais</div>
-    </div>
-    <div class="asma-list" id="asma-list"></div>
-  </div>
-</div>
-
-</div><!-- app -->
-
-<!-- MODAL CGU — hors #app pour être visible depuis l'auth screen -->
-<div class="modal-overlay" id="cgu-modal" onclick="if(event.target.id==='cgu-modal')closeCGU()">
-  <div class="modal-sheet" style="max-height:85vh;overflow-y:auto;">
-    <div class="modal-handle"></div>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-      <div style="font-family:'Playfair Display',serif;font-size:17px;color:var(--noir);">CGU</div>
-      <button onclick="closeCGU()" style="background:var(--sable);border:none;border-radius:50%;width:32px;height:32px;font-size:18px;cursor:pointer;">&#215;</button>
-    </div>
-
-    <div class="ml-section">
-      <div class="ml-titre">1. Présentation</div>
-      <p class="ml-txt">SakinApp est une application web progressive (PWA) de suivi du cycle menstruel et de bien-être islamique, éditée par Lila Himeur. L'utilisation de SakinApp implique l'acceptation pleine et entière des présentes Conditions Générales d'Utilisation.</p>
-    </div>
-
-    <div class="ml-section">
-      <div class="ml-titre">2. Acc&egrave;s au service</div>
-      <p class="ml-txt">SakinApp est accessible depuis tout appareil disposant d&rsquo;un navigateur web. Un <strong>compte est requis</strong> (cr&eacute;ation gratuite par lien magique envoy&eacute; par e-mail). L&rsquo;app peut &ecirc;tre install&eacute;e sur l&rsquo;&eacute;cran d&rsquo;accueil et fonctionne partiellement hors-ligne.</p>
-      <p class="ml-txt" style="margin-top:8px;">L&rsquo;&eacute;ditrice se r&eacute;serve le droit de modifier, suspendre ou interrompre tout ou partie du service &agrave; tout moment, avec information pr&eacute;alable autant que possible.</p>
-    </div>
-
-    <div class="ml-section">
-      <div class="ml-titre">3. Version gratuite</div>
-      <p class="ml-txt">SakinApp est accessible gratuitement, sans abonnement ni carte bancaire requise.</p>
-    </div>
-
-    <div class="ml-section">
-      <div class="ml-titre">4. Propriété intellectuelle</div>
-      <p class="ml-txt">L'ensemble des éléments de SakinApp (contenus, design, code, textes spirituels, traductions, nom et logo) est protégé par le droit de la propriété intellectuelle et est la propriété exclusive de Lila Himeur. Toute reproduction ou utilisation sans autorisation est interdite.</p>
-    </div>
-
-    <div class="ml-section">
-      <div class="ml-titre">5. Responsabilité</div>
-      <p class="ml-txt">SakinApp fournit des informations à caractère général sur le cycle menstruel, la nutrition, le sport et le bien-être spirituel. Ces informations ne constituent pas un avis médical ou religieux. L'éditrice décline toute responsabilité en cas d'utilisation des contenus à des fins médicales ou de diagnostic.</p>
-      <p class="ml-txt" style="margin-top:8px;">Toute décision de santé doit être prise en concertation avec un professionnel de santé qualifié.</p>
-    </div>
-
-    <div class="ml-section">
-      <div class="ml-titre">6. Donn&eacute;es personnelles</div>
-      <p class="ml-txt">SakinApp collecte ton adresse e-mail, pour l&rsquo;authentification uniquement, stock&eacute;e sur Supabase Inc. Tes donn&eacute;es d&rsquo;utilisation (cycle, pri&egrave;res, humeurs) restent uniquement sur ton appareil et ne sont jamais envoy&eacute;es sur nos serveurs.</p>
-      <p class="ml-txt" style="margin-top:8px;">Le traitement complet est d&eacute;crit dans la <strong>Politique de confidentialit&eacute;</strong> accessible dans Param&egrave;tres. Tu peux exporter ou supprimer tes donn&eacute;es &agrave; tout moment.</p>
-    </div>
-
-    <div class="ml-section">
-      <div class="ml-titre">7. Droit applicable &amp; litiges</div>
-      <p class="ml-txt">Les présentes CGU sont soumises au droit français. En cas de litige, une solution amiable sera recherchée en priorité par e-mail. À défaut, les tribunaux français seront compétents.</p>
-    </div>
-
-    <div class="ml-section">
-      <div class="ml-titre">8. Contact</div>
-      <p class="ml-txt">sakina.evolution.contact@gmail.com</p>
-    </div>
-
-    <div style="text-align:center;font-size:11px;color:var(--gris);margin-top:20px;padding-top:16px;border-top:1px solid var(--sable);">
-      SakinApp — CGU v1.1 — Août 2026
-    </div>
-  </div>
-</div>
-
-<!-- MODAL RECETTE -->
-<div class="modal-overlay" id="recipe-modal" onclick="if(event.target===this)closeRecipeModal()">
-  <div class="modal-sheet pmod-sheet">
-    <div class="pmod-handle"></div>
-    <div id="recipe-modal-content"></div>
-    <button onclick="closeRecipeModal()" class="pmod-close-btn">Fermer</button>
-  </div>
-</div>
-
-<!-- MODAL ROUTINE SKINCARE -->
-<div class="modal-overlay" id="skin-modal" onclick="if(event.target===this)closeSkinModal()">
-  <div class="modal-sheet pmod-sheet">
-    <div class="pmod-handle"></div>
-    <div class="pmod-modal-title">&#10024; Routine skincare</div>
-    <div id="skin-modal-content"></div>
-    <button onclick="closeSkinModal()" class="pmod-close-btn">Fermer</button>
-  </div>
-</div>
-
-
-<!-- MODAL BILAN DE CYCLE -->
-<div class="modal-overlay" id="bilan-modal" onclick="if(event.target===this)closeBilanModal()">
-  <div class="modal-sheet bilan-sheet">
-    <div class="bilan-header">
-      <div class="bilan-header-emoji">🌙</div>
-      <div class="bilan-header-label">Ton premier cycle</div>
-      <div class="bilan-header-title">Alhamdulillah ✦<br><span id="bilan-header-days" style="font-size:16px;font-family:var(--sans);font-weight:400;">tu as travers&#233; 20 jours</span></div>
-    </div>
-    <div class="bilan-body" id="bilan-body"></div>
-    <button onclick="closeBilanModal()" class="bilan-cta-free" style="margin-top:16px;">Fermer</button>
-  </div>
-</div>
-
-<!-- MODAL COMPTE -->
-<div class="modal-overlay" id="compte-modal" onclick="if(event.target===this)document.getElementById('compte-modal').classList.remove('open')">
-  <div class="modal-sheet" style="padding:28px 24px 24px;">
-    <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:18px;">&#10022; Mon compte</div>
-    <div style="background:var(--creme);border-radius:14px;padding:14px 16px;margin-bottom:20px;">
-      <div style="font-size:11px;color:var(--gris);margin-bottom:4px;">Adresse email</div>
-      <div id="compte-email-display" style="font-size:14px;font-weight:600;color:var(--noir);word-break:break-all;"></div>
-    </div>
-    <button onclick="openChangeEmail()" style="width:100%;padding:14px;background:var(--season-grad);color:white;border:none;border-radius:14px;font-size:14px;font-weight:700;font-family:var(--sans);cursor:pointer;margin-bottom:10px;">Changer d'adresse mail</button>
-    <button onclick="confirmSignOut()" style="width:100%;padding:14px;background:var(--creme);color:#C46B50;border:1.5px solid #F0C4B0;border-radius:14px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;margin-bottom:10px;">Se déconnecter</button>
-    <button onclick="document.getElementById('compte-modal').classList.remove('open')" style="width:100%;padding:12px;background:none;border:none;color:var(--gris);font-size:13px;cursor:pointer;font-family:var(--sans);">Fermer</button>
-  </div>
-</div>
-
-<!-- MODAL CHANGER EMAIL -->
-<div class="modal-overlay" id="change-email-modal" onclick="if(event.target===this)document.getElementById('change-email-modal').classList.remove('open')">
-  <div class="modal-sheet" style="padding:28px 24px 24px;">
-    <div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:18px;">&#10022; Changer d'adresse mail</div>
-    <div id="change-email-step1">
-      <div style="font-size:13px;color:var(--gris);line-height:1.6;margin-bottom:18px;">Entre ta nouvelle adresse. Un lien de confirmation te sera envoyé — ton compte et tes données restent inchangés.</div>
-      <input id="change-email-input" type="email" inputmode="email" autocomplete="email" placeholder="nouvelle@adresse.com"
-        style="width:100%;box-sizing:border-box;padding:14px 16px;border:1.5px solid var(--sable);border-radius:14px;font-size:15px;font-family:var(--sans);color:var(--noir);background:var(--creme);outline:none;margin-bottom:12px;-webkit-appearance:none;appearance:none;">
-      <div id="change-email-msg" style="font-size:12px;color:var(--gris);min-height:16px;margin-bottom:12px;font-style:italic;font-family:var(--serif);"></div>
-      <button id="change-email-btn" onclick="submitChangeEmail()" style="width:100%;padding:14px;background:var(--season-grad);color:white;border:none;border-radius:14px;font-size:14px;font-weight:700;font-family:var(--sans);cursor:pointer;margin-bottom:10px;">Envoyer le lien de confirmation</button>
-      <button onclick="document.getElementById('change-email-modal').classList.remove('open')" style="width:100%;padding:12px;background:none;border:none;color:var(--gris);font-size:13px;cursor:pointer;font-family:var(--sans);">Annuler</button>
-    </div>
-    <div id="change-email-step2" style="display:none;text-align:center;padding:8px 0;">
-      <div style="font-size:36px;margin-bottom:14px;">&#128231;</div>
-      <div style="font-family:var(--serif);font-size:17px;color:var(--noir);margin-bottom:10px;">Lien envoyé !</div>
-      <div id="change-email-confirm-txt" style="font-size:13px;color:var(--gris);line-height:1.7;margin-bottom:20px;"></div>
-      <button onclick="document.getElementById('change-email-modal').classList.remove('open')" style="width:100%;padding:14px;background:var(--season-grad);color:white;border:none;border-radius:14px;font-size:14px;font-weight:700;font-family:var(--sans);cursor:pointer;">Fermer</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL RECONNEXION -->
-<div class="modal-overlay" id="reconnect-modal">
-  <div class="modal-sheet" style="padding:32px 24px 28px;text-align:center;">
-    <div style="font-size:44px;margin-bottom:14px;">&#128274;</div>
-    <div style="font-family:var(--serif);font-size:20px;color:var(--noir);margin-bottom:8px;">Reconnecte-toi</div>
-    <div style="font-size:13px;color:var(--gris);line-height:1.7;margin-bottom:24px;">Entre ton adresse email pour recevoir un code de connexion.</div>
-    <div id="reconnect-step1">
-      <input id="reconnect-email" type="email" placeholder="ton@email.com" style="width:100%;box-sizing:border-box;padding:14px 16px;border:1.5px solid var(--sable);border-radius:14px;font-size:15px;font-family:var(--sans);outline:none;margin-bottom:14px;">
-      <button id="reconnect-send-btn" onclick="handleReconnect()" style="width:100%;padding:15px;background:var(--season-grad);color:white;border:none;border-radius:16px;font-size:15px;font-weight:600;font-family:var(--sans);cursor:pointer;letter-spacing:0.3px;">Recevoir mon code 🌸</button>
-    </div>
-    <div id="reconnect-step2" style="display:none;margin-top:4px;">
-      <div style="font-size:13px;color:var(--gris);margin-bottom:14px;line-height:1.6;padding:10px;background:rgba(201,169,110,0.1);border-radius:10px;">
-        📧 Code envoyé&nbsp;! Entre les 8 caractères de ton email&nbsp;:
-      </div>
-      <input id="reconnect-otp" type="text" placeholder="· · · · · · · ·" inputmode="text" maxlength="8" autocomplete="one-time-code"
-        style="width:100%;box-sizing:border-box;padding:14px;border:2px solid var(--gold,#C9A96E);border-radius:14px;font-size:26px;font-family:var(--sans);outline:none;text-align:center;letter-spacing:10px;margin-bottom:12px;">
-      <button id="reconnect-verify-btn" onclick="verifyReconnectCode()" style="width:100%;padding:15px;background:var(--season-grad);color:white;border:none;border-radius:16px;font-size:15px;font-weight:600;font-family:var(--sans);cursor:pointer;">Valider ✓</button>
-      <button onclick="resetReconnectStep()" style="background:none;border:none;color:var(--gris);font-size:12px;cursor:pointer;font-family:var(--sans);margin-top:8px;">&#8592; Changer d&rsquo;email</button>
-    </div>
-    <div id="reconnect-msg" style="display:none;margin-top:14px;font-size:13px;line-height:1.6;padding:12px;border-radius:12px;"></div>
-    <button onclick="document.getElementById('reconnect-modal').classList.remove('open')" style="margin-top:16px;background:none;border:none;color:var(--gris);font-size:13px;cursor:pointer;font-family:var(--sans);">Fermer</button>
-  </div>
-</div>
-
-<!-- MODAL AJOUT / MODIFICATION CYCLE PRÉCÉDENT -->
-<div class="modal-overlay" id="add-cycle-modal" onclick="if(event.target===this)closeAddCycleModal()">
-  <div class="modal-sheet" style="padding:24px 20px 28px;max-height:88vh;overflow-y:auto;">
-    <div id="add-cycle-modal-title" style="font-size:13px;font-weight:700;color:var(--noir);margin-bottom:20px;letter-spacing:.3px;">+ Ajouter un cycle pass&#233;</div>
-    <input type="hidden" id="cycle-hist-edit-id">
-
-    <div style="margin-bottom:16px;">
-      <label style="font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--gris);display:block;margin-bottom:6px;">Date de d&#233;but</label>
-      <input type="date" id="cycle-hist-date" style="width:100%;padding:10px 12px;border:1.5px solid var(--sable);border-radius:12px;font-size:14px;font-family:var(--sans);box-sizing:border-box;background:var(--creme);color:var(--noir);">
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
-      <div>
-        <label style="font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--gris);display:block;margin-bottom:6px;">Dur&#233;e du cycle</label>
-        <div style="display:flex;align-items:center;gap:6px;">
-          <input type="number" id="cycle-hist-duree" min="21" max="45" value="28" style="width:100%;padding:10px 10px;border:1.5px solid var(--sable);border-radius:12px;font-size:14px;font-family:var(--sans);box-sizing:border-box;background:var(--creme);color:var(--noir);">
-          <span style="font-size:12px;color:var(--gris);white-space:nowrap;">jours</span>
-        </div>
-      </div>
-      <div>
-        <label style="font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--gris);display:block;margin-bottom:6px;">Dur&#233;e des r&#232;gles</label>
-        <div style="display:flex;align-items:center;gap:6px;">
-          <input type="number" id="cycle-hist-regles" min="2" max="10" value="5" style="width:100%;padding:10px 10px;border:1.5px solid var(--sable);border-radius:12px;font-size:14px;font-family:var(--sans);box-sizing:border-box;background:var(--creme);color:var(--noir);">
-          <span style="font-size:12px;color:var(--gris);white-space:nowrap;">jours</span>
-        </div>
-      </div>
-    </div>
-
-    <div style="margin-bottom:16px;">
-      <label style="font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--gris);display:block;margin-bottom:8px;">Intensit&#233; des r&#232;gles</label>
-      <div style="display:flex;gap:8px;">
-        <div class="intensite-opt" data-val="legere" onclick="selectIntensiteHist(this)" style="flex:1;padding:10px 6px;border:1.5px solid var(--sable);border-radius:12px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s;">
-          <div style="font-size:16px;margin-bottom:3px;">🟢</div>
-          <div style="font-size:10px;color:var(--gris);">L&#233;g&#232;res</div>
-        </div>
-        <div class="intensite-opt" data-val="normale" onclick="selectIntensiteHist(this)" style="flex:1;padding:10px 6px;border:1.5px solid var(--sable);border-radius:12px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s;">
-          <div style="font-size:16px;margin-bottom:3px;">🟡</div>
-          <div style="font-size:10px;color:var(--gris);">Normales</div>
-        </div>
-        <div class="intensite-opt" data-val="abondante" onclick="selectIntensiteHist(this)" style="flex:1;padding:10px 6px;border:1.5px solid var(--sable);border-radius:12px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s;">
-          <div style="font-size:16px;margin-bottom:3px;">🔴</div>
-          <div style="font-size:10px;color:var(--gris);">Abondantes</div>
-        </div>
-      </div>
-    </div>
-
-    <div style="margin-bottom:16px;">
-      <label style="font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--gris);display:block;margin-bottom:8px;">Sympt&#244;mes principaux <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optionnel)</span></label>
-      <div id="cycle-hist-symptomes" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
-    </div>
-
-    <div style="margin-bottom:22px;">
-      <label style="font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--gris);display:block;margin-bottom:6px;">Note personnelle <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optionnel)</span></label>
-      <textarea id="cycle-hist-note" maxlength="100" rows="2" placeholder="Ex : cycle stressant, voyage..." oninput="document.getElementById('cycle-hist-note-count').textContent=this.value.length" style="width:100%;padding:10px 12px;border:1.5px solid var(--sable);border-radius:12px;font-size:13px;font-family:var(--sans);box-sizing:border-box;background:var(--creme);color:var(--noir);resize:none;line-height:1.5;"></textarea>
-      <div style="font-size:10px;color:var(--gris);text-align:right;margin-top:2px;"><span id="cycle-hist-note-count">0</span>/100</div>
-    </div>
-
-    <button onclick="saveHistoriqueCycle()" style="width:100%;padding:13px;background:var(--season-grad);color:white;border:none;border-radius:14px;font-size:14px;font-weight:700;font-family:var(--sans);cursor:pointer;margin-bottom:10px;">Enregistrer</button>
-    <button onclick="closeAddCycleModal()" style="width:100%;padding:11px;background:transparent;color:var(--gris);border:none;border-radius:14px;font-size:13px;font-family:var(--sans);cursor:pointer;">Annuler</button>
-  </div>
-</div>
-
-<script src="/data.js" defer></script>
-<script src="/app.js" defer></script>
-
-<!-- ── PWA INSTALL GUIDE ─────────────────────────────────────── -->
-<div class="pwa-overlay" id="pwa-overlay" onclick="closePwaGuide()"></div>
-
-<div id="pwa-guide-modal" class="pwa-modal" data-browser="ios-safari">
-  <div class="pwa-modal-header">
-    <h3 class="pwa-modal-title">Installe SakinApp sur ton téléphone 📲</h3>
-    <button class="pwa-modal-close" onclick="closePwaGuide()" aria-label="Fermer">✕</button>
-  </div>
-
-  <!-- iOS Safari -->
-  <div class="pwa-content pwa-ios-safari">
-    <p class="pwa-intro">Le plus courant chez nos sœurs 🍎 — c'est très simple :</p>
-    <div class="pwa-steps">
-      <div class="pwa-step">
-        <div class="pwa-step-number">1</div>
-        <div class="pwa-step-icon">⬆️</div>
-        <div class="pwa-step-text">Appuie sur l'icône <strong>Partager</strong> en bas de ton écran</div>
-      </div>
-      <div class="pwa-step">
-        <div class="pwa-step-number">2</div>
-        <div class="pwa-step-icon">📱</div>
-        <div class="pwa-step-text">Fais défiler et trouve <strong>"Sur l'écran d'accueil"</strong></div>
-      </div>
-      <div class="pwa-step">
-        <div class="pwa-step-number">3</div>
-        <div class="pwa-step-icon">✨</div>
-        <div class="pwa-step-text">Appuie sur <strong>"Ajouter"</strong> — c'est tout ! 🌸</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Android Chrome -->
-  <div class="pwa-content pwa-android-chrome">
-    <p class="pwa-intro">Installation rapide sur Android :</p>
-    <div class="pwa-steps">
-      <div class="pwa-step">
-        <div class="pwa-step-number">1</div>
-        <div class="pwa-step-icon">⋮</div>
-        <div class="pwa-step-text">Appuie sur les 3 points <strong>⋮</strong> en haut à droite</div>
-      </div>
-      <div class="pwa-step">
-        <div class="pwa-step-number">2</div>
-        <div class="pwa-step-icon">📲</div>
-        <div class="pwa-step-text">Sélectionne <strong>"Ajouter à l'écran d'accueil"</strong> ou <strong>"Installer l'application"</strong></div>
-      </div>
-      <div class="pwa-step">
-        <div class="pwa-step-number">3</div>
-        <div class="pwa-step-icon">✅</div>
-        <div class="pwa-step-text">Confirme en appuyant sur <strong>"Installer"</strong></div>
-      </div>
-    </div>
-    <button class="pwa-install-btn" onclick="triggerPwaInstall()">Installer maintenant 🌿</button>
-  </div>
-
-  <!-- iOS Chrome -->
-  <div class="pwa-content pwa-ios-chrome">
-    <div class="pwa-limitation">
-      <div class="pwa-limitation-icon">🌿</div>
-      <p>Sur <strong>iPhone</strong>, ouvre <span class="pwa-url">sakinaap.com</span> dans <strong>Safari</strong> pour installer l'app.</p>
-      <p class="pwa-limitation-note">Chrome iOS ne permet pas encore l'installation d'apps.</p>
-    </div>
-    <button class="pwa-copy-btn" onclick="navigator.clipboard&&navigator.clipboard.writeText('https://sakinaap.com').then(()=>this.textContent='Lien copié ! ✓')">Copier le lien 📋</button>
-  </div>
-
-  <!-- Autre navigateur -->
-  <div class="pwa-content pwa-other">
-    <p class="pwa-intro">Installe l'app depuis ton navigateur :</p>
-    <div class="pwa-steps">
-      <div class="pwa-step">
-        <div class="pwa-step-number">1</div>
-        <div class="pwa-step-icon">🔍</div>
-        <div class="pwa-step-text">Cherche <strong>"Ajouter à l'écran d'accueil"</strong> ou <strong>"Installer"</strong> dans le menu de ton navigateur</div>
-      </div>
-      <div class="pwa-step">
-        <div class="pwa-step-number">2</div>
-        <div class="pwa-step-icon">📱</div>
-        <div class="pwa-step-text">Sur mobile : menu du navigateur · Sur desktop : icône dans la barre d'adresse</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="pwa-modal-footer">
-    <button class="pwa-done-btn" onclick="closePwaGuide()">C'est fait ! 🌸</button>
-  </div>
-</div>
-
-<!-- Bannière discrète en bas -->
-<div id="pwa-install-banner" class="pwa-banner" style="display:none;">
-  <div class="pwa-banner-content">
-    <span class="pwa-banner-text">📲 Installe SakinApp sur ton téléphone pour l'avoir toujours avec toi</span>
-    <div class="pwa-banner-actions">
-      <button class="pwa-banner-btn pwa-banner-install" onclick="openPwaGuide(_pwaDetectBrowser().type)">Installer</button>
-      <button class="pwa-banner-btn pwa-banner-later" onclick="this.closest('.pwa-banner').style.display='none';localStorage.setItem('pwa_dismissed_at',Date.now())">Plus tard</button>
-    </div>
-  </div>
-</div>
+</footer>
 
 </body>
 </html>
