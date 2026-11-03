@@ -51,6 +51,7 @@ h3 { font-size: 18px; margin: 26px 0 6px; }
 .appel h2 { margin-top: 0; }
 .bouton { display: inline-block; margin-top: 8px; padding: 13px 26px; border-radius: 999px; background: var(--hiver-f); color: #fff; text-decoration: none; font-weight: 600; }
 .note { font-size: 14px; color: var(--gris); }
+.douceur { font-family: "Playfair Display", Georgia, serif; font-style: italic; font-size: 20px; color: var(--hiver); text-align: center; margin: 30px 0 0; }
 .essentiel { background: var(--doux); border: 0; border-radius: 22px; padding: 20px 24px; }
 .essentiel .titre { color: var(--hiver); }
 .faq details { background: var(--carte); border: 1px solid var(--sable); border-radius: 16px; padding: 12px 18px; margin: 10px 0; }
