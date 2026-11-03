@@ -42,12 +42,14 @@
   .dou .note { margin: 0; }
   @media (prefers-color-scheme: dark) { .dou .ar { color: var(--hiver); } }
   .fiche { text-align: center; border-left: 4px solid var(--hiver); }
+  .fiche-haut { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; border-left: 4px solid var(--hiver); }
+  .fiche-haut .bouton { margin-top: 0; padding: 10px 20px; font-size: 15px; }
 </style>
 </head>
 <body>
 <header class="barre">
   <a class="logo" href="/"><img src="/img/icone.png" alt="SakinApp"><span>SakinApp</span></a>
-  <nav><a href="/">L'appli</a><a href="/blog">Blog</a></nav>
+  <nav><a href="/">L'appli</a><a href="/blog">Blog</a><a href="/fiches">Fiches offertes</a></nav>
 </header>
 
 <main>
@@ -64,6 +66,8 @@
   <span class="titre">L'essentiel en 30 secondes</span>
   <p><strong>Oui, tu peux faire des invocations et du dhikr pendant tes règles.</strong> Les savants sont unanimes : le dhikr et les dou'a, du cœur et de la langue, sont permis (an-Nawawî, <em>al-Adhkâr</em>). Le jour de l'Aïd, les femmes qui avaient leurs règles faisaient le takbir et les invocations avec tout le monde (al-Bukhari 971). Ce qui est suspendu : la <strong>prière</strong>, le <strong>jeûne</strong> (qui se rattrape) et le <strong>tour de la Ka'ba</strong>. Plus bas : les invocations à garder, et une <strong>fiche gratuite à imprimer</strong>.</p>
 </section>
+
+<p class="encadre fiche-haut"><span>🖨️ <strong>La fiche à imprimer</strong> : toutes ces invocations sur une page, gratuite.</span> <a class="bouton" href="/telechargements/invocations-pendant-les-regles.pdf" download>Télécharger le PDF</a></p>
 
 <nav class="sommaire" aria-label="Dans cet article">
   <strong>Dans cet article</strong>
@@ -143,6 +147,7 @@
   <span class="titre" style="color:var(--hiver)">La fiche à imprimer</span>
   <p>Toutes ces invocations sur <strong>une seule page</strong>, en arabe, en phonétique et en français, avec leurs sources et une petite case à cocher. Imprime-la, glisse-la sur ta table de nuit ou dans ton agenda.</p>
   <a class="bouton" href="/telechargements/invocations-pendant-les-regles.pdf" download>Télécharger la fiche (PDF, gratuit)</a>
+  <p class="note" style="margin-top:10px">Retrouve toutes les fiches gratuites sur la page <a href="/fiches">Fiches offertes</a>.</p>
 </section>
 
 <h2 id="suspendu">Qu'est-ce qui est suspendu pendant les règles ?</h2>
@@ -211,6 +216,7 @@
     <span>© 2026 Lila Himeur · SakinApp</span>
     <nav>
       <a href="/blog">Blog</a>
+      <a href="/fiches">Fiches offertes</a>
       <a href="/assistance">Assistance</a>
       <a href="/confidentialite">Confidentialité</a>
       <a href="/mentions-legales">Mentions légales</a>

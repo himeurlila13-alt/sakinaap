@@ -7,6 +7,7 @@ Le ton est celui d'une grande sœur : doux, jamais culpabilisant, jamais médica
 ## Pages principales
 
 - [Accueil : présentation de l'appli](https://sakinaap.com/): fonctionnalités, quatre saisons du cycle, confidentialité des données
+- [Fiches offertes](https://sakinaap.com/fiches): fiches PDF gratuites à imprimer, dont « Mes invocations pendant mes règles » (https://sakinaap.com/telechargements/invocations-pendant-les-regles.pdf)
 - [Assistance et questions fréquentes](https://sakinaap.com/assistance)
 - [Confidentialité](https://sakinaap.com/confidentialite)
 
