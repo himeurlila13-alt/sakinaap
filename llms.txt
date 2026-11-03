@@ -1,0 +1,15 @@
+# SakinApp
+
+> SakinApp est une application gratuite pour les femmes musulmanes : suivi du cycle menstruel en quatre saisons (Hiver, Printemps, Été, Automne), horaires de prière, pause des prières pendant les règles, ghusl, invocations sourcées et les 99 noms d'Allah. Sans compte, sans abonnement : les données restent sur le téléphone. Créée par Lila Himeur, en français.
+
+Le ton est celui d'une grande sœur : doux, jamais culpabilisant, jamais médical. Chaque verset et chaque hadith cité est vérifié dans les recueils (numérotation de Muhammad Fu'ad 'Abd al-Baqi pour Muslim). Les repères santé s'appuient sur des sources médicales reconnues et ne remplacent pas un avis médical.
+
+## Pages principales
+
+- [Accueil : présentation de l'appli](https://sakinaap.com/): fonctionnalités, quatre saisons du cycle, confidentialité des données
+- [Assistance et questions fréquentes](https://sakinaap.com/assistance)
+- [Confidentialité](https://sakinaap.com/confidentialite)
+
+## Blog
+
+- [Soulager le SPM naturellement : vivre ton Automne avec douceur](https://sakinaap.com/blog/spm-naturel): alimentation, activité physique, sommeil et dhikr pour le syndrome prémenstruel, avec FAQ et sources (Coran 13:28, al-Bukhari 1975 et 351, Muslim 1159, Manuel MSD, NHS)

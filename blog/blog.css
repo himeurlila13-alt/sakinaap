@@ -1,0 +1,73 @@
+/* Blog SakinApp : même charte que la page d'accueil (crème, prune, or, saisons). */
+:root {
+  --creme: #FAF6F0; --carte: #FFFFFF; --encre: #2D2420; --gris: #6B5B53; --sable: #E8DDD0; --or: #9A7A3E; --filet: rgba(201,169,110,.5);
+  --hiver: #A65591; --hiver-f: #5C2453; --printemps: #14B8A6; --printemps-f: #0B6E67;
+  --ete: #FF8E5E; --ete-f: #C2552B; --automne: #C0354F; --automne-f: #8C1F35;
+  --doux: #F4EADF;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --creme: #1A1513; --carte: #241D1A; --encre: #F3ECE4; --gris: #B9A99E; --sable: #3A302A; --or: #D9B97A; --hiver: #D08DBE; --automne: #E07A8E; --filet: rgba(201,169,110,.35); --doux: #2A211D; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--creme); color: var(--encre); font: 17px/1.7 "DM Sans", system-ui, sans-serif; }
+img { max-width: 100%; display: block; }
+a { color: var(--hiver); }
+
+.barre { display: flex; align-items: center; justify-content: space-between; max-width: 1120px; margin: 0 auto; padding: 18px 20px; }
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo img { width: 40px; height: 40px; border-radius: 10px; }
+.logo span { font-family: "Dancing Script", cursive; font-size: 30px; color: var(--hiver); }
+.barre nav { display: flex; gap: 22px; font-size: 15px; }
+.barre nav a { text-decoration: none; color: var(--encre); opacity: .8; }
+.barre nav a:hover, .barre nav a[aria-current] { opacity: 1; color: var(--hiver); }
+
+main { max-width: 720px; margin: 0 auto; padding: 8px 16px 64px; }
+.ariane { font-size: 14px; color: var(--gris); margin: 8px 0 18px; }
+.ariane a { color: var(--gris); }
+.surtitre { font-size: 12px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--or); }
+h1 { font-family: "Playfair Display", Georgia, serif; font-weight: 600; font-size: clamp(32px, 6vw, 46px); line-height: 1.15; margin: 10px 0 14px; }
+h1 em, h2 em { color: var(--hiver); font-weight: 500; }
+.chapo { font-family: "Playfair Display", Georgia, serif; font-style: italic; font-size: 20px; line-height: 1.55; color: var(--gris); margin: 0 0 8px; }
+.meta { font-size: 14px; color: var(--gris); }
+.photo { margin: 26px 0; border-radius: 22px; overflow: hidden; aspect-ratio: 3 / 2; }
+.photo img { width: 100%; height: 100%; object-fit: cover; }
+h2 { font-family: "Playfair Display", Georgia, serif; font-weight: 600; font-size: 28px; line-height: 1.25; margin: 44px 0 10px; }
+h3 { font-size: 18px; margin: 26px 0 6px; }
+.sommaire { background: var(--carte); border: 1px solid var(--sable); border-radius: 18px; padding: 16px 22px; margin: 26px 0; font-size: 15px; }
+.sommaire strong { display: block; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--or); margin-bottom: 4px; }
+.sommaire ol { margin: 0; padding-left: 20px; }
+.deux { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 18px 0; }
+@media (max-width: 560px) { .deux { grid-template-columns: 1fr; } }
+.encadre { background: var(--carte); border: 1px solid var(--sable); border-radius: 18px; padding: 16px 20px; margin: 18px 0; }
+.encadre.automne { border-left: 4px solid var(--automne); }
+.encadre .titre { display: block; font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--automne); margin-bottom: 6px; }
+.encadre ul, .encadre ol { margin: 0; padding-left: 20px; }
+.encadre p { margin: 0 0 8px; }
+.encadre p:last-child { margin-bottom: 0; }
+.source { background: var(--doux); border-radius: 18px; padding: 18px 22px; margin: 22px 0; font-family: "Playfair Display", Georgia, serif; font-style: italic; font-size: 19px; line-height: 1.55; }
+.source cite { display: block; margin-top: 8px; font: 500 13px "DM Sans", sans-serif; letter-spacing: .5px; color: var(--or); }
+.appel { text-align: center; background: var(--carte); border: 1px solid var(--filet); border-radius: 22px; padding: 28px 22px; margin: 44px 0 0; }
+.appel img { width: 88px; height: 88px; margin: 0 auto 10px; }
+.appel h2 { margin-top: 0; }
+.bouton { display: inline-block; margin-top: 8px; padding: 13px 26px; border-radius: 999px; background: var(--hiver-f); color: #fff; text-decoration: none; font-weight: 600; }
+.note { font-size: 14px; color: var(--gris); }
+.essentiel { background: var(--doux); border: 0; border-radius: 22px; padding: 20px 24px; }
+.essentiel .titre { color: var(--hiver); }
+.faq details { background: var(--carte); border: 1px solid var(--sable); border-radius: 16px; padding: 12px 18px; margin: 10px 0; }
+.faq summary { cursor: pointer; font-weight: 600; }
+.faq details p { margin: 8px 0 2px; }
+.sources, .autrice { font-size: 15px; }
+.sources li { margin: 4px 0; }
+
+.cartes { display: grid; gap: 18px; margin-top: 26px; }
+.carte { display: grid; grid-template-columns: 220px 1fr; background: var(--carte); border: 1px solid var(--sable); border-radius: 22px; overflow: hidden; text-decoration: none; color: inherit; }
+.carte img { width: 100%; height: 100%; object-fit: cover; min-height: 160px; }
+.carte div { padding: 18px 22px; }
+.carte h2 { font-size: 22px; margin: 6px 0; }
+.carte p { margin: 0; color: var(--gris); font-size: 15px; }
+@media (max-width: 560px) { .carte { grid-template-columns: 1fr; } .carte img { aspect-ratio: 3 / 2; } }
+
+footer { border-top: 1px solid var(--sable); }
+footer .enveloppe { max-width: 1120px; margin: 0 auto; padding: 22px 20px; display: flex; flex-wrap: wrap; gap: 10px 22px; justify-content: space-between; font-size: 14px; color: var(--gris); }
+footer nav { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+footer a { color: var(--gris); }
