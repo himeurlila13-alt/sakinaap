@@ -145,7 +145,17 @@
   footer nav { display: flex; flex-wrap: wrap; gap: 8px 18px; }
   footer a { text-decoration: none; }
   footer a:hover { text-decoration: underline; }
-</style>
+
+  /* Flèche pour remonter (sans script : la CSP les interdit). Elle apparaît après un peu de défilement là où le navigateur le permet. */
+  .remonter { position: fixed; right: 18px; bottom: 18px; z-index: 5; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: var(--carte); border: 1px solid var(--filet); color: var(--hiver-f); text-decoration: none; box-shadow: 0 6px 18px rgba(92,36,83,.16); }
+  .remonter:hover { border-color: var(--hiver); }
+  .remonter svg { width: 20px; height: 20px; }
+  @media (prefers-color-scheme: dark) { .remonter { color: var(--hiver); } }
+  @supports (animation-timeline: scroll()) {
+    .remonter { animation: apparaitre linear both; animation-timeline: scroll(root); animation-range: 0 400px; }
+    @keyframes apparaitre { from { opacity: 0; visibility: hidden; } to { opacity: 1; visibility: visible; } }
+  }
+  </style>
 </head>
 <body>
 
@@ -307,6 +317,7 @@
   </div>
 </main>
 
+<a class="remonter" href="#" aria-label="Remonter en haut de la page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>
 <footer>
   <div class="enveloppe">
     <span>© 2026 Lila Himeur · SakinApp</span>
