@@ -41,7 +41,22 @@
   .barre nav { display: flex; gap: 22px; font-size: 15px; }
   .barre nav a { text-decoration: none; color: var(--encre); opacity: .8; }
   .barre nav a:hover { opacity: 1; }
-  @media (max-width: 720px) { .barre nav { display: none; } }
+  .barre nav { align-items: center; }
+  .barre nav a { white-space: nowrap; }
+  @media (max-width: 1000px) { .barre nav { gap: 14px; font-size: 14.5px; } }
+  @media (max-width: 860px) { .barre nav a[href="#confiance"], .barre nav a[href="#questions"] { display: none; } }
+  /* Pastilles vers le blog et les fiches : visibles aussi sur téléphone. */
+  .barre nav a.pastille { padding: 7px 15px; border-radius: 999px; border: 1px solid var(--filet); background: rgba(var(--voile),.8); color: var(--hiver-f); opacity: 1; font-weight: 600; box-shadow: 0 2px 10px rgba(92,36,83,.08); white-space: nowrap; }
+  .barre nav a.pastille:hover { background: var(--carte); border-color: var(--hiver); }
+  @media (prefers-color-scheme: dark) { .barre nav a.pastille { color: var(--hiver); } }
+  @media (max-width: 720px) {
+    .barre { padding: 14px 16px; }
+    .barre nav { gap: 6px; font-size: 13.5px; }
+    .barre nav a:not(.pastille) { display: none; }
+    .barre nav a.pastille { padding: 6px 11px; }
+    .logo { gap: 8px; }
+    .logo span { font-size: 24px; }
+  }
 
   /* Ouverture : la photo de l'été en fond, sous un voile crème qui porte le texte. */
   .ouverture { position: relative; overflow: hidden; background: url(/img/fonds/ete.jpg) right center / cover no-repeat; }
@@ -145,8 +160,8 @@
     <a href="#appli">L'appli</a>
     <a href="#confiance">Tes données</a>
     <a href="#questions">Questions</a>
-    <a href="/blog">Blog</a>
-    <a href="/fiches">Fiches offertes</a>
+    <a class="pastille" href="/blog">Blog</a>
+    <a class="pastille" href="/fiches">Fiches offertes</a>
   </nav>
 </header>
 
