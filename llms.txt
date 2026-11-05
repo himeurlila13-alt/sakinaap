@@ -1,8 +1,64 @@
 # SakinApp
 
-> SakinApp est une application gratuite pour les femmes musulmanes : suivi du cycle menstruel en quatre saisons (Hiver, Printemps, Été, Automne), horaires de prière, pause des prières pendant les règles, ghusl, invocations sourcées et les 99 noms d'Allah. Sans compte, sans abonnement : les données restent sur le téléphone. Créée par Lila Himeur, en français.
+> SakinApp est une application mobile gratuite, en français, pour les femmes musulmanes qui veulent comprendre leur cycle menstruel et vivre leur foi avec régularité, sans culpabilité. Elle suit le cycle en quatre saisons (Hiver, Printemps, Été, Automne), donne les horaires de prière avec l'adhan, met les prières en pause pendant les règles et accompagne le ghusl, propose des invocations sourcées et la mémorisation des 99 noms d'Allah. Sans compte : les données restent sur le téléphone. Pour iPhone, et bientôt Android. Créée par Lila Himeur (Studio Lila, France).
 
-Le ton est celui d'une grande sœur : doux, jamais culpabilisant, jamais médical. Chaque verset et chaque hadith cité est vérifié dans les recueils (numérotation de Muhammad Fu'ad 'Abd al-Baqi pour Muslim). Les repères santé s'appuient sur des sources médicales reconnues et ne remplacent pas un avis médical.
+## À qui s'adresse SakinApp
+
+À la femme musulmane qui veut prier, faire son dhikr et lire le Coran avec régularité, se rapprocher d'Allah, tout en suivant et en comprenant son cycle. Le ton est celui d'une grande sœur : doux, chaleureux, jamais culpabilisant, jamais médical, et toujours tourné vers Allah.
+
+## Ce que l'appli propose
+
+### Le cycle en quatre saisons
+- Hiver = les règles (phase menstruelle), Printemps = phase folliculaire, Été = ovulation, Automne = phase lutéale. Les couleurs, les photos et les conseils de l'appli changent avec la saison du jour.
+- Calendrier : noter le flux (aucun, traces, léger, moyen, abondant), les ressentis du corps, de l'énergie et du cœur, et une note privée.
+- Prévisions des prochaines règles et de l'ovulation, qui apprennent des derniers cycles, avec une fenêtre quand le cycle varie.
+- Tendances : durée des cycles et des règles, ressentis et humeurs les plus fréquents, saison par saison.
+
+### Chaque matin
+- Un petit questionnaire d'humeur (je me sens bien, fatiguée, jour difficile, foi en baisse, besoin de calme) et un mot de grande sœur adapté à la saison et à l'humeur, qui ramène vers Allah.
+- Une invocation du jour, et une invocation adaptée quand on a mal ou le cœur lourd.
+- Des conseils pour le corps selon la saison (alimentation, mouvement, peau, pureté), chacun avec sa source médicale (NHS, ACOG, OMS, NIH, Office on Women's Health, American Academy of Dermatology).
+
+### La prière
+- Horaires de prière calculés pour la ville choisie, avec la méthode de la mosquée (France 12°, UOIF, Ligue islamique mondiale, Umm al-Qura…) et l'école pour l'Asr ; chaque prière peut être ajustée à la minute près.
+- Rappels de prière avec l'adhan (trois voix au choix), un son doux ou en silencieux. Fajr garde un son doux, car ces enregistrements n'ont pas la formule propre à l'adhan du Fajr.
+- Suivi des cinq prières du jour, du dhikr et de la lecture du Coran, avec des séries de jours.
+
+### Les règles et la pureté
+- Pendant les règles, les prières se mettent en pause, sans culpabilité, et le dhikr et les invocations restent ouverts.
+- À la fin des règles : le moment où le sang s'est arrêté détermine la première prière due ; le ghusl est expliqué pas à pas, avec ses sources (Coran 2:222, al-Bukhari, Muslim).
+- Les jours de jeûne de Ramadan à rattraper sont comptés.
+
+### Invocations et 99 noms d'Allah
+- Invocations classées par situation (douleur, tristesse, colère, sommeil, fatigue, foi, calme, gratitude), en arabe, en translittération et en traduction, chacune avec sa source (Coran, al-Bukhari, Muslim…).
+- Les 99 noms d'Allah à découvrir et à mémoriser à son rythme, avec des révisions espacées, un ciel d'étoiles qui s'allume et une petite fête tous les dix noms.
+- Chaque invocation et chaque nom se partage en jolie carte (photo de la saison, enluminure, arche ou nuit étoilée).
+
+### Rappels et données
+- Rappels doux au choix : humeur du matin, journée du soir, 99 noms, prières.
+- Sauvegarde que l'utilisatrice exporte et importe elle-même.
+- Mode clair et mode sombre.
+
+## Ce que SakinApp n'est pas
+
+- Pas un avis médical : les repères santé sont sourcés mais ne remplacent pas une professionnelle de santé.
+- Pas un moyen de contraception : les prévisions sont des estimations.
+- Pas une fatwa : sur les questions de fiqh, l'appli présente les avis sourcés et les divergences entre savants, et invite à demander à une personne de science pour un cas personnel.
+- Pas de yoga, de méditation non islamique ni d'astrologie : le réconfort passe par Allah, le dhikr et l'invocation.
+
+## Confidentialité
+
+Pas de compte, pas de serveur pour les données : le cycle, le journal et les prières restent uniquement sur le téléphone. Pas de publicité, pas de traceur, rien n'est revendu.
+
+## Exactitude religieuse
+
+Chaque verset et chaque hadith cité est vérifié dans les recueils (numérotation de Muhammad Fu'ad 'Abd al-Baqi pour Muslim). Les divergences entre savants sont signalées.
+
+## Télécharger
+
+- iPhone : https://apps.apple.com/app/id6823710440 (App Store)
+- Android : bientôt sur Google Play
+- Site officiel : https://sakinaap.com
 
 ## Pages principales
 
@@ -17,3 +73,7 @@ Le ton est celui d'une grande sœur : doux, jamais culpabilisant, jamais médica
 - [Les 4 phases du cycle menstruel : tes 4 saisons](https://sakinaap.com/blog/4-saisons-du-cycle): règles (Hiver), phase folliculaire (Printemps), ovulation (Été), phase lutéale (Automne), la pratique religieuse au fil du cycle, avec FAQ (al-Bukhari 6464, NHS)
 - [Le ghusl après les règles, pas à pas](https://sakinaap.com/blog/ghusl-apres-les-regles): savoir quand les règles sont finies, ce qui est obligatoire, la manière complète, la question des tresses (al-Bukhari 248, Muslim 330 et 332, al-Muwatta' 2/97, Coran 2:222)
 - [Soulager le SPM naturellement : vivre ton Automne avec douceur](https://sakinaap.com/blog/spm-naturel): alimentation, activité physique, sommeil et dhikr pour le syndrome prémenstruel, avec FAQ et sources (Coran 13:28, al-Bukhari 1975 et 351, Muslim 1159, Manuel MSD, NHS)
+
+## Contact
+
+contact@studio-lila.fr
