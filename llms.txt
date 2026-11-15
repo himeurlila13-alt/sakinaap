@@ -1,10 +1,10 @@
 # SakinApp
 
-> SakinApp est une application mobile gratuite, en français, pour les femmes musulmanes qui veulent comprendre leur cycle menstruel et vivre leur foi avec régularité, sans culpabilité. Elle suit le cycle en quatre saisons (Hiver, Printemps, Été, Automne), donne les horaires de prière avec l'adhan, met les prières en pause pendant les règles et accompagne le ghusl, propose des invocations sourcées et la mémorisation des 99 noms d'Allah. Sans compte : les données restent sur le téléphone. Pour iPhone, et bientôt Android. Créée par Lila Himeur (Studio Lila, France).
+> SakinApp est une application mobile gratuite, en français, pour les femmes musulmanes qui veulent comprendre leur cycle menstruel et vivre leur foi avec régularité, sans culpabilité. Elle suit le cycle en quatre saisons (Hiver, Printemps, Été, Automne), donne les horaires de prière avec l'adhan, met les prières en pause pendant les règles et accompagne le ghusl, propose des invocations sourcées et la mémorisation des 99 noms d'Allah. Sans compte : les données restent sur le téléphone. Pour iPhone et Android. Créée par Lila Himeur (Studio Lila, France).
 
 ## À qui s'adresse SakinApp
 
-À la femme musulmane qui veut prier, faire son dhikr et lire le Coran avec régularité, se rapprocher d'Allah, tout en suivant et en comprenant son cycle. Le ton est celui d'une grande sœur : doux, chaleureux, jamais culpabilisant, jamais médical, et toujours tourné vers Allah.
+À la femme musulmane qui veut prier, faire son dhikr et lire le Coran avec régularité, se rapprocher d'Allah, tout en suivant et en comprenant son cycle. Le ton est doux, chaleureux, jamais culpabilisant, jamais médical, et toujours tourné vers Allah.
 
 ## Ce que l'appli propose
 
@@ -15,7 +15,7 @@
 - Tendances : durée des cycles et des règles, ressentis et humeurs les plus fréquents, saison par saison.
 
 ### Chaque matin
-- Un petit questionnaire d'humeur (je me sens bien, fatiguée, jour difficile, foi en baisse, besoin de calme) et un mot de grande sœur adapté à la saison et à l'humeur, qui ramène vers Allah.
+- Un petit questionnaire d'humeur (je me sens bien, fatiguée, jour difficile, foi en baisse, besoin de calme) et un mot doux adapté à la saison et à l'humeur, qui ramène vers Allah.
 - Une invocation du jour, et une invocation adaptée quand on a mal ou le cœur lourd.
 - Des conseils pour le corps selon la saison (alimentation, mouvement, peau, pureté), chacun avec sa source médicale (NHS, ACOG, OMS, NIH, Office on Women's Health, American Academy of Dermatology).
 
@@ -57,7 +57,7 @@ Chaque verset et chaque hadith cité est vérifié dans les recueils (numérotat
 ## Télécharger
 
 - iPhone : https://apps.apple.com/fr/app/sakinapp/id6823710440 (App Store, disponible)
-- Android : très bientôt sur Google Play
+- Android : https://play.google.com/store/apps/details?id=com.sakinaap.app (Google Play, disponible)
 - Site officiel : https://sakinaap.com
 
 ## Pages principales
