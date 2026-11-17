@@ -35,11 +35,19 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/blog/blog.css">
+<link rel="stylesheet" href="/menu.css">
+<script src="/menu.js" defer></script>
 </head>
 <body>
-<header class="barre">
-  <a class="logo" href="/"><img src="/img/logo-rose.png" alt="SakinApp"><span>SakinApp</span></a>
-  <nav><a href="/">L'appli</a><a href="/blog">Blog</a><a href="/fiches">Fiches offertes</a></nav>
+<header class="menu-site">
+  <div class="menu-int">
+    <a class="menu-logo" href="/"><img src="/img/logo-rose.png" alt=""><span>SakinApp</span></a>
+    <nav class="menu-liens" aria-label="Menu principal"><a href="/">Découvrir</a><a href="/#saisons">Ton cycle</a><a href="/blog" aria-current="page">Lectures</a><a href="/fiches">Fiches offertes</a><a href="/#questions">Questions</a><a class="menu-btn" href="/#telecharger">Télécharger</a></nav>
+    <details class="menu-tel">
+      <summary aria-label="Menu"><span class="ouvrir" aria-hidden="true">☰</span><span class="fermer" aria-hidden="true">✕</span></summary>
+      <nav class="menu-panneau" aria-label="Menu principal"><a href="/">Découvrir</a><a href="/#saisons">Ton cycle</a><a href="/blog" aria-current="page">Lectures</a><a href="/fiches">Fiches offertes</a><a href="/#questions">Questions</a><span class="menu-filet"></span><a class="menu-btn" href="/#telecharger">Télécharger SakinApp</a></nav>
+    </details>
+  </div>
 </header>
 
 <main>

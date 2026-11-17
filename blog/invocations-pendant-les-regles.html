@@ -46,11 +46,19 @@
   .fiche-haut { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; border-left: 4px solid var(--hiver); }
   .fiche-haut .bouton { margin-top: 0; padding: 10px 20px; font-size: 15px; }
 </style>
+<link rel="stylesheet" href="/menu.css">
+<script src="/menu.js" defer></script>
 </head>
 <body>
-<header class="barre">
-  <a class="logo" href="/"><img src="/img/logo-rose.png" alt="SakinApp"><span>SakinApp</span></a>
-  <nav><a href="/">L'appli</a><a href="/blog">Blog</a><a href="/fiches">Fiches offertes</a></nav>
+<header class="menu-site">
+  <div class="menu-int">
+    <a class="menu-logo" href="/"><img src="/img/logo-rose.png" alt=""><span>SakinApp</span></a>
+    <nav class="menu-liens" aria-label="Menu principal"><a href="/">Découvrir</a><a href="/#saisons">Ton cycle</a><a href="/blog" aria-current="page">Lectures</a><a href="/fiches">Fiches offertes</a><a href="/#questions">Questions</a><a class="menu-btn" href="/#telecharger">Télécharger</a></nav>
+    <details class="menu-tel">
+      <summary aria-label="Menu"><span class="ouvrir" aria-hidden="true">☰</span><span class="fermer" aria-hidden="true">✕</span></summary>
+      <nav class="menu-panneau" aria-label="Menu principal"><a href="/">Découvrir</a><a href="/#saisons">Ton cycle</a><a href="/blog" aria-current="page">Lectures</a><a href="/fiches">Fiches offertes</a><a href="/#questions">Questions</a><span class="menu-filet"></span><a class="menu-btn" href="/#telecharger">Télécharger SakinApp</a></nav>
+    </details>
+  </div>
 </header>
 
 <main>

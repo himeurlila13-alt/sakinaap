@@ -1,0 +1,56 @@
+/* Menu commun à toutes les pages de sakinaap.com (barre élégante, ☰ sur téléphone). */
+.menu-site {
+  --m-creme: 250,246,240; --m-encre: #2D2420; --m-rose: #A65591; --m-rose-f: #5C2453; --m-or: #C9A96E;
+  position: sticky; top: 0; z-index: 50; display: block; margin: 0; gap: 0;
+  border-bottom: 1px solid rgba(201,169,110,.45);
+  font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+/* Le fond flouté est sur un calque à part : sinon le grand menu du téléphone resterait coincé dans la barre. */
+.menu-site::before { content: ""; position: absolute; inset: 0; z-index: -1; background: rgba(var(--m-creme), .88); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+@media (prefers-color-scheme: dark) {
+  .menu-site { --m-creme: 26,21,19; --m-encre: #F3ECE4; --m-rose: #D08DBE; --m-rose-f: #F0C9E4; --m-or: #D9B97A; }
+}
+.menu-int { max-width: 1120px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.menu-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; font-size: 0; line-height: 1; }
+.menu-logo img { width: 38px; height: 38px; border-radius: 10px; }
+.menu-logo span { font-family: "Dancing Script", cursive; font-weight: 700; font-size: 29px; color: var(--m-rose); line-height: 1; }
+
+.menu-liens { display: flex; align-items: center; gap: 28px; font-size: 15px; }
+.menu-liens a { font-family: inherit; font-size: 15px; color: var(--m-encre); text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent; white-space: nowrap; transition: border-color .2s, color .2s; }
+.menu-liens a:hover { color: var(--m-rose); }
+.menu-liens a[aria-current] { border-bottom-color: var(--m-or); }
+.menu-site .menu-btn { color: #fff; background: #A65591; border: 0; border-radius: 999px; padding: 9px 18px; font-weight: 600; box-shadow: 0 4px 12px rgba(166,85,145,.3); }
+.menu-site .menu-btn:hover { color: #fff; background: #92477F; }
+
+/* Téléphone : le logo et ☰, qui ouvre un grand menu crème. */
+.menu-tel { display: none; }
+.menu-tel summary { list-style: none; cursor: pointer; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--m-rose-f); border-radius: 50%; }
+.menu-tel summary::-webkit-details-marker { display: none; }
+.menu-tel .fermer { display: none; font-size: 22px; }
+.menu-tel[open] .ouvrir { display: none; }
+.menu-tel[open] .fermer { display: inline; }
+.menu-panneau {
+  position: fixed; left: 0; right: 0; top: 63px; bottom: 0; z-index: 49; overflow-y: auto;
+  background: rgb(var(--m-creme)); padding: 28px 24px 40px; display: flex; flex-direction: column; gap: 6px;
+}
+.menu-panneau a { font-family: "Playfair Display", Georgia, serif; font-weight: 500; font-size: 26px; color: var(--m-encre); text-decoration: none; padding: 9px 0; }
+.menu-panneau a[aria-current] { color: var(--m-rose); }
+.menu-panneau .menu-filet { height: 1px; margin: 18px 0; background: linear-gradient(90deg, transparent, var(--m-or), transparent); }
+.menu-panneau .menu-btn { font-family: "DM Sans", sans-serif; font-size: 16px; text-align: center; padding: 14px 18px; }
+
+@media (max-width: 860px) {
+  .menu-liens { display: none; }
+  .menu-tel { display: block; }
+  .menu-int { padding: 10px 16px; }
+  .menu-logo span { font-size: 26px; }
+}
+
+/* Les ancres (#saisons, #questions…) ne passent pas sous la barre collée en haut. */
+html { scroll-padding-top: 76px; }
+
+/* Le menu ne reprend pas le style des questions (details/summary) des pages. */
+.menu-site details.menu-tel { border: 0; background: none; padding: 0; margin: 0; box-shadow: none; border-radius: 0; }
+.menu-site .menu-tel summary { background: none; border: 0; padding: 0; margin: 0; box-shadow: none; font-weight: 400; }
+.menu-site .menu-tel summary::before, .menu-site .menu-tel summary::after { content: none; display: none; }
+.menu-site nav { margin: 0; flex-wrap: nowrap; }
+.menu-site .menu-panneau { flex-wrap: nowrap; }

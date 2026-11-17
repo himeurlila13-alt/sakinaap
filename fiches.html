@@ -30,9 +30,15 @@
 <link rel="stylesheet" href="/blog/blog.css">
 <style>.carte .mot-plume { margin-top: 10px; padding: 10px 14px; border-left: 2px solid var(--filet); background: var(--doux); border-radius: 0 12px 12px 0; font-size: 14.5px; } .carte .mot-plume small { display: block; margin-top: 4px; font-size: 13px; color: var(--gris); } .appels { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 44px; } .appels .appel { margin: 0; display: flex; flex-direction: column; align-items: center; } .appels .appel .bouton { margin-top: auto; } @media (max-width: 640px) { .appels { grid-template-columns: 1fr; } }</style>
 <body>
-<header class="barre">
-  <a class="logo" href="/"><img src="/img/logo-rose.png" alt="SakinApp"><span>SakinApp</span></a>
-  <nav><a href="/">L'appli</a><a href="/blog">Blog</a><a href="/fiches" aria-current="page">Fiches offertes</a></nav>
+<header class="menu-site">
+  <div class="menu-int">
+    <a class="menu-logo" href="/"><img src="/img/logo-rose.png" alt=""><span>SakinApp</span></a>
+    <nav class="menu-liens" aria-label="Menu principal"><a href="/">Découvrir</a><a href="/#saisons">Ton cycle</a><a href="/blog">Lectures</a><a href="/fiches" aria-current="page">Fiches offertes</a><a href="/#questions">Questions</a><a class="menu-btn" href="/#telecharger">Télécharger</a></nav>
+    <details class="menu-tel">
+      <summary aria-label="Menu"><span class="ouvrir" aria-hidden="true">☰</span><span class="fermer" aria-hidden="true">✕</span></summary>
+      <nav class="menu-panneau" aria-label="Menu principal"><a href="/">Découvrir</a><a href="/#saisons">Ton cycle</a><a href="/blog">Lectures</a><a href="/fiches" aria-current="page">Fiches offertes</a><a href="/#questions">Questions</a><span class="menu-filet"></span><a class="menu-btn" href="/#telecharger">Télécharger SakinApp</a></nav>
+    </details>
+  </div>
 </header>
 
 <main>

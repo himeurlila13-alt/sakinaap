@@ -263,19 +263,20 @@
  ]
 }
 </script>
+<link rel="stylesheet" href="/menu.css">
+<script src="/menu.js" defer></script>
 </head>
 <body>
 
-<header class="barre">
-  <a class="logo" href="/"><img src="/img/logo-rose.png" alt=""><span>SakinApp</span></a>
-  <nav>
-    <a href="#saisons">Ton cycle</a>
-    <a href="#appli">L'appli</a>
-    <a href="#confiance">Tes données</a>
-    <a href="#questions">Questions</a>
-    <a class="pastille" href="/blog">Blog</a>
-    <a class="pastille" href="/fiches">Fiches offertes</a>
-  </nav>
+<header class="menu-site">
+  <div class="menu-int">
+    <a class="menu-logo" href="/"><img src="/img/logo-rose.png" alt=""><span>SakinApp</span></a>
+    <nav class="menu-liens" aria-label="Menu principal"><a href="/" aria-current="page">Découvrir</a><a href="/#saisons">Ton cycle</a><a href="/blog">Lectures</a><a href="/fiches">Fiches offertes</a><a href="/#questions">Questions</a><a class="menu-btn" href="/#telecharger">Télécharger</a></nav>
+    <details class="menu-tel">
+      <summary aria-label="Menu"><span class="ouvrir" aria-hidden="true">☰</span><span class="fermer" aria-hidden="true">✕</span></summary>
+      <nav class="menu-panneau" aria-label="Menu principal"><a href="/" aria-current="page">Découvrir</a><a href="/#saisons">Ton cycle</a><a href="/blog">Lectures</a><a href="/fiches">Fiches offertes</a><a href="/#questions">Questions</a><span class="menu-filet"></span><a class="menu-btn" href="/#telecharger">Télécharger SakinApp</a></nav>
+    </details>
+  </div>
 </header>
 
 <main>
@@ -400,7 +401,7 @@
     </div>
   </section>
 
-  <div class="appel">
+  <div class="appel" id="telecharger">
     <div class="medaillons"><img src="/img/medaillons/lune.png" alt=""><img src="/img/medaillons/pousse.png" alt=""><img src="/img/medaillons/soleil.png" alt=""><img src="/img/medaillons/feuille.png" alt=""></div>
     <h2>Prête à <em>commencer</em> ?</h2>
     <p class="intro">Gratuite, sans compte, en français.</p>

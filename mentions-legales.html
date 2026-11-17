@@ -25,10 +25,22 @@
   a { color:var(--accent); }
   nav { margin-top:32px; font-size:14px; color:var(--gris); display:flex; flex-wrap:wrap; gap:8px 16px; }
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/menu.css">
+<script src="/menu.js" defer></script>
 </head>
 <body>
+<header class="menu-site">
+  <div class="menu-int">
+    <a class="menu-logo" href="/"><img src="/img/logo-rose.png" alt=""><span>SakinApp</span></a>
+    <nav class="menu-liens" aria-label="Menu principal"><a href="/">Découvrir</a><a href="/#saisons">Ton cycle</a><a href="/blog">Lectures</a><a href="/fiches">Fiches offertes</a><a href="/#questions">Questions</a><a class="menu-btn" href="/#telecharger">Télécharger</a></nav>
+    <details class="menu-tel">
+      <summary aria-label="Menu"><span class="ouvrir" aria-hidden="true">☰</span><span class="fermer" aria-hidden="true">✕</span></summary>
+      <nav class="menu-panneau" aria-label="Menu principal"><a href="/">Découvrir</a><a href="/#saisons">Ton cycle</a><a href="/blog">Lectures</a><a href="/fiches">Fiches offertes</a><a href="/#questions">Questions</a><span class="menu-filet"></span><a class="menu-btn" href="/#telecharger">Télécharger SakinApp</a></nav>
+    </details>
+  </div>
+</header>
 <main>
-<header><img src="/img/logo-rose.png" alt=""><a href="/">SakinApp</a></header>
 <h1>Mentions légales</h1>
 <p class="maj">Mise à jour : 16 octobre 2026</p>
 
