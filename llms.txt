@@ -63,7 +63,7 @@ Chaque verset et chaque hadith cité est vérifié dans les recueils (numérotat
 ## Pages principales
 
 - [Accueil : présentation de l'appli](https://sakinaap.com/): fonctionnalités, quatre saisons du cycle, confidentialité des données
-- [Fiches offertes](https://sakinaap.com/fiches): fiches PDF gratuites à imprimer, dont « Mes invocations pendant mes règles » (https://sakinaap.com/telechargements/invocations-pendant-les-regles.pdf)
+- [Fiches offertes](https://sakinaap.com/fiches): fiches PDF gratuites à imprimer, dont « Mes invocations pendant mes règles » (https://sakinaap.com/telechargements/invocations-pendant-les-regles.pdf) et le livret « Les 99 noms d'Allah » (https://sakinaap.com/telechargements/99-noms-d-allah.pdf) : liste d'at-Tirmidhi 3507, sens de chaque nom et une invocation sourcée (Coran, Bukhari, Muslim, at-Tirmidhi, Abu Dawud, Ibn Majah)
 - [Assistance et questions fréquentes](https://sakinaap.com/assistance)
 - [Confidentialité](https://sakinaap.com/confidentialite)
 
