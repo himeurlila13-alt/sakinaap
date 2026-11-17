@@ -5,28 +5,36 @@
       "titre": "Soulager le SPM naturellement : 5 gestes doux",
       "resume": "Fatigue, fringales, émotions à fleur de peau ? Des gestes simples, et le dhikr pour apaiser le cœur.",
       "saison": "automne",
-      "minutes": 7
+      "minutes": 7,
+      "couverture": "https://sakinaap.com/img/lectures/spm-naturel-couverture.jpg",
+      "pile": "https://sakinaap.com/img/lectures/spm-naturel-pile.jpg"
     },
     {
       "slug": "invocations-pendant-les-regles",
       "titre": "Invocations et dhikr pendant les règles",
       "resume": "Le dhikr et les invocations restent ouverts pendant les règles : ce qui est permis, avec les sources.",
       "saison": "hiver",
-      "minutes": 5
+      "minutes": 5,
+      "couverture": "https://sakinaap.com/img/lectures/invocations-pendant-les-regles-couverture.jpg",
+      "pile": "https://sakinaap.com/img/lectures/invocations-pendant-les-regles-pile.jpg"
     },
     {
       "slug": "ghusl-apres-les-regles",
       "titre": "Le ghusl après les règles, pas à pas",
       "resume": "Savoir quand les règles sont finies, ce qui est obligatoire, et la manière complète décrite par Aïcha.",
       "saison": "hiver",
-      "minutes": 5
+      "minutes": 5,
+      "couverture": "https://sakinaap.com/img/lectures/ghusl-apres-les-regles-couverture.jpg",
+      "pile": "https://sakinaap.com/img/lectures/ghusl-apres-les-regles-pile.jpg"
     },
     {
       "slug": "4-saisons-du-cycle",
       "titre": "Les 4 saisons de ton cycle",
       "resume": "Hiver, Printemps, Été, Automne : ton énergie, ton humeur et ta pratique au fil du mois.",
       "saison": "toutes",
-      "minutes": 6
+      "minutes": 6,
+      "couverture": "https://sakinaap.com/img/lectures/4-saisons-du-cycle-couverture.jpg",
+      "pile": "https://sakinaap.com/img/lectures/4-saisons-du-cycle-pile.jpg"
     }
   ]
 }
