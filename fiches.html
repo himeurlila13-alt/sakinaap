@@ -28,8 +28,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/blog/blog.css">
-<style>.carte .mot-plume { margin-top: 10px; padding: 10px 14px; border-left: 2px solid var(--filet); background: var(--doux); border-radius: 0 12px 12px 0; font-size: 14.5px; } .carte .mot-plume small { display: block; margin-top: 4px; font-size: 13px; color: var(--gris); }</style>
-</head>
+<style>.carte .mot-plume { margin-top: 10px; padding: 10px 14px; border-left: 2px solid var(--filet); background: var(--doux); border-radius: 0 12px 12px 0; font-size: 14.5px; } .carte .mot-plume small { display: block; margin-top: 4px; font-size: 13px; color: var(--gris); } .appels { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 44px; } .appels .appel { margin: 0; display: flex; flex-direction: column; align-items: center; } .appels .appel .bouton { margin-top: auto; } @media (max-width: 640px) { .appels { grid-template-columns: 1fr; } }</style>
 <body>
 <header class="barre">
   <a class="logo" href="/"><img src="/img/logo-rose.png" alt="SakinApp"><span>SakinApp</span></a>
@@ -65,12 +64,20 @@
 
 <p class="note" style="margin-top:26px">D'autres fiches arrivent au fil des articles du <a href="/blog">blog</a>, in shâ' Allah.</p>
 
+<div class="appels">
 <section class="appel">
   <img src="/img/medaillons/chapelet.png" alt="">
   <h2>Ta fiche, <em>dans ta poche</em></h2>
   <p>Dans SakinApp, tu retrouves ton dhikr et tes invocations au fil de ton cycle, et tu les coches chaque jour, même pendant tes règles. Gratuite, sans abonnement, et tes données restent sur ton téléphone.</p>
   <a class="bouton" href="/">Découvrir SakinApp</a>
 </section>
+<section class="appel">
+  <img src="/img/medaillons/lanterne.png" alt="">
+  <h2>Les 99 noms, <em>dans ta poche</em></h2>
+  <p>Dans SakinApp, tu découvres les noms d'Allah trois à cinq à la fois, puis de courtes révisions reviennent au bon moment : retrouver le sens depuis l'arabe, ou l'inverse. À ton rythme, sans série à tenir ni reproche si tu fais une pause.</p>
+  <a class="bouton" href="/">Mémoriser avec SakinApp</a>
+</section>
+</div>
 </main>
 
 <a class="remonter" href="#" aria-label="Remonter en haut de la page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>
