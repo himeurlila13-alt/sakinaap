@@ -64,6 +64,9 @@ Chaque verset et chaque hadith cité est vérifié dans les recueils (numérotat
 
 - [Accueil : présentation de l'appli](https://sakinaap.com/): fonctionnalités, quatre saisons du cycle, confidentialité des données
 - [Fiches offertes](https://sakinaap.com/fiches): fiches PDF gratuites à imprimer, dont « Mes invocations pendant mes règles » (https://sakinaap.com/telechargements/invocations-pendant-les-regles.pdf) et le livret « Les 99 noms d'Allah » (https://sakinaap.com/telechargements/99-noms-d-allah.pdf) : liste d'at-Tirmidhi 3507, sens de chaque nom et une invocation sourcée (Coran, Bukhari, Muslim, at-Tirmidhi, Abu Dawud, Ibn Majah)
+- [Application de cycle menstruel pour femme musulmane](https://sakinaap.com/application-cycle-menstruel-musulmane): le cycle en quatre saisons, la prière en pause pendant les règles, le ghusl pas à pas, les jours de jeûne à rattraper, données sur le téléphone (Muslim 335, al-Bukhari 321)
+- [Horaires de prière et adhan, avec la pause pendant les règles](https://sakinaap.com/horaires-de-priere-et-regles): horaires pour sa ville selon la méthode de sa mosquée, l'adhan, pas de rattrapage des prières des règles (Muslim 335, al-Bukhari 321)
+- [Apprendre et mémoriser les 99 noms d'Allah](https://sakinaap.com/99-noms-d-allah): par petits groupes, révisions espacées, arabe, translittération et sens (Coran 7:180, al-Bukhari 2736, Muslim 2677, at-Tirmidhi 3507)
 - [Assistance et questions fréquentes](https://sakinaap.com/assistance)
 - [Confidentialité](https://sakinaap.com/confidentialite)
 
